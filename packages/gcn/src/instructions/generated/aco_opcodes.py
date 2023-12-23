@@ -61,11 +61,6 @@ class InstrClass(Enum):
 #
 # (*) The same is applicable for VOP1 and VOPC instructions.
 class Format(IntEnum):
-   # Pseudo Instruction Formats
-   PSEUDO = 0
-   PSEUDO_BRANCH = auto()
-   PSEUDO_BARRIER = auto()
-   PSEUDO_REDUCTION = auto()
    # Scalar ALU & Control Formats
    SOP1 = auto()
    SOP2 = auto()
@@ -165,15 +160,6 @@ class Format(IntEnum):
                  ('bool', 'compr', 'false', 'compressed'),
                  ('bool', 'done', 'false'),
                  ('bool', 'vm', 'false', 'valid_mask')]
-      elif self == Format.PSEUDO_BRANCH:
-         return [('uint32_t', 'target0', '0', 'target[0]'),
-                 ('uint32_t', 'target1', '0', 'target[1]')]
-      elif self == Format.PSEUDO_REDUCTION:
-         return [('ReduceOp', 'op', None, 'reduce_op'),
-                 ('unsigned', 'cluster_size', '0')]
-      elif self == Format.PSEUDO_BARRIER:
-         return [('memory_sync_info', 'sync', None),
-                 ('sync_scope', 'exec_scope', 'scope_invocation')]
       elif self == Format.VINTRP:
          return [('unsigned', 'attribute', None),
                  ('unsigned', 'component', None)]
@@ -295,7 +281,7 @@ def dst(def1 = 0, def2 = 0, def3 = 0, def4 = 0):
 # global dictionary of opcodes
 opcodes = {}
 
-def opcode(name, opcode_gfx7 = -1, opcode_gfx9 = -1, opcode_gfx10 = -1, opcode_gfx11 = -1, format = Format.PSEUDO, cls = InstrClass.Other, input_mod = False, output_mod = False, is_atomic = False, definitions = 0, operands = 0):
+def opcode(name, opcode_gfx7 = -1, opcode_gfx9 = -1, opcode_gfx10 = -1, opcode_gfx11 = -1, format = None, cls = InstrClass.Other, input_mod = False, output_mod = False, is_atomic = False, definitions = 0, operands = 0):
    assert name not in opcodes
    opcodes[name] = Opcode(name, opcode_gfx7, opcode_gfx9, opcode_gfx10, opcode_gfx11, format, input_mod, output_mod, is_atomic, cls, definitions, operands)
 
@@ -307,122 +293,6 @@ def default_class(opcodes, cls):
          yield op + (cls,)
 
 opcode("exp", 0, 0, 0, 0, format = Format.EXP, cls = InstrClass.Export)
-opcode("p_parallelcopy")
-opcode("p_startpgm")
-opcode("p_return")
-opcode("p_phi")
-opcode("p_linear_phi")
-opcode("p_as_uniform")
-opcode("p_unit_test")
-
-opcode("p_create_vector")
-opcode("p_extract_vector")
-opcode("p_split_vector")
-
-# start/end the parts where we can use exec based instructions
-# implicitly
-opcode("p_logical_start")
-opcode("p_logical_end")
-
-# e.g. subgroupMin() in SPIR-V
-opcode("p_reduce", format=Format.PSEUDO_REDUCTION)
-# e.g. subgroupInclusiveMin()
-opcode("p_inclusive_scan", format=Format.PSEUDO_REDUCTION)
-# e.g. subgroupExclusiveMin()
-opcode("p_exclusive_scan", format=Format.PSEUDO_REDUCTION)
-
-opcode("p_branch", format=Format.PSEUDO_BRANCH)
-opcode("p_cbranch", format=Format.PSEUDO_BRANCH)
-opcode("p_cbranch_z", format=Format.PSEUDO_BRANCH)
-opcode("p_cbranch_nz", format=Format.PSEUDO_BRANCH)
-
-opcode("p_barrier", format=Format.PSEUDO_BARRIER)
-
-# Primitive Ordered Pixel Shading pseudo-instructions.
-
-# For querying whether the current wave can enter the ordered section on GFX9-10.3, doing
-# s_add_i32(pops_exiting_wave_id, op0), but in a way that it's different from a usual SALU
-# instruction so that it's easier to maintain the volatility of pops_exiting_wave_id and to handle
-# the polling specially in scheduling.
-# Definitions:
-# - Result SGPR;
-# - Clobbered SCC.
-# Operands:
-# - s1 value to add, usually -(current_wave_ID + 1) (or ~current_wave_ID) to remap the exiting wave
-#   ID from wrapping [0, 0x3FF] to monotonic [0, 0xFFFFFFFF].
-opcode("p_pops_gfx9_add_exiting_wave_id")
-
-# Indicates that the wait for the completion of the ordered section in overlapped waves has been
-# finished on GFX9-10.3. Not lowered to any hardware instructions.
-opcode("p_pops_gfx9_overlapped_wave_wait_done")
-
-# Indicates that a POPS ordered section has ended, hints that overlapping waves can possibly
-# continue execution. The overlapping waves may actually be resumed by this instruction or anywhere
-# later, however, especially taking into account the fact that there can be multiple ordered
-# sections in a wave (for instance, if one is chosen in divergent control flow in the source
-# shader), thus multiple p_pops_gfx9_ordered_section_done instructions. At least one must be present
-# in the program if POPS is used, however, otherwise the location of the end of the ordered section
-# will be undefined. Only needed on GFX9-10.3 (GFX11+ ordered section is until the last export,
-# can't be exited early). Not lowered to any hardware instructions.
-opcode("p_pops_gfx9_ordered_section_done")
-
-opcode("p_spill")
-opcode("p_reload")
-
-# Start/end linear vgprs. p_start_linear_vgpr can take an operand to copy from, into the linear vgpr
-opcode("p_start_linear_vgpr")
-opcode("p_end_linear_vgpr")
-
-opcode("p_end_wqm")
-opcode("p_discard_if")
-opcode("p_demote_to_helper")
-opcode("p_is_helper")
-opcode("p_exit_early_if")
-
-# simulates proper bpermute behavior using v_readlane_b32
-# definitions: result VGPR, temp EXEC, clobbered VCC
-# operands: index, input data
-opcode("p_bpermute_readlane")
-
-# simulates proper wave64 bpermute behavior using shared vgprs (for GFX10/10.3)
-# definitions: result VGPR, temp EXEC, clobbered SCC
-# operands: index * 4, input data, same half (bool)
-opcode("p_bpermute_shared_vgpr")
-
-# simulates proper wave64 bpermute behavior using v_permlane64_b32 (for GFX11+)
-# definitions: result VGPR, temp EXEC, clobbered SCC
-# operands: linear VGPR, index * 4, input data, same half (bool)
-opcode("p_bpermute_permlane")
-
-# creates a lane mask where only the first active lane is selected
-opcode("p_elect")
-
-opcode("p_constaddr")
-opcode("p_resume_shader_address")
-
-# These don't have to be pseudo-ops, but it makes optimization easier to only
-# have to consider two instructions.
-# (src0 >> (index * bits)) & ((1 << bits) - 1) with optional sign extension
-opcode("p_extract") # src1=index, src2=bits, src3=signext
-# (src0 & ((1 << bits) - 1)) << (index * bits)
-opcode("p_insert") # src1=index, src2=bits
-
-opcode("p_init_scratch")
-
-# jumps to a shader epilog
-opcode("p_jump_to_epilog")
-
-# loads and interpolates a fragment shader input with a correct exec mask
-#dst0=result, src0=linear_vgpr, src1=attribute, src2=component, src3=coord1, src4=coord2, src5=m0
-#dst0=result, src0=linear_vgpr, src1=attribute, src2=component, src3=dpp_ctrl, src4=m0
-opcode("p_interp_gfx11")
-
-# performs dual source MRTs swizzling and emits exports on GFX11
-opcode("p_dual_src_export_gfx11")
-
-# Let shader end with specific registers set to wanted value, used by multi part
-# shader to pass arguments to next part.
-opcode("p_end_with_regs")
 
 # SOP2 instructions: 2 scalar inputs, 1 scalar output (+optional scc)
 SOP2 = {
@@ -481,9 +351,6 @@ SOP2 = {
    (  -1,   -1,   -1,   -1,   -1, 0x35, "s_pack_hl_b32_b16", dst(1), src(1, 1)),
    (  -1,   -1,   -1, 0x2c, 0x35, 0x2d, "s_mul_hi_u32", dst(1), src(1, 1)),
    (  -1,   -1,   -1, 0x2d, 0x36, 0x2e, "s_mul_hi_i32", dst(1), src(1, 1)),
-   # actually a pseudo-instruction. it's lowered to SALU during assembly though, so it's useful to identify it as a SOP2.
-   (  -1,   -1,   -1,   -1,   -1,   -1, "p_constaddr_addlo", dst(1, SCC), src(1, 1, 1)),
-   (  -1,   -1,   -1,   -1,   -1,   -1, "p_resumeaddr_addlo", dst(1, SCC), src(1, 1, 1)),
 }
 for (gfx6, gfx7, gfx8, gfx9, gfx10, gfx11, name, defs, ops, cls) in default_class(SOP2, InstrClass.Salu):
     opcode(name, gfx7, gfx9, gfx10, gfx11, Format.SOP2, cls, definitions = defs, operands = ops)
@@ -598,10 +465,6 @@ SOP1 = {
    (  -1,   -1,   -1,   -1, 0x49, 0x44, "s_movrelsd_2_b32", dst(1), src(1, M0)),
    (  -1,   -1,   -1,   -1,   -1, 0x4c, "s_sendmsg_rtn_b32", dst(1), src(1)),
    (  -1,   -1,   -1,   -1,   -1, 0x4d, "s_sendmsg_rtn_b64", dst(2), src(1)),
-   # actually a pseudo-instruction. it's lowered to SALU during assembly though, so it's useful to identify it as a SOP1.
-   (  -1,   -1,   -1,   -1,   -1,   -1, "p_constaddr_getpc", dst(2), src(1)),
-   (  -1,   -1,   -1,   -1,   -1,   -1, "p_resumeaddr_getpc", dst(2), src(1)),
-   (  -1,   -1,   -1,   -1,   -1,   -1, "p_load_symbol", dst(1), src(1)),
 }
 for (gfx6, gfx7, gfx8, gfx9, gfx10, gfx11, name, defs, ops, cls) in default_class(SOP1, InstrClass.Salu):
    opcode(name, gfx7, gfx9, gfx10, gfx11, Format.SOP1, cls, definitions = defs, operands = ops)
@@ -1860,9 +1723,6 @@ for (gfx8, gfx10, gfx11, name) in SCRATCH:
 for ver in ['gfx9', 'gfx10', 'gfx11']:
     op_to_name = {}
     for op in opcodes.values():
-        if op.format in [Format.PSEUDO, Format.PSEUDO_BRANCH, Format.PSEUDO_BARRIER, Format.PSEUDO_REDUCTION]:
-            continue
-
         num = getattr(op, 'opcode_' + ver)
         if num == -1:
             continue
