@@ -81,10 +81,10 @@ pub enum OpCode {
    % endfor
 }
 
-<%def name="render_generation_ops(ops, prefix, extract)">
-<% generation_ops = to_sparse_array(ops.values(), extract) %>
-pub const ${prefix}_OPS: [Option<OpCode>; ${len(generation_ops)}] = [
-    % for op in generation_ops:
+<%def name="render_gfx_level_ops(ops, prefix, extract)">
+<% gfx_level_ops = to_sparse_array(ops.values(), extract) %>
+pub const ${prefix}_OPS: [Option<OpCode>; ${len(gfx_level_ops)}] = [
+    % for op in gfx_level_ops:
     % if op:
     Some(OpCode::${op.name}),
     % else:
@@ -94,10 +94,10 @@ pub const ${prefix}_OPS: [Option<OpCode>; ${len(generation_ops)}] = [
 ];
 </%def>
 
-${render_generation_ops(ops, "GFX7", lambda it: it.opcode_gfx7)}
-${render_generation_ops(ops, "GFX9", lambda it: it.opcode_gfx9)}
-${render_generation_ops(ops, "GFX10", lambda it: it.opcode_gfx10)}
-${render_generation_ops(ops, "GFX11", lambda it: it.opcode_gfx11)}
+${render_gfx_level_ops(ops, "GFX7", lambda it: it.opcode_gfx7)}
+${render_gfx_level_ops(ops, "GFX9", lambda it: it.opcode_gfx9)}
+${render_gfx_level_ops(ops, "GFX10", lambda it: it.opcode_gfx10)}
+${render_gfx_level_ops(ops, "GFX11", lambda it: it.opcode_gfx11)}
 
 pub const OPS: [OpInfo; ${len(ops)}] = [
     % for op in ops.values():
