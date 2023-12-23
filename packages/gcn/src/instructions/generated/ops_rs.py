@@ -76,33 +76,61 @@ pub struct OpInfo {
 
 #[allow(non_camel_case_types)]
 pub enum OpCode {
-   % for idx, opcode in enumerate(opcodes.values()):
-   ${opcode.name} = ${idx},
+   % for idx, op in enumerate(ops.values()):
+   ${op.name} = ${idx},
    % endfor
 }
 
-pub const OPS: [OpInfo; ${len(opcodes)}] = [
-    % for opcode in opcodes.values():
+<%def name="render_generation_ops(ops, prefix, extract)">
+<% generation_ops = to_sparse_array(ops.values(), extract) %>
+pub const ${prefix}_OPS: [Option<OpCode>; ${len(generation_ops)}] = [
+    % for op in generation_ops:
+    % if op:
+    Some(OpCode::${op.name}),
+    % else:
+    None,
+    % endif
+    % endfor
+];
+</%def>
+
+${render_generation_ops(ops, "GFX7", lambda it: it.opcode_gfx7)}
+${render_generation_ops(ops, "GFX9", lambda it: it.opcode_gfx9)}
+${render_generation_ops(ops, "GFX10", lambda it: it.opcode_gfx10)}
+${render_generation_ops(ops, "GFX11", lambda it: it.opcode_gfx11)}
+
+pub const OPS: [OpInfo; ${len(ops)}] = [
+    % for op in ops.values():
     OpInfo {
-        op_code: OpCode::${opcode.name},
-        name: "${opcode.name}",
-        format: OpFormat::${opcode.format.name},
-        class: OpClass::${opcode.cls.name},
-        gfx7: ${to_option(opcode.opcode_gfx7)},
-        gfx9: ${to_option(opcode.opcode_gfx9)},
-        gfx10: ${to_option(opcode.opcode_gfx10)},
-        gfx11: ${to_option(opcode.opcode_gfx11)},
+        op_code: OpCode::${op.name},
+        name: "${op.name}",
+        format: OpFormat::${op.format.name},
+        class: OpClass::${op.cls.name},
+        gfx7: ${to_option(op.opcode_gfx7)},
+        gfx9: ${to_option(op.opcode_gfx9)},
+        gfx10: ${to_option(op.opcode_gfx10)},
+        gfx11: ${to_option(op.opcode_gfx11)},
     },
     % endfor
 ];
 """
 
+def to_sparse_array(ops, fn):
+    relevant_ops = [item for item in ops if fn(item) != -1]
+    max_index = max(fn(item) for item in relevant_ops)
+
+    result = [None] * (max_index + 1)
+
+    for item in relevant_ops:
+        result[fn(item)] = item
+
+    return result
 
 def to_option(number):
     return f"Some({hex(number)})" if number >= 0 else "None"
 
 
 if __name__ == '__main__':
-    rendered = Template(template).render(opcodes=opcodes, to_option=to_option)
+    rendered = Template(template).render(ops=opcodes, to_option=to_option, to_sparse_array=to_sparse_array)
     with open('ops.rs', 'w') as file:
         file.write(rendered)
