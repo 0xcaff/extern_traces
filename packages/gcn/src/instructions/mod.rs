@@ -1,9 +1,10 @@
 mod generated;
 
-pub use generated::{OpCode, OpFormat, OpInfo, OPS};
-use std::io::Read;
 use anyhow::format_err;
 use byteorder::{LittleEndian, ReadBytesExt};
+pub use generated::{OpCode, OpFormat, OpInfo, OPS};
+use std::collections::{BTreeMap, HashMap};
+use std::io::Read;
 
 impl OpCode {
     pub fn op_info(&self) -> &'static OpInfo {
@@ -16,39 +17,9 @@ impl OpFormat {
         OPS.iter().filter(|it| &it.format == self)
     }
 
-    pub fn bytes_len(&self) -> usize {
-        match self {
-            OpFormat::SOP2 | OpFormat::SOPK | OpFormat::SOP1 | OpFormat::SOPC | OpFormat::SOPP => 4,
-
-            OpFormat::VOP2 | OpFormat::VOP1 | OpFormat::VOPC => 4,
-
-            OpFormat::VOP3 => 8,
-
-            OpFormat::MUBUF | OpFormat::MTBUF | OpFormat::MIMG => 8,
-
-            OpFormat::VINTRP => 4,
-
-            OpFormat::EXP | OpFormat::GLOBAL | OpFormat::SCRATCH => 8,
-
-            OpFormat::DS => 8,
-
-            OpFormat::SMEM => 4,
-            OpFormat::LDSDIR => 8,
-
-            OpFormat::FLAT => 8,
-
-            OpFormat::SDWA => 4,
-            OpFormat::DPP16 => 4,
-            OpFormat::DPP8 => 8,
-
-            OpFormat::VOP3P => 8,
-            OpFormat::VINTERP_INREG => 8,
-        }
-    }
-
     pub fn op_mask(&self) -> u32 {
         fn mask(start_bit_idx: u32, len_bits: u32) -> u32 {
-           ((1 << len_bits) - 1)  << (32 - len_bits - start_bit_idx)
+            ((1 << len_bits) - 1) << (32 - len_bits - start_bit_idx)
         }
 
         match self {
@@ -74,101 +45,220 @@ struct OpFormatInfo {
     pub format: OpFormat,
     pub bytes_len: u8,
 
-    pub pattern_width: u8,
-    pub pattern: u32,
-
-    pub op_start_bit_idx: u8,
-    pub op_len_bits: u8,
+    pub pattern: Option<OpFormatPattern>,
+    // pub op_start_bit_idx: u8,
+    // pub op_len_bits: u8,
 }
 
-pub static OP_FORMATS: [OpFormatInfo] = [
-    // todo: fill this out
-]
+struct OpFormatPattern {
+    width: u8,
+    bits: u32,
+}
 
+#[macro_export]
+macro_rules! op_format_pattern {
+    ($bitstring:expr) => {{
+        const WIDTH: usize = $bitstring.len();
+        const BITS: u32 = {
+            let bytes = $bitstring.as_bytes();
+            let mut bits = 0;
 
-impl OpFormat {
-    pub fn matches(token: u32) -> Option<OpFormat> {
+            let mut i = 0;
+            while i < WIDTH {
+                bits <<= 1;
+                match bytes[i] {
+                    b'0' => {}
+                    b'1' => bits |= 1,
+                    _ => panic!("Invalid character in bitstring"), // Causes compile-time error
+                }
+                i += 1;
+            }
+            bits
+        };
+
+        OpFormatPattern {
+            width: WIDTH as u8,
+            bits: BITS,
+        }
+    }};
+}
+
+pub const OP_FORMATS: [OpFormatInfo; 25] = [
+    OpFormatInfo {
+        format: OpFormat::SOP1,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("101111101")),
+        // op_start_bit_idx: 16,
+        // op_len_bits: 8,
+    },
+    OpFormatInfo {
+        format: OpFormat::SOP2,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("10")),
+        // op_start_bit_idx: 0,
+        // op_len_bits: 0,
+    },
+    OpFormatInfo {
+        format: OpFormat::SOPK,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("1011")),
+    },
+    OpFormatInfo {
+        format: OpFormat::SOPP,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("101111111")),
+    },
+    OpFormatInfo {
+        format: OpFormat::SOPC,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("101111100")),
+    },
+    OpFormatInfo {
+        format: OpFormat::SMEM,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("11000")),
+    },
+    OpFormatInfo {
+        format: OpFormat::DS,
+        bytes_len: 8,
+        pattern: Some(op_format_pattern!("110110")),
+    },
+    OpFormatInfo {
+        format: OpFormat::LDSDIR,
+        bytes_len: 8,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::MTBUF,
+        bytes_len: 8,
+        pattern: Some(op_format_pattern!("111010")),
+    },
+    OpFormatInfo {
+        format: OpFormat::MUBUF,
+        bytes_len: 8,
+        pattern: Some(op_format_pattern!("111000")),
+    },
+    OpFormatInfo {
+        format: OpFormat::MIMG,
+        bytes_len: 8,
+        pattern: Some(op_format_pattern!("111100")),
+    },
+    OpFormatInfo {
+        format: OpFormat::EXP,
+        bytes_len: 8,
+        pattern: Some(op_format_pattern!("111110")),
+    },
+    OpFormatInfo {
+        format: OpFormat::FLAT,
+        bytes_len: 8,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::GLOBAL,
+        bytes_len: 8,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::SCRATCH,
+        bytes_len: 8,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::VINTRP,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("110010")),
+    },
+    OpFormatInfo {
+        format: OpFormat::VINTERP_INREG,
+        bytes_len: 8,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::VOP1,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("0111111")),
+    },
+    OpFormatInfo {
+        format: OpFormat::VOP2,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("0")),
+    },
+    OpFormatInfo {
+        format: OpFormat::VOPC,
+        bytes_len: 4,
+        pattern: Some(op_format_pattern!("0111110")),
+    },
+    OpFormatInfo {
+        format: OpFormat::VOP3,
+        bytes_len: 8,
+        pattern: Some(op_format_pattern!("110100")),
+    },
+    OpFormatInfo {
+        format: OpFormat::VOP3P,
+        bytes_len: 8,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::SDWA,
+        bytes_len: 4,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::DPP16,
+        bytes_len: 4,
+        pattern: None,
+    },
+    OpFormatInfo {
+        format: OpFormat::DPP8,
+        bytes_len: 8,
+        pattern: None,
+    },
+];
+
+struct OpFormatMatcher {
+    groups: BTreeMap<u8, Vec<(OpFormat, u32)>>,
+}
+
+impl OpFormatMatcher {
+    pub fn new(formats: &[OpFormatInfo]) -> OpFormatMatcher {
+        let groups = {
+            let mut groups: BTreeMap<u8, Vec<(OpFormat, u32)>> = BTreeMap::new();
+
+            for info in formats {
+                if let Some(it) = info.pattern {
+                    groups
+                        .entry(it.width)
+                        .or_insert_with(Vec::new)
+                        .push((info.format, it.bits));
+                }
+            }
+
+            groups
+        };
+
+        OpFormatMatcher { groups }
+    }
+
+    pub fn from(&self, token: u32) -> Option<OpFormat> {
         fn bitmask(size: u32) -> u32 {
             ((1 << size) - 1) << (32 - size)
         }
 
-        fn shift(mask: u32, size: u32) -> u32 {
-            mask << (32 - size)
-        }
-
         fn extract_pattern(token: u32, size: u32) -> u32 {
-            token & bitmask(size) >> (32 - size)
+            (token & bitmask(size)) >> (32 - size)
         }
 
-        {
-            let masked = extract_pattern(token, 9);
+        for (width, values) in self.groups.iter().rev() {
+            let masked = extract_pattern(token, width);
 
-            match masked {
-                0b101111101 => return Some(OpFormat::SOP1),
-                0b101111100 => return Some(OpFormat::SOPC),
-                0b101111111 => return Some(OpFormat::SOPP),
-                _ => {}
+            for (format, pattern) in values {
+                if masked == pattern {
+                    return Some(format);
+                }
             }
         }
 
-        {
-            let masked = extract_pattern(token, 7);
-
-            match masked {
-                0b0111111 => return Some(OpFormat::VOP1),
-                0b0111110 => return Some(OpFormat::VOPC),
-                _ => {}
-            }
-        }
-
-        {
-            let masked = extract_pattern(token, 6);
-
-            match masked {
-                0b111100 => return Some(OpFormat::MIMG),
-                0b110110 => return Some(OpFormat::DS),
-                0b110010 => return Some(OpFormat::VINTRP),
-                0b111110 => return Some(OpFormat::EXP),
-                0b110100 => return Some(OpFormat::VOP3),
-                0b111000 => return Some(OpFormat::MUBUF),
-                0b111010 => return Some(OpFormat::MTBUF),
-                _ => {}
-            }
-        }
-
-        {
-            let masked = extract_pattern(token, 5);
-            match masked {
-                0b11000 => return Some(OpFormat::SMEM),
-                _ => {}
-            }
-        }
-
-        {
-            let masked = extract_pattern(token, 4);
-            match masked {
-                0b1011 => return Some(OpFormat::SOPK),
-                _ => {}
-            }
-        }
-
-        {
-            let masked = extract_pattern(token, 2);
-            match masked {
-                0b10 => return Some(OpFormat::SOP2),
-                _ => {}
-            }
-        }
-
-        {
-            let masked = extract_pattern(token, 1);
-            match masked {
-                0b0 => return Some(OpFormat::VOP2),
-                _ => {}
-            }
-        }
-
-        None
+        return None;
     }
 }
 
@@ -213,11 +303,7 @@ where
 
     pub fn decode(&mut self) -> Result<Instruction, anyhow::Error> {
         let token = self.reader.read_u32::<LittleEndian>()?;
-        let format = OpFormat::matches(token).ok_or_else(|| format_err!("unknown token {:x}", token))?;
-
-        format.ops()
-
-        OpFormat::
-
+        let format =
+            OpFormat::matches(token).ok_or_else(|| format_err!("unknown token {:x}", token))?;
     }
 }
