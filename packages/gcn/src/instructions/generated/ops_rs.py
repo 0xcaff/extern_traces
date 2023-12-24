@@ -2,6 +2,7 @@ from aco_opcodes import opcodes
 from mako.template import Template
 
 template = """
+#[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum OpFormat {
     SOP1,
     SOP2,
@@ -38,6 +39,7 @@ pub enum OpFormat {
     DPP8,
 }
 
+#[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum OpClass {
     Valu32,
     ValuConvert32,
@@ -75,29 +77,12 @@ pub struct OpInfo {
 }
 
 #[allow(non_camel_case_types)]
+#[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum OpCode {
    % for idx, op in enumerate(ops.values()):
    ${op.name} = ${idx},
    % endfor
 }
-
-<%def name="render_gfx_level_ops(ops, prefix, extract)">
-<% gfx_level_ops = to_sparse_array(ops.values(), extract) %>
-pub const ${prefix}_OPS: [Option<OpCode>; ${len(gfx_level_ops)}] = [
-    % for op in gfx_level_ops:
-    % if op:
-    Some(OpCode::${op.name}),
-    % else:
-    None,
-    % endif
-    % endfor
-];
-</%def>
-
-${render_gfx_level_ops(ops, "GFX7", lambda it: it.opcode_gfx7)}
-${render_gfx_level_ops(ops, "GFX9", lambda it: it.opcode_gfx9)}
-${render_gfx_level_ops(ops, "GFX10", lambda it: it.opcode_gfx10)}
-${render_gfx_level_ops(ops, "GFX11", lambda it: it.opcode_gfx11)}
 
 pub const OPS: [OpInfo; ${len(ops)}] = [
     % for op in ops.values():
