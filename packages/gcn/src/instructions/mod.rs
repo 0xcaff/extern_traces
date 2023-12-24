@@ -2,9 +2,10 @@ mod generated;
 
 use anyhow::format_err;
 use byteorder::{LittleEndian, ReadBytesExt};
-pub use generated::{OpCode, OpFormat, OpInfo, OPS};
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::io::Read;
+
+pub use generated::{OpCode, OpFormat, OpInfo, OPS};
 
 impl OpCode {
     pub fn op_info(&self) -> &'static OpInfo {
@@ -17,27 +18,8 @@ impl OpFormat {
         OPS.iter().filter(|it| &it.format == self)
     }
 
-    pub fn op_mask(&self) -> u32 {
-        fn mask(start_bit_idx: u32, len_bits: u32) -> u32 {
-            ((1 << len_bits) - 1) << (32 - len_bits - start_bit_idx)
-        }
-
-        match self {
-            OpFormat::SOP2 => mask(2, 7),
-            OpFormat::SOPK => mask(4, 5),
-            OpFormat::SOP1 => mask(16, 8),
-            OpFormat::SOPC => mask(9, 7),
-            OpFormat::VOP2 => mask(1, 6),
-            OpFormat::VOP1 => mask(15, 8),
-            OpFormat::VOPC => mask(7, 8),
-            OpFormat::VOP3 => mask(6, 9),
-            OpFormat::SOPP => mask(9, 7),
-            OpFormat::MUBUF => mask(7, 7),
-            OpFormat::MTBUF => mask(13, 3),
-            OpFormat::MIMG => mask(7, 7),
-            OpFormat::DS => mask(6, 8),
-            OpFormat::VINTRP => mask(14, 2),
-        }
+    pub fn info(&self) -> &OpFormatInfo {
+        &OP_FORMATS[self]
     }
 }
 
@@ -46,13 +28,31 @@ struct OpFormatInfo {
     pub bytes_len: u8,
 
     pub pattern: Option<OpFormatPattern>,
-    // pub op_start_bit_idx: u8,
-    // pub op_len_bits: u8,
+    pub op_bits: Option<BitRange>,
 }
 
 struct OpFormatPattern {
     width: u8,
     bits: u32,
+}
+
+struct BitRange {
+    start: u8,
+    len: u8,
+}
+
+impl BitRange {
+    pub fn of(&self, value: u32) -> u32 {
+        let offset = 32 - self.len - self.start;
+
+        let mask = ((1 << self.len) - 1) << offset;
+
+        (mask & value) >> offset;
+    }
+}
+
+pub const fn bitrange(start: u8, len: u8) -> BitRange {
+    BitRange { start, len }
 }
 
 #[macro_export]
@@ -88,85 +88,97 @@ pub const OP_FORMATS: [OpFormatInfo; 25] = [
         format: OpFormat::SOP1,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("101111101")),
-        // op_start_bit_idx: 16,
-        // op_len_bits: 8,
+        op_bits: Some(bitrange(16, 8)),
     },
     OpFormatInfo {
         format: OpFormat::SOP2,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("10")),
-        // op_start_bit_idx: 0,
-        // op_len_bits: 0,
+        op_bits: Some(bitrange(2, 7)),
     },
     OpFormatInfo {
         format: OpFormat::SOPK,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("1011")),
+        op_bits: Some(bitrange(4, 5)),
     },
     OpFormatInfo {
         format: OpFormat::SOPP,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("101111111")),
+        op_bits: Some(bitrange(9, 7)),
     },
     OpFormatInfo {
         format: OpFormat::SOPC,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("101111100")),
+        op_bits: Some(bitrange(9, 7)),
     },
     OpFormatInfo {
         format: OpFormat::SMEM,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("11000")),
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::DS,
         bytes_len: 8,
         pattern: Some(op_format_pattern!("110110")),
+        op_bits: Some(bitrange(6, 8)),
     },
     OpFormatInfo {
         format: OpFormat::LDSDIR,
         bytes_len: 8,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::MTBUF,
         bytes_len: 8,
         pattern: Some(op_format_pattern!("111010")),
+        op_bits: Some(bitrange(13, 3)),
     },
     OpFormatInfo {
         format: OpFormat::MUBUF,
         bytes_len: 8,
         pattern: Some(op_format_pattern!("111000")),
+        op_bits: Some(bitrange(7, 7)),
     },
     OpFormatInfo {
         format: OpFormat::MIMG,
         bytes_len: 8,
         pattern: Some(op_format_pattern!("111100")),
+        op_bits: Some(bitrange(7, 7)),
     },
     OpFormatInfo {
         format: OpFormat::EXP,
         bytes_len: 8,
         pattern: Some(op_format_pattern!("111110")),
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::FLAT,
         bytes_len: 8,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::GLOBAL,
         bytes_len: 8,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::SCRATCH,
         bytes_len: 8,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::VINTRP,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("110010")),
+        op_bits: Some(bitrange(14, 2)),
     },
     OpFormatInfo {
         format: OpFormat::VINTERP_INREG,
@@ -177,41 +189,49 @@ pub const OP_FORMATS: [OpFormatInfo; 25] = [
         format: OpFormat::VOP1,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("0111111")),
+        op_bits: Some(bitrange(15, 8)),
     },
     OpFormatInfo {
         format: OpFormat::VOP2,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("0")),
+        op_bits: Some(bitrange(1, 6)),
     },
     OpFormatInfo {
         format: OpFormat::VOPC,
         bytes_len: 4,
         pattern: Some(op_format_pattern!("0111110")),
+        op_bits: Some(bitrange(7, 8)),
     },
     OpFormatInfo {
         format: OpFormat::VOP3,
         bytes_len: 8,
         pattern: Some(op_format_pattern!("110100")),
+        op_bits: Some(bitrange(6, 9)),
     },
     OpFormatInfo {
         format: OpFormat::VOP3P,
         bytes_len: 8,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::SDWA,
         bytes_len: 4,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::DPP16,
         bytes_len: 4,
         pattern: None,
+        op_bits: None,
     },
     OpFormatInfo {
         format: OpFormat::DPP8,
         bytes_len: 8,
         pattern: None,
+        op_bits: None,
     },
 ];
 
@@ -280,9 +300,22 @@ impl GfxLevel {
     }
 }
 
+impl OpInfo {
+    pub fn op_code_for_level(&self, gfx_level: GfxLevel) -> Option<u16> {
+        match gfx_level {
+            GfxLevel::GFX7 => self.gfx7,
+            GfxLevel::GFX9 => self.gfx9,
+            GfxLevel::GFX10 => self.gfx10,
+            GfxLevel::GFX11 => self.gfx11,
+        }
+    }
+}
+
 pub struct Decoder<'a, R> {
     level: GfxLevel,
-    ops: &'static [Option<OpCode>],
+    ops: Vec<OpCode>,
+
+    op_format_matcher: OpFormatMatcher,
 
     reader: R,
 }
@@ -296,14 +329,48 @@ where
     R: Read,
 {
     pub fn new(level: GfxLevel, reader: R) -> Decoder<R> {
-        let ops = level.ops();
+        let ops = level
+            .ops()
+            .iter()
+            .filter_map(|it| *it)
+            .collect::<Vec<OpCode>>();
 
-        Decoder { level, ops, reader }
+        Decoder {
+            level,
+            ops,
+            reader,
+            op_format_matcher: OpFormatMatcher::new(&OP_FORMATS),
+        }
     }
 
     pub fn decode(&mut self) -> Result<Instruction, anyhow::Error> {
         let token = self.reader.read_u32::<LittleEndian>()?;
-        let format =
-            OpFormat::matches(token).ok_or_else(|| format_err!("unknown token {:x}", token))?;
+
+        let format = self
+            .op_format_matcher
+            .from(token)
+            .ok_or_else(|| format_err!("unknown token {:x}", token))?;
+
+        let bitrange = format
+            .info()
+            .op_bits
+            .ok_or_else(|| format_err!("unknown op_bits for format {}", format))?;
+
+        let op_bits = bitrange.of(token) as u16;
+
+        let _code = format
+            .ops()
+            .find_map(|op| {
+                let op_code = op.op_code_for_level(self.level)?;
+
+                if op_code == op_bits {
+                    return Some(op.op_code);
+                }
+
+                None
+            })
+            .ok_or_else(|| format_err!("no opcode found"))?;
+
+        Ok(Instruction { code })
     }
 }
