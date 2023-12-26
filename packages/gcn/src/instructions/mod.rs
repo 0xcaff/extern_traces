@@ -4,7 +4,8 @@ mod generated;
 use anyhow::format_err;
 use byteorder::{LittleEndian, ReadBytesExt};
 use std::collections::BTreeMap;
-use std::io::Read;
+use std::io;
+use std::io::{ErrorKind, Read};
 
 use crate::instructions::format_info::OP_FORMATS;
 pub use generated::{OpCode, OpFormat, OpInfo, OPS};
@@ -89,6 +90,7 @@ pub struct Decoder<R> {
     reader: R,
 }
 
+#[derive(Debug)]
 pub struct Instruction {
     pub code: OpCode,
 }
@@ -105,35 +107,85 @@ where
         }
     }
 
-    pub fn decode(&mut self) -> Result<Instruction, anyhow::Error> {
-        let token = self.reader.read_u32::<LittleEndian>()?;
+    pub fn decode(&mut self) -> Result<Instruction, InstructionParseErrorKind> {
+        let token = self.reader.read_u32::<LittleEndian>().wrapping_eof()?;
 
         let format = self
             .op_format_matcher
             .from(token)
             .ok_or_else(|| format_err!("unknown token {:x}", token))?;
 
-        let bitrange = format
-            .info()
-            .op_bits
-            .as_ref()
-            .ok_or_else(|| format_err!("unknown op_bits for format {:?}", format))?;
+        let format_info = format.info();
 
-        let op_bits = bitrange.of(token) as u16;
+        let remaining_len = format_info.dword_len - 1;
 
-        let code = format
-            .ops()
-            .find_map(|op| {
-                let op_code = op.op_code_for_level(self.level)?;
+        let next_token = if remaining_len == 1 {
+            Some(self.reader.read_u32::<LittleEndian>().wrapping_eof()?)
+        } else {
+            None
+        };
 
-                if op_code == op_bits {
-                    return Some(op.op_code);
+        match format {
+            OpFormat::VOP3 => {
+                for format in [
+                    OpFormat::VOP3,
+                    OpFormat::VOPC,
+                    OpFormat::VOP2,
+                    OpFormat::VOP1,
+                ] {
+                    let op_bits = format.info().op_bits.as_ref().unwrap().of(token) as u16;
+                    let code = match format.op(self.level, op_bits) {
+                        Some(code) => code,
+                        None => continue,
+                    };
+
+                    return Ok(Instruction { code });
                 }
 
-                None
-            })
-            .ok_or_else(|| format_err!("no opcode found"))?;
+                return Err(format_err!("no opcode found").into());
+            }
+            OpFormat::EXP => return Ok(Instruction { code: OpCode::exp }),
+            _ => {
+                let bitrange = format_info
+                    .op_bits
+                    .as_ref()
+                    .ok_or_else(|| format_err!("unknown op_bits for format {:?}", format))?;
 
-        Ok(Instruction { code })
+                let op_bits = bitrange.of(token) as u16;
+
+                let code = format
+                    .op(self.level, op_bits)
+                    .ok_or_else(|| format_err!("no opcode found"))?;
+
+                Ok(Instruction { code })
+            }
+        }
+    }
+}
+
+pub enum InstructionParseErrorKind {
+    Eof,
+    Error(anyhow::Error),
+}
+
+trait ResultExt<T> {
+    fn wrapping_eof(self) -> Result<T, InstructionParseErrorKind>;
+}
+
+impl<T> ResultExt<T> for Result<T, io::Error> {
+    fn wrapping_eof(self) -> Result<T, InstructionParseErrorKind> {
+        self.map_err(|err| match err.kind() {
+            ErrorKind::UnexpectedEof => InstructionParseErrorKind::Eof,
+            _ => InstructionParseErrorKind::Error(err.into()),
+        })
+    }
+}
+
+impl<T> From<T> for InstructionParseErrorKind
+where
+    T: Into<anyhow::Error>,
+{
+    fn from(value: T) -> Self {
+        InstructionParseErrorKind::Error(value.into())
     }
 }
