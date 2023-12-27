@@ -1,5 +1,6 @@
 mod format_info;
 mod generated;
+mod operands;
 
 use anyhow::format_err;
 use byteorder::{LittleEndian, ReadBytesExt};
