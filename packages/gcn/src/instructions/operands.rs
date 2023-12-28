@@ -1,4 +1,5 @@
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
+#[derive(Debug)]
 pub enum ScalarDestinationOperand {
     /// Scalar **G**eneral **P**urpose **R**egister
     ScalarGPR(u8),
@@ -32,6 +33,7 @@ impl ScalarDestinationOperand {
 }
 
 /// Also referred to as SSRC (**S**calar **S**ou**rc**e) operand.
+#[derive(Debug)]
 pub enum ScalarSourceOperand {
     Destination(ScalarDestinationOperand),
     IntegerConstant(InlineIntegerConstant),
@@ -46,6 +48,7 @@ pub enum ScalarSourceOperand {
     Reserved(u8),
 }
 
+#[derive(Debug)]
 pub struct InlineIntegerConstant {
     value: u8,
 }
@@ -61,6 +64,7 @@ impl InlineIntegerConstant {
     }
 }
 
+#[derive(Debug)]
 pub struct InlineFloatConstant {
     value: u8,
 }
@@ -101,6 +105,7 @@ impl ScalarSourceOperand {
     }
 }
 
+#[derive(Debug)]
 pub enum SourceOperand {
     Scalar(ScalarSourceOperand),
     VectorGPR(VectorGPR),
@@ -118,6 +123,7 @@ impl SourceOperand {
     }
 }
 
+#[derive(Debug)]
 pub struct VectorGPR {
     register_idx: u8,
 }

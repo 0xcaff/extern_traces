@@ -1,20 +1,18 @@
-use crate::instructions::format_info::bitrange;
-use crate::instructions::formats::{ParseInstruction, Reader};
+use crate::instructions::bitrange::bitrange;
+use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MUBUFOpCode;
 use crate::instructions::InstructionParseErrorKind;
 
+#[derive(Debug)]
 pub struct MUBUFInstruction {
     op: MUBUFOpCode,
 }
 
 impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
-    fn parse(first_token: u32, mut reader: R) -> Result<Self, InstructionParseErrorKind> {
-        let second_token = reader.read_u32()?;
-
-        let token = ((first_token as u64) << 32) | second_token;
-
+    fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind> {
+        let token = combine(token, reader)?;
         Ok(MUBUFInstruction {
-            op: MUBUFOpCode::decode(bitrange(7, 7).of(token))?,
+            op: MUBUFOpCode::decode(bitrange(7, 7).of_64(token))?,
         })
     }
 }

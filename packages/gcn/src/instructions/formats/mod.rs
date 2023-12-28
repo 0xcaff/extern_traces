@@ -1,3 +1,6 @@
+use std::io::Read;
+use gcn_internal_macros::ParseInstruction;
+use byteorder::{LittleEndian, ReadBytesExt};
 use crate::instructions::formats::ds::DSInstruction;
 use crate::instructions::formats::exp::ExpInstruction;
 use crate::instructions::formats::mimg::MIMGInstruction;
@@ -14,7 +17,7 @@ use crate::instructions::formats::vop1::VOP1Instruction;
 use crate::instructions::formats::vop2::VOP2Instruction;
 use crate::instructions::formats::vop3::VOP3Instruction;
 use crate::instructions::formats::vopc::VOPCInstruction;
-use crate::instructions::InstructionParseErrorKind;
+use crate::instructions::{InstructionParseErrorKind, ResultExt};
 
 mod ds;
 mod exp;
@@ -33,54 +36,54 @@ mod vop2;
 mod vop3;
 mod vopc;
 
-// #[derive(ParseInstruction)]
+#[derive(Debug, ParseInstruction)]
 pub enum FormattedInstruction {
-    #[pattern("110110")]
+    #[pattern(0b110110)]
     DS(DSInstruction),
 
-    #[pattern("111110")]
+    #[pattern(0b111110)]
     EXP(ExpInstruction),
 
-    #[pattern("111100")]
+    #[pattern(0b111100)]
     MIMG(MIMGInstruction),
 
-    #[pattern("111010")]
+    #[pattern(0b111010)]
     MTBUF(MTBufInstruction),
 
-    #[pattern("111000")]
+    #[pattern(0b111000)]
     MUBUF(MUBUFInstruction),
 
-    #[pattern("11000")]
+    #[pattern(0b11000)]
     SMEM(SMEMInstruction),
 
-    #[pattern("101111101")]
+    #[pattern(0b101111101)]
     SOP1(SOP1Instruction),
 
-    #[pattern("10")]
+    #[pattern(0b10)]
     SOP2(SOP2Instruction),
 
-    #[pattern("101111100")]
+    #[pattern(0b101111100)]
     SOPC(SOPCInstruction),
 
-    #[pattern("1011")]
+    #[pattern(0b1011)]
     SOPK(SOPKInstruction),
 
-    #[pattern("101111111")]
+    #[pattern(0b101111111)]
     SOPP(SOPPInstruction),
 
-    #[pattern("110010")]
+    #[pattern(0b110010)]
     VINTRP(VINTRPInstruction),
 
-    #[pattern("0111111")]
+    #[pattern(0b0111111)]
     VOP1(VOP1Instruction),
 
-    #[pattern("0")]
+    #[pattern(0b0)]
     VOP2(VOP2Instruction),
 
-    #[pattern("110100")]
+    #[pattern(0b110100)]
     VOP3(VOP3Instruction),
 
-    #[pattern("0111110")]
+    #[pattern(0b0111110)]
     VOPC(VOPCInstruction),
 }
 
@@ -88,6 +91,19 @@ pub trait Reader {
     fn read_u32(&mut self) -> Result<u32, InstructionParseErrorKind>;
 }
 
+impl <R: Read> Reader for R {
+    fn read_u32(&mut self) -> Result<u32, InstructionParseErrorKind> {
+        Ok(ReadBytesExt::read_u32::<LittleEndian>(self).wrapping_eof()?)
+    }
+}
+
 pub trait ParseInstruction<R: Reader> {
-    fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind>;
+    fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind> where Self: Sized;
+}
+
+pub fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, InstructionParseErrorKind> {
+    let second_token = reader.read_u32()?;
+    let token = ((first_token as u64) << 32) | second_token as u64;
+
+    Ok(token)
 }

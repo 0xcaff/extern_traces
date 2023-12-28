@@ -1,15 +1,13 @@
-use crate::instructions::formats::{ParseInstruction, Reader};
+use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::InstructionParseErrorKind;
 
 // todo: implement
+#[derive(Debug)]
 pub struct ExpInstruction {}
 
 impl<R: Reader> ParseInstruction<R> for ExpInstruction {
-    fn parse(first_token: u32, mut reader: R) -> Result<Self, InstructionParseErrorKind> {
-        let second_token = reader.read_u32()?;
-
-        let token = ((first_token as u64) << 32) | second_token;
-
+    fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind> {
+        let token = combine(token, reader)?;
         Ok(ExpInstruction {})
     }
 }

@@ -1,8 +1,9 @@
-use crate::instructions::format_info::bitrange;
+use crate::instructions::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VINTRPOpCode;
 use crate::instructions::InstructionParseErrorKind;
 
+#[derive(Debug)]
 pub struct VINTRPInstruction {
     op: VINTRPOpCode,
     // todo: implement
@@ -11,7 +12,7 @@ pub struct VINTRPInstruction {
 impl<R: Reader> ParseInstruction<R> for VINTRPInstruction {
     fn parse(token: u32, _reader: R) -> Result<Self, InstructionParseErrorKind> {
         Ok(VINTRPInstruction {
-            op: VINTRPOpCode::decode(bitrange(14, 2).of(token) as u8)?,
+            op: VINTRPOpCode::decode(bitrange(14, 2).of_32(token))?,
         })
     }
 }
