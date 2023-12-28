@@ -1,7 +1,11 @@
 from aco_opcodes import opcodes
 from mako.template import Template
+from itertools import groupby
 
 template = """
+use strum::FromRepr;
+use anyhow;
+
 #[derive(Eq, PartialEq, Clone, Copy, Debug)]
 pub enum OpFormat {
     SOP1,
@@ -84,6 +88,25 @@ pub enum OpCode {
    % endfor
 }
 
+% for format, format_ops in groupby(filter(lambda op: op.opcode_gfx7 >= 0, ops.values()), lambda op: op.format.name):
+#[repr(usize)]
+#[allow(non_camel_case_types)]
+#[derive(Eq, PartialEq, Clone, Copy, Debug, FromRepr)]
+pub enum ${format}OpCode {
+    % for op in sorted(format_ops, key=lambda op: op.opcode_gfx7):
+    ${op.name} = ${op.opcode_gfx7},
+    % endfor
+}
+
+impl ${format}OpCode {
+    pub fn decode(op: usize) -> Result<Self, anyhow::Error> {
+        Ok(Self::from_repr(op)
+            .ok_or_else(|| anyhow::format_err!("unknown op {} for ${format}OpCode", op))?)
+    }
+}
+
+% endfor
+
 pub const OPS: [OpInfo; ${len(ops)}] = [
     % for op in ops.values():
     OpInfo {
@@ -116,6 +139,6 @@ def to_option(number):
 
 
 if __name__ == '__main__':
-    rendered = Template(template).render(ops=opcodes, to_option=to_option, to_sparse_array=to_sparse_array)
+    rendered = Template(template).render(ops=opcodes, to_option=to_option, to_sparse_array=to_sparse_array, groupby=groupby)
     with open('ops.rs', 'w') as file:
         file.write(rendered)

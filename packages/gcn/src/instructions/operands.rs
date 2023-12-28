@@ -15,7 +15,7 @@ pub enum ScalarDestinationOperand {
 }
 
 impl ScalarDestinationOperand {
-    fn decode(encoded: u8) -> ScalarDestinationOperand {
+    pub fn decode(encoded: u8) -> ScalarDestinationOperand {
         let value = encoded & 0b1111111;
         debug_assert_eq!(value, encoded);
 
@@ -32,7 +32,7 @@ impl ScalarDestinationOperand {
 }
 
 /// Also referred to as SSRC (**S**calar **S**ou**rc**e) operand.
-enum ScalarSourceOperand {
+pub enum ScalarSourceOperand {
     Destination(ScalarDestinationOperand),
     IntegerConstant(InlineIntegerConstant),
     FloatConstant(InlineFloatConstant),
@@ -54,8 +54,8 @@ impl InlineIntegerConstant {
     pub fn value(&self) -> i8 {
         match self.value {
             128 => 0,
-            129..=192 => self.value - 129 + 1, // maps 129..=192 to 1..64
-            193..=208 => -(self.value - 193 + 1), // maps 193..208 to -1..-16
+            129..=192 => (self.value as i16 - 129 + 1) as i8, // maps 129..=192 to 1..64
+            193..=208 => (-(self.value as i16 - 193 + 1)) as i8, // maps 193..208 to -1..-16
             _ => panic!("unexpected value {}", self.value),
         }
     }
