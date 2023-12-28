@@ -1,10 +1,7 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatInfo};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VINTRPOpCode;
 use crate::instructions::InstructionParseErrorKind;
-
-pub const FORMAT: OpFormatInfo = format_pattern!("110010");
 
 pub struct VINTRPInstruction {
     op: VINTRPOpCode,

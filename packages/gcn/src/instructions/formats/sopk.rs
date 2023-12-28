@@ -1,11 +1,8 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatInfo};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOPKOpCode;
 use crate::instructions::operands::ScalarDestinationOperand;
 use crate::instructions::InstructionParseErrorKind;
-
-pub const FORMAT: OpFormatInfo = format_pattern!("1011");
 
 /// Scalar Instruction One Inline Constant Input, One Output
 ///

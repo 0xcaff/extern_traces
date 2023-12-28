@@ -1,11 +1,8 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatInfo};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOPCOpCode;
 use crate::instructions::operands::ScalarSourceOperand;
 use crate::instructions::InstructionParseErrorKind;
-
-pub const FORMAT: OpFormatInfo = format_pattern!("101111100");
 
 /// Scalar Instruction Two Inputs, One Comparison
 ///

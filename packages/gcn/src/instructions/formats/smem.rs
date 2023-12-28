@@ -1,10 +1,7 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatInfo};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SMEMOpCode;
 use crate::instructions::InstructionParseErrorKind;
-
-pub const FORMAT: OpFormatInfo = format_pattern!("11000");
 
 /// Scalar Instruction Memory Access
 ///

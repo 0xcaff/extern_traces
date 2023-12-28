@@ -1,10 +1,7 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatPattern};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::DSOpCode;
 use crate::instructions::InstructionParseErrorKind;
-
-pub const PATTERN: OpFormatPattern = format_pattern!("110110");
 
 pub struct DSInstruction {
     op: DSOpCode,

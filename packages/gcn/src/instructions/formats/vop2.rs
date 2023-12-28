@@ -1,11 +1,8 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatPattern};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VOP2OpCode;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::instructions::InstructionParseErrorKind;
-
-pub const FORMAT: OpFormatPattern = format_pattern!("0");
 
 /// Vector Instruction Two Inputs, One Output
 ///

@@ -1,9 +1,5 @@
-use crate::format_pattern;
-use crate::instructions::format_info::OpFormatPattern;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::InstructionParseErrorKind;
-
-pub const PATTERN: OpFormatPattern = format_pattern!("111110");
 
 // todo: implement
 pub struct ExpInstruction {}

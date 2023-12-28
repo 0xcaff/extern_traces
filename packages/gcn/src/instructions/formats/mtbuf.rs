@@ -1,10 +1,7 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatPattern};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::MTBUFOpCode;
 use crate::instructions::InstructionParseErrorKind;
-
-pub const PATTERN: OpFormatPattern = format_pattern!("111010");
 
 pub struct MTBufInstruction {
     op: MTBUFOpCode,

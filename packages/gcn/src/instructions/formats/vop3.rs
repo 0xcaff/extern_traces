@@ -1,12 +1,9 @@
-use crate::format_pattern;
-use crate::instructions::format_info::{bitrange, OpFormatPattern};
+use crate::instructions::format_info::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::instructions::InstructionParseErrorKind;
 use anyhow::format_err;
-
-pub const FORMAT: OpFormatPattern = format_pattern!("110100");
 
 pub struct VOP3Instruction {
     op: OpCode,

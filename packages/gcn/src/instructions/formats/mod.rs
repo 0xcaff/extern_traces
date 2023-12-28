@@ -33,27 +33,54 @@ mod vop2;
 mod vop3;
 mod vopc;
 
-
-#[derive(ParseInstruction)]
+// #[derive(ParseInstruction)]
 pub enum FormattedInstruction {
     #[pattern("110110")]
     DS(DSInstruction),
 
-    #[pattern()]
+    #[pattern("111110")]
     EXP(ExpInstruction),
+
+    #[pattern("111100")]
     MIMG(MIMGInstruction),
+
+    #[pattern("111010")]
     MTBUF(MTBufInstruction),
+
+    #[pattern("111000")]
     MUBUF(MUBUFInstruction),
+
+    #[pattern("11000")]
     SMEM(SMEMInstruction),
+
+    #[pattern("101111101")]
     SOP1(SOP1Instruction),
+
+    #[pattern("10")]
     SOP2(SOP2Instruction),
+
+    #[pattern("101111100")]
     SOPC(SOPCInstruction),
+
+    #[pattern("1011")]
     SOPK(SOPKInstruction),
+
+    #[pattern("101111111")]
     SOPP(SOPPInstruction),
+
+    #[pattern("110010")]
     VINTRP(VINTRPInstruction),
+
+    #[pattern("0111111")]
     VOP1(VOP1Instruction),
+
+    #[pattern("0")]
     VOP2(VOP2Instruction),
+
+    #[pattern("110100")]
     VOP3(VOP3Instruction),
+
+    #[pattern("0111110")]
     VOPC(VOPCInstruction),
 }
 
@@ -63,32 +90,4 @@ pub trait Reader {
 
 pub trait ParseInstruction<R: Reader> {
     fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind>;
-}
-
-#[macro_export]
-macro_rules! format_pattern {
-    ($bitstring:expr) => {{
-        const WIDTH: usize = $bitstring.len();
-        const BITS: u32 = {
-            let bytes = $bitstring.as_bytes();
-            let mut bits = 0;
-
-            let mut i = 0;
-            while i < WIDTH {
-                bits <<= 1;
-                match bytes[i] {
-                    b'0' => {}
-                    b'1' => bits |= 1,
-                    _ => panic!("Invalid character in bitstring"), // Causes compile-time error
-                }
-                i += 1;
-            }
-            bits
-        };
-
-        OpFormatPattern {
-            width: WIDTH as u8,
-            bits: BITS,
-        }
-    }};
 }
