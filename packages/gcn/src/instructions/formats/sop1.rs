@@ -21,7 +21,7 @@ impl<R: Reader> ParseInstruction<R> for SOP1Instruction {
         Ok(SOP1Instruction {
             op: SOP1OpCode::decode(bitrange(16, 8).of_32(token))?,
             sdst: ScalarDestinationOperand::decode(bitrange(9, 7).of_32(token) as u8),
-            ssrc0: ScalarSourceOperand::decode(bitrange(24, 8).of_32(token ) as u8),
+            ssrc0: ScalarSourceOperand::decode(bitrange(24, 8).of_32(token) as u8),
         })
     }
 }

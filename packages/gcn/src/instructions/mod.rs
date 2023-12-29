@@ -23,9 +23,7 @@ where
     R: Read,
 {
     pub fn new(reader: R) -> Decoder<R> {
-        Decoder {
-            reader,
-        }
+        Decoder { reader }
     }
 
     pub fn decode(&mut self) -> Result<Instruction, InstructionParseErrorKind> {
@@ -33,9 +31,7 @@ where
 
         let inner = FormattedInstruction::parse(token, &mut self.reader)?;
 
-        Ok(Instruction {
-            inner,
-        })
+        Ok(Instruction { inner })
     }
 }
 

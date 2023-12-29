@@ -1,6 +1,3 @@
-use std::io::Read;
-use gcn_internal_macros::ParseInstruction;
-use byteorder::{LittleEndian, ReadBytesExt};
 use crate::instructions::formats::ds::DSInstruction;
 use crate::instructions::formats::exp::ExpInstruction;
 use crate::instructions::formats::mimg::MIMGInstruction;
@@ -18,6 +15,9 @@ use crate::instructions::formats::vop2::VOP2Instruction;
 use crate::instructions::formats::vop3::VOP3Instruction;
 use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::instructions::{InstructionParseErrorKind, ResultExt};
+use byteorder::{LittleEndian, ReadBytesExt};
+use gcn_internal_macros::ParseInstruction;
+use std::io::Read;
 
 mod ds;
 mod exp;
@@ -91,17 +91,22 @@ pub trait Reader {
     fn read_u32(&mut self) -> Result<u32, InstructionParseErrorKind>;
 }
 
-impl <R: Read> Reader for R {
+impl<R: Read> Reader for R {
     fn read_u32(&mut self) -> Result<u32, InstructionParseErrorKind> {
         Ok(ReadBytesExt::read_u32::<LittleEndian>(self).wrapping_eof()?)
     }
 }
 
 pub trait ParseInstruction<R: Reader> {
-    fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind> where Self: Sized;
+    fn parse(token: u32, reader: R) -> Result<Self, InstructionParseErrorKind>
+    where
+        Self: Sized;
 }
 
-pub fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, InstructionParseErrorKind> {
+pub fn combine<R: Reader>(
+    first_token: u32,
+    mut reader: R,
+) -> Result<u64, InstructionParseErrorKind> {
     let second_token = reader.read_u32()?;
     let token = ((first_token as u64) << 32) | second_token as u64;
 

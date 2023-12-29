@@ -1,9 +1,9 @@
-use std::collections::BTreeMap;
-use std::str::FromStr;
-use proc_macro2::{Ident, Literal, TokenStream};
 use crate::bitstring::BitString;
 use macro_utils::exactly_one;
+use proc_macro2::{Ident, Literal, TokenStream};
 use quote::quote;
+use std::collections::BTreeMap;
+use std::str::FromStr;
 use syn::__private::TokenStream2;
 use syn::{parse2, Data, DataEnum, DeriveInput, Field, Type, Variant};
 
@@ -39,12 +39,16 @@ pub fn derive_parse_instruction(input: DeriveInput) -> Result<TokenStream2, syn:
     })
 }
 
-fn emit_blocks<'a>(enum_ident: &'a Ident, variant_info: Vec<VariantInfo<'a>>) -> impl Iterator<Item = TokenStream> + 'a  {
+fn emit_blocks<'a>(
+    enum_ident: &'a Ident,
+    variant_info: Vec<VariantInfo<'a>>,
+) -> impl Iterator<Item = TokenStream> + 'a {
     let groups = {
         let mut groups = BTreeMap::new();
 
         for info in variant_info {
-            groups.entry(info.bits.len())
+            groups
+                .entry(info.bits.len())
                 .or_insert_with(Vec::new)
                 .push((info.typ, info.ident, info.bits))
         }
