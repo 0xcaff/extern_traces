@@ -26,6 +26,7 @@ impl ${format}OpCode {
 % endfor
 """
 
+
 def to_sparse_array(ops, fn):
     relevant_ops = [item for item in ops if fn(item) != -1]
     max_index = max(fn(item) for item in relevant_ops)
@@ -37,11 +38,17 @@ def to_sparse_array(ops, fn):
 
     return result
 
+
 def to_option(number):
     return f"Some({hex(number)})" if number >= 0 else "None"
 
 
 if __name__ == '__main__':
-    rendered = Template(template).render(ops=opcodes, to_option=to_option, to_sparse_array=to_sparse_array, groupby=groupby)
+    rendered = Template(template).render(
+        ops=opcodes,
+        to_option=to_option,
+        to_sparse_array=to_sparse_array,
+        groupby=groupby
+    )
     with open('ops.rs', 'w') as file:
         file.write(rendered)
