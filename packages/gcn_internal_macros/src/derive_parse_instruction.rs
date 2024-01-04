@@ -22,7 +22,8 @@ pub fn derive_parse_instruction(input: DeriveInput) -> Result<TokenStream2, syn:
 
     Ok(quote! {
         impl <R: crate::instructions::formats::Reader> crate::instructions::formats::ParseInstruction<R> for #enum_ident {
-            fn parse(token: u32, reader: R) -> std::result::Result<Self, crate::instructions::InstructionParseErrorKind> {
+            fn parse(token: u32, reader: R) -> std::result::Result<Self, crate::reader::ReadError> {
+
                 fn bitmask(size: u8) -> u32 {
                     ((1 << size) - 1) << (32 - size)
                 }

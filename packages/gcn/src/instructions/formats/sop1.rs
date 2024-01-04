@@ -1,8 +1,8 @@
-use crate::instructions::bitrange::bitrange;
+use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOP1OpCode;
 use crate::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
-use crate::instructions::InstructionParseErrorKind;
+use crate::reader::ReadError;
 
 /// Scalar Instruction One Input, One Output
 ///
@@ -17,7 +17,7 @@ pub struct SOP1Instruction {
 }
 
 impl<R: Reader> ParseInstruction<R> for SOP1Instruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, InstructionParseErrorKind> {
+    fn parse(token: u32, _reader: R) -> Result<Self, ReadError> {
         Ok(SOP1Instruction {
             op: SOP1OpCode::decode(bitrange(16, 8).of_32(token))?,
             sdst: ScalarDestinationOperand::decode(bitrange(9, 7).of_32(token) as u8),

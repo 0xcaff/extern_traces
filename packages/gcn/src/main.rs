@@ -1,8 +1,12 @@
-use crate::instructions::{Decoder, InstructionParseErrorKind};
+use crate::instructions::Decoder;
+use crate::reader::ReadError;
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
 
+mod bitrange;
 mod instructions;
+mod pm4;
+mod reader;
 
 fn main() -> Result<(), anyhow::Error> {
     let mut file =
@@ -13,8 +17,8 @@ fn main() -> Result<(), anyhow::Error> {
     loop {
         let instruction = match decoder.decode() {
             Ok(value) => value,
-            Err(InstructionParseErrorKind::Eof) => break,
-            Err(InstructionParseErrorKind::Error(error)) => {
+            Err(ReadError::Eof) => break,
+            Err(ReadError::Error(error)) => {
                 println!("{:?}", error);
                 continue;
             }
