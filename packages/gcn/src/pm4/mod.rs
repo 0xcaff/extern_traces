@@ -2,6 +2,7 @@ use crate::bitrange::bitrange;
 use crate::reader::{ReadError, Reader};
 use anyhow::format_err;
 
+#[derive(Debug)]
 pub enum PM4Packet {
     Type0(Type0Packet),
     Type2(Type2Header),
@@ -60,25 +61,30 @@ impl PM4Packet {
     }
 }
 
+#[derive(Debug)]
 pub struct Type0Packet {
     pub header: Type0Header,
     pub body: Vec<u8>,
 }
 
+#[derive(Debug)]
 pub struct Type0Header {
     pub count: u16,
     pub base_idx: u16,
 }
 
+#[derive(Debug)]
 pub struct Type2Header {
     pub reserved: u32,
 }
 
+#[derive(Debug)]
 pub struct Type3Packet {
     pub header: Type3Header,
     pub body: Vec<u8>,
 }
 
+#[derive(Debug)]
 pub struct Type3Header {
     pub count: u16,
     pub opcode: u8,
@@ -87,6 +93,7 @@ pub struct Type3Header {
     pub predicate: bool,
 }
 
+#[derive(Debug)]
 pub enum ShaderType {
     Graphics,
     Compute,
