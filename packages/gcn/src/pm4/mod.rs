@@ -25,7 +25,7 @@ impl PM4Packet {
 
                 Ok(PM4Packet::Type0(Type0Packet {
                     header,
-                    body: reader.read_bytes((count * 2) as usize)?,
+                    body: reader.read_bytes((count * 4) as usize)?,
                 }))
             }
             1 => Err(format_err!("no").into()),
@@ -53,7 +53,7 @@ impl PM4Packet {
 
                 Ok(PM4Packet::Type3(Type3Packet {
                     header,
-                    body: reader.read_bytes((count * 2) as usize)?,
+                    body: reader.read_bytes((count * 4) as usize)?,
                 }))
             }
             _ => panic!("unexpected packet type {}", packet_type),
