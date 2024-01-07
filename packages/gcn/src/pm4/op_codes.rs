@@ -86,6 +86,7 @@ pub enum OpCode {
 
 impl OpCode {
     pub fn from_op(value: u8) -> Result<OpCode, anyhow::Error> {
-        Ok(Self::from_repr(value).ok_or_else(|| format_err!("failed to parse op code {}", value))?)
+        Ok(Self::from_repr(value)
+            .ok_or_else(|| format_err!("failed to parse op code {}", value))?)
     }
 }
