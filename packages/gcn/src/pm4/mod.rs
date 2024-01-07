@@ -13,19 +13,20 @@ impl PM4Packet {
     pub fn parse(mut reader: impl Reader) -> Result<PM4Packet, ReadError> {
         let value = reader.read_u32()?;
         let packet_type = bitrange(0, 2).of_32(value);
+        let count = bitrange(2, 14).of_32(value) as u16 + 1;
 
         match packet_type {
             0 => {
-                let count = bitrange(2, 14).of_32(value) as u16;
-
                 let header = Type0Header {
                     count,
                     base_idx: bitrange(16, 16).of_32(value) as u16,
                 };
 
+                let body = reader.read_bytes((count * 4) as usize)?;
+
                 Ok(PM4Packet::Type0(Type0Packet {
                     header,
-                    body: reader.read_bytes((count * 4) as usize)?,
+                    body,
                 }))
             }
             1 => Err(format_err!("no").into()),
@@ -33,7 +34,7 @@ impl PM4Packet {
                 reserved: bitrange(2, 30).of_32(value) as u32,
             })),
             3 => {
-                let count = bitrange(2, 14).of_32(value) as u16;
+                let body = reader.read_bytes((count * 4) as usize)?;
 
                 let header = Type3Header {
                     count,
@@ -53,7 +54,7 @@ impl PM4Packet {
 
                 Ok(PM4Packet::Type3(Type3Packet {
                     header,
-                    body: reader.read_bytes((count * 4) as usize)?,
+                    body,
                 }))
             }
             _ => panic!("unexpected packet type {}", packet_type),
