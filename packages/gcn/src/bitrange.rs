@@ -1,3 +1,7 @@
+/// Holds information to extract a set of bits from a value.
+///
+/// The start value is relative to the most significant bit, so a start of 0
+/// will start from the most significant bit.
 pub struct BitRange {
     pub start: u8,
     pub len: u8,
