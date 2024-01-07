@@ -31,3 +31,17 @@ pub const fn bitrange(start_idx: u8, len: u8) -> BitRange {
         len,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::bitrange::bitrange;
+
+    #[test]
+    fn test() {
+        let value = 0b11010000000110001000001110101011u32;
+
+        assert_eq!(bitrange(0, 6).of_32(value), 0b110100);
+        assert_eq!(bitrange(0, 6).of_64(value as u64), 0b000000);
+    }
+
+}
