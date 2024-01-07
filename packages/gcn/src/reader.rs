@@ -1,4 +1,4 @@
-use byteorder::{LittleEndian, ReadBytesExt};
+use byteorder::{ByteOrder, LittleEndian, ReadBytesExt};
 use std::io;
 use std::io::{ErrorKind, Read};
 
@@ -18,7 +18,7 @@ impl<T> ResultExt<T> for Result<T, io::Error> {
 pub trait Reader {
     fn read_u32(&mut self) -> Result<u32, ReadError>;
 
-    fn read_bytes(&mut self, len: usize) -> Result<Vec<u8>, ReadError>;
+    fn read_dwords(&mut self, len: usize) -> Result<Vec<u32>, ReadError>;
 }
 
 impl<R: Read> Reader for R {
@@ -26,12 +26,15 @@ impl<R: Read> Reader for R {
         Ok(ReadBytesExt::read_u32::<LittleEndian>(self).wrapping_eof()?)
     }
 
-    fn read_bytes(&mut self, len: usize) -> Result<Vec<u8>, ReadError> {
-        let mut buffer = vec![0; len];
+    fn read_dwords(&mut self, len: usize) -> Result<Vec<u32>, ReadError> {
+        let mut buffer = vec![0; len * 4];
 
         self.read_exact(&mut buffer).wrapping_eof()?;
 
-        Ok(buffer)
+        Ok(buffer
+            .chunks(4)
+            .map(|it| LittleEndian::read_u32(it))
+            .collect::<Vec<u32>>())
     }
 }
 

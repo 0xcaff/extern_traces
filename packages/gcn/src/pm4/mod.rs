@@ -19,26 +19,16 @@ impl PM4Packet {
         let count = bitrange(29, 16).of_32(value) as u16 + 1;
 
         match packet_type {
-            0 => {
-                let header = Type0Header {
-                    count,
-                    base_idx: bitrange(15, 0).of_32(value) as u16,
-                };
-
-                let body = reader.read_bytes((count * 4) as usize)?;
-
-                Ok(PM4Packet::Type0(Type0Packet { header, body }))
-            }
+            0 => Ok(PM4Packet::Type0(Type0Packet {
+                base_idx: bitrange(15, 0).of_32(value) as u16,
+                body: reader.read_dwords(count as usize)?,
+            })),
             1 => Err(format_err!("no").into()),
             2 => Ok(PM4Packet::Type2(Type2Header {
                 reserved: bitrange(29, 0).of_32(value) as u32,
             })),
-            3 => {
-                let body = reader.read_bytes((count * 4) as usize)?;
-
-                let header = Type3Header {
-                    count,
-                    opcode: OpCode::from_op(bitrange(15, 8).of_32(value) as u8)?,
+            3 => Ok(PM4Packet::Type3(Type3Packet {
+                header: Type3Header {
                     reserved: bitrange(7, 2).of_32(value) as u8,
                     shader_type: if bitrange(1, 1).of_32(value) == 0 {
                         ShaderType::Graphics
@@ -50,10 +40,12 @@ impl PM4Packet {
                     } else {
                         true
                     },
-                };
-
-                Ok(PM4Packet::Type3(Type3Packet { header, body }))
-            }
+                },
+                value: Type3PacketValue::parse(
+                    OpCode::from_op(bitrange(15, 8).of_32(value) as u8)?,
+                    reader.read_dwords(count as usize)?,
+                ),
+            })),
             _ => panic!("unexpected packet type {}", packet_type),
         }
     }
@@ -61,14 +53,8 @@ impl PM4Packet {
 
 #[derive(Debug)]
 pub struct Type0Packet {
-    pub header: Type0Header,
-    pub body: Vec<u8>,
-}
-
-#[derive(Debug)]
-pub struct Type0Header {
-    pub count: u16,
     pub base_idx: u16,
+    pub body: Vec<u32>,
 }
 
 #[derive(Debug)]
@@ -79,13 +65,42 @@ pub struct Type2Header {
 #[derive(Debug)]
 pub struct Type3Packet {
     pub header: Type3Header,
-    pub body: Vec<u8>,
+    pub value: Type3PacketValue,
+}
+
+#[derive(Debug)]
+pub enum Type3PacketValue {
+    SetContextRegister { offset: u16, data: Vec<u32> },
+    SetShaderRegister { offset: u16, data: Vec<u32> },
+    Unknown { opcode: OpCode, body: Vec<u32> },
+}
+
+impl Type3PacketValue {
+    pub fn parse(opcode: OpCode, mut body: Vec<u32>) -> Type3PacketValue {
+        match opcode {
+            OpCode::SET_CONTEXT_REG => {
+                let value_header = body.remove(0);
+
+                Type3PacketValue::SetContextRegister {
+                    offset: bitrange(15, 0).of_32(value_header) as u16,
+                    data: body,
+                }
+            }
+            OpCode::SET_SH_REG => {
+                let value_header = body.remove(0);
+
+                Type3PacketValue::SetShaderRegister {
+                    offset: bitrange(15, 0).of_32(value_header) as u16,
+                    data: body,
+                }
+            }
+            _ => Type3PacketValue::Unknown { opcode, body },
+        }
+    }
 }
 
 #[derive(Debug)]
 pub struct Type3Header {
-    pub count: u16,
-    pub opcode: OpCode,
     pub reserved: u8,
     pub shader_type: ShaderType,
     pub predicate: bool,
@@ -103,6 +118,7 @@ pub enum ShaderType {
 /// This is how bit ranges are specified in the AMD Southern Island PM4 docs.
 pub fn bitrange(highest: u8, lowest: u8) -> BitRange {
     let bit_len = highest - lowest + 1;
+    // todo: this 32 here is kinda wrong
     let start = 32 - bit_len - lowest;
 
     crate::bitrange::bitrange(start, bit_len)
