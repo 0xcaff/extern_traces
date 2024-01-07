@@ -76,8 +76,7 @@ pub enum Type3PacketValue {
         values: Vec<ContextRegisterSetOperation>,
     },
     SetShaderRegister {
-        offset: u16,
-        data: Vec<u32>,
+        values: Vec<ShaderRegisterSetOperation>,
     },
     Unknown {
         opcode: OpCode,
@@ -87,6 +86,12 @@ pub enum Type3PacketValue {
 
 #[derive(Debug)]
 pub struct ContextRegisterSetOperation {
+    register: Option<Register>,
+    value: u32,
+}
+
+#[derive(Debug)]
+pub struct ShaderRegisterSetOperation {
     register: Option<Register>,
     value: u32,
 }
@@ -115,10 +120,21 @@ impl Type3PacketValue {
             }
             OpCode::SET_SH_REG => {
                 let value_header = body.remove(0);
+                let offset = bitrange(15, 0).of_32(value_header) as u16;
 
                 Type3PacketValue::SetShaderRegister {
-                    offset: bitrange(15, 0).of_32(value_header) as u16,
-                    data: body,
+                    values: body
+                        .into_iter()
+                        .enumerate()
+                        .map(|(idx, value)| {
+                            let offset = offset + idx as u16;
+
+                            ShaderRegisterSetOperation {
+                                register: Register::from_repr(((offset as usize) << 2) + 0xB000),
+                                value,
+                            }
+                        })
+                        .collect(),
                 }
             }
             _ => Type3PacketValue::Unknown { opcode, body },
@@ -157,6 +173,7 @@ mod tests {
 
     #[test]
     fn test() {
+        println!("{}", bitrange(15, 8).of_32(0xc0026900));
         assert_eq!(bitrange(31, 30), crate::bitrange::bitrange(0, 2));
         assert_eq!(bitrange(29, 16), crate::bitrange::bitrange(2, 14));
         assert_eq!(bitrange(15, 0), crate::bitrange::bitrange(16, 16));
