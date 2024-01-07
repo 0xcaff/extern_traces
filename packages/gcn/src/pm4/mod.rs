@@ -1,4 +1,7 @@
+mod op_codes;
+
 use crate::bitrange::BitRange;
+use crate::pm4::op_codes::OpCode;
 use crate::reader::{ReadError, Reader};
 use anyhow::format_err;
 
@@ -35,7 +38,7 @@ impl PM4Packet {
 
                 let header = Type3Header {
                     count,
-                    opcode: bitrange(15, 8).of_32(value) as u8,
+                    opcode: OpCode::from_op(bitrange(15, 8).of_32(value) as u8)?,
                     reserved: bitrange(7, 2).of_32(value) as u8,
                     shader_type: if bitrange(1, 1).of_32(value) == 0 {
                         ShaderType::Graphics
@@ -82,7 +85,7 @@ pub struct Type3Packet {
 #[derive(Debug)]
 pub struct Type3Header {
     pub count: u16,
-    pub opcode: u8,
+    pub opcode: OpCode,
     pub reserved: u8,
     pub shader_type: ShaderType,
     pub predicate: bool,
