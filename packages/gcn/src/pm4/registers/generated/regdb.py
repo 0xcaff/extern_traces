@@ -897,4 +897,20 @@ def deduplicate_register_types(regdb):
             if len(regtypes) > 1:
                 regdb.merge_register_types(regtypes, regtypes[0])
 
+
+def load(files):
+    regdb = None
+    for filename in files:
+        with open(filename, 'r') as filp:
+            db = RegisterDatabase.from_json(json.load(filp))
+            if regdb is None:
+                regdb = db
+            else:
+                regdb.update(db)
+
+    deduplicate_enums(regdb)
+    deduplicate_register_types(regdb)
+
+    return regdb
+
 # kate: space-indent on; indent-width 4; replace-tabs on;

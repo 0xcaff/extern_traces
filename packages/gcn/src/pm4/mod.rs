@@ -1,7 +1,9 @@
 mod op_codes;
+mod registers;
 
 use crate::bitrange::BitRange;
 use crate::pm4::op_codes::OpCode;
+use crate::pm4::registers::Register;
 use crate::reader::{ReadError, Reader};
 use anyhow::format_err;
 
@@ -70,9 +72,23 @@ pub struct Type3Packet {
 
 #[derive(Debug)]
 pub enum Type3PacketValue {
-    SetContextRegister { offset: u16, data: Vec<u32> },
-    SetShaderRegister { offset: u16, data: Vec<u32> },
-    Unknown { opcode: OpCode, body: Vec<u32> },
+    SetContextRegister {
+        values: Vec<ContextRegisterSetOperation>,
+    },
+    SetShaderRegister {
+        offset: u16,
+        data: Vec<u32>,
+    },
+    Unknown {
+        opcode: OpCode,
+        body: Vec<u32>,
+    },
+}
+
+#[derive(Debug)]
+pub struct ContextRegisterSetOperation {
+    register: Option<Register>,
+    value: u32,
 }
 
 impl Type3PacketValue {
@@ -80,10 +96,21 @@ impl Type3PacketValue {
         match opcode {
             OpCode::SET_CONTEXT_REG => {
                 let value_header = body.remove(0);
+                let offset = bitrange(15, 0).of_32(value_header) as u16;
 
                 Type3PacketValue::SetContextRegister {
-                    offset: bitrange(15, 0).of_32(value_header) as u16,
-                    data: body,
+                    values: body
+                        .into_iter()
+                        .enumerate()
+                        .map(|(idx, value)| {
+                            let offset = offset + idx as u16;
+
+                            ContextRegisterSetOperation {
+                                register: Register::from_repr(((offset as usize) << 2) + 0x028000),
+                                value,
+                            }
+                        })
+                        .collect(),
                 }
             }
             OpCode::SET_SH_REG => {
