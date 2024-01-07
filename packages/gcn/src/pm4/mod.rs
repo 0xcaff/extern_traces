@@ -1,4 +1,4 @@
-use crate::bitrange::bitrange;
+use crate::bitrange::BitRange;
 use crate::reader::{ReadError, Reader};
 use anyhow::format_err;
 
@@ -12,50 +12,44 @@ pub enum PM4Packet {
 impl PM4Packet {
     pub fn parse(mut reader: impl Reader) -> Result<PM4Packet, ReadError> {
         let value = reader.read_u32()?;
-        let packet_type = bitrange(0, 2).of_32(value);
-        let count = bitrange(2, 14).of_32(value) as u16 + 1;
+        let packet_type = bitrange(31, 30).of_32(value);
+        let count = bitrange(29, 16).of_32(value) as u16 + 1;
 
         match packet_type {
             0 => {
                 let header = Type0Header {
                     count,
-                    base_idx: bitrange(16, 16).of_32(value) as u16,
+                    base_idx: bitrange(15, 0).of_32(value) as u16,
                 };
 
                 let body = reader.read_bytes((count * 4) as usize)?;
 
-                Ok(PM4Packet::Type0(Type0Packet {
-                    header,
-                    body,
-                }))
+                Ok(PM4Packet::Type0(Type0Packet { header, body }))
             }
             1 => Err(format_err!("no").into()),
             2 => Ok(PM4Packet::Type2(Type2Header {
-                reserved: bitrange(2, 30).of_32(value) as u32,
+                reserved: bitrange(29, 0).of_32(value) as u32,
             })),
             3 => {
                 let body = reader.read_bytes((count * 4) as usize)?;
 
                 let header = Type3Header {
                     count,
-                    opcode: bitrange(16, 8).of_32(value) as u8,
-                    reserved: bitrange(24, 6).of_32(value) as u8,
-                    shader_type: if bitrange(30, 1).of_32(value) == 0 {
+                    opcode: bitrange(15, 8).of_32(value) as u8,
+                    reserved: bitrange(7, 2).of_32(value) as u8,
+                    shader_type: if bitrange(1, 1).of_32(value) == 0 {
                         ShaderType::Graphics
                     } else {
                         ShaderType::Compute
                     },
-                    predicate: if bitrange(31, 1).of_32(value) == 0 {
+                    predicate: if bitrange(0, 0).of_32(value) == 0 {
                         false
                     } else {
                         true
                     },
                 };
 
-                Ok(PM4Packet::Type3(Type3Packet {
-                    header,
-                    body,
-                }))
+                Ok(PM4Packet::Type3(Type3Packet { header, body }))
             }
             _ => panic!("unexpected packet type {}", packet_type),
         }
@@ -98,4 +92,33 @@ pub struct Type3Header {
 pub enum ShaderType {
     Graphics,
     Compute,
+}
+
+/// Creates a bit range spanning from lowest to highest, inclusive. A value of
+/// 0 indicates the least significant bit.
+///
+/// This is how bit ranges are specified in the AMD Southern Island PM4 docs.
+pub fn bitrange(highest: u8, lowest: u8) -> BitRange {
+    let bit_len = highest - lowest + 1;
+    let start = 32 - bit_len - lowest;
+
+    crate::bitrange::bitrange(start, bit_len)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::pm4::bitrange;
+
+    #[test]
+    fn test() {
+        assert_eq!(bitrange(31, 30), crate::bitrange::bitrange(0, 2));
+        assert_eq!(bitrange(29, 16), crate::bitrange::bitrange(2, 14));
+        assert_eq!(bitrange(15, 0), crate::bitrange::bitrange(16, 16));
+        assert_eq!(bitrange(29, 0), crate::bitrange::bitrange(2, 30));
+
+        assert_eq!(bitrange(15, 8), crate::bitrange::bitrange(16, 8));
+        assert_eq!(bitrange(7, 2), crate::bitrange::bitrange(24, 6));
+        assert_eq!(bitrange(1, 1), crate::bitrange::bitrange(30, 1));
+        assert_eq!(bitrange(0, 0), crate::bitrange::bitrange(31, 1));
+    }
 }

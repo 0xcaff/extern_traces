@@ -2,6 +2,7 @@
 ///
 /// The start value is relative to the most significant bit, so a start of 0
 /// will start from the most significant bit.
+#[derive(PartialEq, Eq, Debug)]
 pub struct BitRange {
     pub start: u8,
     pub len: u8,
@@ -43,5 +44,4 @@ mod tests {
         assert_eq!(bitrange(0, 6).of_32(value), 0b110100);
         assert_eq!(bitrange(0, 6).of_64(value as u64), 0b000000);
     }
-
 }
