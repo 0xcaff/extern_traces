@@ -4,7 +4,7 @@ mod registers;
 use crate::bitrange::BitRange;
 use crate::pm4::op_codes::OpCode;
 use crate::pm4::registers::Register;
-use crate::reader::{ReadError, Reader};
+use crate::reader::Reader;
 use anyhow::format_err;
 
 #[derive(Debug)]
@@ -15,7 +15,7 @@ pub enum PM4Packet {
 }
 
 impl PM4Packet {
-    pub fn parse(mut reader: impl Reader) -> Result<PM4Packet, ReadError> {
+    pub fn parse(mut reader: impl Reader) -> Result<PM4Packet, anyhow::Error> {
         let value = reader.read_u32()?;
         let packet_type = bitrange(31, 30).of_32(value);
         let count = bitrange(29, 16).of_32(value) as u16 + 1;

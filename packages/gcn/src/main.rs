@@ -1,5 +1,6 @@
+#![feature(buf_read_has_data_left)]
+
 use crate::instructions::Decoder;
-use crate::reader::ReadError;
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
 
@@ -15,13 +16,9 @@ fn main() -> Result<(), anyhow::Error> {
     let mut decoder = Decoder::new(file.take(76));
 
     loop {
-        let instruction = match decoder.decode() {
-            Ok(value) => value,
-            Err(ReadError::Eof) => break,
-            Err(ReadError::Error(error)) => {
-                println!("{:?}", error);
-                continue;
-            }
+        let instruction = match decoder.decode()? {
+            Some(value) => value,
+            None => break,
         };
 
         println!("{:#?}", instruction);

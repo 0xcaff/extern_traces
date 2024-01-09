@@ -2,7 +2,6 @@ use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOPCOpCode;
 use crate::instructions::operands::ScalarSourceOperand;
-use crate::reader::ReadError;
 
 /// Scalar Instruction Two Inputs, One Comparison
 ///
@@ -17,7 +16,7 @@ pub struct SOPCInstruction {
 }
 
 impl<R: Reader> ParseInstruction<R> for SOPCInstruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, ReadError> {
+    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
         Ok(SOPCInstruction {
             op: SOPCOpCode::decode(bitrange(9, 7).of_32(token))?,
             ssrc0: ScalarSourceOperand::decode(bitrange(16, 8).of_32(token) as u8),

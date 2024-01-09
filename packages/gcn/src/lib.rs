@@ -1,3 +1,5 @@
+#![feature(buf_read_has_data_left)]
+
 mod bitrange;
 mod instructions;
 mod pm4;

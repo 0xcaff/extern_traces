@@ -1,7 +1,6 @@
 use crate::bitrange::bitrange;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::DSOpCode;
-use crate::reader::ReadError;
 
 #[derive(Debug)]
 pub struct DSInstruction {
@@ -18,7 +17,7 @@ pub struct DSInstruction {
 }
 
 impl<R: Reader> ParseInstruction<R> for DSInstruction {
-    fn parse(token: u32, reader: R) -> Result<Self, ReadError> {
+    fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
 
         Ok(DSInstruction {

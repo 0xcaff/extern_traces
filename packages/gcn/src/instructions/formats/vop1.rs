@@ -2,7 +2,6 @@ use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VOP1OpCode;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
-use crate::reader::ReadError;
 
 /// Vector Instruction One Input, One Output
 ///
@@ -17,7 +16,7 @@ pub struct VOP1Instruction {
 }
 
 impl<R: Reader> ParseInstruction<R> for VOP1Instruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, ReadError> {
+    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
         Ok(VOP1Instruction {
             op: VOP1OpCode::decode(bitrange(15, 8).of_32(token))?,
             vdst: VectorGPR::decode(bitrange(7, 8).of_32(token) as u8),

@@ -1,7 +1,6 @@
 use crate::bitrange::bitrange;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MTBUFOpCode;
-use crate::reader::ReadError;
 
 #[derive(Debug)]
 pub struct MTBufInstruction {
@@ -41,7 +40,7 @@ pub struct MTBufInstruction {
 // }
 
 impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
-    fn parse(token: u32, reader: R) -> Result<Self, ReadError> {
+    fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MTBufInstruction {
             op: MTBUFOpCode::decode(bitrange(13, 3).of_64(token))?,
