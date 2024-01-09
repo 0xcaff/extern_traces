@@ -1,6 +1,7 @@
 mod op_codes;
 mod registers;
 
+use std::io::Cursor;
 use crate::bitrange::BitRange;
 use crate::pm4::op_codes::OpCode;
 use crate::pm4::registers::Register;
@@ -50,6 +51,20 @@ impl PM4Packet {
             })),
             _ => panic!("unexpected packet type {}", packet_type),
         }
+    }
+
+    pub fn parse_all(draw_command_buffer: &[u8]) -> Result<Vec<PM4Packet>, anyhow::Error> {
+        let mut cursor = Cursor::new(draw_command_buffer);
+
+        let mut result = Vec::new();
+
+        while !cursor.is_empty() {
+            let packet = PM4Packet::parse(&mut cursor)?;
+
+            result.push(packet);
+        }
+
+        Ok(result)
     }
 }
 

@@ -1,4 +1,5 @@
 #![feature(buf_read_has_data_left)]
+#![feature(cursor_remaining)]
 
 use crate::instructions::Decoder;
 use std::fs::File;
