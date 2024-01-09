@@ -9,7 +9,7 @@ pub fn exactly_one(
 ) -> Result<TokenStream, syn::Error> {
     let mut filtered_attributes = attrs.iter().filter_map(|attr| {
         let Meta::List(value) = &attr.meta else {
-            return None
+            return None;
         };
 
         if !value.path.is_ident(name) {

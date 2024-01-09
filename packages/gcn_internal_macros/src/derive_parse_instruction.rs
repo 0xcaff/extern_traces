@@ -11,10 +11,7 @@ pub fn derive_parse_instruction(input: DeriveInput) -> Result<TokenStream2, syn:
     let enum_ident = &input.ident;
 
     let Data::Enum(data_enum) = input.data else {
-        return Err(syn::Error::new_spanned(
-            &input,
-            "only enums are supported",
-        ));
+        return Err(syn::Error::new_spanned(&input, "only enums are supported"));
     };
 
     let variants = get_variant_info(&data_enum)?;
