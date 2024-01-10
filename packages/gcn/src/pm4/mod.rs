@@ -26,7 +26,6 @@ impl PM4Packet {
                 base_idx: bitrange(15, 0).of_32(value) as u16,
                 body: reader.read_dwords(count as usize)?,
             })),
-            1 => Err(format_err!("no").into()),
             2 => Ok(PM4Packet::Type2(Type2Header {
                 reserved: bitrange(29, 0).of_32(value) as u32,
             })),
