@@ -1,12 +1,12 @@
 mod op_codes;
 mod registers;
 
-use std::io::Cursor;
 use crate::bitrange::BitRange;
 use crate::pm4::op_codes::OpCode;
 use crate::pm4::registers::Register;
 use crate::reader::Reader;
 use anyhow::format_err;
+use std::io::Cursor;
 
 #[derive(Debug)]
 pub enum PM4Packet {
