@@ -2,10 +2,9 @@ mod op_codes;
 mod registers;
 
 use crate::bitrange::BitRange;
-use crate::pm4::op_codes::OpCode;
-use crate::pm4::registers::Register;
+pub use crate::pm4::op_codes::OpCode;
+pub use crate::pm4::registers::Register;
 use crate::reader::Reader;
-use anyhow::format_err;
 use std::io::Cursor;
 
 #[derive(Debug)]
@@ -100,8 +99,8 @@ pub enum Type3PacketValue {
 
 #[derive(Debug)]
 pub struct ContextRegisterSetOperation {
-    register: Option<Register>,
-    value: u32,
+    pub register: Option<Register>,
+    pub value: u32,
 }
 
 #[derive(Debug)]
