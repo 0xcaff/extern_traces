@@ -1,26 +1,28 @@
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOP1OpCode;
 use crate::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
-use bits::{bitrange, FromBits};
+use bits::FromBits;
+use bits_macros::FromBits;
 
 /// Scalar Instruction One Input, One Output
 ///
 /// This is a scalar instruction with one input and one output. Can be followed
 /// by a 32-bit literal constant.
-#[derive(Debug)]
+#[derive(Debug, FromBits)]
+#[bits(32)]
 pub struct SOP1Instruction {
+    #[bits(8, 15)]
     op: SOP1OpCode,
 
+    #[bits(0, 7)]
     ssrc0: ScalarSourceOperand,
+
+    #[bits(16, 22)]
     sdst: ScalarDestinationOperand,
 }
 
 impl<R: Reader> ParseInstruction<R> for SOP1Instruction {
     fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
-        Ok(SOP1Instruction {
-            op: SOP1OpCode::from_bits(bitrange(16, 8).of_32(token)),
-            sdst: ScalarDestinationOperand::from_bits(bitrange(9, 7).of_32(token)),
-            ssrc0: ScalarSourceOperand::from_bits(bitrange(24, 8).of_32(token)),
-        })
+        Ok(Self::from_bits(token as usize))
     }
 }
