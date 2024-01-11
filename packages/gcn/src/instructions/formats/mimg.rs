@@ -1,6 +1,6 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MIMGOpCode;
+use bits::bitrange;
 
 #[derive(Debug)]
 pub struct MIMGInstruction {

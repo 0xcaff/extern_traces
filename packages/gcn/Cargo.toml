@@ -10,3 +10,4 @@ byteorder = "1.5.0"
 anyhow = "1.0.76"
 strum = { version = "0.25.0", features = ["derive"] }
 gcn_internal_macros = { path = "../gcn_internal_macros" }
+bits = { path = "../bits" }

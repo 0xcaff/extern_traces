@@ -1,6 +1,6 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SMEMOpCode;
+use bits::bitrange;
 
 /// Scalar Instruction Memory Access
 ///

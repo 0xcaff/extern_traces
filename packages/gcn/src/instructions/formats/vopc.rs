@@ -1,7 +1,7 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VOPCOpCode;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
+use bits::bitrange;
 
 #[derive(Debug)]
 pub struct VOPCInstruction {

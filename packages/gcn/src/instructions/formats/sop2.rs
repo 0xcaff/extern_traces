@@ -1,7 +1,7 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOP2OpCode;
 use crate::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
+use bits::bitrange;
 
 /// Scalar Format Two Inputs, One Output
 ///

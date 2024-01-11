@@ -1,6 +1,6 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::DSOpCode;
+use bits::bitrange;
 
 #[derive(Debug)]
 pub struct DSInstruction {

@@ -1,10 +1,10 @@
 mod op_codes;
 mod registers;
 
-use crate::bitrange::BitRange;
 pub use crate::pm4::op_codes::OpCode;
 pub use crate::pm4::registers::Register;
 use crate::reader::Reader;
+use bits::BitRange;
 use std::io::Cursor;
 
 #[derive(Debug)]
@@ -220,7 +220,7 @@ pub fn bitrange(highest: u8, lowest: u8) -> BitRange {
     // todo: this 32 here is kinda wrong
     let start = 32 - bit_len - lowest;
 
-    crate::bitrange::bitrange(start, bit_len)
+    bits::bitrange(start, bit_len)
 }
 
 #[cfg(test)]
@@ -230,14 +230,14 @@ mod tests {
     #[test]
     fn test() {
         println!("{}", bitrange(15, 8).of_32(0xc0026900));
-        assert_eq!(bitrange(31, 30), crate::bitrange::bitrange(0, 2));
-        assert_eq!(bitrange(29, 16), crate::bitrange::bitrange(2, 14));
-        assert_eq!(bitrange(15, 0), crate::bitrange::bitrange(16, 16));
-        assert_eq!(bitrange(29, 0), crate::bitrange::bitrange(2, 30));
+        assert_eq!(bitrange(31, 30), bits::bitrange(0, 2));
+        assert_eq!(bitrange(29, 16), bits::bitrange(2, 14));
+        assert_eq!(bitrange(15, 0), bits::bitrange(16, 16));
+        assert_eq!(bitrange(29, 0), bits::bitrange(2, 30));
 
-        assert_eq!(bitrange(15, 8), crate::bitrange::bitrange(16, 8));
-        assert_eq!(bitrange(7, 2), crate::bitrange::bitrange(24, 6));
-        assert_eq!(bitrange(1, 1), crate::bitrange::bitrange(30, 1));
-        assert_eq!(bitrange(0, 0), crate::bitrange::bitrange(31, 1));
+        assert_eq!(bitrange(15, 8), bits::bitrange(16, 8));
+        assert_eq!(bitrange(7, 2), bits::bitrange(24, 6));
+        assert_eq!(bitrange(1, 1), bits::bitrange(30, 1));
+        assert_eq!(bitrange(0, 0), bits::bitrange(31, 1));
     }
 }

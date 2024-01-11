@@ -1,7 +1,7 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VOP1OpCode;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
+use bits::bitrange;
 
 /// Vector Instruction One Input, One Output
 ///

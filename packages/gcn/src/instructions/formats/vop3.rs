@@ -1,8 +1,8 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use anyhow::format_err;
+use bits::bitrange;
 
 #[derive(Debug)]
 pub struct VOP3Instruction {

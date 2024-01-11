@@ -1,6 +1,6 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOPPOpCode;
+use bits::bitrange;
 
 /// Scalar Instruction One Input, One Special Operation
 ///

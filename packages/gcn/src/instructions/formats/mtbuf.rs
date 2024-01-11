@@ -1,6 +1,6 @@
-use crate::bitrange::bitrange;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MTBUFOpCode;
+use bits::bitrange;
 
 #[derive(Debug)]
 pub struct MTBufInstruction {
