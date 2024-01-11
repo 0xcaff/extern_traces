@@ -5,7 +5,6 @@ use crate::instructions::Decoder;
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
 
-mod bitrange;
 mod instructions;
 mod pm4;
 mod reader;
