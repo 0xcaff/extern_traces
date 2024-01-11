@@ -1,3 +1,5 @@
+use bits::FromBits;
+
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
 #[derive(Debug)]
 pub enum ScalarDestinationOperand {
@@ -15,11 +17,9 @@ pub enum ScalarDestinationOperand {
     Reserved(u8),
 }
 
-impl ScalarDestinationOperand {
-    pub fn decode(encoded: u8) -> ScalarDestinationOperand {
-        let value = encoded & 0b1111111;
-        debug_assert_eq!(value, encoded);
-
+impl FromBits<7> for ScalarDestinationOperand {
+    fn from_bits(value: usize) -> Self {
+        let value = value as u8;
         match value {
             0..=103 => ScalarDestinationOperand::ScalarGPR(value),
             106 => ScalarDestinationOperand::VccLo,
@@ -85,10 +85,11 @@ impl InlineFloatConstant {
     }
 }
 
-impl ScalarSourceOperand {
-    pub fn decode(encoded: u8) -> ScalarSourceOperand {
+impl FromBits<8> for ScalarSourceOperand {
+    fn from_bits(value: usize) -> Self {
+        let encoded = value as u8;
         match encoded {
-            0..=127 => ScalarSourceOperand::Destination(ScalarDestinationOperand::decode(encoded)),
+            0..=127 => ScalarSourceOperand::Destination(ScalarDestinationOperand::from_bits(value)),
 
             128..=208 => {
                 ScalarSourceOperand::IntegerConstant(InlineIntegerConstant { value: encoded })
@@ -111,10 +112,11 @@ pub enum SourceOperand {
     VectorGPR(VectorGPR),
 }
 
-impl SourceOperand {
-    pub fn decode(value: u16) -> SourceOperand {
+impl FromBits<9> for SourceOperand {
+    fn from_bits(value: usize) -> Self {
+        let value = value as u16;
         match value {
-            0..=255 => SourceOperand::Scalar(ScalarSourceOperand::decode(value as u8)),
+            0..=255 => SourceOperand::Scalar(ScalarSourceOperand::from_bits(value as usize)),
             256..=511 => SourceOperand::VectorGPR(VectorGPR {
                 register_idx: (value - 256) as u8,
             }), // 256..=511 to VGPR0..VGPR255
@@ -128,8 +130,9 @@ pub struct VectorGPR {
     register_idx: u8,
 }
 
-impl VectorGPR {
-    pub fn decode(value: u8) -> VectorGPR {
+impl FromBits<8> for VectorGPR {
+    fn from_bits(value: usize) -> Self {
+        let value = value as u8;
         VectorGPR {
             register_idx: value,
         }

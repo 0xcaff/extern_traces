@@ -27,7 +27,7 @@ where
     }
 
     pub fn decode(&mut self) -> Result<Option<Instruction>, anyhow::Error> {
-        if self.reader.has_data_left()? {
+        if !self.reader.has_data_left()? {
             return Ok(None);
         }
 

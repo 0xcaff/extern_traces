@@ -2,7 +2,7 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use anyhow::format_err;
-use bits::bitrange;
+use bits::{bitrange, FromBits};
 
 #[derive(Debug)]
 pub struct VOP3Instruction {
@@ -23,7 +23,7 @@ impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
         let token = combine(token, reader)?;
         Ok(VOP3Instruction {
             op: OpCode::decode(bitrange(6, 9).of_64(token))?,
-            vdst: VectorGPR::decode(bitrange(24, 8).of_64(token) as u8),
+            vdst: VectorGPR::from_bits(bitrange(24, 8).of_64(token)),
 
             src0: TransformedOperand::parse(token, 0),
             src1: TransformedOperand::parse(token, 1),
@@ -86,12 +86,12 @@ impl TransformedOperand {
             },
             9,
         )
-        .of_64(token) as u16;
+        .of_64(token);
 
         TransformedOperand {
             abs: bitrange(21 + idx, 1).of_64(token) == 1,
             neg: bitrange(32 + idx, 1).of_64(token) == 1,
-            operand: SourceOperand::decode(op_value),
+            operand: SourceOperand::from_bits(op_value),
         }
     }
 }
