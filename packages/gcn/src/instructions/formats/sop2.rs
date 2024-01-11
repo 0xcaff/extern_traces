@@ -1,8 +1,5 @@
-use crate::instructions::formats::ParseInstruction;
 use crate::instructions::generated::SOP2OpCode;
 use crate::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
-use crate::reader::Reader;
-use bits::FromBits;
 use bits_macros::FromBits;
 
 /// Scalar Format Two Inputs, One Output
@@ -23,10 +20,4 @@ pub struct SOP2Instruction {
 
     #[bits(16, 22)]
     sdst: ScalarDestinationOperand,
-}
-
-impl<R: Reader> ParseInstruction<R> for SOP2Instruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
-        Ok(Self::from_bits(token as usize))
-    }
 }

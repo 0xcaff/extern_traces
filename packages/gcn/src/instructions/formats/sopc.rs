@@ -1,8 +1,5 @@
-use crate::instructions::formats::ParseInstruction;
 use crate::instructions::generated::SOPCOpCode;
 use crate::instructions::operands::ScalarSourceOperand;
-use crate::reader::Reader;
-use bits::FromBits;
 use bits_macros::FromBits;
 
 /// Scalar Instruction Two Inputs, One Comparison
@@ -20,10 +17,4 @@ pub struct SOPCInstruction {
 
     #[bits(8, 15)]
     ssrc1: ScalarSourceOperand,
-}
-
-impl<R: Reader> ParseInstruction<R> for SOPCInstruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
-        Ok(Self::from_bits(token as usize))
-    }
 }

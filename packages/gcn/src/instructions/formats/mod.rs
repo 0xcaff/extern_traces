@@ -15,6 +15,7 @@ use crate::instructions::formats::vop2::VOP2Instruction;
 use crate::instructions::formats::vop3::VOP3Instruction;
 use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::reader::Reader;
+use bits::FromBits;
 use byteorder::ReadBytesExt;
 use gcn_internal_macros::ParseInstruction;
 use std::io;
@@ -92,6 +93,15 @@ pub trait ParseInstruction<R: Reader> {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error>
     where
         Self: Sized;
+}
+
+impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
+    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error>
+    where
+        Self: Sized,
+    {
+        Ok(Self::from_bits(token as usize))
+    }
 }
 
 pub fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, io::Error> {
