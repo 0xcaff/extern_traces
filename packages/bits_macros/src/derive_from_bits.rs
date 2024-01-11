@@ -66,9 +66,9 @@ struct BitsAttributeArgs {
 
 impl Parse for BitsAttributeArgs {
     fn parse(input: ParseStream) -> syn::Result<Self> {
-        let lowest_bit: LitInt = input.parse()?;
-        let _separator: Token![,] = input.parse()?;
         let highest_bit: LitInt = input.parse()?;
+        let _separator: Token![,] = input.parse()?;
+        let lowest_bit: LitInt = input.parse()?;
 
         Ok(Self {
             lowest_bit: lowest_bit.base10_parse()?,

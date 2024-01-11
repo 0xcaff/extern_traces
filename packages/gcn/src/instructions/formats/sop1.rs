@@ -9,12 +9,12 @@ use bits_macros::FromBits;
 #[derive(Debug, FromBits)]
 #[bits(32)]
 pub struct SOP1Instruction {
-    #[bits(8, 15)]
+    #[bits(15, 8)]
     op: SOP1OpCode,
 
-    #[bits(0, 7)]
+    #[bits(7, 0)]
     ssrc0: ScalarSourceOperand,
 
-    #[bits(16, 22)]
+    #[bits(22, 16)]
     sdst: ScalarDestinationOperand,
 }

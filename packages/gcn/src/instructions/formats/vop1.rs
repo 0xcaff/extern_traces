@@ -9,12 +9,12 @@ use bits_macros::FromBits;
 #[derive(Debug, FromBits)]
 #[bits(32)]
 pub struct VOP1Instruction {
-    #[bits(9, 16)]
+    #[bits(16, 9)]
     op: VOP1OpCode,
 
-    #[bits(0, 8)]
+    #[bits(8, 0)]
     src0: SourceOperand,
 
-    #[bits(17, 24)]
+    #[bits(24, 17)]
     vdst: VectorGPR,
 }

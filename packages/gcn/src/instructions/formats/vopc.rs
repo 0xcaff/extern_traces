@@ -5,12 +5,12 @@ use bits_macros::FromBits;
 #[derive(Debug, FromBits)]
 #[bits(32)]
 pub struct VOPCInstruction {
-    #[bits(17, 24)]
+    #[bits(24, 17)]
     op: VOPCOpCode,
 
-    #[bits(0, 8)]
+    #[bits(8, 0)]
     src0: SourceOperand,
 
-    #[bits(9, 16)]
+    #[bits(16, 9)]
     vsrc1: VectorGPR,
 }
