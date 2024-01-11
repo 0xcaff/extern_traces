@@ -1,6 +1,6 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::DSOpCode;
-use bits::bitrange;
+use bits::{bitrange, FromBits};
 
 #[derive(Debug)]
 pub struct DSInstruction {
@@ -21,7 +21,7 @@ impl<R: Reader> ParseInstruction<R> for DSInstruction {
         let token = combine(token, reader)?;
 
         Ok(DSInstruction {
-            op: DSOpCode::decode(bitrange(6, 8).of_64(token))?,
+            op: DSOpCode::from_bits(bitrange(6, 8).of_64(token)),
         })
     }
 }

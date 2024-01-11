@@ -1,6 +1,6 @@
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SOPPOpCode;
-use bits::bitrange;
+use bits::{bitrange, FromBits};
 
 /// Scalar Instruction One Input, One Special Operation
 ///
@@ -16,7 +16,7 @@ pub struct SOPPInstruction {
 impl<R: Reader> ParseInstruction<R> for SOPPInstruction {
     fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
         Ok(SOPPInstruction {
-            op: SOPPOpCode::decode(bitrange(9, 7).of_32(token))?,
+            op: SOPPOpCode::from_bits(bitrange(9, 7).of_32(token)),
             simm16: bitrange(16, 16).of_32(token) as u16,
         })
     }

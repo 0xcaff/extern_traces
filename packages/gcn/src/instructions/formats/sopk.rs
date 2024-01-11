@@ -17,7 +17,7 @@ pub struct SOPKInstruction {
 impl<R: Reader> ParseInstruction<R> for SOPKInstruction {
     fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
         Ok(SOPKInstruction {
-            op: SOPKOpCode::decode(bitrange(4, 5).of_32(token))?,
+            op: SOPKOpCode::from_bits(bitrange(4, 5).of_32(token)),
             simm16: bitrange(16, 16).of_32(token) as u16,
             sdst: ScalarDestinationOperand::from_bits(bitrange(9, 7).of_32(token)),
         })

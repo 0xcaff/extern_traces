@@ -1,6 +1,6 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MIMGOpCode;
-use bits::bitrange;
+use bits::{bitrange, FromBits};
 
 #[derive(Debug)]
 pub struct MIMGInstruction {
@@ -12,7 +12,7 @@ impl<R: Reader> ParseInstruction<R> for MIMGInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MIMGInstruction {
-            op: MIMGOpCode::decode(bitrange(7, 7).of_64(token))?,
+            op: MIMGOpCode::from_bits(bitrange(7, 7).of_64(token)),
         })
     }
 }

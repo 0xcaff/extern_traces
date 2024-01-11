@@ -1,6 +1,6 @@
 use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SMEMOpCode;
-use bits::bitrange;
+use bits::{bitrange, FromBits};
 
 /// Scalar Instruction Memory Access
 ///
@@ -15,7 +15,7 @@ pub struct SMEMInstruction {
 impl<R: Reader> ParseInstruction<R> for SMEMInstruction {
     fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
         Ok(SMEMInstruction {
-            op: SMEMOpCode::decode(bitrange(5, 5).of_32(token))?,
+            op: SMEMOpCode::from_bits(bitrange(5, 5).of_32(token)),
         })
     }
 }

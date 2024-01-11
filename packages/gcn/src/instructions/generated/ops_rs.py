@@ -4,6 +4,20 @@ from itertools import groupby
 
 FORMATS = {
     "SOPC": 7,
+    "DS": 8,
+    "MIMG": 7,
+    "MTBUF": 3,
+    "MUBUF": 7,
+    "SMEM": 5,
+    "SOP1": 8,
+    "SOP2": 7,
+    "SOPK": 5,
+    "SOPP": 7,
+    "VINTRP": 2,
+    "VOP1": 8,
+    "VOP2": 6,
+    "VOP3": 9,
+    "VOPC": 8,
 }
 
 template = """
@@ -21,17 +35,10 @@ pub enum ${format}OpCode {
     % endfor
 }
 
-impl ${format}OpCode {
-    pub fn decode(op: usize) -> Result<Self, anyhow::Error> {
-        Ok(Self::from_repr(op)
-            .ok_or_else(|| anyhow::format_err!("unknown op {} for ${format}OpCode", op))?)
-    }
-}
-
 % if format in FORMATS:
 impl FromBits<${FORMATS[format]}> for ${format}OpCode {
     fn from_bits(value: usize) -> Self {
-        Self::decode(value).unwrap()
+        Self::from_repr(value).unwrap()
     }
 }
 %endif

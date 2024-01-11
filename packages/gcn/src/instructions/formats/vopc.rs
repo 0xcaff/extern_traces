@@ -14,7 +14,7 @@ pub struct VOPCInstruction {
 impl<R: Reader> ParseInstruction<R> for VOPCInstruction {
     fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
         Ok(VOPCInstruction {
-            op: VOPCOpCode::decode(bitrange(7, 8).of_32(token))?,
+            op: VOPCOpCode::from_bits(bitrange(7, 8).of_32(token)),
             vsrc1: VectorGPR::from_bits(bitrange(15, 8).of_32(token)),
             src0: SourceOperand::from_bits(bitrange(23, 9).of_32(token)),
         })
