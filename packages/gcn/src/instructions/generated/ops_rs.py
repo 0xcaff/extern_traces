@@ -2,8 +2,13 @@ from aco_opcodes import opcodes
 from mako.template import Template
 from itertools import groupby
 
+FORMATS = {
+    "SOPC": 7,
+}
+
 template = """
 use strum::FromRepr;
+use bits::FromBits;
 use anyhow;
 
 % for format, format_ops in groupby(filter(lambda op: op.opcode_gfx7 >= 0, ops.values()), lambda op: op.format.name):
@@ -23,6 +28,13 @@ impl ${format}OpCode {
     }
 }
 
+% if format in FORMATS:
+impl FromBits<${FORMATS[format]}> for ${format}OpCode {
+    fn from_bits(value: usize) -> Self {
+        Self::decode(value).unwrap()
+    }
+}
+%endif
 % endfor
 """
 
@@ -48,7 +60,8 @@ if __name__ == '__main__':
         ops=opcodes,
         to_option=to_option,
         to_sparse_array=to_sparse_array,
-        groupby=groupby
+        groupby=groupby,
+        FORMATS=FORMATS
     )
     with open('ops.rs', 'w') as file:
         file.write(rendered)
