@@ -28,23 +28,15 @@ pub struct MUBUFInstruction {
     #[bits(16, 16)]
     lds: bool,
 
-    #[bits(17, 17)]
-    reserved: bool,
-
-    #[bits(25, 25)]
-    reserved2: bool,
-
     #[bits(39, 32)]
     vaddr: VectorGPR,
 
     #[bits(47, 40)]
     vdata: VectorGPR,
 
+    // todo:
     // #[bits(52, 48)]
     // srsrc: ScalarSourceOperand
-    #[bits(53, 53)]
-    reserved3: bool,
-
     #[bits(54, 54)]
     slc: bool,
 
@@ -56,7 +48,7 @@ pub struct MUBUFInstruction {
 }
 
 #[derive(Debug)]
-struct Offset(u16);
+pub struct Offset(u16);
 
 impl FromBits<12> for Offset {
     fn from_bits(value: usize) -> Self {

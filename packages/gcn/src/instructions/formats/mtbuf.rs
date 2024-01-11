@@ -1,27 +1,54 @@
+use crate::instructions::formats::mubuf::Offset;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MTBUFOpCode;
-use bits::{bitrange, FromBits};
+use crate::instructions::operands::VectorGPR;
+use bits::FromBits;
+use bits_macros::FromBits;
 
-#[derive(Debug)]
+#[derive(Debug, FromBits)]
+#[bits(64)]
 pub struct MTBufInstruction {
+    #[bits(18, 16)]
     op: MTBUFOpCode,
-    // todo: implement
-    // offset: u16,
-    // offen: bool,
-    // idxen: bool,
-    // glc: bool,
 
-    // data_format: DataFormat,
-    // number_format: NumberFormat,
+    #[bits(11, 0)]
+    offset: Offset,
 
-    // vaddr: u8,
-    // vdata: VectorGPR,
-    // // todo:
+    #[bits(12, 12)]
+    offen: bool,
+
+    #[bits(13, 13)]
+    idxen: bool,
+
+    #[bits(14, 14)]
+    glc: bool,
+
+    #[bits(15, 15)]
+    addr64: bool,
+
+    #[bits(22, 19)]
+    dfmt: DataFormat,
+
+    #[bits(25, 23)]
+    nfmt: NumberFormat,
+
+    #[bits(39, 32)]
+    vaddr: u8,
+
+    #[bits(47, 40)]
+    vdata: VectorGPR,
+
+    // todo:
+    // #[bits(52, 48)]
     // srsrc: u8,
-    // slc: bool,
-    // tfe: bool,
+    #[bits(54, 54)]
+    slc: bool,
 
-    // soffset: u8,
+    #[bits(55, 55)]
+    tfe: bool,
+
+    #[bits(63, 56)]
+    soffset: u8,
 }
 
 // enum DataFormat {
@@ -39,11 +66,27 @@ pub struct MTBufInstruction {
 //     Float = 7,
 // }
 
+#[derive(Debug)]
+struct NumberFormat(u8);
+
+impl FromBits<3> for NumberFormat {
+    fn from_bits(value: usize) -> Self {
+        Self(value as _)
+    }
+}
+
+#[derive(Debug)]
+struct DataFormat(u8);
+
+impl FromBits<4> for DataFormat {
+    fn from_bits(value: usize) -> Self {
+        DataFormat(value as _)
+    }
+}
+
 impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(MTBufInstruction {
-            op: MTBUFOpCode::from_bits(bitrange(13, 3).of_64(token)),
-        })
+        Ok(MTBufInstruction::from_bits(token as usize))
     }
 }

@@ -1,21 +1,26 @@
-use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::SMEMOpCode;
-use bits::{bitrange, FromBits};
+use crate::instructions::operands::ScalarDestinationOperand;
+use bits_macros::FromBits;
 
 /// Scalar Instruction Memory Access
 ///
 /// Scalar instruction performing a memory operation on scalar L1 memory. Two
 /// Dwords.
-#[derive(Debug)]
+#[derive(Debug, FromBits)]
+#[bits(32)]
 pub struct SMEMInstruction {
+    #[bits(26, 22)]
     op: SMEMOpCode,
-    // todo: implement
-}
 
-impl<R: Reader> ParseInstruction<R> for SMEMInstruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
-        Ok(SMEMInstruction {
-            op: SMEMOpCode::from_bits(bitrange(5, 5).of_32(token)),
-        })
-    }
+    #[bits(7, 0)]
+    offset: u8,
+
+    #[bits(8, 8)]
+    imm: bool,
+
+    // todo:
+    // #[bits(14, 9)]
+    // sbase: u8,
+    #[bits(21, 15)]
+    sdst: ScalarDestinationOperand,
 }

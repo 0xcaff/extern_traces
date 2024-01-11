@@ -1,8 +1,9 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
+use crate::pm4::bitrange64 as bitrange;
 use anyhow::format_err;
-use bits::{bitrange, FromBits};
+use bits::FromBits;
 
 #[derive(Debug)]
 pub struct VOP3Instruction {
@@ -22,14 +23,14 @@ impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(VOP3Instruction {
-            op: OpCode::decode(bitrange(6, 9).of_64(token))?,
-            vdst: VectorGPR::from_bits(bitrange(24, 8).of_64(token)),
+            op: OpCode::decode(bitrange(25, 17).of_64(token))?,
+            vdst: VectorGPR::from_bits(bitrange(7, 0).of_64(token)),
 
             src0: TransformedOperand::parse(token, 0),
             src1: TransformedOperand::parse(token, 1),
             src2: TransformedOperand::parse(token, 2),
 
-            clamp: bitrange(20, 1).of_64(token) == 1,
+            clamp: bitrange(11, 11).of_64(token) == 1,
         })
     }
 }
@@ -77,20 +78,21 @@ struct TransformedOperand {
 
 impl TransformedOperand {
     fn parse(token: u64, idx: u8) -> TransformedOperand {
-        let op_value = bitrange(
-            match idx {
-                2 => 37,
-                1 => 46,
-                0 => 55,
-                _ => panic!("invalid index {}", idx),
-            },
-            9,
-        )
-        .of_64(token);
+        let highest_idx = match idx {
+            0 => 40,
+            1 => 49,
+            2 => 58,
+            _ => panic!("invalid index {}", idx),
+        };
+
+        let op_value = bitrange(highest_idx, highest_idx - 8).of_64(token);
+
+        let abs_idx = 10 - idx;
+        let neg_idx = 63 - idx;
 
         TransformedOperand {
-            abs: bitrange(21 + idx, 1).of_64(token) == 1,
-            neg: bitrange(32 + idx, 1).of_64(token) == 1,
+            abs: bitrange(abs_idx, abs_idx).of_64(token) == 1,
+            neg: bitrange(neg_idx, neg_idx).of_64(token) == 1,
             operand: SourceOperand::from_bits(op_value),
         }
     }

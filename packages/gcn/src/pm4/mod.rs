@@ -223,6 +223,14 @@ pub fn bitrange(highest: u8, lowest: u8) -> BitRange {
     bits::bitrange(start, bit_len)
 }
 
+pub fn bitrange64(highest: u8, lowest: u8) -> BitRange {
+    let bit_len = highest - lowest + 1;
+    // todo: remove this
+    let start = 64 - bit_len - lowest;
+
+    bits::bitrange(start, bit_len)
+}
+
 #[cfg(test)]
 mod tests {
     use crate::pm4::bitrange;

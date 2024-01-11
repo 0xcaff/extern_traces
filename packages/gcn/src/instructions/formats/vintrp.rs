@@ -1,17 +1,41 @@
-use crate::instructions::formats::{ParseInstruction, Reader};
 use crate::instructions::generated::VINTRPOpCode;
-use bits::{bitrange, FromBits};
+use crate::instructions::operands::VectorGPR;
+use bits::FromBits;
+use bits_macros::FromBits;
 
-#[derive(Debug)]
+#[derive(Debug, FromBits)]
+#[bits(32)]
 pub struct VINTRPInstruction {
+    #[bits(17, 16)]
     op: VINTRPOpCode,
-    // todo: implement
+
+    #[bits(7, 0)]
+    vsrc: VectorGPR,
+
+    #[bits(9, 8)]
+    attrchan: AttrChan,
+
+    #[bits(15, 10)]
+    attr: Attr,
+
+    #[bits(25, 18)]
+    vdst: VectorGPR,
 }
 
-impl<R: Reader> ParseInstruction<R> for VINTRPInstruction {
-    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error> {
-        Ok(VINTRPInstruction {
-            op: VINTRPOpCode::from_bits(bitrange(14, 2).of_32(token)),
-        })
+#[derive(Debug)]
+struct AttrChan(u8);
+
+impl FromBits<2> for AttrChan {
+    fn from_bits(value: usize) -> Self {
+        AttrChan(value as _)
+    }
+}
+
+#[derive(Debug)]
+struct Attr(u8);
+
+impl FromBits<6> for Attr {
+    fn from_bits(value: usize) -> Self {
+        Self(value as _)
     }
 }

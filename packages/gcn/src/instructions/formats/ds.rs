@@ -17,9 +17,6 @@ pub struct DSInstruction {
     #[bits(15, 8)]
     offset1: u8,
 
-    #[bits(16, 16)]
-    reserved: bool,
-
     #[bits(17, 17)]
     gds: bool,
 
