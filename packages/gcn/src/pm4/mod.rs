@@ -4,7 +4,7 @@ mod registers;
 pub use crate::pm4::op_codes::OpCode;
 pub use crate::pm4::registers::Register;
 use crate::reader::Reader;
-use bits::BitRange;
+use bits::{BitRange, bitrange};
 use std::io::Cursor;
 
 #[derive(Debug)]
@@ -209,43 +209,4 @@ pub struct Type3Header {
 pub enum ShaderType {
     Graphics,
     Compute,
-}
-
-/// Creates a bit range spanning from lowest to highest, inclusive. A value of
-/// 0 indicates the least significant bit.
-///
-/// This is how bit ranges are specified in the AMD Southern Island PM4 docs.
-pub fn bitrange(highest: u8, lowest: u8) -> BitRange {
-    let bit_len = highest - lowest + 1;
-    // todo: this 32 here is kinda wrong
-    let start = 32 - bit_len - lowest;
-
-    bits::bitrange(start, bit_len)
-}
-
-pub fn bitrange64(highest: u8, lowest: u8) -> BitRange {
-    let bit_len = highest - lowest + 1;
-    // todo: remove this
-    let start = 64 - bit_len - lowest;
-
-    bits::bitrange(start, bit_len)
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::pm4::bitrange;
-
-    #[test]
-    fn test() {
-        println!("{}", bitrange(15, 8).of_32(0xc0026900));
-        assert_eq!(bitrange(31, 30), bits::bitrange(0, 2));
-        assert_eq!(bitrange(29, 16), bits::bitrange(2, 14));
-        assert_eq!(bitrange(15, 0), bits::bitrange(16, 16));
-        assert_eq!(bitrange(29, 0), bits::bitrange(2, 30));
-
-        assert_eq!(bitrange(15, 8), bits::bitrange(16, 8));
-        assert_eq!(bitrange(7, 2), bits::bitrange(24, 6));
-        assert_eq!(bitrange(1, 1), bits::bitrange(30, 1));
-        assert_eq!(bitrange(0, 0), bits::bitrange(31, 1));
-    }
 }

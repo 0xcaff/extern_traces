@@ -1,35 +1,34 @@
 /// Holds information to extract a set of bits from a value.
 ///
-/// The start value is relative to the most significant bit, so a start of 0
-/// will start from the most significant bit.
+/// The start value is relative to the least significant bit, so a start of 0
+/// will start from the most significant bit. The least significant bit index
+/// is the only stable anchor point to index against.
 #[derive(PartialEq, Eq, Debug)]
 pub struct BitRange {
-    pub start: u8,
-    pub len: u8,
+    least_significant_idx: u8,
+    mask: usize,
 }
 
 impl BitRange {
-    pub fn of_32(&self, value: u32) -> usize {
-        let offset = 32 - self.len - self.start;
-
-        let mask = ((1 << self.len) - 1) << offset;
-
-        ((mask & value) >> offset) as usize
+    pub fn of(&self, value: usize) -> usize {
+        (value >> self.least_significant_idx) & self.mask
     }
 
-    pub fn of_64(&self, value: u64) -> usize {
-        let offset = 64 - self.len - self.start;
-
-        let mask = ((1 << self.len) - 1) << offset;
-
-        ((mask & value) >> offset) as usize
+    pub fn of_32(&self, value: u32) -> usize {
+        self.of(value as _)
     }
 }
 
-pub const fn bitrange(start_idx: u8, len: u8) -> BitRange {
+/// Constructs a bit range spanning from [`most_significant_idx`] to
+/// [`least_significant_idx`], inclusive of both the upper and lower bounds.
+/// Bits will maintain the ordering of their input.
+pub const fn bitrange(most_significant_idx: u8, least_significant_idx: u8) -> BitRange {
+    let len = most_significant_idx - least_significant_idx + 1;
+    let mask = ((1usize) << len) - 1;
+
     BitRange {
-        start: start_idx,
-        len,
+        least_significant_idx,
+        mask,
     }
 }
 
@@ -39,9 +38,9 @@ mod tests {
 
     #[test]
     fn test() {
-        let value = 0b11010000000110001000001110101011u32;
+        let value = 0b11010000000110001000001110101011;
 
-        assert_eq!(bitrange(0, 6).of_32(value), 0b110100);
-        assert_eq!(bitrange(0, 6).of_64(value as u64), 0b000000);
+        assert_eq!(bitrange(31, 26).of(value), 0b110100);
+        assert_eq!(bitrange(31, 26).of(value), 0b000000);
     }
 }

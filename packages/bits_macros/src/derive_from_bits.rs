@@ -8,7 +8,7 @@ pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
     let struct_ident = &input.ident;
 
     let attribute = exactly_one(&input.attrs, "bits", &input)?;
-    let bits_length = parse2::<LitInt>(attribute)?.base10_parse()?;
+    let bits_length: usize = parse2::<LitInt>(attribute)?.base10_parse()?;
 
     let Data::Struct(struct_value) = input.data else {
         return Err(syn::Error::new_spanned(input, "only struct implemented"));
@@ -17,7 +17,7 @@ pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
     let initializers = struct_value
         .fields
         .iter()
-        .map(|it| field(it, bits_length))
+        .map(|it| field(it))
         .collect::<Result<Vec<_>, _>>()?;
 
     Ok(quote! {
@@ -31,7 +31,7 @@ pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
     })
 }
 
-fn field(field: &Field, total_len: usize) -> Result<TokenStream, syn::Error> {
+fn field(field: &Field) -> Result<TokenStream, syn::Error> {
     let identifier = field
         .ident
         .as_ref()
@@ -40,23 +40,14 @@ fn field(field: &Field, total_len: usize) -> Result<TokenStream, syn::Error> {
 
     let attribute = exactly_one(&field.attrs, "bits", &field)?;
     let args: BitsAttributeArgs = parse2(attribute)?;
+    let highest_bit = args.highest_bit;
+    let lowest_bit = args.lowest_bit;
 
     let len = (args.highest_bit - args.lowest_bit + 1) as usize;
 
-    let start = (total_len - args.lowest_bit as usize - len) as u8;
-
-    let len_short = len as u8;
-
-    // todo: remove of_32 hardcode
-    if total_len == 32 {
-        Ok(quote! {
-            #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(::bits::bitrange(#start, #len_short).of_32(value as u32)),
-        })
-    } else {
-        Ok(quote! {
-            #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(::bits::bitrange(#start, #len_short).of_64(value as u64)),
-        })
-    }
+    Ok(quote! {
+        #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(::bits::bitrange(#highest_bit, #lowest_bit).of(value)),
+    })
 }
 
 struct BitsAttributeArgs {
