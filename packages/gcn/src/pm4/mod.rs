@@ -107,8 +107,12 @@ pub struct EndOfPipePacket {
     pub immediate: u64,
 }
 
-impl EndOfPipePacket {
-    pub fn from_type3_packet(body: Vec<u32>) -> EndOfPipePacket {
+trait ParseType3Packet {
+    fn parse_type3_packet(body: Vec<u32>) -> Self;
+}
+
+impl ParseType3Packet for EndOfPipePacket {
+    fn parse_type3_packet(body: Vec<u32>) -> EndOfPipePacket {
         let event_control = body[0];
 
         let inv_l2 = if bitrange(20, 20).of_32(event_control) == 1 {
@@ -187,7 +191,7 @@ impl Type3PacketValue {
                 }
             }
             OpCode::EVENT_WRITE_EOP => {
-                Type3PacketValue::EndOfPipe(EndOfPipePacket::from_type3_packet(body))
+                Type3PacketValue::EndOfPipe(EndOfPipePacket::parse_type3_packet(body))
             }
             _ => Type3PacketValue::Unknown { opcode, body },
         }
