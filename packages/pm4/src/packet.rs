@@ -1,10 +1,7 @@
-mod op_codes;
-mod registers;
-
-pub use crate::pm4::op_codes::OpCode;
-pub use crate::pm4::registers::Register;
+use crate::op_codes::OpCode;
 use crate::reader::Reader;
-use bits::{BitRange, bitrange};
+use crate::registers::Register;
+use bits::bitrange;
 use std::io::Cursor;
 
 #[derive(Debug)]

@@ -1,12 +1,10 @@
 #![feature(buf_read_has_data_left)]
-#![feature(cursor_remaining)]
 
 use crate::instructions::Decoder;
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom};
 
 mod instructions;
-mod pm4;
 mod reader;
 
 fn main() -> Result<(), anyhow::Error> {
