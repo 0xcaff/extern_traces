@@ -24,6 +24,7 @@ ignored = [
     "VS_EN",
     "GS_EN",
     "ES_EN",
+    "LS_EN",
 ]
 
 template = """
@@ -34,6 +35,7 @@ use strum::FromRepr;
 use bits_macros::FromBits;
 use bits::FromBits;
 use crate::registers::usize::Usize;
+use pm4_internal_macros::ParseRegisterEntry;
 
 #[repr(usize)]
 #[derive(FromRepr, Debug)]
@@ -82,6 +84,16 @@ pub struct ${name} {
 }
 
 % endfor
+
+#[derive(ParseRegisterEntry)]
+pub enum RegisterEntry {
+% for register_mapping in regdb.register_mappings():
+    #[register(Register::${register_mapping.name})]
+    ${register_mapping.name}(${register_mapping.type_ref if hasattr(register_mapping, 'type_ref') else "u32"}),
+
+% endfor
+}
+
 """
 
 

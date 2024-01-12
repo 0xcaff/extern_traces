@@ -19,3 +19,9 @@ impl FromBits<1> for bool {
         value != 0
     }
 }
+
+impl FromBits<32> for u32 {
+    fn from_bits(value: usize) -> Self {
+        value as _
+    }
+}

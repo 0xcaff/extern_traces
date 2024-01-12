@@ -11,3 +11,4 @@ bits_macros = { path = "../bits_macros" }
 anyhow = "1.0.79"
 byteorder = "1.5.0"
 strum = { version = "0.25.0", features = ["derive"] }
+pm4_internal_macros = { path = "../pm4_internal_macros" }
