@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 bits = { path = "../bits" }
+bits_macros = { path = "../bits_macros" }
 anyhow = "1.0.79"
 byteorder = "1.5.0"
 strum = { version = "0.25.0", features = ["derive"] }

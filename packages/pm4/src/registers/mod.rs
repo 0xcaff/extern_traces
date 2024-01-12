@@ -1,4 +1,5 @@
 mod generated;
+mod usize;
 
 pub use generated::Register;
 
