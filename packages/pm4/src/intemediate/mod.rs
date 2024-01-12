@@ -1,4 +1,4 @@
-use crate::{CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE, CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL, DB_RENDER_CONTROL, DB_SHADER_CONTROL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET, SPI_BARYC_CNTL, SPI_PS_IN_CONTROL, SPI_PS_INPUT_ENA, SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_Z_FORMAT};
+use crate::{CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE, CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE, DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL, DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL, SPI_PS_IN_CONTROL, SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG};
 
 /// A structured intermediate representation of data in pm4 graphics pipeline.
 ///
@@ -8,25 +8,92 @@ use crate::{CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_P
 ///   will always be accompanied with a SPI_SHADER_PGM_RSRC1_PS entry.
 ///
 /// * Express as complete a set of possible information available to downstream
-///   code to get a sense of implementation completeness
+///   code to get a sense of implementation completeness. Things are grouped
+///   according to their names (things with the same prefixes live near each
+///   other).
 ///
 /// * Provide a representation optimized for later stages to read.
 ///
+///
 #[derive(FromRegisterEntries)]
 pub struct GraphicsPipeline {
-    #[entry(RegisterEntry::DB_RENDER_CONTROL)]
-    render_control: DB_RENDER_CONTROL,
-
-    #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
-    depth_control: DB_DEPTH_CONTROL,
+    depth_buffer: DepthBuffer,
 
     primitive_assembly: PrimitiveAssembly,
 
     #[entry(RegisterEntry::CB_TARGET_MASK)]
     target_mask: CB_TARGET_MASK,
 
+    #[entry(RegisterEntry::CB_SHADER_MASK)]
+    shader_mask: CB_SHADER_MASK,
+
     shader: Shader,
     pixel_shader: PixelShader,
+    vertex_shader: Option<VertexShader>,
+}
+
+struct DepthBuffer {
+    stencil: Stencil,
+    depth: Depth,
+    z: Z,
+
+    #[entry(RegisterEntry::DB_RENDER_CONTROL)]
+    render_control: DB_RENDER_CONTROL,
+
+    #[entry(RegisterEntry::DB_SHADER_CONTROL)]
+    shader_control: DB_SHADER_CONTROL,
+
+    htile: Option<HTile>,
+}
+
+struct HTile {
+    #[entry(RegisterEntry::DB_HTILE_DATA_BASE)]
+    hitle_data_base: u32,
+
+    #[entry(RegisterEntry::DB_HTILE_SURFACE)]
+    htile_surface: DB_HTILE_SURFACE,
+}
+
+struct Depth {
+    #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
+    control: DB_DEPTH_CONTROL,
+
+    #[entry(RegisterEntry::DB_DEPTH_CLEAR)]
+    clear: Option<u32>,
+
+    #[entry(RegisterEntry::DB_DEPTH_SIZE)]
+    size: Option<DB_DEPTH_SIZE>,
+
+    #[entry(RegisterEntry::DB_DEPTH_SLICE)]
+    slice: Option<DB_DEPTH_SLICE>,
+
+    #[entry(RegisterInfo::DB_DEPTH_INFO)]
+    info: Option<DB_DEPTH_INFO>,
+
+    #[entry(RegisterInfo::DB_DEPTH_VIEW)]
+    view: Option<DB_DEPTH_VIEW>
+}
+
+struct Z {
+    #[entry(RegisterEntry::DB_Z_READ_BASE)]
+    read_base: Option<u32>,
+
+    #[entry(RegisterEntry::DB_Z_WRITE_BASE)]
+    write_base: Option<u32>,
+
+    #[entry(RegisterEntry::DB_Z_INFO)]
+    info: Option<DB_Z_INFO>,
+}
+
+struct Stencil {
+    #[entry(RegisterEntry::DB_STENCIL_READ_BASE)]
+    read_base: Option<u32>,
+
+    #[entry(RegisterEntry::DB_STENCIL_WRITE_BASE)]
+    write_base: Option<u32>,
+
+    #[entry(RegisterEntry::DB_STENCIL_INFO)]
+    info: Option<DB_STENCIL_INFO>,
 }
 
 // todo: think about color1
@@ -69,6 +136,9 @@ struct Clip {
     #[entry(RegisterEntry::PA_CL_VTE_CNTL)]
     viewport_transform_engine_control: PA_CL_VTE_CNTL,
 
+    #[entry(RegisterEntry::PA_CL_VS_OUT_CNTL)]
+    vertex_shader_out_control: PA_CL_VS_OUT_CNTL,
+
     guard_band: GuardBand,
 }
 
@@ -110,6 +180,9 @@ struct ScissorClip {
 struct ShaderUnit {
     #[entry(RegisterEntry::PA_SU_HARDWARE_SCREEN_OFFSET)]
     hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET,
+
+    #[entry(RegisterEntry::PA_SU_SC_MODE_CNTL)]
+    control: Option<PA_SU_SC_MODE_CNTL>,
 }
 
 struct GuardBand {
@@ -132,6 +205,9 @@ struct Shader {
 
     #[entry(RegisterEntry::SPI_SHADER_COL_FORMAT)]
     col_format: SPI_SHADER_COL_FORMAT,
+
+    #[entry(RegisterEntry::SPI_SHADER_POS_FORMAT)]
+    pos_format: Option<SPI_SHADER_POS_FORMAT>,
 
     #[entry(RegisterEntry::SPI_BARYC_CNTL)]
     baryc_control: SPI_BARYC_CNTL,
@@ -156,15 +232,28 @@ struct PixelShader {
     #[entry(RegisterEntry::SPI_PS_IN_CONTROL)]
     in_control: SPI_PS_IN_CONTROL,
 
-
-    #[entry(RegisterEntry::SPI_SHADER)]
-    db_shader_control: DB_SHADER_CONTROL,
-
-    #[entry(RegisterEntry::CB_SHADER_MASK)]
-    cb_shader_mask: CB_SHADER_MASK,
+    #[entry(RegisterEntry::SPI_PS_INPUT_CNTL_0)]
+    input_control: Option<SPI_PS_INPUT_CNTL_0>,
 
     // todo:
     // SPI_SHADER_USER_DATA_PS_0 - SPI_SHADER_USER_DATA_PS_15
+    user_data: Vec<UserDataEntry>,
+}
+
+struct VertexShader {
+    #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
+    address: u32,
+
+    #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_VS)]
+    resource1: SPI_SHADER_PGM_RSRC1_VS,
+
+    #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC2_VS)]
+    resource2: SPI_SHADER_PGM_RSRC2_VS,
+
+    #[entry(RegisterEntry::SPI_VS_OUT_CONFIG)]
+    out_config: SPI_VS_OUT_CONFIG,
+
+    // SPI_SHADER_USER_DATA_VS_0 - SPI_SHADER_USER_DATA_VS_15
     user_data: Vec<UserDataEntry>,
 }
 
