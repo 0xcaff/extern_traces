@@ -24,9 +24,7 @@ pub fn derive_parse_register_entry(derive_input: DeriveInput) -> Result<TokenStr
 
     Ok(quote! {
         impl crate::registers::entry::ParseRegisterEntry for #ident {
-            fn parse_register_entry(register: u32, value: u32) -> Self {
-                let register = Register::from_repr(register as _).unwrap();
-
+            fn parse_register_entry(register: Register, value: u32) -> Self {
                 match register {
                     #(#branches)*
 

@@ -1,8 +1,9 @@
 use crate::op_codes::OpCode;
 use crate::reader::Reader;
-use crate::registers::Register;
 use bits::bitrange;
 use std::io::Cursor;
+use crate::{Register, RegisterEntry};
+use crate::registers::ParseRegisterEntry;
 
 #[derive(Debug)]
 pub enum PM4Packet {
@@ -83,10 +84,10 @@ pub struct Type3Packet {
 #[derive(Debug)]
 pub enum Type3PacketValue {
     SetContextRegister {
-        values: Vec<ContextRegisterSetOperation>,
+        values: Vec<Option<RegisterEntry>>,
     },
     SetShaderRegister {
-        values: Vec<ShaderRegisterSetOperation>,
+        values: Vec<Option<RegisterEntry>>,
     },
     EndOfPipe(EndOfPipePacket),
     Unknown {
@@ -134,18 +135,6 @@ impl ParseType3Packet for EndOfPipePacket {
     }
 }
 
-#[derive(Debug)]
-pub struct ContextRegisterSetOperation {
-    pub register: Option<Register>,
-    pub value: u32,
-}
-
-#[derive(Debug)]
-pub struct ShaderRegisterSetOperation {
-    register: Option<Register>,
-    value: u32,
-}
-
 impl Type3PacketValue {
     pub fn parse(opcode: OpCode, mut body: Vec<u32>) -> Type3PacketValue {
         match opcode {
@@ -160,10 +149,8 @@ impl Type3PacketValue {
                         .map(|(idx, value)| {
                             let offset = offset + idx as u16;
 
-                            ContextRegisterSetOperation {
-                                register: Register::from_repr(((offset as usize) << 2) + 0x028000),
-                                value,
-                            }
+                            let register = Register::from_repr(((offset as usize) << 2) + 0x028000);
+                            register.map(|it| RegisterEntry::parse_register_entry(it, value))
                         })
                         .collect(),
                 }
@@ -179,10 +166,8 @@ impl Type3PacketValue {
                         .map(|(idx, value)| {
                             let offset = offset + idx as u16;
 
-                            ShaderRegisterSetOperation {
-                                register: Register::from_repr(((offset as usize) << 2) + 0xB000),
-                                value,
-                            }
+                            let register = Register::from_repr(((offset as usize) << 2) + 0xB000);
+                            register.map(|it| RegisterEntry::parse_register_entry(it, value))
                         })
                         .collect(),
                 }

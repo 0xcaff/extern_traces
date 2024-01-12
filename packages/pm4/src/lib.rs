@@ -6,4 +6,4 @@ mod reader;
 mod registers;
 
 pub use packet::*;
-pub use registers::*;
+pub use registers::generated::*;

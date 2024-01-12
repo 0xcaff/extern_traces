@@ -1,8 +1,10 @@
 mod entry;
-mod generated;
+pub mod generated;
 mod usize;
 
-pub use generated::Register;
+use generated::Register;
+
+pub use entry::ParseRegisterEntry;
 
 impl Register {
     pub fn decode(address: usize) -> Result<Self, anyhow::Error> {

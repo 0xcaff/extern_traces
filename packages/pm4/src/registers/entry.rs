@@ -1,3 +1,5 @@
+use crate::Register;
+
 pub trait ParseRegisterEntry {
-    fn parse_register_entry(register: u32, value: u32) -> Self;
+    fn parse_register_entry(register: Register, value: u32) -> Self;
 }
