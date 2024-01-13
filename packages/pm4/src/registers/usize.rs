@@ -1,7 +1,13 @@
 use bits::FromBits;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Usize(pub usize);
+
+impl Into<u32> for Usize {
+    fn into(self) -> u32 {
+        self.0 as _
+    }
+}
 
 macro_rules! from_bits_impls {
     ($($n:expr),*) => {

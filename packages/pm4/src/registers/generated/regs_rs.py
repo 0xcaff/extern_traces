@@ -36,6 +36,7 @@ use bits_macros::FromBits;
 use bits::FromBits;
 use crate::registers::usize::Usize;
 use pm4_internal_macros::ParseRegisterEntry;
+use crate::intermediate::build::Marker;
 
 #[repr(usize)]
 #[derive(FromRepr, Debug)]
@@ -47,7 +48,7 @@ pub enum Register {
 
 % for (name, entries) in regdb.enums():
 #[repr(usize)]
-#[derive(FromRepr, Debug)]
+#[derive(Clone, FromRepr, Debug)]
 pub enum ${name} {
 % for entry in entries.entries:
     ${entry.name} = ${entry.value},
@@ -72,7 +73,7 @@ impl FromBits<${overrides[name]}> for ${name} {
 % endfor
 
 % for (name, fields) in regdb.register_types():
-#[derive(Debug, FromBits)]
+#[derive(Debug, Clone, FromBits)]
 #[bits(32)]
 pub struct ${name} {
 % for field in unique(fields.fields, lambda it: it.name):
@@ -85,6 +86,9 @@ pub struct ${name} {
     )},
     % endif
 % endfor
+}
+
+impl Marker for ${name} {
 }
 
 % endfor

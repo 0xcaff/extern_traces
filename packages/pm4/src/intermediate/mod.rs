@@ -1,4 +1,17 @@
-use crate::{CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE, CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE, DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL, DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL, SPI_PS_IN_CONTROL, SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG};
+pub mod build;
+
+use crate::{
+    RegisterEntry, CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH,
+    CB_COLOR0_SLICE, CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL,
+    DB_DEPTH_INFO, DB_DEPTH_SIZE, DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE,
+    DB_RENDER_CONTROL, DB_SHADER_CONTROL, DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL,
+    PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET,
+    PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL, SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL,
+    SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS,
+    SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT,
+    SPI_VS_OUT_CONFIG,
+};
+use pm4_internal_macros::Build;
 
 /// A structured intermediate representation of data in pm4 graphics pipeline.
 ///
@@ -13,10 +26,9 @@ use crate::{CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_P
 ///   other).
 ///
 /// * Provide a representation optimized for later stages to read.
-///
-///
-#[derive(FromRegisterEntries)]
-pub struct GraphicsPipeline {
+#[derive(Build)]
+#[entry(RegisterEntry)]
+struct GraphicsPipeline {
     depth_buffer: DepthBuffer,
 
     primitive_assembly: PrimitiveAssembly,
@@ -32,6 +44,8 @@ pub struct GraphicsPipeline {
     vertex_shader: Option<VertexShader>,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct DepthBuffer {
     stencil: Stencil,
     depth: Depth,
@@ -46,6 +60,8 @@ struct DepthBuffer {
     htile: Option<HTile>,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct HTile {
     #[entry(RegisterEntry::DB_HTILE_DATA_BASE)]
     hitle_data_base: u32,
@@ -54,6 +70,8 @@ struct HTile {
     htile_surface: DB_HTILE_SURFACE,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
     control: DB_DEPTH_CONTROL,
@@ -67,13 +85,15 @@ struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_SLICE)]
     slice: Option<DB_DEPTH_SLICE>,
 
-    #[entry(RegisterInfo::DB_DEPTH_INFO)]
+    #[entry(RegisterEntry::DB_DEPTH_INFO)]
     info: Option<DB_DEPTH_INFO>,
 
-    #[entry(RegisterInfo::DB_DEPTH_VIEW)]
-    view: Option<DB_DEPTH_VIEW>
+    #[entry(RegisterEntry::DB_DEPTH_VIEW)]
+    view: Option<DB_DEPTH_VIEW>,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct Z {
     #[entry(RegisterEntry::DB_Z_READ_BASE)]
     read_base: Option<u32>,
@@ -85,6 +105,8 @@ struct Z {
     info: Option<DB_Z_INFO>,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct Stencil {
     #[entry(RegisterEntry::DB_STENCIL_READ_BASE)]
     read_base: Option<u32>,
@@ -97,6 +119,8 @@ struct Stencil {
 }
 
 // todo: think about color1
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct ColorBuffer {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
     base: u32,
@@ -124,12 +148,16 @@ struct ColorBuffer {
     clear_word_1: u32,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct PrimitiveAssembly {
     clip: Clip,
     scissor_clip: ScissorClip,
     shader_unit: ShaderUnit,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct Clip {
     viewport: ClipViewport,
 
@@ -142,6 +170,8 @@ struct Clip {
     guard_band: GuardBand,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct ClipViewport {
     #[entry(RegisterEntry::PA_CL_VPORT_XSCALE)]
     xscale: u32,
@@ -160,9 +190,10 @@ struct ClipViewport {
 
     #[entry(RegisterEntry::PA_CL_VPORT_ZOFFSET)]
     zoffset: u32,
-
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct ScissorClip {
     #[entry(RegisterEntry::PA_SC_VPORT_ZMIN_0)]
     viewport_zmin0: u32,
@@ -177,6 +208,8 @@ struct ScissorClip {
     screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct ShaderUnit {
     #[entry(RegisterEntry::PA_SU_HARDWARE_SCREEN_OFFSET)]
     hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET,
@@ -185,6 +218,8 @@ struct ShaderUnit {
     control: Option<PA_SU_SC_MODE_CNTL>,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct GuardBand {
     #[entry(RegisterEntry::PA_CL_GB_VERT_CLIP_ADJ)]
     vertical_clip: u32,
@@ -199,6 +234,8 @@ struct GuardBand {
     horizontal_discard: u32,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct Shader {
     #[entry(RegisterEntry::SPI_SHADER_Z_FORMAT)]
     z_format: SPI_SHADER_Z_FORMAT,
@@ -210,9 +247,11 @@ struct Shader {
     pos_format: Option<SPI_SHADER_POS_FORMAT>,
 
     #[entry(RegisterEntry::SPI_BARYC_CNTL)]
-    baryc_control: SPI_BARYC_CNTL,
+    barycentric_control: SPI_BARYC_CNTL,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct PixelShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_PS)]
     address: u32,
@@ -234,12 +273,13 @@ struct PixelShader {
 
     #[entry(RegisterEntry::SPI_PS_INPUT_CNTL_0)]
     input_control: Option<SPI_PS_INPUT_CNTL_0>,
-
     // todo:
     // SPI_SHADER_USER_DATA_PS_0 - SPI_SHADER_USER_DATA_PS_15
-    user_data: Vec<UserDataEntry>,
+    // user_data: Vec<UserDataEntry>,
 }
 
+#[derive(Build)]
+#[entry(RegisterEntry)]
 struct VertexShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
     address: u32,
@@ -252,19 +292,21 @@ struct VertexShader {
 
     #[entry(RegisterEntry::SPI_VS_OUT_CONFIG)]
     out_config: SPI_VS_OUT_CONFIG,
-
+    // todo:
     // SPI_SHADER_USER_DATA_VS_0 - SPI_SHADER_USER_DATA_VS_15
-    user_data: Vec<UserDataEntry>,
+    // user_data: Vec<UserDataEntry>,
 }
 
-// todo:
-// features: Option<>
-// Vec<>
-// how do we handle the positional stuff?
-// Ignore it i think for now but in the future operate on the array?
+// todo: crash on duplicate value
+// todo: error handling
+
+// // todo:
+// // todo: positional nop entries
+// // todo: sequence of entries (user data for example)
+// // how do we handle the positional stuff?
+// // Ignore it i think for now but in the future operate on the array?
 
 struct UserDataEntry {
     slot: u8,
     value: u32,
 }
-
