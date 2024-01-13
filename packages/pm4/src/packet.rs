@@ -1,9 +1,9 @@
 use crate::op_codes::OpCode;
 use crate::reader::Reader;
+use crate::registers::ParseRegisterEntry;
+use crate::{Register, RegisterEntry};
 use bits::bitrange;
 use std::io::Cursor;
-use crate::{Register, RegisterEntry};
-use crate::registers::ParseRegisterEntry;
 
 #[derive(Debug)]
 pub enum PM4Packet {
@@ -83,17 +83,10 @@ pub struct Type3Packet {
 
 #[derive(Debug)]
 pub enum Type3PacketValue {
-    SetContextRegister {
-        values: Vec<Option<RegisterEntry>>,
-    },
-    SetShaderRegister {
-        values: Vec<Option<RegisterEntry>>,
-    },
+    SetContextRegister { values: Vec<Option<RegisterEntry>> },
+    SetShaderRegister { values: Vec<Option<RegisterEntry>> },
     EndOfPipe(EndOfPipePacket),
-    Unknown {
-        opcode: OpCode,
-        body: Vec<u32>,
-    },
+    Unknown { opcode: OpCode, body: Vec<u32> },
 }
 
 #[derive(Debug)]
