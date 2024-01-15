@@ -12,7 +12,7 @@ use crate::{
     SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS,
     SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
 };
-use pm4_internal_macros::Build;
+use pm4_internal_macros::{Build, BuildUserData};
 
 #[derive(Debug)]
 pub enum Command {
@@ -61,9 +61,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
             PM4Packet::Type3(Type3Packet {
                 header,
                 value: Type3PacketValue::EndOfPipe(end_of_pipe),
-                             }) => {
-                result.push(Command::EndOfPipe(end_of_pipe.clone()))
-            }
+            }) => result.push(Command::EndOfPipe(end_of_pipe.clone())),
             _ => {}
         }
     }
@@ -331,10 +329,13 @@ struct PixelShader {
 
     #[entry(RegisterEntry::SPI_PS_INPUT_CNTL_0)]
     input_control: Option<SPI_PS_INPUT_CNTL_0>,
-    // todo:
-    // SPI_SHADER_USER_DATA_PS_0 - SPI_SHADER_USER_DATA_PS_15
-    // user_data: Vec<UserDataEntry>,
+
+    user_data: PixelShaderUserData,
 }
+
+#[derive(Debug, BuildUserData)]
+#[user_data(SPI_SHADER_USER_DATA_PS_, 0..=15)]
+struct PixelShaderUserData(Vec<UserDataEntry>);
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
@@ -350,20 +351,22 @@ struct VertexShader {
 
     #[entry(RegisterEntry::SPI_VS_OUT_CONFIG)]
     out_config: SPI_VS_OUT_CONFIG,
-    // todo:
-    // SPI_SHADER_USER_DATA_VS_0 - SPI_SHADER_USER_DATA_VS_15
-    // user_data: Vec<UserDataEntry>,
+
+    user_data: VertexShaderUserData,
 }
 
+#[derive(Debug, BuildUserData)]
+#[user_data(SPI_SHADER_USER_DATA_VS_, 0..=15)]
+struct VertexShaderUserData(Vec<UserDataEntry>);
+
 // todo: crash on duplicate value
-// todo: error handling
 
 // // todo:
 // // todo: positional nop entries
-// // todo: sequence of entries (user data for example)
 // // how do we handle the positional stuff?
 // // Ignore it i think for now but in the future operate on the array?
 
+#[derive(Debug, Clone)]
 struct UserDataEntry {
     slot: u8,
     value: u32,
