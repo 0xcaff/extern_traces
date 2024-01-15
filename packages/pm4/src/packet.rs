@@ -1,7 +1,7 @@
 use crate::op_codes::OpCode;
 use crate::reader::Reader;
 use crate::registers::ParseRegisterEntry;
-use crate::{Register, RegisterEntry, VGT_DRAW_INITIATOR};
+use crate::{Register, RegisterEntry, VGT_DRAW_INITIATOR, VGT_EVENT_INITIATOR};
 use bits::bitrange;
 use bits::FromBits;
 use std::io::Cursor;
@@ -98,7 +98,7 @@ pub enum Type3PacketValue {
 pub struct EndOfPipePacket {
     pub invalidate_writeback_l2: bool,
     pub event_index: u8,
-    pub event_type: u8,
+    pub event_type: VGT_EVENT_INITIATOR,
     pub address: u64,
     pub immediate: u64,
 }
@@ -117,7 +117,7 @@ impl ParseType3Packet for EndOfPipePacket {
             false
         };
         let event_index = bitrange(11, 8).of_32(event_control) as u8;
-        let event_type = bitrange(5, 0).of_32(event_control) as u8;
+        let event_type = VGT_EVENT_INITIATOR::from_bits(bitrange(5, 0).of_32(event_control));
 
         let address = (body[1] as u64) | ((bitrange(15, 0).of_32(body[2]) << 32) as u64);
         let immediate = (body[3] as u64) | ((body[4] as u64) << 32);
@@ -284,7 +284,7 @@ impl Type3PacketValue {
                 WaitRegisterMemoryPacket::parse_type3_packet(body),
             ),
             OpCode::DRAW_INDEX_AUTO => {
-                Type3PacketValue::DrawIndexAuto(DrawIndexAuto::parse_type3_packet(body))
+                Type3PacketValue::DrawIndexAuto(DrawIndexAutoPacket::parse_type3_packet(body))
             }
             _ => Type3PacketValue::Unknown { opcode, body },
         }
