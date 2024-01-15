@@ -7,4 +7,5 @@ mod reader;
 mod registers;
 
 pub use packet::*;
+pub use intermediate::convert;
 pub use registers::generated::*;

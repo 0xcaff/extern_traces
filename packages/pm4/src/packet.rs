@@ -94,7 +94,7 @@ pub enum Type3PacketValue {
     Unknown { opcode: OpCode, body: Vec<u32> },
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EndOfPipePacket {
     pub invalidate_writeback_l2: bool,
     pub event_index: u8,

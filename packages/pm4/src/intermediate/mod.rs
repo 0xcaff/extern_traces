@@ -1,17 +1,75 @@
 pub mod build;
 
+use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
 use crate::{
-    RegisterEntry, CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH,
-    CB_COLOR0_SLICE, CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL,
-    DB_DEPTH_INFO, DB_DEPTH_SIZE, DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE,
-    DB_RENDER_CONTROL, DB_SHADER_CONTROL, DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL,
-    PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET,
-    PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL, SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL,
-    SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS,
-    SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT,
-    SPI_VS_OUT_CONFIG,
+    DrawIndexAutoPacket, EndOfPipePacket, PM4Packet, RegisterEntry, Type3Packet, Type3PacketValue,
+    CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE,
+    CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE,
+    DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL,
+    DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR,
+    PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL,
+    SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL, SPI_SHADER_COL_FORMAT,
+    SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS,
+    SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
 };
 use pm4_internal_macros::Build;
+
+#[derive(Debug)]
+pub enum Command {
+    Draw {
+        draw_packet: DrawIndexAutoPacket,
+        pipeline: GraphicsPipeline,
+    },
+    EndOfPipe(EndOfPipePacket),
+}
+
+pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
+    let mut result = vec![];
+
+    let mut builder = <GraphicsPipeline as Build<RegisterEntry>>::Builder::new();
+
+    for packet in commands {
+        match packet {
+            PM4Packet::Type3(Type3Packet {
+                header,
+                value: Type3PacketValue::SetContextRegister { values },
+            })
+            | PM4Packet::Type3(Type3Packet {
+                header,
+                value: Type3PacketValue::SetShaderRegister { values },
+            }) => {
+                for entry in values {
+                    let Some(entry) = entry else {
+                        continue;
+                    };
+
+                    let accepted = builder.update(entry);
+                    if let None = accepted {
+                        // todo: log
+                    }
+                }
+            }
+            PM4Packet::Type3(Type3Packet {
+                header,
+                value: Type3PacketValue::DrawIndexAuto(draw_packet),
+            }) => {
+                result.push(Command::Draw {
+                    draw_packet: draw_packet.clone(),
+                    pipeline: builder.clone().finalize().unwrap(),
+                });
+            }
+            PM4Packet::Type3(Type3Packet {
+                header,
+                value: Type3PacketValue::EndOfPipe(end_of_pipe),
+                             }) => {
+                result.push(Command::EndOfPipe(end_of_pipe.clone()))
+            }
+            _ => {}
+        }
+    }
+
+    result
+}
 
 /// A structured intermediate representation of data in pm4 graphics pipeline.
 ///
@@ -26,7 +84,7 @@ use pm4_internal_macros::Build;
 ///   other).
 ///
 /// * Provide a representation optimized for later stages to read.
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct GraphicsPipeline {
     depth_buffer: DepthBuffer,
@@ -44,7 +102,7 @@ struct GraphicsPipeline {
     vertex_shader: Option<VertexShader>,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct DepthBuffer {
     stencil: Stencil,
@@ -60,7 +118,7 @@ struct DepthBuffer {
     htile: Option<HTile>,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct HTile {
     #[entry(RegisterEntry::DB_HTILE_DATA_BASE)]
@@ -70,7 +128,7 @@ struct HTile {
     htile_surface: DB_HTILE_SURFACE,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
@@ -92,7 +150,7 @@ struct Depth {
     view: Option<DB_DEPTH_VIEW>,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct Z {
     #[entry(RegisterEntry::DB_Z_READ_BASE)]
@@ -105,7 +163,7 @@ struct Z {
     info: Option<DB_Z_INFO>,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct Stencil {
     #[entry(RegisterEntry::DB_STENCIL_READ_BASE)]
@@ -119,7 +177,7 @@ struct Stencil {
 }
 
 // todo: think about color1
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct ColorBuffer {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
@@ -148,7 +206,7 @@ struct ColorBuffer {
     clear_word_1: u32,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct PrimitiveAssembly {
     clip: Clip,
@@ -156,7 +214,7 @@ struct PrimitiveAssembly {
     shader_unit: ShaderUnit,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct Clip {
     viewport: ClipViewport,
@@ -165,12 +223,12 @@ struct Clip {
     viewport_transform_engine_control: PA_CL_VTE_CNTL,
 
     #[entry(RegisterEntry::PA_CL_VS_OUT_CNTL)]
-    vertex_shader_out_control: PA_CL_VS_OUT_CNTL,
+    vertex_shader_out_control: Option<PA_CL_VS_OUT_CNTL>,
 
     guard_band: GuardBand,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct ClipViewport {
     #[entry(RegisterEntry::PA_CL_VPORT_XSCALE)]
@@ -192,7 +250,7 @@ struct ClipViewport {
     zoffset: u32,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct ScissorClip {
     #[entry(RegisterEntry::PA_SC_VPORT_ZMIN_0)]
@@ -208,7 +266,7 @@ struct ScissorClip {
     screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct ShaderUnit {
     #[entry(RegisterEntry::PA_SU_HARDWARE_SCREEN_OFFSET)]
@@ -218,7 +276,7 @@ struct ShaderUnit {
     control: Option<PA_SU_SC_MODE_CNTL>,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct GuardBand {
     #[entry(RegisterEntry::PA_CL_GB_VERT_CLIP_ADJ)]
@@ -230,11 +288,11 @@ struct GuardBand {
     #[entry(RegisterEntry::PA_CL_GB_HORZ_CLIP_ADJ)]
     horizontal_clip: u32,
 
-    #[entry(RegisterEntry::PA_CL_GB_VERT_DISC_ADJ)]
+    #[entry(RegisterEntry::PA_CL_GB_HORZ_DISC_ADJ)]
     horizontal_discard: u32,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct Shader {
     #[entry(RegisterEntry::SPI_SHADER_Z_FORMAT)]
@@ -250,7 +308,7 @@ struct Shader {
     barycentric_control: SPI_BARYC_CNTL,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct PixelShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_PS)]
@@ -278,7 +336,7 @@ struct PixelShader {
     // user_data: Vec<UserDataEntry>,
 }
 
-#[derive(Build)]
+#[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 struct VertexShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
