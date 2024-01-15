@@ -1,8 +1,9 @@
 use crate::op_codes::OpCode;
 use crate::reader::Reader;
 use crate::registers::ParseRegisterEntry;
-use crate::{Register, RegisterEntry};
+use crate::{Register, RegisterEntry, VGT_DRAW_INITIATOR};
 use bits::bitrange;
+use bits::FromBits;
 use std::io::Cursor;
 
 #[derive(Debug)]
@@ -87,7 +88,7 @@ pub enum Type3PacketValue {
     SetShaderRegister { values: Vec<Option<RegisterEntry>> },
     EndOfPipe(EndOfPipePacket),
     WaitRegisterMemory(WaitRegisterMemoryPacket),
-    // todo: draw index auto
+    DrawIndexAuto(DrawIndexAuto),
     // todo: index_type
     // todo: set_uconfig_register
     Unknown { opcode: OpCode, body: Vec<u32> },
@@ -224,6 +225,21 @@ impl ParseType3Packet for WaitRegisterMemoryPacket {
     }
 }
 
+#[derive(Debug)]
+pub struct DrawIndexAuto {
+    index_count: u32,
+    draw_initiator: VGT_DRAW_INITIATOR,
+}
+
+impl ParseType3Packet for DrawIndexAuto {
+    fn parse_type3_packet(body: Vec<u32>) -> Self {
+        Self {
+            index_count: body[0],
+            draw_initiator: VGT_DRAW_INITIATOR::from_bits(body[1] as _),
+        }
+    }
+}
+
 impl Type3PacketValue {
     pub fn parse(opcode: OpCode, mut body: Vec<u32>) -> Type3PacketValue {
         match opcode {
@@ -267,6 +283,9 @@ impl Type3PacketValue {
             OpCode::ACQUIRE_MEM => Type3PacketValue::WaitRegisterMemory(
                 WaitRegisterMemoryPacket::parse_type3_packet(body),
             ),
+            OpCode::DRAW_INDEX_AUTO => {
+                Type3PacketValue::DrawIndexAuto(DrawIndexAuto::parse_type3_packet(body))
+            }
             _ => Type3PacketValue::Unknown { opcode, body },
         }
     }
