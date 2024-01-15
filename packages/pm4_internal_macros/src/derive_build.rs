@@ -131,22 +131,25 @@ pub fn derive_build(derive_input: DeriveInput) -> Result<TokenStream, syn::Error
             let ident = &it.ident;
 
             Ok(quote! {
-                #ident: self.#ident.finalize(),
+                #ident: self.#ident.finalize().with_context(|| format!("for field {}", stringify!(#ident)))?,
             })
         })
         .collect::<Result<Vec<_>, syn::Error>>()?;
 
     let finalize_impl = quote! {
         impl crate::intermediate::build::Finalize<#ident> for #builder_ident {
-            fn finalize(self) -> #ident {
-                #ident {
+            fn finalize(self) -> Result<#ident, ::anyhow::Error> {
+                use anyhow::Context;
+
+                Ok(#ident {
                     #(#finalize_expressions)*
-                }
+                })
             }
         }
     };
 
     Ok(quote! {
+        #[derive(Clone)]
         struct #builder_ident {
             #(#builder_fields)*
         }

@@ -88,7 +88,7 @@ pub enum Type3PacketValue {
     SetShaderRegister { values: Vec<Option<RegisterEntry>> },
     EndOfPipe(EndOfPipePacket),
     WaitRegisterMemory(WaitRegisterMemoryPacket),
-    DrawIndexAuto(DrawIndexAuto),
+    DrawIndexAuto(DrawIndexAutoPacket),
     // todo: index_type
     // todo: set_uconfig_register
     Unknown { opcode: OpCode, body: Vec<u32> },
@@ -225,13 +225,13 @@ impl ParseType3Packet for WaitRegisterMemoryPacket {
     }
 }
 
-#[derive(Debug)]
-pub struct DrawIndexAuto {
+#[derive(Debug, Clone)]
+pub struct DrawIndexAutoPacket {
     index_count: u32,
     draw_initiator: VGT_DRAW_INITIATOR,
 }
 
-impl ParseType3Packet for DrawIndexAuto {
+impl ParseType3Packet for DrawIndexAutoPacket {
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
             index_count: body[0],
