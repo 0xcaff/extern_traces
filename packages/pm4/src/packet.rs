@@ -162,11 +162,26 @@ pub enum Function {
 pub struct WaitRegisterMemoryPacket {
     pub engine: Engine,
     pub function: Function,
+
+    pub tcl1_volatile_action_enable: bool,
+    pub texture_cache_volatile_action_enable: bool,
+    pub texture_cache_write_back_action_enable: bool,
+    pub color_buffer_action_enable: bool,
+    pub depth_buffer_action_enable: bool,
+
     pub reference_value: u32,
     pub poll_address_swap: u8,
     pub poll_address: MemoryAddress,
     pub mask: u32,
     pub poll_interval: u16,
+}
+
+fn bit(idx: u8, of: u32) -> bool {
+    match bitrange(idx, idx).of_32(of) {
+        0 => false,
+        1 => true,
+        value => unreachable!("unknown value {}", value),
+    }
 }
 
 impl ParseType3Packet for WaitRegisterMemoryPacket {
@@ -195,6 +210,13 @@ impl ParseType3Packet for WaitRegisterMemoryPacket {
                 0b110 => Function::GreaterThan,
                 value => panic!("unexpected value {}", value),
             },
+
+            tcl1_volatile_action_enable: bit(15, body[0]),
+            texture_cache_volatile_action_enable: bit(16, body[0]),
+            texture_cache_write_back_action_enable: bit(18, body[0]),
+            color_buffer_action_enable: bit(25, body[0]),
+            depth_buffer_action_enable: bit(26, body[0]),
+
             reference_value: body[3],
             mask: body[4],
             poll_interval: bitrange(15, 0).of_32(body[5]) as _,
