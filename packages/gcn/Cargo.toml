@@ -12,3 +12,6 @@ strum = { version = "0.25.0", features = ["derive"] }
 gcn_internal_macros = { path = "../gcn_internal_macros" }
 bits = { path = "../bits" }
 bits_macros = { path = "../bits_macros" }
+
+[dev-dependencies]
+insta = { version = "1.33.0" }

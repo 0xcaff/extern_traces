@@ -27,6 +27,7 @@ where
     }
 
     pub fn decode(&mut self) -> Result<Option<Instruction>, anyhow::Error> {
+        // todo: rework this, doesn't handle branching or termination correctly
         if !self.reader.has_data_left()? {
             return Ok(None);
         }
