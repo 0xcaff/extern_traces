@@ -172,6 +172,12 @@ expression: test_shader(&data)
                 vdata: VectorGPR {
                     register_idx: 7,
                 },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+                ssam: ScalarGeneralPurposeRegisterGroup {
+                    value: 4,
+                },
             },
         ),
     },

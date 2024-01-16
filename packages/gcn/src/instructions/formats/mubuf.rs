@@ -1,6 +1,6 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MUBUFOpCode;
-use crate::instructions::operands::VectorGPR;
+use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use bits::FromBits;
 use bits_macros::FromBits;
 
@@ -34,9 +34,9 @@ pub struct MUBUFInstruction {
     #[bits(47, 40)]
     vdata: VectorGPR,
 
-    // todo:
-    // #[bits(52, 48)]
-    // srsrc: ScalarSourceOperand
+    #[bits(52, 48)]
+    srsrc: ScalarGeneralPurposeRegisterGroup,
+
     #[bits(54, 54)]
     slc: bool,
 

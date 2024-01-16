@@ -138,3 +138,23 @@ impl FromBits<8> for VectorGPR {
         }
     }
 }
+
+/// A group of 4 consecutive SGPR registers
+#[derive(Debug)]
+pub struct ScalarGeneralPurposeRegisterGroup {
+    value: u8,
+}
+
+impl ScalarGeneralPurposeRegisterGroup {
+    pub fn lowest_register(&self) -> ScalarDestinationOperand {
+        ScalarDestinationOperand::from_bits((self.value << 2) as usize)
+    }
+}
+
+impl FromBits<5> for ScalarGeneralPurposeRegisterGroup {
+    fn from_bits(value: usize) -> Self {
+        Self {
+            value: value as _
+        }
+    }
+}

@@ -1,6 +1,6 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MIMGOpCode;
-use crate::instructions::operands::VectorGPR;
+use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use bits::FromBits;
 use bits_macros::FromBits;
 
@@ -39,13 +39,12 @@ pub struct MIMGInstruction {
 
     #[bits(47, 40)]
     vdata: VectorGPR,
-    // todo:
-    // #[bits(52, 48)]
-    // srsrc: u8,
 
-    // todo:
-    // #[bits(57, 53)]
-    // ssam: u8,
+    #[bits(52, 48)]
+    srsrc: ScalarGeneralPurposeRegisterGroup,
+
+    #[bits(57, 53)]
+    ssamp: ScalarGeneralPurposeRegisterGroup,
 }
 
 #[derive(Debug)]
