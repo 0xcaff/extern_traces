@@ -24,6 +24,35 @@ mod tests {
             0x08, 0x09, 0x80, 0x80, 0x00, 0x00, 0x81, 0xBF,
         ];
 
+        //   s_swappc_b64  s[0:1], s[0:1]
+        //   s_load_dwordx4 s[0:3], s[6:7], 0x00
+        //   s_waitcnt     0xc07f
+        //   s_buffer_load_dwordx4 s[4:7], s[0:3], 0x08
+        //   s_buffer_load_dwordx4 s[8:11], s[0:3], 0x0c
+        //   s_buffer_load_dwordx4 s[12:15], s[0:3], 0x04
+        //   s_buffer_load_dwordx4 s[0:3], s[0:3], 0x00
+        //   s_waitcnt     vmcnt(1) & lgkmcnt(0)
+        //   v_mul_f32     v7, s4, v6
+        //   v_mul_f32     v0, s5, v6
+        //   v_mul_f32     v1, s6, v6
+        //   v_mul_f32     v6, s7, v6
+        //   v_add_f32     v7, s8, v7
+        //   v_add_f32     v0, s9, v0
+        //   v_add_f32     v1, s10, v1
+        //   v_add_f32     v6, s11, v6
+        //   v_mac_f32     v7, s12, v5
+        //   v_mac_f32     v0, s13, v5
+        //   v_mac_f32     v1, s14, v5
+        //   v_mac_f32     v6, s15, v5
+        //   v_mac_f32     v7, s0, v4
+        //   v_mac_f32     v0, s1, v4
+        //   v_mac_f32     v1, s2, v4
+        //   v_mac_f32     v6, s3, v4
+        //   exp           pos0, v7, v0, v1, v6 done
+        //   s_waitcnt     0x3f70
+        //   exp           param0, v8, v9, off, off
+        //   s_endpgm
+
         insta::assert_snapshot!(test_shader(&data));
     }
 
@@ -37,6 +66,23 @@ mod tests {
             0x01, 0x00, 0x5E, 0xD2, 0x02, 0xE5, 0x01, 0x00, 0x0F, 0x1C, 0x00, 0xF8, 0x00, 0x01,
             0x80, 0x80, 0x00, 0x00, 0x81, 0xBF,
         ];
+
+        //   s_wqm_b64     exec, exec
+        //   s_load_dwordx8 s[8:15], s[0:1], 0x00
+        //   s_load_dwordx4 s[0:3], s[0:1], 0x08
+        //   s_mov_b32     m0, s4
+        //   v_interp_p1_f32 v2, v0, attr0.x
+        //   v_interp_p2_f32 v2, v1, attr0.x
+        //   v_interp_p1_f32 v0, v0, attr0.y
+        //   v_interp_p2_f32 v0, v1, attr0.y
+        //   v_mov_b32     v3, v0
+        //   s_waitcnt     0xc07f
+        //   image_sample  v[0:2], v[2:3], s[8:15], s[0:3] dmask:0x7
+        //   s_waitcnt     0x3f70
+        //   v_cvt_pkrtz_f16_f32 v0, v0, v1
+        //   v_cvt_pkrtz_f16_f32 v1, v2, 1.0
+        //   exp           mrt_color0, v0, v1 compr vm done
+        //   s_endpgm
 
         insta::assert_snapshot!(test_shader(&data));
     }
