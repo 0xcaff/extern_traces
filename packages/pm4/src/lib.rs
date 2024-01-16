@@ -6,6 +6,6 @@ mod packet;
 mod reader;
 mod registers;
 
-pub use intermediate::convert;
+pub use intermediate::{convert, Command};
 pub use packet::*;
 pub use registers::generated::*;

@@ -84,7 +84,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
 /// * Provide a representation optimized for later stages to read.
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
-struct GraphicsPipeline {
+pub struct GraphicsPipeline {
     depth_buffer: DepthBuffer,
 
     primitive_assembly: PrimitiveAssembly,
@@ -94,6 +94,8 @@ struct GraphicsPipeline {
 
     #[entry(RegisterEntry::CB_SHADER_MASK)]
     shader_mask: CB_SHADER_MASK,
+
+    pub color0: ColorBuffer,
 
     shader: Shader,
     pixel_shader: PixelShader,
@@ -177,9 +179,9 @@ struct Stencil {
 // todo: think about color1
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
-struct ColorBuffer {
+pub struct ColorBuffer {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
-    base: u32,
+    pub base: u32,
     #[entry(RegisterEntry::CB_COLOR0_PITCH)]
     pitch: CB_COLOR0_PITCH,
     #[entry(RegisterEntry::CB_COLOR0_SLICE)]

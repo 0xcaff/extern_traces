@@ -150,7 +150,7 @@ pub fn derive_build(derive_input: DeriveInput) -> Result<TokenStream, syn::Error
 
     Ok(quote! {
         #[derive(Clone)]
-        struct #builder_ident {
+        pub struct #builder_ident {
             #(#builder_fields)*
         }
 
