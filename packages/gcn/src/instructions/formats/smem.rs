@@ -18,9 +18,9 @@ pub struct SMEMInstruction {
     #[bits(8, 8)]
     imm: bool,
 
-    // todo:
-    // #[bits(14, 9)]
-    // sbase: u8,
+    #[bits(14, 9)]
+    sbase: usize,
+
     #[bits(21, 15)]
     sdst: ScalarDestinationOperand,
 }
