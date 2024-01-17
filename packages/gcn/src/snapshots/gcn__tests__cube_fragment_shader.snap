@@ -13,6 +13,7 @@ expression: test_shader(&data)
                 sdst: ExecLo,
             },
         ),
+        program_counter: 0,
     },
     Instruction {
         inner: SMEM(
@@ -26,6 +27,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 4,
     },
     Instruction {
         inner: SMEM(
@@ -39,6 +41,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 8,
     },
     Instruction {
         inner: SOP1(
@@ -52,6 +55,7 @@ expression: test_shader(&data)
                 sdst: M0,
             },
         ),
+        program_counter: 12,
     },
     Instruction {
         inner: VINTRP(
@@ -71,6 +75,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 16,
     },
     Instruction {
         inner: VINTRP(
@@ -90,6 +95,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 20,
     },
     Instruction {
         inner: VINTRP(
@@ -109,6 +115,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 24,
     },
     Instruction {
         inner: VINTRP(
@@ -128,6 +135,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 28,
     },
     Instruction {
         inner: VOP1(
@@ -143,6 +151,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 32,
     },
     Instruction {
         inner: SOPP(
@@ -151,6 +160,7 @@ expression: test_shader(&data)
                 simm16: 49279,
             },
         ),
+        program_counter: 36,
     },
     Instruction {
         inner: MIMG(
@@ -175,11 +185,12 @@ expression: test_shader(&data)
                 srsrc: ScalarGeneralPurposeRegisterGroup {
                     value: 0,
                 },
-                ssam: ScalarGeneralPurposeRegisterGroup {
+                ssamp: ScalarGeneralPurposeRegisterGroup {
                     value: 4,
                 },
             },
         ),
+        program_counter: 40,
     },
     Instruction {
         inner: SOPP(
@@ -188,6 +199,7 @@ expression: test_shader(&data)
                 simm16: 16240,
             },
         ),
+        program_counter: 48,
     },
     Instruction {
         inner: VOP2(
@@ -206,6 +218,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 52,
     },
     Instruction {
         inner: VOP3(
@@ -250,6 +263,7 @@ expression: test_shader(&data)
                 clamp: false,
             },
         ),
+        program_counter: 56,
     },
     Instruction {
         inner: EXP(
@@ -277,6 +291,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 64,
     },
     Instruction {
         inner: SOPP(
@@ -285,5 +300,6 @@ expression: test_shader(&data)
                 simm16: 0,
             },
         ),
+        program_counter: 72,
     },
 ]

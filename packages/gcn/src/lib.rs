@@ -97,7 +97,8 @@ mod tests {
                 break;
             }
 
-            let instruction = Instruction::parse(&mut cursor, cursor.position()).unwrap();
+            let position = cursor.position();
+            let instruction = Instruction::parse(&mut cursor, position).unwrap();
             result.push(instruction);
         }
 

@@ -17,6 +17,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 0,
     },
     Instruction {
         inner: SMEM(
@@ -30,6 +31,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 4,
     },
     Instruction {
         inner: SOPP(
@@ -38,6 +40,7 @@ expression: test_shader(&data)
                 simm16: 49279,
             },
         ),
+        program_counter: 8,
     },
     Instruction {
         inner: SMEM(
@@ -51,6 +54,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 12,
     },
     Instruction {
         inner: SMEM(
@@ -64,6 +68,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 16,
     },
     Instruction {
         inner: SMEM(
@@ -77,6 +82,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 20,
     },
     Instruction {
         inner: SMEM(
@@ -90,6 +96,7 @@ expression: test_shader(&data)
                 ),
             },
         ),
+        program_counter: 24,
     },
     Instruction {
         inner: SOPP(
@@ -98,6 +105,7 @@ expression: test_shader(&data)
                 simm16: 113,
             },
         ),
+        program_counter: 28,
     },
     Instruction {
         inner: VOP2(
@@ -118,6 +126,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 32,
     },
     Instruction {
         inner: VOP2(
@@ -138,6 +147,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 36,
     },
     Instruction {
         inner: VOP2(
@@ -158,6 +168,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 40,
     },
     Instruction {
         inner: VOP2(
@@ -178,6 +189,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 44,
     },
     Instruction {
         inner: VOP2(
@@ -198,6 +210,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 48,
     },
     Instruction {
         inner: VOP2(
@@ -218,6 +231,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 52,
     },
     Instruction {
         inner: VOP2(
@@ -238,6 +252,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 56,
     },
     Instruction {
         inner: VOP2(
@@ -258,6 +273,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 60,
     },
     Instruction {
         inner: VOP2(
@@ -278,6 +294,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 64,
     },
     Instruction {
         inner: VOP2(
@@ -298,6 +315,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 68,
     },
     Instruction {
         inner: VOP2(
@@ -318,6 +336,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 72,
     },
     Instruction {
         inner: VOP2(
@@ -338,6 +357,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 76,
     },
     Instruction {
         inner: VOP2(
@@ -358,6 +378,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 80,
     },
     Instruction {
         inner: VOP2(
@@ -378,6 +399,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 84,
     },
     Instruction {
         inner: VOP2(
@@ -398,6 +420,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 88,
     },
     Instruction {
         inner: VOP2(
@@ -418,6 +441,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 92,
     },
     Instruction {
         inner: EXP(
@@ -445,6 +469,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 96,
     },
     Instruction {
         inner: SOPP(
@@ -453,6 +478,7 @@ expression: test_shader(&data)
                 simm16: 16240,
             },
         ),
+        program_counter: 104,
     },
     Instruction {
         inner: EXP(
@@ -480,6 +506,7 @@ expression: test_shader(&data)
                 },
             },
         ),
+        program_counter: 108,
     },
     Instruction {
         inner: SOPP(
@@ -488,5 +515,6 @@ expression: test_shader(&data)
                 simm16: 0,
             },
         ),
+        program_counter: 116,
     },
 ]
