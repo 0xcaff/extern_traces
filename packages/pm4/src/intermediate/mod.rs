@@ -98,8 +98,8 @@ pub struct GraphicsPipeline {
     pub color0: ColorBuffer,
 
     shader: Shader,
-    pixel_shader: PixelShader,
-    vertex_shader: Option<VertexShader>,
+    pub pixel_shader: PixelShader,
+    pub vertex_shader: Option<VertexShader>,
 }
 
 #[derive(Build, Debug)]
@@ -310,9 +310,9 @@ struct Shader {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
-struct PixelShader {
+pub struct PixelShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_PS)]
-    address: u32,
+    pub address: u32,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_PS)]
     resource1: SPI_SHADER_PGM_RSRC1_PS,
@@ -341,9 +341,9 @@ struct PixelShaderUserData(Vec<UserDataEntry>);
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
-struct VertexShader {
+pub struct VertexShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
-    address: u32,
+    pub address: u32,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_VS)]
     resource1: SPI_SHADER_PGM_RSRC1_VS,

@@ -7,6 +7,7 @@ use std::io::{BufRead, BufReader, Read};
 
 use crate::reader::Reader;
 
+pub use control_flow::*;
 pub use formats::*;
 pub use generated::*;
 
