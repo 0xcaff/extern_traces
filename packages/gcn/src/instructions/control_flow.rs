@@ -4,16 +4,19 @@ use crate::{
     SOPKInstruction, SOPKOpCode, SOPPInstruction, SOPPOpCode,
 };
 
+#[derive(Debug)]
 pub struct ControlFlowInformation {
     pub has_next_instruction: bool,
     pub branch_target: Option<BranchTarget>,
 }
 
+#[derive(Debug)]
 pub enum BranchTarget {
     Indirect(IndirectValue),
     Direct(u64),
 }
 
+#[derive(Debug)]
 pub enum IndirectValue {
     Register(ScalarSourceOperand),
 }

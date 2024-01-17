@@ -76,7 +76,7 @@ pub fn derive_build_user_data(derive_input: DeriveInput) -> Result<TokenStream, 
         }
 
         #[derive(Clone)]
-        struct #builder_ident {
+        pub struct #builder_ident {
             entries: Vec<UserDataEntry>,
         }
 

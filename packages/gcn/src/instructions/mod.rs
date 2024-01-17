@@ -10,6 +10,7 @@ use crate::reader::Reader;
 pub use control_flow::*;
 pub use formats::*;
 pub use generated::*;
+pub use operands::*;
 
 pub struct Decoder<R> {
     reader: BufReader<R>,
@@ -18,7 +19,7 @@ pub struct Decoder<R> {
 #[derive(Debug)]
 pub struct Instruction {
     pub inner: FormattedInstruction,
-    program_counter: u64,
+    pub program_counter: u64,
 }
 
 impl Instruction {

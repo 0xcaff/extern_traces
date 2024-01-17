@@ -332,12 +332,12 @@ pub struct PixelShader {
     #[entry(RegisterEntry::SPI_PS_INPUT_CNTL_0)]
     input_control: Option<SPI_PS_INPUT_CNTL_0>,
 
-    user_data: PixelShaderUserData,
+    pub user_data: PixelShaderUserData,
 }
 
 #[derive(Debug, BuildUserData)]
 #[user_data(SPI_SHADER_USER_DATA_PS_, 0..=15)]
-struct PixelShaderUserData(Vec<UserDataEntry>);
+pub struct PixelShaderUserData(pub Vec<UserDataEntry>);
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
@@ -354,12 +354,12 @@ pub struct VertexShader {
     #[entry(RegisterEntry::SPI_VS_OUT_CONFIG)]
     out_config: SPI_VS_OUT_CONFIG,
 
-    user_data: VertexShaderUserData,
+    pub user_data: VertexShaderUserData,
 }
 
 #[derive(Debug, BuildUserData)]
 #[user_data(SPI_SHADER_USER_DATA_VS_, 0..=15)]
-struct VertexShaderUserData(Vec<UserDataEntry>);
+pub struct VertexShaderUserData(pub Vec<UserDataEntry>);
 
 // todo: crash on duplicate value
 
@@ -369,7 +369,7 @@ struct VertexShaderUserData(Vec<UserDataEntry>);
 // // Ignore it i think for now but in the future operate on the array?
 
 #[derive(Debug, Clone)]
-struct UserDataEntry {
-    slot: u8,
-    value: u32,
+pub struct UserDataEntry {
+    pub slot: u8,
+    pub value: u32,
 }
