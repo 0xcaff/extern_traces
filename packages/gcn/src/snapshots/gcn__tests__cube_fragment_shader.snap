@@ -165,28 +165,28 @@ expression: test_shader(&data)
     Instruction {
         inner: MIMG(
             MIMGInstruction {
-                op: image_load,
+                op: image_sample,
                 dmask: DMask(
-                    0,
+                    7,
                 ),
                 unorm: false,
                 glc: false,
                 da: false,
                 r128: false,
                 tfe: false,
-                lwe: true,
+                lwe: false,
                 slc: false,
                 vaddr: VectorGPR {
-                    register_idx: 0,
+                    register_idx: 2,
                 },
                 vdata: VectorGPR {
-                    register_idx: 7,
+                    register_idx: 0,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 0,
+                    value: 2,
                 },
                 ssamp: ScalarGeneralPurposeRegisterGroup {
-                    value: 4,
+                    value: 0,
                 },
             },
         ),
@@ -223,41 +223,41 @@ expression: test_shader(&data)
     Instruction {
         inner: VOP3(
             VOP3Instruction {
-                op: VOPC(
-                    v_cmp_f_f32,
+                op: VOP2(
+                    v_cvt_pkrtz_f16_f32,
                 ),
                 vdst: VectorGPR {
-                    register_idx: 2,
+                    register_idx: 1,
                 },
                 src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                1,
-                            ),
-                        ),
-                    ),
-                    abs: true,
-                    neg: true,
-                },
-                src1: TransformedOperand {
                     operand: VectorGPR(
                         VectorGPR {
-                            register_idx: 0,
+                            register_idx: 2,
                         },
                     ),
                     abs: false,
-                    neg: true,
+                    neg: false,
                 },
-                src2: TransformedOperand {
+                src1: TransformedOperand {
                     operand: Scalar(
-                        IntegerConstant(
-                            InlineIntegerConstant {
-                                value: 151,
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 242,
                             },
                         ),
                     ),
-                    abs: true,
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
                     neg: false,
                 },
                 clamp: false,
@@ -269,25 +269,25 @@ expression: test_shader(&data)
         inner: EXP(
             ExpInstruction {
                 en: En(
-                    0,
+                    15,
                 ),
                 tgt: Tgt(
-                    16,
+                    0,
                 ),
-                compr: false,
-                done: false,
-                vm: false,
+                compr: true,
+                done: true,
+                vm: true,
                 vsrc0: VectorGPR {
-                    register_idx: 15,
-                },
-                vsrc1: VectorGPR {
-                    register_idx: 28,
-                },
-                vsrc2: VectorGPR {
                     register_idx: 0,
                 },
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vsrc2: VectorGPR {
+                    register_idx: 128,
+                },
                 vsrc3: VectorGPR {
-                    register_idx: 248,
+                    register_idx: 128,
                 },
             },
         ),

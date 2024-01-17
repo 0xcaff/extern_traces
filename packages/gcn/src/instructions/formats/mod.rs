@@ -106,7 +106,7 @@ impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
 
 pub fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, io::Error> {
     let second_token = reader.read_u32()?;
-    let token = ((first_token as u64) << 32) | second_token as u64;
+    let token = (first_token as u64) | ((second_token as u64) << 32);
 
     Ok(token)
 }

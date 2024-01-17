@@ -447,25 +447,25 @@ expression: test_shader(&data)
         inner: EXP(
             ExpInstruction {
                 en: En(
-                    7,
+                    15,
                 ),
                 tgt: Tgt(
-                    0,
+                    12,
                 ),
                 compr: false,
-                done: false,
+                done: true,
                 vm: false,
                 vsrc0: VectorGPR {
-                    register_idx: 207,
+                    register_idx: 7,
                 },
                 vsrc1: VectorGPR {
-                    register_idx: 8,
-                },
-                vsrc2: VectorGPR {
                     register_idx: 0,
                 },
+                vsrc2: VectorGPR {
+                    register_idx: 1,
+                },
                 vsrc3: VectorGPR {
-                    register_idx: 248,
+                    register_idx: 6,
                 },
             },
         ),
@@ -484,25 +484,25 @@ expression: test_shader(&data)
         inner: EXP(
             ExpInstruction {
                 en: En(
-                    8,
+                    3,
                 ),
                 tgt: Tgt(
-                    16,
+                    32,
                 ),
                 compr: false,
-                done: true,
+                done: false,
                 vm: false,
                 vsrc0: VectorGPR {
-                    register_idx: 3,
+                    register_idx: 8,
                 },
                 vsrc1: VectorGPR {
-                    register_idx: 2,
+                    register_idx: 9,
                 },
                 vsrc2: VectorGPR {
-                    register_idx: 0,
+                    register_idx: 128,
                 },
                 vsrc3: VectorGPR {
-                    register_idx: 248,
+                    register_idx: 128,
                 },
             },
         ),
