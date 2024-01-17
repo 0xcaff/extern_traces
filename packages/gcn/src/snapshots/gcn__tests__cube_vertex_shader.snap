@@ -446,11 +446,14 @@ expression: test_shader(&data)
     Instruction {
         inner: EXP(
             ExpInstruction {
-                en: En(
-                    15,
-                ),
-                tgt: Tgt(
-                    12,
+                en: EnabledExports {
+                    vsrc0: true,
+                    vsrc1: true,
+                    vsrc2: true,
+                    vsrc3: true,
+                },
+                tgt: Position(
+                    0,
                 ),
                 compr: false,
                 done: true,
@@ -483,11 +486,14 @@ expression: test_shader(&data)
     Instruction {
         inner: EXP(
             ExpInstruction {
-                en: En(
-                    3,
-                ),
-                tgt: Tgt(
-                    32,
+                en: EnabledExports {
+                    vsrc0: true,
+                    vsrc1: true,
+                    vsrc2: false,
+                    vsrc3: false,
+                },
+                tgt: Parameter(
+                    0,
                 ),
                 compr: false,
                 done: false,

@@ -268,10 +268,13 @@ expression: test_shader(&data)
     Instruction {
         inner: EXP(
             ExpInstruction {
-                en: En(
-                    15,
-                ),
-                tgt: Tgt(
+                en: EnabledExports {
+                    vsrc0: true,
+                    vsrc1: true,
+                    vsrc2: true,
+                    vsrc3: true,
+                },
+                tgt: RenderTarget(
                     0,
                 ),
                 compr: true,

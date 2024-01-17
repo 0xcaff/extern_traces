@@ -7,10 +7,10 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct ExpInstruction {
     #[bits(3, 0)]
-    en: En,
+    en: EnabledExports,
 
     #[bits(9, 4)]
-    tgt: Tgt,
+    tgt: ExportTarget,
 
     #[bits(10, 10)]
     compr: bool,
@@ -41,20 +41,41 @@ impl<R: Reader> ParseInstruction<R> for ExpInstruction {
     }
 }
 
-#[derive(Debug)]
-struct En(u8);
+// todo: flatten this
+#[derive(Debug, FromBits)]
+#[bits(4)]
+struct EnabledExports {
+    #[bits(0, 0)]
+    vsrc0: bool,
 
-impl FromBits<4> for En {
-    fn from_bits(value: usize) -> Self {
-        En(value as _)
-    }
+    #[bits(1, 1)]
+    vsrc1: bool,
+
+    #[bits(2, 2)]
+    vsrc2: bool,
+
+    #[bits(3, 3)]
+    vsrc3: bool,
 }
 
 #[derive(Debug)]
-struct Tgt(u8);
+enum ExportTarget {
+    RenderTarget(u8),
+    Z,
+    Null,
+    Position(u8),
+    Parameter(u8),
+}
 
-impl FromBits<6> for Tgt {
+impl FromBits<6> for ExportTarget {
     fn from_bits(value: usize) -> Self {
-        Tgt(value as _)
+        match value {
+            0..=7 => ExportTarget::RenderTarget(value as _),
+            8 => ExportTarget::Z,
+            9 => ExportTarget::Null,
+            12..=15 => ExportTarget::Position((value - 12) as _),
+            32..=63 => ExportTarget::Parameter((value - 32) as _),
+            _ => panic!("unexpected value {}", value)
+        }
     }
 }
