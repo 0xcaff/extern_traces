@@ -1,13 +1,13 @@
-#![feature(buf_read_has_data_left)]
+#![feature(cursor_remaining)]
 
 mod instructions;
 mod reader;
 
-pub use instructions::Instruction;
+pub use instructions::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::instructions::Decoder;
+    use crate::Instruction;
     use std::io::Cursor;
 
     #[test]
@@ -88,18 +88,17 @@ mod tests {
     }
 
     fn test_shader(shader_bytes: &[u8]) -> String {
-        let cursor = Cursor::new(shader_bytes);
-        let mut decoder = Decoder::new(cursor);
+        let mut cursor = Cursor::new(shader_bytes);
 
         let mut result = vec![];
 
         loop {
-            let instruction = match decoder.decode().unwrap() {
-                Some(value) => {
-                    result.push(value);
-                }
-                None => break,
-            };
+            if cursor.is_empty() {
+                break;
+            }
+
+            let instruction = Instruction::parse(&mut cursor, cursor.position()).unwrap();
+            result.push(instruction);
         }
 
         format!("{:#?}", result)

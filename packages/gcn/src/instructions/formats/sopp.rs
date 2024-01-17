@@ -9,8 +9,8 @@ use bits_macros::FromBits;
 #[bits(32)]
 pub struct SOPPInstruction {
     #[bits(22, 16)]
-    op: SOPPOpCode,
+    pub op: SOPPOpCode,
 
     #[bits(15, 0)]
-    simm16: u16,
+    pub simm16: u16,
 }

@@ -1,11 +1,14 @@
+mod control_flow;
 mod formats;
 mod generated;
 mod operands;
 
-use byteorder::{LittleEndian, ReadBytesExt};
 use std::io::{BufRead, BufReader, Read};
 
-use crate::instructions::formats::{FormattedInstruction, ParseInstruction};
+use crate::reader::Reader;
+
+pub use formats::*;
+pub use generated::*;
 
 pub struct Decoder<R> {
     reader: BufReader<R>,
@@ -13,29 +16,20 @@ pub struct Decoder<R> {
 
 #[derive(Debug)]
 pub struct Instruction {
-    inner: FormattedInstruction,
+    pub inner: FormattedInstruction,
+    program_counter: u64,
 }
 
-impl<R> Decoder<R>
-where
-    R: Read,
-{
-    pub fn new(reader: R) -> Decoder<R> {
-        Decoder {
-            reader: BufReader::new(reader),
-        }
-    }
+impl Instruction {
+    pub fn parse(
+        mut reader: impl Read,
+        program_counter: u64,
+    ) -> Result<Instruction, anyhow::Error> {
+        let token = reader.read_u32()?;
 
-    pub fn decode(&mut self) -> Result<Option<Instruction>, anyhow::Error> {
-        // todo: rework this, doesn't handle branching or termination correctly
-        if !self.reader.has_data_left()? {
-            return Ok(None);
-        }
-
-        let token = self.reader.read_u32::<LittleEndian>()?;
-
-        let inner = FormattedInstruction::parse(token, &mut self.reader)?;
-
-        Ok(Some(Instruction { inner }))
+        Ok(Self {
+            inner: FormattedInstruction::parse(token, &mut reader)?,
+            program_counter,
+        })
     }
 }

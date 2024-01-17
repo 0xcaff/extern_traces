@@ -1,7 +1,7 @@
 use bits::FromBits;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ScalarDestinationOperand {
     /// Scalar **G**eneral **P**urpose **R**egister
     ScalarGPR(u8),
@@ -33,7 +33,7 @@ impl FromBits<7> for ScalarDestinationOperand {
 }
 
 /// Also referred to as SSRC (**S**calar **S**ou**rc**e) operand.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ScalarSourceOperand {
     Destination(ScalarDestinationOperand),
     IntegerConstant(InlineIntegerConstant),
@@ -48,7 +48,7 @@ pub enum ScalarSourceOperand {
     Reserved(u8),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InlineIntegerConstant {
     value: u8,
 }
@@ -64,7 +64,7 @@ impl InlineIntegerConstant {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InlineFloatConstant {
     value: u8,
 }
@@ -153,8 +153,6 @@ impl ScalarGeneralPurposeRegisterGroup {
 
 impl FromBits<5> for ScalarGeneralPurposeRegisterGroup {
     fn from_bits(value: usize) -> Self {
-        Self {
-            value: value as _
-        }
+        Self { value: value as _ }
     }
 }

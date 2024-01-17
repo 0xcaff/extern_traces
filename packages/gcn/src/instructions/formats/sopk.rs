@@ -9,11 +9,11 @@ use bits_macros::FromBits;
 #[bits(32)]
 pub struct SOPKInstruction {
     #[bits(27, 23)]
-    op: SOPKOpCode,
+    pub op: SOPKOpCode,
 
     #[bits(15, 0)]
-    simm16: u16,
+    pub simm16: u16,
 
     #[bits(22, 16)]
-    sdst: ScalarDestinationOperand,
+    pub sdst: ScalarDestinationOperand,
 }
