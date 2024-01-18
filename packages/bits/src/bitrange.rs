@@ -32,6 +32,14 @@ pub const fn bitrange(most_significant_idx: u8, least_significant_idx: u8) -> Bi
     }
 }
 
+pub fn bit(idx: u8, of: usize) -> bool {
+    match bitrange(idx, idx).of(of) {
+        0 => false,
+        1 => true,
+        value => unreachable!("unknown value {}", value),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::bitrange;

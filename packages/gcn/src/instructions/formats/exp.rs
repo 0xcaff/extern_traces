@@ -1,14 +1,11 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::operands::VectorGPR;
-use bits::FromBits;
+use bits::{bit, bitrange, FromBits};
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
 pub struct ExpInstruction {
-    #[bits(3, 0)]
-    en: EnabledExports,
-
     #[bits(9, 4)]
     tgt: ExportTarget,
 
@@ -21,23 +18,44 @@ pub struct ExpInstruction {
     #[bits(12, 12)]
     vm: bool,
 
-    #[bits(39, 32)]
-    vsrc0: VectorGPR,
+    #[bits(vsrc(0))]
+    vsrc0: Option<VectorGPR>,
 
-    #[bits(47, 40)]
-    vsrc1: VectorGPR,
+    #[bits(vsrc(1))]
+    vsrc1: Option<VectorGPR>,
 
-    #[bits(55, 48)]
-    vsrc2: VectorGPR,
+    #[bits(vsrc(2))]
+    vsrc2: Option<VectorGPR>,
 
-    #[bits(63, 56)]
-    vsrc3: VectorGPR,
+    #[bits(vsrc(3))]
+    vsrc3: Option<VectorGPR>,
 }
 
 impl<R: Reader> ParseInstruction<R> for ExpInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(ExpInstruction::from_bits(token as usize))
+    }
+}
+
+fn vsrc(idx: u8) -> impl Fn(usize) -> Option<VectorGPR> {
+    move |token: usize| {
+        let enabled = bit(idx, token);
+
+        if !enabled {
+            return None;
+        }
+
+        Some(VectorGPR::from_bits(
+            (match idx {
+                0 => bitrange(39, 32),
+                1 => bitrange(47, 40),
+                2 => bitrange(55, 48),
+                3 => bitrange(63, 56),
+                _ => unreachable!("invalid index"),
+            })
+            .of(token),
+        ))
     }
 }
 
@@ -75,7 +93,7 @@ impl FromBits<6> for ExportTarget {
             9 => ExportTarget::Null,
             12..=15 => ExportTarget::Position((value - 12) as _),
             32..=63 => ExportTarget::Parameter((value - 32) as _),
-            _ => panic!("unexpected value {}", value)
+            _ => panic!("unexpected value {}", value),
         }
     }
 }

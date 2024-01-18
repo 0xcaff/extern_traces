@@ -268,30 +268,32 @@ expression: test_shader(&data)
     Instruction {
         inner: EXP(
             ExpInstruction {
-                en: EnabledExports {
-                    vsrc0: true,
-                    vsrc1: true,
-                    vsrc2: true,
-                    vsrc3: true,
-                },
                 tgt: RenderTarget(
                     0,
                 ),
                 compr: true,
                 done: true,
                 vm: true,
-                vsrc0: VectorGPR {
-                    register_idx: 0,
-                },
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vsrc2: VectorGPR {
-                    register_idx: 128,
-                },
-                vsrc3: VectorGPR {
-                    register_idx: 128,
-                },
+                vsrc0: Some(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: Some(
+                    VectorGPR {
+                        register_idx: 1,
+                    },
+                ),
+                vsrc2: Some(
+                    VectorGPR {
+                        register_idx: 128,
+                    },
+                ),
+                vsrc3: Some(
+                    VectorGPR {
+                        register_idx: 128,
+                    },
+                ),
             },
         ),
         program_counter: 64,

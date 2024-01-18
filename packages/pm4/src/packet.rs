@@ -177,14 +177,6 @@ pub struct WaitRegisterMemoryPacket {
     pub poll_interval: u16,
 }
 
-fn bit(idx: u8, of: u32) -> bool {
-    match bitrange(idx, idx).of_32(of) {
-        0 => false,
-        1 => true,
-        value => unreachable!("unknown value {}", value),
-    }
-}
-
 impl ParseType3Packet for WaitRegisterMemoryPacket {
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
