@@ -1,6 +1,7 @@
 mod control_flow;
 mod formats;
 mod generated;
+mod instruction_info;
 mod operands;
 
 use std::io::{BufRead, BufReader, Read};

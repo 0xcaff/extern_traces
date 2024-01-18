@@ -1,4 +1,4 @@
-from aco_opcodes import opcodes
+from aco_opcodes import opcodes, M0, SCC, EXEC, EXEC_LO, VCC
 from mako.template import Template
 from itertools import groupby
 
@@ -24,13 +24,14 @@ template = """
 use strum::FromRepr;
 use bits::FromBits;
 use anyhow;
+use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 
-% for format, format_ops in groupby(filter(lambda op: op.opcode_gfx7 >= 0, ops.values()), lambda op: op.format.name):
+% for format, format_ops in ops:
 #[repr(usize)]
 #[allow(non_camel_case_types)]
 #[derive(Eq, PartialEq, Clone, Copy, Debug, FromRepr)]
 pub enum ${format}OpCode {
-    % for op in sorted(format_ops, key=lambda op: op.opcode_gfx7):
+    % for op in format_ops:
     ${op.name} = ${op.opcode_gfx7},
     % endfor
 }
@@ -42,33 +43,81 @@ impl FromBits<${FORMATS[format]}> for ${format}OpCode {
     }
 }
 %endif
+
+impl ${format}OpCode {
+    fn instruction_info(&self) -> InstructionInfo {
+        match self {
+            % for op in format_ops:
+            ${format}OpCode::${op.name} => {
+                InstructionInfo {
+                    definitions: &[${emit_operands(op.definitions)}],
+                    operands: &[${emit_operands(op.operands)}],
+                }
+            },
+            % endfor
+        }
+    }
+}
 % endfor
 """
 
 
-def to_sparse_array(ops, fn):
-    relevant_ops = [item for item in ops if fn(item) != -1]
-    max_index = max(fn(item) for item in relevant_ops)
+def emit_operands(field):
+    values = list(map(lambda field: to_operand(field), u32_to_u8s(field)))
 
-    result = [None] * (max_index + 1)
-
-    for item in relevant_ops:
-        result[fn(item)] = item
-
-    return result
+    return ",".join(values)
 
 
-def to_option(number):
-    return f"Some({hex(number)})" if number >= 0 else "None"
+def u32_to_u8s(value):
+    if not 0 <= value <= 0xFFFFFFFF:
+        raise ValueError("Value must be a 32-bit unsigned integer")
+
+    return [
+        value & 0xFF,
+        (value >> 8) & 0xFF,
+        (value >> 16) & 0xFF,
+        (value >> 24) & 0xFF,
+    ]
+
+
+def to_operand(field):
+    if field == 0:
+        return "None"
+    if field == M0:
+        return "Some(OperandInfo::M0)"
+    elif field == SCC:
+        return "Some(OperandInfo::SCC)"
+    elif field == EXEC:
+        return "Some(OperandInfo::Exec)"
+    elif field == EXEC_LO:
+        return "Some(OperandInfo::ExecLo)"
+    elif field == VCC:
+        return "Some(OperandInfo::Vcc)"
+    else:
+        return "Some(OperandInfo::Size({}))".format(field)
 
 
 if __name__ == '__main__':
+    ops = list(
+        map(
+            lambda t: (
+                t[0],
+                list(sorted(t[1], key=lambda op: op.opcode_gfx7))
+            ),
+            groupby(
+                filter(
+                    lambda op: op.opcode_gfx7 >= 0,
+                    opcodes.values()
+                ),
+                lambda op: op.format.name
+            )
+        )
+    )
+
     rendered = Template(template).render(
-        ops=opcodes,
-        to_option=to_option,
-        to_sparse_array=to_sparse_array,
-        groupby=groupby,
-        FORMATS=FORMATS
+        ops=ops,
+        FORMATS=FORMATS,
+        emit_operands=emit_operands,
     )
     with open('ops.rs', 'w') as file:
         file.write(rendered)
