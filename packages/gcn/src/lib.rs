@@ -7,7 +7,7 @@ pub use instructions::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::Instruction;
+    use crate::{DisplayInstruction, Instruction};
     use std::io::Cursor;
 
     #[test]
@@ -53,7 +53,9 @@ mod tests {
         //   exp           param0, v8, v9, off, off
         //   s_endpgm
 
-        insta::assert_snapshot!(test_shader(&data));
+        let shader = Shader::new(&data).unwrap();
+        insta::assert_snapshot!(shader.debug());
+        insta::assert_snapshot!(shader.displayed());
     }
 
     #[test]
@@ -84,24 +86,47 @@ mod tests {
         //   exp           mrt_color0, v0, v1 compr vm done
         //   s_endpgm
 
-        insta::assert_snapshot!(test_shader(&data));
+        let shader = Shader::new(&data).unwrap();
+        insta::assert_snapshot!(shader.debug());
+        insta::assert_snapshot!(shader.displayed());
     }
 
-    fn test_shader(shader_bytes: &[u8]) -> String {
-        let mut cursor = Cursor::new(shader_bytes);
+    struct Shader {
+        instructions: Vec<Instruction>,
+    }
 
-        let mut result = vec![];
+    impl Shader {
+        pub fn new(shader_bytes: &[u8]) -> Result<Shader, anyhow::Error> {
+            let mut cursor = Cursor::new(shader_bytes);
+            let mut instructions = vec![];
 
-        loop {
-            if cursor.is_empty() {
-                break;
+            loop {
+                if cursor.is_empty() {
+                    break;
+                }
+
+                let position = cursor.position();
+                let instruction = Instruction::parse(&mut cursor, position)?;
+                instructions.push(instruction);
             }
 
-            let position = cursor.position();
-            let instruction = Instruction::parse(&mut cursor, position).unwrap();
-            result.push(instruction);
+            Ok(Shader { instructions })
         }
 
-        format!("{:#?}", result)
+        pub fn debug(&self) -> String {
+            format!("{:#?}", self.instructions)
+        }
+
+        pub fn displayed(&self) -> String {
+            self.instructions
+                .iter()
+                .map(|it| {
+                    let display = it.inner.display();
+
+                    format!("{} {}", display.op, display.args.join(", "))
+                })
+                .collect::<Vec<_>>()
+                .join("\n")
+        }
     }
 }

@@ -1,6 +1,6 @@
 ---
 source: packages/gcn/src/lib.rs
-expression: test_shader(&data)
+expression: shader.debug()
 ---
 [
     Instruction {
@@ -446,12 +446,12 @@ expression: test_shader(&data)
     Instruction {
         inner: EXP(
             ExpInstruction {
-                tgt: Position(
+                target: Position(
                     0,
                 ),
-                compr: false,
+                compress: false,
                 done: true,
-                vm: false,
+                valid_mask: false,
                 vsrc0: Some(
                     VectorGPR {
                         register_idx: 7,
@@ -488,12 +488,12 @@ expression: test_shader(&data)
     Instruction {
         inner: EXP(
             ExpInstruction {
-                tgt: Parameter(
+                target: Parameter(
                     0,
                 ),
-                compr: false,
+                compress: false,
                 done: false,
-                vm: false,
+                valid_mask: false,
                 vsrc0: Some(
                     VectorGPR {
                         register_idx: 8,

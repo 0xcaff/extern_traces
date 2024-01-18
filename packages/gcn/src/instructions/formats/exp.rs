@@ -1,5 +1,6 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::operands::VectorGPR;
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::{bit, bitrange, FromBits};
 use bits_macros::FromBits;
 
@@ -7,16 +8,16 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct ExpInstruction {
     #[bits(9, 4)]
-    tgt: ExportTarget,
+    target: ExportTarget,
 
     #[bits(10, 10)]
-    compr: bool,
+    compress: bool,
 
     #[bits(11, 11)]
     done: bool,
 
     #[bits(12, 12)]
-    vm: bool,
+    valid_mask: bool,
 
     #[bits(vsrc(0))]
     vsrc0: Option<VectorGPR>,
@@ -59,21 +60,47 @@ fn vsrc(idx: u8) -> impl Fn(usize) -> Option<VectorGPR> {
     }
 }
 
-// todo: flatten this
-#[derive(Debug, FromBits)]
-#[bits(4)]
-struct EnabledExports {
-    #[bits(0, 0)]
-    vsrc0: bool,
+impl DisplayInstruction for ExpInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        DisplayableInstruction {
+            op: "exp".to_string(),
+            args: {
+                let mut values = vec![
+                    self.target.display(),
+                    self.vsrc0
+                        .as_ref()
+                        .map(|it| it.display(&None))
+                        .unwrap_or("off".to_string()),
+                    self.vsrc1
+                        .as_ref()
+                        .map(|it| it.display(&None))
+                        .unwrap_or("off".to_string()),
+                    self.vsrc2
+                        .as_ref()
+                        .map(|it| it.display(&None))
+                        .unwrap_or("off".to_string()),
+                    self.vsrc3
+                        .as_ref()
+                        .map(|it| it.display(&None))
+                        .unwrap_or("off".to_string()),
+                ];
 
-    #[bits(1, 1)]
-    vsrc1: bool,
+                if self.compress {
+                    values.push("compress".to_string());
+                }
 
-    #[bits(2, 2)]
-    vsrc2: bool,
+                if self.done {
+                    values.push("done".to_string());
+                }
 
-    #[bits(3, 3)]
-    vsrc3: bool,
+                if self.valid_mask {
+                    values.push("vm".to_string());
+                }
+
+                values
+            },
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -94,6 +121,18 @@ impl FromBits<6> for ExportTarget {
             12..=15 => ExportTarget::Position((value - 12) as _),
             32..=63 => ExportTarget::Parameter((value - 32) as _),
             _ => panic!("unexpected value {}", value),
+        }
+    }
+}
+
+impl ExportTarget {
+    fn display(&self) -> String {
+        match self {
+            ExportTarget::RenderTarget(idx) => format!("mrt_color{}", *idx),
+            ExportTarget::Position(idx) => format!("pos{}", *idx),
+            ExportTarget::Parameter(idx) => format!("param{}", *idx),
+            ExportTarget::Z => "z".to_string(),
+            ExportTarget::Null => "NULL".to_string(),
         }
     }
 }

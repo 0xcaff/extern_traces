@@ -1,5 +1,6 @@
 use crate::instructions::generated::SOPKOpCode;
 use crate::instructions::operands::ScalarDestinationOperand;
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits_macros::FromBits;
 
 /// Scalar Instruction One Inline Constant Input, One Output
@@ -16,4 +17,18 @@ pub struct SOPKInstruction {
 
     #[bits(22, 16)]
     pub sdst: ScalarDestinationOperand,
+}
+
+impl DisplayInstruction for SOPKInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        let op_info = self.op.instruction_info();
+
+        DisplayableInstruction {
+            op: self.op.as_ref().to_string(),
+            args: vec![
+                self.sdst.display(&op_info.definitions[0]),
+                format!("0x{:x}", self.simm16),
+            ],
+        }
+    }
 }

@@ -1,7 +1,7 @@
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 
-use syn::{Attribute, Meta};
+use syn::{Attribute, Field, Fields, Meta};
 
 pub fn upto_one(attrs: &[Attribute], name: &str) -> Result<Option<TokenStream>, syn::Error> {
     let mut filtered_attributes = attrs.iter().filter_map(|attr| {
@@ -47,4 +47,21 @@ pub fn exactly_one(
     };
 
     Ok(expr)
+}
+
+pub fn exactly_one_field(fields: &Fields) -> Result<&Field, syn::Error> {
+    let mut it = fields.iter();
+
+    let field = it
+        .next()
+        .ok_or(syn::Error::new_spanned(fields, "missing field"))?;
+
+    if let Some(next_field) = it.next() {
+        return Err(syn::Error::new_spanned(
+            next_field,
+            "more than one field in enum variant, expected exactly one",
+        ));
+    }
+
+    Ok(field)
 }

@@ -2,6 +2,7 @@ use crate::instructions::formats::mubuf::Offset;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MTBUFOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
 
@@ -88,5 +89,15 @@ impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MTBufInstruction::from_bits(token as usize))
+    }
+}
+
+impl DisplayInstruction for MTBufInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        // todo: implement
+        DisplayableInstruction {
+            op: "unknown".to_string(),
+            args: vec![],
+        }
     }
 }

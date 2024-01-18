@@ -1,11 +1,11 @@
 use crate::bitstring::BitString;
-use macro_utils::exactly_one;
+use macro_utils::{exactly_one, exactly_one_field};
 use proc_macro2::{Ident, Literal, TokenStream};
 use quote::quote;
 use std::collections::BTreeMap;
 use std::str::FromStr;
 use syn::__private::TokenStream2;
-use syn::{parse2, Data, DataEnum, DeriveInput, Field, Type, Variant};
+use syn::{parse2, Data, DataEnum, DeriveInput, Type, Variant};
 
 pub fn derive_parse_instruction(input: DeriveInput) -> Result<TokenStream2, syn::Error> {
     let enum_ident = &input.ident;
@@ -104,24 +104,7 @@ impl VariantInfo<'_> {
                 let pattern_expr = exactly_one(&variant.attrs, "pattern", variant)?;
                 parse2(pattern_expr)?
             },
-            typ: exactly_one_field(variant)?.ty.clone(),
+            typ: exactly_one_field(&variant.fields)?.ty.clone(),
         })
     }
-}
-
-fn exactly_one_field(variant: &Variant) -> Result<&Field, syn::Error> {
-    let mut it = variant.fields.iter();
-
-    let field = it
-        .next()
-        .ok_or(syn::Error::new_spanned(variant, "missing field"))?;
-
-    if let Some(next_field) = it.next() {
-        return Err(syn::Error::new_spanned(
-            next_field,
-            "more than one field in enum variant, expected exactly one",
-        ));
-    }
-
-    Ok(field)
 }

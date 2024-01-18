@@ -1,0 +1,32 @@
+---
+source: packages/gcn/src/lib.rs
+expression: shader.displayed()
+---
+s_swappc_b64 s[0:1], s[0:1]
+s_load_dwordx4 s[0:3], s[6:9]
+s_waitcnt 0xc07f
+s_buffer_load_dwordx4 s[4:7], s[0:3]
+s_buffer_load_dwordx4 s[8:11], s[0:3]
+s_buffer_load_dwordx4 s[12:15], s[0:3]
+s_buffer_load_dwordx4 s[0:3], s[0:3]
+s_waitcnt 0x71
+v_mul_f32 v7, s4, v6
+v_mul_f32 v0, s5, v6
+v_mul_f32 v1, s6, v6
+v_mul_f32 v6, s7, v6
+v_add_f32 v7, s8, v7
+v_add_f32 v0, s9, v0
+v_add_f32 v1, s10, v1
+v_add_f32 v6, s11, v6
+v_mac_f32 v7, s12, v5
+v_mac_f32 v0, s13, v5
+v_mac_f32 v1, s14, v5
+v_mac_f32 v6, s15, v5
+v_mac_f32 v7, s0, v4
+v_mac_f32 v0, s1, v4
+v_mac_f32 v1, s2, v4
+v_mac_f32 v6, s3, v4
+exp pos0, v7, v0, v1, v6, done
+s_waitcnt 0x3f70
+exp param0, v8, v9, off, off
+s_endpgm 0x0

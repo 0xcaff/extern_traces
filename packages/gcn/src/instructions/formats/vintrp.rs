@@ -2,6 +2,7 @@ use crate::instructions::generated::VINTRPOpCode;
 use crate::instructions::operands::VectorGPR;
 use bits::FromBits;
 use bits_macros::FromBits;
+use crate::{DisplayableInstruction, DisplayInstruction};
 
 #[derive(Debug, FromBits)]
 #[bits(32)]
@@ -37,5 +38,15 @@ struct Attr(u8);
 impl FromBits<6> for Attr {
     fn from_bits(value: usize) -> Self {
         Self(value as _)
+    }
+}
+
+impl DisplayInstruction for VINTRPInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        // todo: implement
+        DisplayableInstruction {
+            op: "unknown".to_string(),
+            args: vec![],
+        }
     }
 }

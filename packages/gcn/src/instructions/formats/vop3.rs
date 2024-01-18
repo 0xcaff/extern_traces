@@ -4,6 +4,7 @@ use crate::instructions::operands::{SourceOperand, VectorGPR};
 use anyhow::format_err;
 use bits::{bitrange, FromBits};
 use bits_macros::FromBits;
+use crate::{DisplayableInstruction, DisplayInstruction};
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
@@ -104,6 +105,16 @@ impl TransformedOperand {
             abs: bitrange(abs_idx, abs_idx).of(token as _) == 1,
             neg: bitrange(neg_idx, neg_idx).of(token as _) == 1,
             operand: SourceOperand::from_bits(op_value),
+        }
+    }
+}
+
+impl DisplayInstruction for VOP3Instruction {
+    fn display(&self) -> DisplayableInstruction {
+        // todo: implement
+        DisplayableInstruction {
+            op: "unknown".to_string(),
+            args: vec![],
         }
     }
 }

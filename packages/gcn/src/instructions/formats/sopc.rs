@@ -1,3 +1,4 @@
+use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
 use crate::instructions::generated::SOPCOpCode;
 use crate::instructions::operands::ScalarSourceOperand;
 use bits_macros::FromBits;
@@ -17,4 +18,18 @@ pub struct SOPCInstruction {
 
     #[bits(15, 8)]
     ssrc1: ScalarSourceOperand,
+}
+
+impl DisplayInstruction for SOPCInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        let op_info = self.op.instruction_info();
+
+        DisplayableInstruction {
+            op: self.op.as_ref().to_string(),
+            args: vec![
+                self.ssrc0.display(&op_info.operands[0]),
+                self.ssrc1.display(&op_info.operands[1]),
+            ],
+        }
+    }
 }

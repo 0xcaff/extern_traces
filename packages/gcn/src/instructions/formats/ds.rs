@@ -2,6 +2,7 @@ use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::generated::DSOpCode;
 use crate::instructions::operands::VectorGPR;
 use crate::reader::Reader;
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
 
@@ -38,5 +39,15 @@ impl<R: Reader> ParseInstruction<R> for DSInstruction {
         let token = combine(token, reader)?;
 
         Ok(DSInstruction::from_bits(token as usize))
+    }
+}
+
+impl DisplayInstruction for DSInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        // todo: implement
+        DisplayableInstruction {
+            op: "unknown".to_string(),
+            args: vec![],
+        }
     }
 }

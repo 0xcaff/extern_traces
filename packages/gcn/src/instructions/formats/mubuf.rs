@@ -3,6 +3,7 @@ use crate::instructions::generated::MUBUFOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use bits::FromBits;
 use bits_macros::FromBits;
+use crate::{DisplayableInstruction, DisplayInstruction};
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
@@ -60,5 +61,15 @@ impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MUBUFInstruction::from_bits(token as usize))
+    }
+}
+
+impl DisplayInstruction for MUBUFInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        // todo: implement
+        DisplayableInstruction {
+            op: "unknown".to_string(),
+            args: vec![],
+        }
     }
 }

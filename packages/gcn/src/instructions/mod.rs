@@ -1,21 +1,19 @@
 mod control_flow;
+mod display;
 mod formats;
 mod generated;
 mod instruction_info;
 mod operands;
 
-use std::io::{BufRead, BufReader, Read};
+use std::io::{BufRead, Read};
 
 use crate::reader::Reader;
 
 pub use control_flow::*;
+pub use display::*;
 pub use formats::*;
 pub use generated::*;
 pub use operands::*;
-
-pub struct Decoder<R> {
-    reader: BufReader<R>,
-}
 
 #[derive(Debug)]
 pub struct Instruction {

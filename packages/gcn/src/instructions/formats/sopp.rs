@@ -1,4 +1,5 @@
 use crate::instructions::generated::SOPPOpCode;
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits_macros::FromBits;
 
 /// Scalar Instruction One Input, One Special Operation
@@ -13,4 +14,13 @@ pub struct SOPPInstruction {
 
     #[bits(15, 0)]
     pub simm16: u16,
+}
+
+impl DisplayInstruction for SOPPInstruction {
+    fn display(&self) -> DisplayableInstruction {
+        DisplayableInstruction {
+            op: self.op.as_ref().to_string(),
+            args: vec![format!("0x{:x}", self.simm16)],
+        }
+    }
 }

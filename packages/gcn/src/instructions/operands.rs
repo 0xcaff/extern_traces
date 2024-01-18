@@ -1,5 +1,5 @@
+use crate::instructions::instruction_info::OperandInfo;
 use bits::FromBits;
-use std::fmt;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
 #[derive(Debug, Clone)]
@@ -31,15 +31,27 @@ impl FromBits<7> for ScalarDestinationOperand {
     }
 }
 
-impl fmt::Display for ScalarDestinationOperand {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl ScalarDestinationOperand {
+    pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
         match self {
-            ScalarDestinationOperand::ScalarGPR(idx) => write!(f, "s{}", *idx),
-            ScalarDestinationOperand::VccLo => write!(f, "vcc_lo"),
-            ScalarDestinationOperand::VccHi => write!(f, "vcc_hi"),
-            ScalarDestinationOperand::M0 => write!(f, "m0"),
-            ScalarDestinationOperand::ExecLo => write!(f, "exec_lo"),
-            ScalarDestinationOperand::ExecHi => write!(f, "exec_hi"),
+            ScalarDestinationOperand::ScalarGPR(idx) => {
+                let size = match operand_info {
+                    Some(OperandInfo::Size(words)) => *words,
+                    Some(_) => unimplemented!("not implemented"),
+                    None => 1,
+                };
+
+                if size == 1 {
+                    format!("s{}", *idx)
+                } else {
+                    format!("s[{}:{}]", *idx, *idx + size - 1)
+                }
+            }
+            ScalarDestinationOperand::VccLo => "vcc_lo".to_string(),
+            ScalarDestinationOperand::VccHi => "vcc_hi".to_string(),
+            ScalarDestinationOperand::M0 => "m0".to_string(),
+            ScalarDestinationOperand::ExecLo => "exec_lo".to_string(),
+            ScalarDestinationOperand::ExecHi => "exec_hi".to_string(),
         }
     }
 }
@@ -116,15 +128,15 @@ impl FromBits<8> for ScalarSourceOperand {
     }
 }
 
-impl fmt::Display for ScalarSourceOperand {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl ScalarSourceOperand {
+    pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
         match self {
-            ScalarSourceOperand::Destination(dst) => write!(f, "{:?}", dst),
-            ScalarSourceOperand::IntegerConstant(value) => write!(f, "{}", value.value()),
-            ScalarSourceOperand::FloatConstant(value) => write!(f, "{}.f", value.value()),
-            ScalarSourceOperand::VccZero => write!(f, "vccz"),
-            ScalarSourceOperand::ExecZero => write!(f, "execz"),
-            ScalarSourceOperand::ScalarConditionCode => write!(f, "scc"),
+            ScalarSourceOperand::Destination(dst) => dst.display(operand_info),
+            ScalarSourceOperand::IntegerConstant(value) => format!("{}", value.value()),
+            ScalarSourceOperand::FloatConstant(value) => format!("{}.f", value.value()),
+            ScalarSourceOperand::VccZero => "vccz".to_string(),
+            ScalarSourceOperand::ExecZero => "execz".to_string(),
+            ScalarSourceOperand::ScalarConditionCode => "scc".to_string(),
             ScalarSourceOperand::LDSDirect => {
                 unimplemented!()
             }
@@ -154,11 +166,11 @@ impl FromBits<9> for SourceOperand {
     }
 }
 
-impl fmt::Display for SourceOperand {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl SourceOperand {
+    pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
         match self {
-            SourceOperand::Scalar(value) => write!(f, "{}", value),
-            SourceOperand::VectorGPR(value) => write!(f, "{}", value),
+            SourceOperand::Scalar(value) => value.display(operand_info),
+            SourceOperand::VectorGPR(value) => value.display(operand_info),
         }
     }
 }
@@ -177,9 +189,19 @@ impl FromBits<8> for VectorGPR {
     }
 }
 
-impl fmt::Display for VectorGPR {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "v{}", self.register_idx)
+impl VectorGPR {
+    pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
+        let size = match operand_info {
+            Some(OperandInfo::Size(words)) => *words,
+            Some(_) => unimplemented!("not implemented"),
+            None => 1,
+        };
+
+        if size == 1 {
+            format!("v{}", self.register_idx)
+        } else {
+            format!("v[{}:{}]", self.register_idx, self.register_idx + size - 1)
+        }
     }
 }
 
@@ -205,19 +227,9 @@ impl FromBits<5> for ScalarGeneralPurposeRegisterGroup {
     }
 }
 
-impl fmt::Display for ScalarGeneralPurposeRegisterGroup {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "s[{}..{}]",
-            match self.lowest_register() {
-                ScalarDestinationOperand::ScalarGPR(gpr) => format!("{}", gpr),
-                value => format!("{:?}", value),
-            },
-            match self.highest_register() {
-                ScalarDestinationOperand::ScalarGPR(gpr) => format!("{}", gpr),
-                value => format!("{:?}", value),
-            },
-        )
+impl ScalarGeneralPurposeRegisterGroup {
+    pub fn display(&self) -> String {
+        let operand_info = Some(OperandInfo::Size(4));
+        self.lowest_register().display(&operand_info)
     }
 }
