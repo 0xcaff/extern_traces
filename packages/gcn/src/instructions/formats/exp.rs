@@ -2,6 +2,7 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::operands::VectorGPR;
 use bits::FromBits;
 use bits_macros::FromBits;
+use std::fmt;
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
@@ -75,7 +76,19 @@ impl FromBits<6> for ExportTarget {
             9 => ExportTarget::Null,
             12..=15 => ExportTarget::Position((value - 12) as _),
             32..=63 => ExportTarget::Parameter((value - 32) as _),
-            _ => panic!("unexpected value {}", value)
+            _ => panic!("unexpected value {}", value),
+        }
+    }
+}
+
+impl fmt::Display for ExportTarget {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ExportTarget::RenderTarget(idx) => write!(f, "mrt_color{}", *idx),
+            ExportTarget::Position(idx) => write!(f, "pos{}", *idx),
+            ExportTarget::Parameter(idx) => write!(f, "param{}", *idx),
+            ExportTarget::Z => write!(f, "z"),
+            ExportTarget::Null => write!(f, "NULL"),
         }
     }
 }
