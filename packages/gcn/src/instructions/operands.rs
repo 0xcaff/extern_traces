@@ -1,4 +1,5 @@
 use bits::FromBits;
+use std::fmt;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
 #[derive(Debug, Clone)]
@@ -13,8 +14,6 @@ pub enum ScalarDestinationOperand {
 
     ExecLo,
     ExecHi,
-
-    Reserved(u8),
 }
 
 impl FromBits<7> for ScalarDestinationOperand {
@@ -27,7 +26,20 @@ impl FromBits<7> for ScalarDestinationOperand {
             124 => ScalarDestinationOperand::M0,
             126 => ScalarDestinationOperand::ExecLo,
             127 => ScalarDestinationOperand::ExecHi,
-            _ => ScalarDestinationOperand::Reserved(value),
+            _ => panic!("unknown {}", value),
+        }
+    }
+}
+
+impl fmt::Display for ScalarDestinationOperand {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ScalarDestinationOperand::ScalarGPR(idx) => write!(f, "s{}", *idx),
+            ScalarDestinationOperand::VccLo => write!(f, "vcc_lo"),
+            ScalarDestinationOperand::VccHi => write!(f, "vcc_hi"),
+            ScalarDestinationOperand::M0 => write!(f, "m0"),
+            ScalarDestinationOperand::ExecLo => write!(f, "exec_lo"),
+            ScalarDestinationOperand::ExecHi => write!(f, "exec_hi"),
         }
     }
 }
@@ -44,8 +56,6 @@ pub enum ScalarSourceOperand {
     ScalarConditionCode,
     LDSDirect,
     LiteralConstant,
-
-    Reserved(u8),
 }
 
 #[derive(Debug, Clone)]
@@ -101,7 +111,26 @@ impl FromBits<8> for ScalarSourceOperand {
             253 => ScalarSourceOperand::ScalarConditionCode,
             254 => ScalarSourceOperand::LDSDirect,
             255 => ScalarSourceOperand::LiteralConstant,
-            _ => ScalarSourceOperand::Reserved(encoded),
+            _ => panic!("unknown value {}", encoded),
+        }
+    }
+}
+
+impl fmt::Display for ScalarSourceOperand {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ScalarSourceOperand::Destination(dst) => write!(f, "{:?}", dst),
+            ScalarSourceOperand::IntegerConstant(value) => write!(f, "{}", value.value()),
+            ScalarSourceOperand::FloatConstant(value) => write!(f, "{}.f", value.value()),
+            ScalarSourceOperand::VccZero => write!(f, "vccz"),
+            ScalarSourceOperand::ExecZero => write!(f, "execz"),
+            ScalarSourceOperand::ScalarConditionCode => write!(f, "scc"),
+            ScalarSourceOperand::LDSDirect => {
+                unimplemented!()
+            }
+            ScalarSourceOperand::LiteralConstant => {
+                unimplemented!()
+            }
         }
     }
 }
@@ -125,6 +154,15 @@ impl FromBits<9> for SourceOperand {
     }
 }
 
+impl fmt::Display for SourceOperand {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            SourceOperand::Scalar(value) => write!(f, "{}", value),
+            SourceOperand::VectorGPR(value) => write!(f, "{}", value),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct VectorGPR {
     register_idx: u8,
@@ -139,6 +177,12 @@ impl FromBits<8> for VectorGPR {
     }
 }
 
+impl fmt::Display for VectorGPR {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "v{}", self.register_idx)
+    }
+}
+
 /// A group of 4 consecutive SGPR registers
 #[derive(Debug)]
 pub struct ScalarGeneralPurposeRegisterGroup {
@@ -149,10 +193,31 @@ impl ScalarGeneralPurposeRegisterGroup {
     pub fn lowest_register(&self) -> ScalarDestinationOperand {
         ScalarDestinationOperand::from_bits((self.value << 2) as usize)
     }
+
+    pub fn highest_register(&self) -> ScalarDestinationOperand {
+        ScalarDestinationOperand::from_bits(((self.value << 2) + 3) as usize)
+    }
 }
 
 impl FromBits<5> for ScalarGeneralPurposeRegisterGroup {
     fn from_bits(value: usize) -> Self {
         Self { value: value as _ }
+    }
+}
+
+impl fmt::Display for ScalarGeneralPurposeRegisterGroup {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "s[{}..{}]",
+            match self.lowest_register() {
+                ScalarDestinationOperand::ScalarGPR(gpr) => format!("{}", gpr),
+                value => format!("{:?}", value),
+            },
+            match self.highest_register() {
+                ScalarDestinationOperand::ScalarGPR(gpr) => format!("{}", gpr),
+                value => format!("{:?}", value),
+            },
+        )
     }
 }
