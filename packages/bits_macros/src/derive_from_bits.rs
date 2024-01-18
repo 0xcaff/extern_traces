@@ -2,7 +2,7 @@ use macro_utils::exactly_one;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
-use syn::{parse2, Data, DeriveInput, Field, LitInt, Token};
+use syn::{parse2, Data, DeriveInput, Expr, Field, LitInt, Token};
 
 pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
     let struct_ident = &input.ident;
@@ -39,23 +39,38 @@ fn field(field: &Field) -> Result<TokenStream, syn::Error> {
     let typ = &field.ty;
 
     let attribute = exactly_one(&field.attrs, "bits", &field)?;
-    let args: BitsAttributeArgs = parse2(attribute)?;
-    let highest_bit = args.highest_bit;
-    let lowest_bit = args.lowest_bit;
+    let args: FromBitsFieldAttribute = parse2(attribute)?;
 
-    let len = (args.highest_bit - args.lowest_bit + 1) as usize;
+    Ok(match args {
+        FromBitsFieldAttribute::BitRange(range) => {
+            let highest_bit = range.highest_bit;
+            let lowest_bit = range.lowest_bit;
 
-    Ok(quote! {
-        #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(::bits::bitrange(#highest_bit, #lowest_bit).of(value)),
+            let len = (range.highest_bit - range.lowest_bit + 1) as usize;
+
+            quote! {
+                #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(::bits::bitrange(#highest_bit, #lowest_bit).of(value)),
+            }
+        }
+        FromBitsFieldAttribute::With(expr) => {
+            quote! {
+                #identifier: #expr(value),
+            }
+        }
     })
 }
 
-struct BitsAttributeArgs {
+enum FromBitsFieldAttribute {
+    BitRange(BitRange),
+    With(Expr),
+}
+
+struct BitRange {
     lowest_bit: u8,
     highest_bit: u8,
 }
 
-impl Parse for BitsAttributeArgs {
+impl Parse for BitRange {
     fn parse(input: ParseStream) -> syn::Result<Self> {
         let highest_bit: LitInt = input.parse()?;
         let _separator: Token![,] = input.parse()?;
@@ -65,5 +80,15 @@ impl Parse for BitsAttributeArgs {
             lowest_bit: lowest_bit.base10_parse()?,
             highest_bit: highest_bit.base10_parse()?,
         })
+    }
+}
+
+impl Parse for FromBitsFieldAttribute {
+    fn parse(input: ParseStream) -> syn::Result<Self> {
+        if input.peek(LitInt) {
+            Ok(FromBitsFieldAttribute::BitRange(input.parse()?))
+        } else {
+            Ok(FromBitsFieldAttribute::With(input.parse()?))
+        }
     }
 }

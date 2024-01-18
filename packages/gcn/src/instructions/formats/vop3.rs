@@ -3,17 +3,27 @@ use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpC
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use anyhow::format_err;
 use bits::{bitrange, FromBits};
+use bits_macros::FromBits;
 
-#[derive(Debug)]
+#[derive(Debug, FromBits)]
+#[bits(64)]
 pub struct VOP3Instruction {
+    #[bits(25, 17)]
     op: OpCode,
 
+    #[bits(7, 0)]
     vdst: VectorGPR,
 
+    #[bits(src(0))]
     src0: TransformedOperand,
+
+    #[bits(src(1))]
     src1: TransformedOperand,
+
+    #[bits(src(2))]
     src2: TransformedOperand,
 
+    #[bits(11, 11)]
     clamp: bool,
     // todo: omod
 }
@@ -21,17 +31,12 @@ pub struct VOP3Instruction {
 impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(VOP3Instruction {
-            op: OpCode::decode(bitrange(25, 17).of(token as _))?,
-            vdst: VectorGPR::from_bits(bitrange(7, 0).of(token as _)),
-
-            src0: TransformedOperand::parse(token, 0),
-            src1: TransformedOperand::parse(token, 1),
-            src2: TransformedOperand::parse(token, 2),
-
-            clamp: bitrange(11, 11).of(token as _) == 1,
-        })
+        Ok(VOP3Instruction::from_bits(token as usize))
     }
+}
+
+fn src(idx: u8) -> impl Fn(usize) -> TransformedOperand {
+    move |token| TransformedOperand::parse(token as _, idx)
 }
 
 #[derive(Debug)]
@@ -65,6 +70,12 @@ impl OpCode {
 
     fn decode(op: usize) -> Result<OpCode, anyhow::Error> {
         Ok(Self::from(op).ok_or_else(|| format_err!("unknown op code {} for VOP3", op))?)
+    }
+}
+
+impl FromBits<9> for OpCode {
+    fn from_bits(value: usize) -> Self {
+        Self::decode(value).unwrap()
     }
 }
 
