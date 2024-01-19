@@ -1,10 +1,10 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
+use crate::{DisplayInstruction, DisplayableInstruction};
 use anyhow::format_err;
 use bits::{bitrange, FromBits};
 use bits_macros::FromBits;
-use crate::{DisplayableInstruction, DisplayInstruction};
 
 #[derive(Debug, FromBits)]
 #[bits(64)]

@@ -1,9 +1,9 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MUBUFOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
-use crate::{DisplayableInstruction, DisplayInstruction};
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
