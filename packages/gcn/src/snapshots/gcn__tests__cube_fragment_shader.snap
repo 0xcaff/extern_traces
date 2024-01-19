@@ -64,9 +64,7 @@ expression: shader.debug()
                 vsrc: VectorGPR {
                     register_idx: 0,
                 },
-                attrchan: AttrChan(
-                    0,
-                ),
+                attribute_channel: X,
                 attr: Attr(
                     0,
                 ),
@@ -84,9 +82,7 @@ expression: shader.debug()
                 vsrc: VectorGPR {
                     register_idx: 1,
                 },
-                attrchan: AttrChan(
-                    0,
-                ),
+                attribute_channel: X,
                 attr: Attr(
                     0,
                 ),
@@ -104,9 +100,7 @@ expression: shader.debug()
                 vsrc: VectorGPR {
                     register_idx: 0,
                 },
-                attrchan: AttrChan(
-                    1,
-                ),
+                attribute_channel: Y,
                 attr: Attr(
                     0,
                 ),
@@ -124,9 +118,7 @@ expression: shader.debug()
                 vsrc: VectorGPR {
                     register_idx: 1,
                 },
-                attrchan: AttrChan(
-                    1,
-                ),
+                attribute_channel: Y,
                 attr: Attr(
                     0,
                 ),

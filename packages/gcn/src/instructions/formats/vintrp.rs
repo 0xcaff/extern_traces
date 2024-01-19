@@ -1,8 +1,9 @@
 use crate::instructions::generated::VINTRPOpCode;
 use crate::instructions::operands::VectorGPR;
+use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
-use crate::{DisplayableInstruction, DisplayInstruction};
+use strum::AsRefStr;
 
 #[derive(Debug, FromBits)]
 #[bits(32)]
@@ -14,7 +15,7 @@ pub struct VINTRPInstruction {
     vsrc: VectorGPR,
 
     #[bits(9, 8)]
-    attrchan: AttrChan,
+    attribute_channel: AttributeChannel,
 
     #[bits(15, 10)]
     attr: Attr,
@@ -23,12 +24,27 @@ pub struct VINTRPInstruction {
     vdst: VectorGPR,
 }
 
-#[derive(Debug)]
-struct AttrChan(u8);
+#[derive(Debug, AsRefStr)]
+enum AttributeChannel {
+    #[strum(serialize = "x")]
+    X,
+    #[strum(serialize = "y")]
+    Y,
+    #[strum(serialize = "z")]
+    Z,
+    #[strum(serialize = "w")]
+    W,
+}
 
-impl FromBits<2> for AttrChan {
+impl FromBits<2> for AttributeChannel {
     fn from_bits(value: usize) -> Self {
-        AttrChan(value as _)
+        match value {
+            0 => AttributeChannel::X,
+            1 => AttributeChannel::Y,
+            2 => AttributeChannel::Z,
+            3 => AttributeChannel::W,
+            _ => unreachable!("unexpected value {}", value),
+        }
     }
 }
 
@@ -43,10 +59,15 @@ impl FromBits<6> for Attr {
 
 impl DisplayInstruction for VINTRPInstruction {
     fn display(&self) -> DisplayableInstruction {
-        // todo: implement
+        let op_info = self.op.instruction_info();
+
         DisplayableInstruction {
-            op: "unknown".to_string(),
-            args: vec![],
+            op: self.op.as_ref().to_string(),
+            args: vec![
+                self.vdst.display(&op_info.definitions[0]),
+                self.vsrc.display(&op_info.operands[0]),
+                format!("attr{}.{}", self.attr.0, self.attribute_channel.as_ref()),
+            ],
         }
     }
 }
