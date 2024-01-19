@@ -66,10 +66,12 @@ impl<R: Reader> ParseInstruction<R> for MIMGInstruction {
 
 impl DisplayInstruction for MIMGInstruction {
     fn display(&self) -> DisplayableInstruction {
-        // todo: implement
         DisplayableInstruction {
-            op: "unknown".to_string(),
-            args: vec![],
+            op: self.op.as_ref().to_string(),
+            args: vec![
+                // todo: figure out sizes
+                "SKIPPED".to_string()
+            ],
         }
     }
 }

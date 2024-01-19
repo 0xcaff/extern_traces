@@ -94,10 +94,10 @@ impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
 
 impl DisplayInstruction for MTBufInstruction {
     fn display(&self) -> DisplayableInstruction {
-        // todo: implement
         DisplayableInstruction {
-            op: "unknown".to_string(),
-            args: vec![],
+            op: self.op.as_ref().to_string(),
+            // todo: figure out sizes
+            args: vec!["SKIPPED".to_string()],
         }
     }
 }

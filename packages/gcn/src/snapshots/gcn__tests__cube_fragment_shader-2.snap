@@ -12,7 +12,7 @@ v_interp_p1_f32 v0, v0, attr0.y
 v_interp_p2_f32 v0, v1, attr0.y
 v_mov_b32 v3, v0
 s_waitcnt 0xc07f
-image_sample 
+image_sample SKIPPED
 s_waitcnt 0x3f70
 v_cvt_pkrtz_f16_f32 v0, v0, v1
 v_cvt_pkrtz_f16_f32 v1, v2, 1.f, s0
