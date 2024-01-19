@@ -34,7 +34,7 @@ impl DisplayInstruction for SMEMInstruction {
             args: vec![
                 self.sdst.display(&Some(OperandInfo::Size(4))),
                 ScalarDestinationOperand::ScalarGPR((self.sbase << 1) as u8)
-                    .display(&Some(OperandInfo::Size(4))),
+                    .display(&Some(OperandInfo::Size(2))),
             ],
         }
     }
