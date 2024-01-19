@@ -253,6 +253,7 @@ expression: shader.debug()
                     neg: false,
                 },
                 clamp: false,
+                output_modifier: None,
             },
         ),
         program_counter: 56,

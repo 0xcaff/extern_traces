@@ -3,7 +3,7 @@ use crate::instructions::operands::VectorGPR;
 use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
-use strum::AsRefStr;
+use strum::{AsRefStr, FromRepr};
 
 #[derive(Debug, FromBits)]
 #[bits(32)]
@@ -24,27 +24,22 @@ pub struct VINTRPInstruction {
     vdst: VectorGPR,
 }
 
-#[derive(Debug, AsRefStr)]
+#[derive(FromRepr, Debug, AsRefStr)]
+#[repr(usize)]
 enum AttributeChannel {
     #[strum(serialize = "x")]
-    X,
+    X = 0,
     #[strum(serialize = "y")]
-    Y,
+    Y = 1,
     #[strum(serialize = "z")]
-    Z,
+    Z = 2,
     #[strum(serialize = "w")]
-    W,
+    W = 3,
 }
 
 impl FromBits<2> for AttributeChannel {
     fn from_bits(value: usize) -> Self {
-        match value {
-            0 => AttributeChannel::X,
-            1 => AttributeChannel::Y,
-            2 => AttributeChannel::Z,
-            3 => AttributeChannel::W,
-            _ => unreachable!("unexpected value {}", value),
-        }
+        Self::from_repr(value).unwrap()
     }
 }
 

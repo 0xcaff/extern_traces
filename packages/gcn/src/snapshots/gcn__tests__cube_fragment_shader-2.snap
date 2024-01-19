@@ -15,6 +15,6 @@ s_waitcnt 0xc07f
 image_sample 
 s_waitcnt 0x3f70
 v_cvt_pkrtz_f16_f32 v0, v0, v1
-unknown 
+v_cvt_pkrtz_f16_f32 v1, v2, 1.f, s0
 exp mrt_color0, v0, v1, v128, v128, compress, done, vm
 s_endpgm 0x0

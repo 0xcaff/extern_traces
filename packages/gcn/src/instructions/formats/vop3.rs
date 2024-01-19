@@ -1,10 +1,12 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
+use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
 use anyhow::format_err;
 use bits::{bitrange, FromBits};
 use bits_macros::FromBits;
+use strum::FromRepr;
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
@@ -26,7 +28,35 @@ pub struct VOP3Instruction {
 
     #[bits(11, 11)]
     clamp: bool,
-    // todo: omod
+
+    #[bits(60, 59)]
+    output_modifier: OutputModifier,
+}
+
+#[derive(Debug, FromRepr)]
+#[repr(usize)]
+enum OutputModifier {
+    None = 0,
+    Mul2 = 1,
+    Mul4 = 2,
+    Div2 = 3,
+}
+
+impl FromBits<2> for OutputModifier {
+    fn from_bits(value: usize) -> Self {
+        Self::from_repr(value).unwrap()
+    }
+}
+
+impl OutputModifier {
+    fn display(&self) -> Option<String> {
+        match self {
+            OutputModifier::None => None,
+            OutputModifier::Mul2 => Some("mul:2".to_string()),
+            OutputModifier::Mul4 => Some("mul:4".to_string()),
+            OutputModifier::Div2 => Some("div:2".to_string()),
+        }
+    }
 }
 
 impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
@@ -72,6 +102,26 @@ impl OpCode {
     fn decode(op: usize) -> Result<OpCode, anyhow::Error> {
         Ok(Self::from(op).ok_or_else(|| format_err!("unknown op code {} for VOP3", op))?)
     }
+
+    fn instruction_info(&self) -> InstructionInfo {
+        match self {
+            OpCode::VOP3(op) => op.instruction_info(),
+            OpCode::VOPC(op) => op.instruction_info(),
+            OpCode::VOP2(op) => op.instruction_info(),
+            OpCode::VOP1(op) => op.instruction_info(),
+        }
+    }
+}
+
+impl AsRef<str> for OpCode {
+    fn as_ref(&self) -> &str {
+        match self {
+            OpCode::VOP3(op) => op.as_ref(),
+            OpCode::VOPC(op) => op.as_ref(),
+            OpCode::VOP2(op) => op.as_ref(),
+            OpCode::VOP1(op) => op.as_ref(),
+        }
+    }
 }
 
 impl FromBits<9> for OpCode {
@@ -107,14 +157,51 @@ impl TransformedOperand {
             operand: SourceOperand::from_bits(op_value),
         }
     }
+
+    fn display(&self, operand_info: &Option<OperandInfo>) -> String {
+        let result = format!("{}", self.operand.display(operand_info));
+
+        let result = if self.abs {
+            format!("abs({})", result)
+        } else {
+            result
+        };
+
+        let result = if self.neg {
+            format!("-{}", result)
+        } else {
+            result
+        };
+
+        result
+    }
 }
 
 impl DisplayInstruction for VOP3Instruction {
     fn display(&self) -> DisplayableInstruction {
-        // todo: implement
+        let op_info = self.op.instruction_info();
+
+        // todo: argument count
         DisplayableInstruction {
-            op: "unknown".to_string(),
-            args: vec![],
+            op: self.op.as_ref().to_string(),
+            args: {
+                let mut args = vec![
+                    self.vdst.display(&op_info.definitions[0]),
+                    self.src0.display(&op_info.operands[0]),
+                    self.src1.display(&op_info.operands[1]),
+                    self.src2.display(&op_info.operands[2]),
+                ];
+
+                if self.clamp {
+                    args.push("clamp".to_string());
+                }
+
+                if let Some(value) = self.output_modifier.display() {
+                    args.push(value)
+                }
+
+                args
+            },
         }
     }
 }
