@@ -2,7 +2,7 @@ use crate::op_codes::OpCode;
 use crate::reader::Reader;
 use crate::registers::ParseRegisterEntry;
 use crate::{Register, RegisterEntry, VGT_DRAW_INITIATOR, VGT_EVENT_INITIATOR};
-use bits::bitrange;
+use bits::{bit, bitrange};
 use bits::FromBits;
 use std::io::Cursor;
 
@@ -204,11 +204,11 @@ impl ParseType3Packet for WaitRegisterMemoryPacket {
                 value => panic!("unexpected value {}", value),
             },
 
-            tcl1_volatile_action_enable: bit(15, body[0]),
-            texture_cache_volatile_action_enable: bit(16, body[0]),
-            texture_cache_write_back_action_enable: bit(18, body[0]),
-            color_buffer_action_enable: bit(25, body[0]),
-            depth_buffer_action_enable: bit(26, body[0]),
+            tcl1_volatile_action_enable: bit(15, body[0] as _),
+            texture_cache_volatile_action_enable: bit(16, body[0] as _),
+            texture_cache_write_back_action_enable: bit(18, body[0] as _),
+            color_buffer_action_enable: bit(25, body[0] as _),
+            depth_buffer_action_enable: bit(26, body[0] as _),
 
             reference_value: body[3],
             mask: body[4],
