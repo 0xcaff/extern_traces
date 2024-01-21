@@ -35,6 +35,7 @@ impl DisplayInstruction for SMEMInstruction {
                 self.sdst.display(&Some(OperandInfo::Size(4))),
                 ScalarDestinationOperand::ScalarGPR((self.sbase << 1) as u8)
                     .display(&Some(OperandInfo::Size(2))),
+                format!("0x{:x}", self.offset),
             ],
         }
     }
