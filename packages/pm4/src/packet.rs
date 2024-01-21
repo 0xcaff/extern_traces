@@ -2,8 +2,8 @@ use crate::op_codes::OpCode;
 use crate::reader::Reader;
 use crate::registers::ParseRegisterEntry;
 use crate::{Register, RegisterEntry, VGT_DRAW_INITIATOR, VGT_EVENT_INITIATOR};
-use bits::{bit, bitrange};
 use bits::FromBits;
+use bits::{bit, bitrange};
 use std::io::Cursor;
 
 #[derive(Debug)]

@@ -70,7 +70,7 @@ impl DisplayInstruction for MIMGInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
                 // todo: figure out sizes
-                "SKIPPED".to_string()
+                "SKIPPED".to_string(),
             ],
         }
     }
