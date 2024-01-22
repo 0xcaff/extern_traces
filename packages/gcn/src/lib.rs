@@ -2,13 +2,13 @@
 
 mod instructions;
 mod reader;
+pub mod test_utils;
 
 pub use instructions::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::{DisplayInstruction, Instruction};
-    use std::io::Cursor;
+    use crate::test_utils::GCNInstructionStream;
 
     #[test]
     fn test_cube_vertex_shader() {
@@ -53,7 +53,7 @@ mod tests {
         //   exp           param0, v8, v9, off, off
         //   s_endpgm
 
-        let shader = Shader::new(&data).unwrap();
+        let shader = GCNInstructionStream::new(&data).unwrap();
         insta::assert_snapshot!(shader.debug());
         insta::assert_snapshot!(shader.displayed());
     }
@@ -86,47 +86,8 @@ mod tests {
         //   exp           mrt_color0, v0, v1 compr vm done
         //   s_endpgm
 
-        let shader = Shader::new(&data).unwrap();
+        let shader = GCNInstructionStream::new(&data).unwrap();
         insta::assert_snapshot!(shader.debug());
         insta::assert_snapshot!(shader.displayed());
-    }
-
-    struct Shader {
-        instructions: Vec<Instruction>,
-    }
-
-    impl Shader {
-        pub fn new(shader_bytes: &[u8]) -> Result<Shader, anyhow::Error> {
-            let mut cursor = Cursor::new(shader_bytes);
-            let mut instructions = vec![];
-
-            loop {
-                if cursor.is_empty() {
-                    break;
-                }
-
-                let position = cursor.position();
-                let instruction = Instruction::parse(&mut cursor, position)?;
-                instructions.push(instruction);
-            }
-
-            Ok(Shader { instructions })
-        }
-
-        pub fn debug(&self) -> String {
-            format!("{:#?}", self.instructions)
-        }
-
-        pub fn displayed(&self) -> String {
-            self.instructions
-                .iter()
-                .map(|it| {
-                    let display = it.inner.display();
-
-                    format!("{} {}", display.op, display.args.join(", "))
-                })
-                .collect::<Vec<_>>()
-                .join("\n")
-        }
     }
 }

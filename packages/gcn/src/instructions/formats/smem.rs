@@ -12,19 +12,19 @@ use bits_macros::FromBits;
 #[bits(32)]
 pub struct SMEMInstruction {
     #[bits(26, 22)]
-    op: SMEMOpCode,
+    pub op: SMEMOpCode,
 
     #[bits(7, 0)]
-    offset: u8,
+    pub offset: u8,
 
     #[bits(8, 8)]
-    imm: bool,
+    pub imm: bool,
 
     #[bits(14, 9)]
-    sbase: usize,
+    pub sbase: usize,
 
     #[bits(21, 15)]
-    sdst: ScalarDestinationOperand,
+    pub sdst: ScalarDestinationOperand,
 }
 
 impl DisplayInstruction for SMEMInstruction {
