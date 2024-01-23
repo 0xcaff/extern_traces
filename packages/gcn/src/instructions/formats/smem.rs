@@ -32,6 +32,7 @@ impl DisplayInstruction for SMEMInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
+                // todo: this isn't correct generally
                 self.sdst.display(&Some(OperandInfo::Size(4))),
                 ScalarDestinationOperand::ScalarGPR((self.sbase << 1) as u8)
                     .display(&Some(OperandInfo::Size(2))),
