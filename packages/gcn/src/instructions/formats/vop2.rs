@@ -11,16 +11,16 @@ use bits_macros::FromBits;
 #[bits(32)]
 pub struct VOP2Instruction {
     #[bits(30, 25)]
-    op: VOP2OpCode,
+    pub op: VOP2OpCode,
 
     #[bits(8, 0)]
-    src0: SourceOperand,
+    pub src0: SourceOperand,
 
     #[bits(16, 9)]
-    vsrc1: VectorGPR,
+    pub vsrc1: VectorGPR,
 
     #[bits(24, 17)]
-    vdst: VectorGPR,
+    pub vdst: VectorGPR,
 }
 
 impl DisplayInstruction for VOP2Instruction {
