@@ -9,47 +9,47 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct MUBUFInstruction {
     #[bits(24, 18)]
-    op: MUBUFOpCode,
+    pub op: MUBUFOpCode,
 
     #[bits(11, 0)]
-    offset: Offset,
+    pub offset: Offset,
 
     #[bits(12, 12)]
-    offen: bool,
+    pub offen: bool,
 
     #[bits(13, 13)]
-    idxen: bool,
+    pub idxen: bool,
 
     #[bits(14, 14)]
-    glc: bool,
+    pub glc: bool,
 
     #[bits(15, 15)]
-    addr64: bool,
+    pub addr64: bool,
 
     #[bits(16, 16)]
-    lds: bool,
+    pub lds: bool,
 
     #[bits(39, 32)]
-    vaddr: VectorGPR,
+    pub vaddr: VectorGPR,
 
     #[bits(47, 40)]
-    vdata: VectorGPR,
+    pub vdata: VectorGPR,
 
     #[bits(52, 48)]
-    srsrc: ScalarGeneralPurposeRegisterGroup,
+    pub srsrc: ScalarGeneralPurposeRegisterGroup,
 
     #[bits(54, 54)]
-    slc: bool,
+    pub slc: bool,
 
     #[bits(55, 55)]
-    tfe: bool,
+    pub tfe: bool,
 
     #[bits(63, 56)]
-    soffset: u8,
+    pub soffset: u8,
 }
 
 #[derive(Debug)]
-pub struct Offset(u16);
+pub struct Offset(pub u16);
 
 impl FromBits<12> for Offset {
     fn from_bits(value: usize) -> Self {

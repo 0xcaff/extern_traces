@@ -177,7 +177,7 @@ impl SourceOperand {
 
 #[derive(Debug)]
 pub struct VectorGPR {
-    register_idx: u8,
+    pub register_idx: u8,
 }
 
 impl FromBits<8> for VectorGPR {
