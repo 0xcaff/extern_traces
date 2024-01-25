@@ -8,28 +8,28 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct ExpInstruction {
     #[bits(9, 4)]
-    target: ExportTarget,
+    pub target: ExportTarget,
 
     #[bits(10, 10)]
-    compress: bool,
+    pub compress: bool,
 
     #[bits(11, 11)]
-    done: bool,
+    pub done: bool,
 
     #[bits(12, 12)]
-    valid_mask: bool,
+    pub valid_mask: bool,
 
     #[bits(vsrc(0))]
-    vsrc0: Option<VectorGPR>,
+    pub vsrc0: Option<VectorGPR>,
 
     #[bits(vsrc(1))]
-    vsrc1: Option<VectorGPR>,
+    pub vsrc1: Option<VectorGPR>,
 
     #[bits(vsrc(2))]
-    vsrc2: Option<VectorGPR>,
+    pub vsrc2: Option<VectorGPR>,
 
     #[bits(vsrc(3))]
-    vsrc3: Option<VectorGPR>,
+    pub vsrc3: Option<VectorGPR>,
 }
 
 impl<R: Reader> ParseInstruction<R> for ExpInstruction {
@@ -103,8 +103,8 @@ impl DisplayInstruction for ExpInstruction {
     }
 }
 
-#[derive(Debug)]
-enum ExportTarget {
+#[derive(Debug, Clone, Copy)]
+pub enum ExportTarget {
     RenderTarget(u8),
     Z,
     Null,

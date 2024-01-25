@@ -1,5 +1,5 @@
 pub use crate::instructions::formats::ds::DSInstruction;
-pub use crate::instructions::formats::exp::ExpInstruction;
+pub use crate::instructions::formats::exp::*;
 pub use crate::instructions::formats::mimg::MIMGInstruction;
 pub use crate::instructions::formats::mtbuf::MTBufInstruction;
 pub use crate::instructions::formats::mubuf::MUBUFInstruction;
