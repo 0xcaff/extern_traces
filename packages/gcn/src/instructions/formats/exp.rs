@@ -103,7 +103,7 @@ impl DisplayInstruction for ExpInstruction {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
 pub enum ExportTarget {
     RenderTarget(u8),
     Z,
