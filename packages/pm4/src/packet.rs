@@ -219,8 +219,8 @@ impl ParseType3Packet for WaitRegisterMemoryPacket {
 
 #[derive(Debug, Clone)]
 pub struct DrawIndexAutoPacket {
-    index_count: u32,
-    draw_initiator: VGT_DRAW_INITIATOR,
+    pub index_count: u32,
+    pub draw_initiator: VGT_DRAW_INITIATOR,
 }
 
 impl ParseType3Packet for DrawIndexAutoPacket {
