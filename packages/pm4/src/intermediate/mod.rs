@@ -31,11 +31,11 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
     for packet in commands {
         match packet {
             PM4Packet::Type3(Type3Packet {
-                header,
+                header: _,
                 value: Type3PacketValue::SetContextRegister { values },
             })
             | PM4Packet::Type3(Type3Packet {
-                header,
+                header: _,
                 value: Type3PacketValue::SetShaderRegister { values },
             }) => {
                 for entry in values {
@@ -59,7 +59,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
                 });
             }
             PM4Packet::Type3(Type3Packet {
-                header,
+                header: _,
                 value: Type3PacketValue::EndOfPipe(end_of_pipe),
             }) => result.push(Command::EndOfPipe(end_of_pipe.clone())),
             _ => {}
@@ -84,6 +84,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
 /// * Provide a representation optimized for later stages to read.
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 pub struct GraphicsPipeline {
     depth_buffer: DepthBuffer,
 
@@ -104,6 +105,7 @@ pub struct GraphicsPipeline {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct DepthBuffer {
     stencil: Stencil,
     depth: Depth,
@@ -120,6 +122,7 @@ struct DepthBuffer {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct HTile {
     #[entry(RegisterEntry::DB_HTILE_DATA_BASE)]
     hitle_data_base: u32,
@@ -130,6 +133,7 @@ struct HTile {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
     control: DB_DEPTH_CONTROL,
@@ -152,6 +156,7 @@ struct Depth {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct Z {
     #[entry(RegisterEntry::DB_Z_READ_BASE)]
     read_base: Option<u32>,
@@ -165,6 +170,7 @@ struct Z {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct Stencil {
     #[entry(RegisterEntry::DB_STENCIL_READ_BASE)]
     read_base: Option<u32>,
@@ -179,6 +185,7 @@ struct Stencil {
 // todo: think about color1
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 pub struct ColorBuffer {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
     pub base: u32,
@@ -208,6 +215,7 @@ pub struct ColorBuffer {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct PrimitiveAssembly {
     clip: Clip,
     scissor_clip: ScissorClip,
@@ -216,6 +224,7 @@ struct PrimitiveAssembly {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct Clip {
     viewport: ClipViewport,
 
@@ -230,6 +239,7 @@ struct Clip {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct ClipViewport {
     #[entry(RegisterEntry::PA_CL_VPORT_XSCALE)]
     xscale: u32,
@@ -252,6 +262,7 @@ struct ClipViewport {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct ScissorClip {
     #[entry(RegisterEntry::PA_SC_VPORT_ZMIN_0)]
     viewport_zmin0: u32,
@@ -268,6 +279,7 @@ struct ScissorClip {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct ShaderUnit {
     #[entry(RegisterEntry::PA_SU_HARDWARE_SCREEN_OFFSET)]
     hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET,
@@ -278,6 +290,7 @@ struct ShaderUnit {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct GuardBand {
     #[entry(RegisterEntry::PA_CL_GB_VERT_CLIP_ADJ)]
     vertical_clip: u32,
@@ -294,6 +307,7 @@ struct GuardBand {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 struct Shader {
     #[entry(RegisterEntry::SPI_SHADER_Z_FORMAT)]
     z_format: SPI_SHADER_Z_FORMAT,
@@ -310,6 +324,7 @@ struct Shader {
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 pub struct PixelShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_PS)]
     pub address: u32,
@@ -337,10 +352,12 @@ pub struct PixelShader {
 
 #[derive(Debug, BuildUserData)]
 #[user_data(SPI_SHADER_USER_DATA_PS_, 0..=15)]
+#[allow(dead_code)]
 pub struct PixelShaderUserData(pub Vec<UserDataEntry>);
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
+#[allow(dead_code)]
 pub struct VertexShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
     pub address: u32,

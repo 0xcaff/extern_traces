@@ -75,6 +75,7 @@ impl FromBits<${overrides[name]}> for ${name} {
 % endfor
 
 % for (name, fields) in regdb.register_types():
+#[allow(dead_code)]
 #[derive(Debug, Clone, FromBits)]
 #[bits(32)]
 pub struct ${name} {
