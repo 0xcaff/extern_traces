@@ -26,7 +26,6 @@ template = """
 use strum::FromRepr;
 use strum::AsRefStr;
 use bits::FromBits;
-use anyhow;
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 
 % for format, format_ops in ops:

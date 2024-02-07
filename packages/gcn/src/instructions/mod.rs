@@ -5,7 +5,7 @@ mod generated;
 mod instruction_info;
 mod operands;
 
-use std::io::{BufRead, Read};
+use std::io::Read;
 
 use crate::reader::Reader;
 

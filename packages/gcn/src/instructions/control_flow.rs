@@ -63,7 +63,7 @@ impl Instruction {
                     _ => {}
                 }
             }
-            FormattedInstruction::SOP1(SOP1Instruction { op, sdst, ssrc0 }) => match op {
+            FormattedInstruction::SOP1(SOP1Instruction { op, ssrc0, .. }) => match op {
                 SOP1OpCode::s_setpc_b64 | SOP1OpCode::s_swappc_b64 | SOP1OpCode::s_rfe_b64 => {
                     return ControlFlowInformation {
                         has_next_instruction: false,

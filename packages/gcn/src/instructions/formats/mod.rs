@@ -15,12 +15,9 @@ pub use crate::instructions::formats::vop2::VOP2Instruction;
 pub use crate::instructions::formats::vop3::VOP3Instruction;
 pub use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::reader::Reader;
-use crate::DisplayInstruction;
 use bits::FromBits;
-use byteorder::ReadBytesExt;
 use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
 use std::io;
-use std::io::Read;
 
 mod ds;
 mod exp;
