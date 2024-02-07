@@ -50,7 +50,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
                 }
             }
             PM4Packet::Type3(Type3Packet {
-                header,
+                header: _,
                 value: Type3PacketValue::DrawIndexAuto(draw_packet),
             }) => {
                 result.push(Command::Draw {
