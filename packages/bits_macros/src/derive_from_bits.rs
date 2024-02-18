@@ -2,6 +2,7 @@ use macro_utils::exactly_one;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, ParseStream};
+use syn::spanned::Spanned;
 use syn::{parse2, Data, DeriveInput, Expr, Field, LitInt, Token};
 
 pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
@@ -39,12 +40,23 @@ fn field(field: &Field) -> Result<TokenStream, syn::Error> {
     let typ = &field.ty;
 
     let attribute = exactly_one(&field.attrs, "bits", &field)?;
+    let attribute_span = attribute.span();
     let args: FromBitsFieldAttribute = parse2(attribute)?;
 
-    Ok(match args {
+    Ok(match &args {
         FromBitsFieldAttribute::BitRange(range) => {
             let highest_bit = range.highest_bit;
             let lowest_bit = range.lowest_bit;
+
+            if highest_bit < lowest_bit {
+                return Err(syn::Error::new(
+                    attribute_span,
+                    format!(
+                        "second value ({}) larger than first value ({})",
+                        highest_bit, lowest_bit
+                    ),
+                ));
+            }
 
             let len = (range.highest_bit - range.lowest_bit + 1) as usize;
 
