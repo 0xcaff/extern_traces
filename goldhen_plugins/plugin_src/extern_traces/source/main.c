@@ -10,6 +10,8 @@ attr_public const char *g_pluginDesc = "Collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
+static FILE *file = NULL;
+
 #define TRAMPOLINE_INIT(FUNC_NAME)                                             \
     HOOK_INIT(FUNC_NAME);                                                      \
     extern void *FUNC_NAME();                                                  \
@@ -17,7 +19,7 @@ attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
     {                                                                          \
         RegisterArgsState state;                                               \
         save_args_state(&state);                                               \
-        final_printf(#FUNC_NAME "\n");                                         \
+        fprintf(file, #FUNC_NAME "\n");                                        \
         /*                                                                     \
          * r10 is not an argument register and will not be clobbered by the    \
          * restore_args_state call.                                            \
@@ -38,6 +40,13 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
 
+    FILE *file_local = fopen("/data/extern.log", "w");
+    if (file_local == NULL)
+    {
+        final_printf("failed to open file /data/extern.log\n");
+        return 1;
+    }
+
     HOOK32(sceAudioOutInit);
 
     return 0;
@@ -48,5 +57,6 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
     UNHOOK(sceAudioOutInit);
+    fclose(file);
     return 0;
 }
