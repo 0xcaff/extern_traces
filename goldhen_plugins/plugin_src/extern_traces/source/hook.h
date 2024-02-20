@@ -1,6 +1,7 @@
 #include <stdalign.h>
 
-typedef struct RegisterArgsState {
+typedef struct RegisterArgsState
+{
     // General purpose registers
     unsigned long rdi, rsi, rdx, rcx, r8, r9;
     // Base pointer and stack pointer
@@ -10,10 +11,11 @@ typedef struct RegisterArgsState {
     alignas(16) __uint128_t xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6, xmm7;
 } RegisterArgsState;
 
-#define SAVE_REG(reg) asm volatile("mov %%"#reg", %0" : "=m" (state->reg));
-#define SAVE_XMM_REG(reg) asm volatile("movdqu %%"#reg", %0" : "=m" (state->reg));
+#define SAVE_REG(reg) asm volatile("mov %%" #reg ", %0" : "=m"(state->reg));
+#define SAVE_XMM_REG(reg) asm volatile("movdqu %%" #reg ", %0" : "=m"(state->reg));
 
-void save_args_state(RegisterArgsState* state) {
+void save_args_state(RegisterArgsState *state)
+{
 
     SAVE_REG(rdi)
     SAVE_REG(rsi)
@@ -34,10 +36,11 @@ void save_args_state(RegisterArgsState* state) {
     SAVE_XMM_REG(xmm7)
 }
 
-#define RESTORE_REG(reg) asm volatile("mov %0, %%"#reg : : "m" (state->reg));
-#define RESTORE_XMM_REG(reg) asm volatile("movdqu %0, %%"#reg : : "m" (state->reg));
+#define RESTORE_REG(reg) asm volatile("mov %0, %%" #reg : : "m"(state->reg));
+#define RESTORE_XMM_REG(reg) asm volatile("movdqu %0, %%" #reg : : "m"(state->reg));
 
-void restore_args_state(RegisterArgsState* state) {
+void restore_args_state(RegisterArgsState *state)
+{
     RESTORE_REG(rdi)
     RESTORE_REG(rsi)
     RESTORE_REG(rdx)
@@ -56,4 +59,3 @@ void restore_args_state(RegisterArgsState* state) {
     RESTORE_XMM_REG(xmm6)
     RESTORE_XMM_REG(xmm7)
 }
-
