@@ -18,7 +18,8 @@ TARGET_ELF   := $(BUILD_FOLDER)/elf$(TYPE)/$(OUTPUT_PRX)
 TARGETSTUB   := $(OUTPUT_PRX).so
 
 # Libraries linked into the ELF.
-LIBS := -lSceLibcInternal -lGoldHEN_Hook -lkernel -lSceSysmodule -lSceAudioOut
+LIBS := -lSceLibcInternal -lGoldHEN_Hook -lSceAppContent -lSceAudioIn -lSceAudioOut -lSceAvPlayer -lSceCamera -lSceCommonDialog -lSceCompanionHttpd -lSceContentSearch -lSceErrorDialog -lSceFiber -lSceFios2 -lSceGameLiveStreaming -lSceGnmDriver -lSceHttp -lSceImeDialog -lSceJpegDec -lSceMove -lSceMoveTracker -lSceMsgDialog -lSceNet -lSceNetCtl -lSceNpAuth -lSceNpCommerce -lSceNpCommon -lSceNpSignaling -lSceNpTrophy -lSceNpUtility -lSceNpWebApi -lScePad -lScePlayGo -lScePosix -lSceRtc -lSceSaveData -lSceSaveDataDialog -lSceSsl -lSceSysmodule -lSceSystemService -lSceUserService -lSceVideoOut -lkernel
+
 
 EXTRAFLAGS := $(DEBUG_FLAGS) $(LOG_TYPE) -fcolor-diagnostics -Wall
 

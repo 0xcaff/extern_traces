@@ -16,7 +16,6 @@ typedef struct RegisterArgsState
 
 void save_args_state(RegisterArgsState *state)
 {
-
     SAVE_REG(rdi)
     SAVE_REG(rsi)
     SAVE_REG(rdx)
