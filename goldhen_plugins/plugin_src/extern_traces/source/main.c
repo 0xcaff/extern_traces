@@ -12,24 +12,58 @@ attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
 static FILE *file = NULL;
 
-#define TRAMPOLINE_INIT(FUNC_NAME)                                             \
-    HOOK_INIT(FUNC_NAME);                                                      \
-    extern void *FUNC_NAME();                                                  \
-    void *FUNC_NAME##_hook()                                                   \
-    {                                                                          \
-        RegisterArgsState state;                                               \
-        save_args_state(&state);                                               \
-        fprintf(file, #FUNC_NAME "\n");                                        \
-        /*                                                                     \
-         * r10 is not an argument register and will not be clobbered by the    \
-         * restore_args_state call.                                            \
-         */                                                                    \
-        asm volatile("mov %0, %%r10" : : "m"(Detour_##FUNC_NAME.StubPtr));     \
-        /* Retores args and stack, clobbering any locals defined above in this \
-         * scope.                                                              \
-         */                                                                    \
-        restore_args_state(&state);                                            \
-        asm volatile("call *%%r10" : :);                                       \
+FILE *lazy_file()
+{
+    if (file)
+    {
+        return file;
+    }
+
+    FILE *file_local = fopen("/data/extern.log", "w");
+    if (file_local == NULL)
+    {
+        final_printf("failed to open file /data/extern.log\n");
+        return 0;
+    }
+
+    file = file_local;
+    return file_local;
+}
+
+void extern_logf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+
+    FILE *stream = lazy_file();
+    vfprintf(stream, format, args);
+
+    // Flush the stream
+    fflush(stream);
+
+    // End variadic argument processing
+    va_end(args);
+}
+
+#define TRAMPOLINE_INIT(FUNC_NAME)                                              \
+    HOOK_INIT(FUNC_NAME);                                                       \
+    extern void *FUNC_NAME();                                                   \
+    void *FUNC_NAME##_hook()                                                    \
+    {                                                                           \
+        RegisterArgsState state;                                                \
+        save_args_state(&state);                                                \
+        extern_logf(#FUNC_NAME "\n");                                           \
+        /*                                                                      \
+         * r10 is not an argument register and will not be clobbered by the     \
+         * restore_args_state call.                                             \
+         */                                                                     \
+        asm volatile("mov %0, %%r10" : : "m"(Detour_##FUNC_NAME.StubPtr));      \
+        /*                                                                      \
+         * Restores args and stack, clobbering any locals defined above in this \
+         * scope.                                                               \
+         */                                                                     \
+        restore_args_state(&state);                                             \
+        asm volatile("call *%%r10" : :);                                        \
     }
 
 TRAMPOLINE_INIT(sceAudioOutInit);
@@ -39,13 +73,6 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
-
-    FILE *file_local = fopen("/data/extern.log", "w");
-    if (file_local == NULL)
-    {
-        final_printf("failed to open file /data/extern.log\n");
-        return 1;
-    }
 
     HOOK32(sceAudioOutInit);
 
