@@ -1,9 +1,59 @@
+#include <stdalign.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 
-#include "hook.h"
 #include "plugin_common.h"
+
+static inline __attribute__((always_inline)) void save_args_state()
+{
+    asm volatile(
+        "push %rsp\n\t"
+        "push %rbp\n\t"
+
+        "push %rdi\n\t"
+        "push %rsi\n\t"
+        "push %rdx\n\t"
+        "push %rcx\n\t"
+        "push %r8\n\t"
+        "push %r9\n\t"
+
+        "movdqu %xmm0, -0x10(%rsp)\n\t"
+        "movdqu %xmm1, -0x20(%rsp)\n\t"
+        "movdqu %xmm2, -0x30(%rsp)\n\t"
+        "movdqu %xmm3, -0x40(%rsp)\n\t"
+        "movdqu %xmm4, -0x50(%rsp)\n\t"
+        "movdqu %xmm5, -0x60(%rsp)\n\t"
+        "movdqu %xmm6, -0x70(%rsp)\n\t"
+        "movdqu %xmm7, -0x80(%rsp)\n\t"
+
+        "sub $0x80, %rsp\n\t");
+}
+
+static inline __attribute__((always_inline)) void restore_args_state()
+{
+    asm volatile(
+        "movdqu 0x70(%rsp), %xmm0\n\t"
+        "movdqu 0x60(%rsp), %xmm1\n\t"
+        "movdqu 0x50(%rsp), %xmm2\n\t"
+        "movdqu 0x40(%rsp), %xmm3\n\t"
+        "movdqu 0x30(%rsp), %xmm4\n\t"
+        "movdqu 0x20(%rsp), %xmm5\n\t"
+        "movdqu 0x10(%rsp), %xmm6\n\t"
+        "movdqu 0x00(%rsp), %xmm7\n\t"
+
+        "add $0x80, %rsp\n\t"
+
+        "pop %r9\n\t"
+        "pop %r8\n\t"
+        "pop %rcx\n\t"
+        "pop %rdx\n\t"
+        "pop %rsi\n\t"
+        "pop %rdi\n\t"
+
+        "pop %rbp\n\t"
+        "pop %rsp\n\t");
+}
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "Collects traces for external calls";
@@ -45,46 +95,51 @@ void extern_logf(const char *format, ...)
     va_end(args);
 }
 
-#define TRAMPOLINE_INITW(FUNC_NAME)                                             \
-    HOOK_INIT(FUNC_NAME);                                                       \
-    void *FUNC_NAME##_hook()                                                    \
-    {                                                                           \
-        RegisterArgsState state;                                                \
-        save_args_state(&state);                                                \
-        extern_logf(#FUNC_NAME "\n");                                           \
-        /*                                                                      \
-         * r10 is not an argument register and will not be clobbered by the     \
-         * restore_args_state call.                                             \
-         */                                                                     \
-        asm volatile("mov %0, %%r10" : : "m"(Detour_##FUNC_NAME.StubPtr));      \
-        /*                                                                      \
-         * Restores args and stack, clobbering any locals defined above in this \
-         * scope.                                                               \
-         */                                                                     \
-        restore_args_state(&state);                                             \
-        asm volatile("call *%%r10" : :);                                        \
-    }                                                                           
+#define TRAMPOLINE_INITW(FUNC_NAME)                                  \
+    HOOK_INIT(FUNC_NAME);                                            \
+    void FUNC_NAME##_logger()                                        \
+    {                                                                \
+        extern_logf(#FUNC_NAME "\n");                                \
+    }                                                                \
+    void *FUNC_NAME##_hook()                                         \
+    {                                                                \
+        save_args_state();                                           \
+        FUNC_NAME##_logger();                                        \
+        restore_args_state();                                        \
+        /*                                                           \
+         * rax is unused at this point and is safe to use to hold an \
+         * intermediate value                                        \
+         */                                                          \
+        restore_args_state();                                        \
+        asm volatile(                                                \
+            "mov %0, %%rax\n\t"                                      \
+            "call *%%rax\n\t"                                        \
+            "ret\n\t"                                                \
+            : : "m"(Detour_##FUNC_NAME.StubPtr));                    \
+    }
 
-#define TRAMPOLINE_INIT(FUNC_NAME)                                              \
-    HOOK_INIT(FUNC_NAME);                                                       \
-    extern void *FUNC_NAME();                                                   \
-    void *FUNC_NAME##_hook()                                                    \
-    {                                                                           \
-        RegisterArgsState state;                                                \
-        save_args_state(&state);                                                \
-        extern_logf(#FUNC_NAME "\n");                                           \
-        /*                                                                      \
-         * r10 is not an argument register and will not be clobbered by the     \
-         * restore_args_state call.                                             \
-         */                                                                     \
-        asm volatile("mov %0, %%r10" : : "m"(Detour_##FUNC_NAME.StubPtr));      \
-        /*                                                                      \
-         * Restores args and stack, clobbering any locals defined above in this \
-         * scope.                                                               \
-         */                                                                     \
-        restore_args_state(&state);                                             \
-        asm volatile("call *%%r10" : :);                                        \
-    }                                                                           
+#define TRAMPOLINE_INIT(FUNC_NAME)                                   \
+    HOOK_INIT(FUNC_NAME);                                            \
+    extern void *FUNC_NAME();                                        \
+    void FUNC_NAME##_logger()                                        \
+    {                                                                \
+        extern_logf(#FUNC_NAME "\n");                                \
+    }                                                                \
+    void *FUNC_NAME##_hook()                                         \
+    {                                                                \
+        save_args_state();                                           \
+        FUNC_NAME##_logger();                                        \
+        restore_args_state();                                        \
+        /*                                                           \
+         * rax is unused at this point and is safe to use to hold an \
+         * intermediate value                                        \
+         */                                                          \
+        asm volatile(                                                \
+            "mov %0, %%rax\n\t"                                      \
+            "call *%%rax\n\t"                                        \
+            "ret\n\t"                                                \
+            : : "m"(Detour_##FUNC_NAME.StubPtr));                    \
+    }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type"
@@ -212,313 +267,313 @@ TRAMPOLINE_INIT(sceHttpDeleteTemplate);
 TRAMPOLINE_INIT(sceHttpGetAuthEnabled);
 TRAMPOLINE_INIT(sceHttpInit);
 TRAMPOLINE_INIT(sceHttpCreateRequestWithURL);
-TRAMPOLINE_INIT(sceHttpsLoadCert);
-TRAMPOLINE_INIT(sceHttpAddRequestHeader);
-TRAMPOLINE_INIT(sceHttpSetCookieSendCallback);
-TRAMPOLINE_INIT(sceHttpTerm);
-TRAMPOLINE_INIT(sceHttpSetCookieRecvCallback);
-TRAMPOLINE_INIT(sceHttpCreateConnection);
-TRAMPOLINE_INIT(sceHttpReadData);
-TRAMPOLINE_INIT(sceHttpDeleteConnection);
-TRAMPOLINE_INIT(sceHttpSetRequestContentLength);
-TRAMPOLINE_INIT(sceHttpSetAutoRedirect);
-TRAMPOLINE_INIT(sceHttpSetCookieEnabled);
-TRAMPOLINE_INIT(sceHttpGetAllResponseHeaders);
-TRAMPOLINE_INIT(sceHttpSetRedirectCallback);
-TRAMPOLINE_INIT(sceHttpParseResponseHeader);
-TRAMPOLINE_INIT(sceHttpsSetSslCallback);
-TRAMPOLINE_INIT(sceHttpAbortRequest);
-TRAMPOLINE_INIT(sceHttpGetCookieEnabled);
-TRAMPOLINE_INIT(sceHttpAddCookie);
-TRAMPOLINE_INIT(sceHttpGetAutoRedirect);
-TRAMPOLINE_INIT(sceHttpSetAuthEnabled);
-TRAMPOLINE_INIT(sceHttpDeleteRequest);
-TRAMPOLINE_INIT(sceHttpCreateConnectionWithURL);
-TRAMPOLINE_INIT(sceHttpCookieFlush);
-TRAMPOLINE_INIT(sceHttpCreateRequest);
-TRAMPOLINE_INIT(sceHttpSetSendTimeOut);
-TRAMPOLINE_INIT(sceHttpSetRecvTimeOut);
-TRAMPOLINE_INIT(sceHttpGetResponseContentLength);
-TRAMPOLINE_INIT(sceHttpRemoveRequestHeader);
-TRAMPOLINE_INIT(sceHttpsUnloadCert);
-TRAMPOLINE_INIT(sceImeDialogGetStatus);
-TRAMPOLINE_INIT(sceImeDialogInit);
-TRAMPOLINE_INIT(sceImeDialogTerm);
-TRAMPOLINE_INIT(sceImeDialogAbort);
-TRAMPOLINE_INIT(sceImeDialogGetResult);
-TRAMPOLINE_INIT(sceJpegDecDecode);
-TRAMPOLINE_INIT(sceJpegDecDelete);
-TRAMPOLINE_INIT(sceJpegDecCreate);
-TRAMPOLINE_INIT(sceJpegDecParseHeader);
-TRAMPOLINE_INIT(sceJpegDecQueryMemorySize);
-TRAMPOLINE_INIT(sceMoveGetDeviceInfo);
-TRAMPOLINE_INIT(sceMoveOpen);
-TRAMPOLINE_INIT(sceMoveClose);
-TRAMPOLINE_INIT(sceMoveReadStateRecent);
-TRAMPOLINE_INIT(sceMoveInit);
-TRAMPOLINE_INIT(sceMoveTrackerControllersUpdate);
-TRAMPOLINE_INIT(sceMoveTrackerTerm);
-TRAMPOLINE_INIT(sceMoveTrackerCameraUpdate);
-TRAMPOLINE_INIT(sceMoveTrackerInit);
-TRAMPOLINE_INIT(sceMoveTrackerGetState);
-TRAMPOLINE_INIT(sceMoveTrackerGetWorkingMemorySize);
-TRAMPOLINE_INIT(sceMsgDialogUpdateStatus);
-TRAMPOLINE_INIT(sceMsgDialogOpen);
-TRAMPOLINE_INIT(sceMsgDialogTerminate);
-TRAMPOLINE_INIT(sceMsgDialogInitialize);
-TRAMPOLINE_INIT(sceNetSetsockopt);
-TRAMPOLINE_INIT(sceNetSocketClose);
-TRAMPOLINE_INIT(sceNetInetPton);
-TRAMPOLINE_INIT(sceNetInetNtop);
-TRAMPOLINE_INIT(sceNetRecv);
-TRAMPOLINE_INIT(sceNetResolverCreate);
-TRAMPOLINE_INIT(sceNetErrnoLoc);
-TRAMPOLINE_INIT(sceNetEpollDestroy);
-TRAMPOLINE_INIT(sceNetPoolDestroy);
-TRAMPOLINE_INIT(sceNetResolverStartNtoa);
-TRAMPOLINE_INIT(sceNetInit);
-TRAMPOLINE_INIT(sceNetConnect);
-TRAMPOLINE_INIT(sceNetAccept);
-TRAMPOLINE_INIT(sceNetSocket);
-TRAMPOLINE_INIT(sceNetEpollCreate);
-TRAMPOLINE_INIT(sceNetEpollControl);
-TRAMPOLINE_INIT(sceNetBind);
-TRAMPOLINE_INIT(sceNetSend);
-TRAMPOLINE_INIT(sceNetTerm);
-TRAMPOLINE_INIT(sceNetPoolCreate);
-TRAMPOLINE_INIT(sceNetEpollWait);
-TRAMPOLINE_INIT(sceNetHtons);
-TRAMPOLINE_INIT(sceNetResolverDestroy);
-TRAMPOLINE_INIT(sceNetListen);
-TRAMPOLINE_INIT(sceNetCtlGetNatInfo);
-TRAMPOLINE_INIT(sceNetCtlUnregisterCallback);
-TRAMPOLINE_INIT(sceNetCtlRegisterCallback);
-TRAMPOLINE_INIT(sceNetCtlCheckCallback);
-TRAMPOLINE_INIT(sceNetCtlGetInfo);
-TRAMPOLINE_INIT(sceNetCtlGetState);
-TRAMPOLINE_INIT(sceNpAuthCreateRequest);
-TRAMPOLINE_INIT(sceNpAuthDeleteRequest);
-TRAMPOLINE_INIT(sceNpAuthGetAuthorizationCode);
-TRAMPOLINE_INIT(sceNpCommerceDialogInitialize);
-TRAMPOLINE_INIT(sceNpCommerceShowPsStoreIcon);
-TRAMPOLINE_INIT(sceNpCommerceDialogOpen);
-TRAMPOLINE_INIT(sceNpCommerceDialogUpdateStatus);
-TRAMPOLINE_INIT(sceNpCommerceHidePsStoreIcon);
-TRAMPOLINE_INIT(sceNpCommerceDialogTerminate);
-TRAMPOLINE_INIT(sceNpCommerceDialogGetResult);
-TRAMPOLINE_INIT(sceNpCmpOnlineId);
-// TRAMPOLINE_INIT(sceNpInGameMessageDeleteHandle);
-// TRAMPOLINE_INIT(sceNpCheckCallback);
-// TRAMPOLINE_INIT(sceNpSetContentRestriction);
-// TRAMPOLINE_INIT(sceNpSetNpTitleId);
-// TRAMPOLINE_INIT(sceNpInGameMessageInitialize);
-// TRAMPOLINE_INIT(sceNpNotifyPlusFeature);
-// TRAMPOLINE_INIT(sceNpGetAccountCountry);
-// TRAMPOLINE_INIT(sceNpCreateRequest);
-// TRAMPOLINE_INIT(sceNpInGameMessageSendData);
-// TRAMPOLINE_INIT(sceNpAbortRequest);
-// TRAMPOLINE_INIT(sceNpDeleteRequest);
-// TRAMPOLINE_INIT(sceNpRegisterStateCallback);
-// TRAMPOLINE_INIT(sceNpInGameMessagePrepare);
-// TRAMPOLINE_INIT(sceNpGetOnlineId);
-// TRAMPOLINE_INIT(sceNpInGameMessageTerminate);
-// TRAMPOLINE_INIT(sceNpGetState);
-// TRAMPOLINE_INIT(sceNpCreateAsyncRequest);
-// TRAMPOLINE_INIT(sceNpGetParentalControlInfo);
-// TRAMPOLINE_INIT(sceNpUnregisterStateCallback);
-// TRAMPOLINE_INIT(sceNpGetNpId);
-// TRAMPOLINE_INIT(sceNpCheckPlus);
-// TRAMPOLINE_INIT(sceNpInGameMessageCreateHandle);
-// TRAMPOLINE_INIT(sceNpPollAsync);
-// TRAMPOLINE_INIT(sceNpSignalingActivateConnection);
-// TRAMPOLINE_INIT(sceNpSignalingInitialize);
-// TRAMPOLINE_INIT(sceNpSignalingCreateContext);
-// TRAMPOLINE_INIT(sceNpSignalingGetConnectionInfo);
-// TRAMPOLINE_INIT(sceNpSignalingTerminateConnection);
-// TRAMPOLINE_INIT(sceNpSignalingGetConnectionStatus);
-// TRAMPOLINE_INIT(sceNpSignalingDeleteContext);
-// TRAMPOLINE_INIT(sceNpTrophyUnlockTrophy);
-// TRAMPOLINE_INIT(sceNpTrophyDestroyContext);
-// TRAMPOLINE_INIT(sceNpTrophyDestroyHandle);
-// TRAMPOLINE_INIT(sceNpTrophyGetTrophyUnlockState);
-// TRAMPOLINE_INIT(sceNpTrophyRegisterContext);
-// TRAMPOLINE_INIT(sceNpTrophyCreateContext);
-// TRAMPOLINE_INIT(sceNpTrophyCreateHandle);
-// TRAMPOLINE_INIT(sceNpLookupCreateTitleCtx);
-// TRAMPOLINE_INIT(sceNpBandwidthTestGetStatus);
-// TRAMPOLINE_INIT(sceNpLookupNpId);
-// TRAMPOLINE_INIT(sceNpLookupCreateRequest);
-// TRAMPOLINE_INIT(sceNpBandwidthTestInitStart);
-// TRAMPOLINE_INIT(sceNpLookupDeleteTitleCtx);
-// TRAMPOLINE_INIT(sceNpBandwidthTestShutdown);
-// TRAMPOLINE_INIT(sceNpLookupDeleteRequest);
-// TRAMPOLINE_INIT(sceNpWebApiGetErrorCode);
-// TRAMPOLINE_INIT(sceNpWebApiDeleteHandle);
-// TRAMPOLINE_INIT(sceNpWebApiCreateHandle);
-// TRAMPOLINE_INIT(sceNpWebApiReadData);
-// TRAMPOLINE_INIT(sceNpWebApiInitialize);
-// TRAMPOLINE_INIT(sceNpWebApiAbortRequest);
-// TRAMPOLINE_INIT(sceNpWebApiDeleteServicePushEventFilter);
-// TRAMPOLINE_INIT(sceNpWebApiRegisterPushEventCallback);
-// TRAMPOLINE_INIT(sceNpWebApiDeleteContext);
-// TRAMPOLINE_INIT(sceNpWebApiTerminate);
-// TRAMPOLINE_INIT(sceNpWebApiGetHttpStatusCode);
-// TRAMPOLINE_INIT(sceNpWebApiRegisterServicePushEventCallback);
-// TRAMPOLINE_INIT(sceNpWebApiSendRequest);
-// TRAMPOLINE_INIT(sceNpWebApiDeleteRequest);
-// TRAMPOLINE_INIT(sceNpWebApiUtilityParseNpId);
-// TRAMPOLINE_INIT(sceNpWebApiUnregisterPushEventCallback);
-// TRAMPOLINE_INIT(sceNpWebApiCreateRequest);
-// TRAMPOLINE_INIT(sceNpWebApiCreateServicePushEventFilter);
-// TRAMPOLINE_INIT(sceNpWebApiCreateContext);
-// TRAMPOLINE_INIT(sceNpWebApiCreatePushEventFilter);
-TRAMPOLINE_INIT(scePadClose);
-TRAMPOLINE_INIT(scePadSetLightBar);
-TRAMPOLINE_INIT(scePadReadState);
-TRAMPOLINE_INIT(scePadGetControllerInformation);
-TRAMPOLINE_INIT(scePadInit);
-TRAMPOLINE_INIT(scePadOpen);
-TRAMPOLINE_INIT(scePadSetVibration);
-TRAMPOLINE_INIT(scePlayGoGetProgress);
-TRAMPOLINE_INIT(scePlayGoSetInstallSpeed);
-TRAMPOLINE_INIT(scePlayGoOpen);
-TRAMPOLINE_INIT(scePlayGoGetToDoList);
-TRAMPOLINE_INIT(scePlayGoClose);
-TRAMPOLINE_INIT(scePlayGoGetInstallSpeed);
-TRAMPOLINE_INIT(scePlayGoInitialize);
-TRAMPOLINE_INIT(scePlayGoGetLocus);
-TRAMPOLINE_INIT(recv);
-TRAMPOLINE_INIT(sem_post);
-TRAMPOLINE_INIT(bind);
-TRAMPOLINE_INIT(socket);
-TRAMPOLINE_INIT(shutdown);
-TRAMPOLINE_INIT(connect);
-TRAMPOLINE_INIT(pthread_setschedparam);
-TRAMPOLINE_INIT(sem_wait);
-TRAMPOLINE_INIT(sem_destroy);
-TRAMPOLINE_INIT(setsockopt);
-TRAMPOLINE_INIT(send);
-TRAMPOLINE_INIT(clock_gettime);
-TRAMPOLINE_INIT(recvfrom);
-TRAMPOLINE_INIT(sendto);
-TRAMPOLINE_INIT(sem_init);
-TRAMPOLINE_INIT(sem_timedwait);
-TRAMPOLINE_INIT(sceRtcGetCurrentTick);
-TRAMPOLINE_INIT(sceRtcGetTick);
-TRAMPOLINE_INIT(sceRtcGetDayOfWeek);
-TRAMPOLINE_INIT(sceRtcConvertUtcToLocalTime);
-TRAMPOLINE_INIT(sceRtcGetCurrentClockLocalTime);
-TRAMPOLINE_INIT(sceRtcSetTime_t);
-TRAMPOLINE_INIT(sceRtcSetTick);
-TRAMPOLINE_INIT(sceRtcGetCurrentNetworkTick);
-TRAMPOLINE_INIT(sceSaveDataMount);
-TRAMPOLINE_INIT(sceSaveDataSetParam);
-TRAMPOLINE_INIT(sceSaveDataUmount);
-TRAMPOLINE_INIT(sceSaveDataDelete);
-TRAMPOLINE_INIT(sceSaveDataInitialize);
-TRAMPOLINE_INIT(sceSaveDataSaveIcon);
-TRAMPOLINE_INIT(sceSaveDataDirNameSearch);
-TRAMPOLINE_INIT(sceSaveDataTerminate);
-TRAMPOLINE_INIT(sceSaveDataDialogOpen);
-TRAMPOLINE_INIT(sceSaveDataDialogUpdateStatus);
-TRAMPOLINE_INIT(sceSaveDataDialogTerminate);
-TRAMPOLINE_INIT(sceSaveDataDialogIsReadyToDisplay);
-TRAMPOLINE_INIT(sceSaveDataDialogClose);
-TRAMPOLINE_INIT(sceSaveDataDialogProgressBarSetValue);
-TRAMPOLINE_INIT(sceSaveDataDialogInitialize);
-TRAMPOLINE_INIT(sceSaveDataDialogGetResult);
-TRAMPOLINE_INIT(sceSslTerm);
-TRAMPOLINE_INIT(sceSslInit);
-TRAMPOLINE_INIT(sceSysmoduleIsLoaded);
-TRAMPOLINE_INIT(sceSysmoduleLoadModule);
-TRAMPOLINE_INIT(sceSystemServiceGetDisplaySafeAreaInfo);
-TRAMPOLINE_INIT(sceSystemServiceReceiveEvent);
-TRAMPOLINE_INIT(sceSystemServiceHideSplashScreen);
-TRAMPOLINE_INIT(sceSystemServiceParamGetInt);
-TRAMPOLINE_INIT(sceSystemServiceGetStatus);
-TRAMPOLINE_INIT(sceUserServiceGetUserName);
-TRAMPOLINE_INIT(sceUserServiceGetInitialUser);
-TRAMPOLINE_INIT(sceUserServiceTerminate);
-TRAMPOLINE_INIT(sceUserServiceGetLoginUserIdList);
-TRAMPOLINE_INIT(sceUserServiceInitialize);
-TRAMPOLINE_INIT(sceUserServiceGetEvent);
-TRAMPOLINE_INIT(sceVideoOutSetFlipRate);
-TRAMPOLINE_INIT(sceVideoOutColorSettingsSetGamma_);
-TRAMPOLINE_INIT(sceVideoOutAddFlipEvent);
-TRAMPOLINE_INIT(sceVideoOutSetWindowModeMargins);
-TRAMPOLINE_INIT(sceVideoOutOpen);
-TRAMPOLINE_INIT(sceVideoOutSetBufferAttribute);
-TRAMPOLINE_INIT(sceVideoOutAdjustColor_);
-TRAMPOLINE_INIT(sceVideoOutRegisterBuffers);
-TRAMPOLINE_INITW(scePthreadSetspecific);
-TRAMPOLINE_INITW(sceKernelReadTsc);
-TRAMPOLINE_INITW(scePthreadAttrSetdetachstate);
-TRAMPOLINE_INITW(sceKernelMkdir);
-TRAMPOLINE_INITW(sceKernelPollSema);
-TRAMPOLINE_INITW(sceKernelCreateSema);
-TRAMPOLINE_INITW(sceKernelOpen);
-TRAMPOLINE_INITW(sceKernelGetTscFrequency);
-TRAMPOLINE_INITW(sceKernelUsleep);
-TRAMPOLINE_INITW(sceKernelGetEventFilter);
-TRAMPOLINE_INITW(scePthreadMutexDestroy);
-TRAMPOLINE_INITW(scePthreadCondInit);
-TRAMPOLINE_INITW(scePthreadExit);
-TRAMPOLINE_INITW(scePthreadAttrSetaffinity);
-TRAMPOLINE_INITW(scePthreadAttrSetschedpolicy);
-TRAMPOLINE_INITW(sceKernelAddUserEvent);
-TRAMPOLINE_INITW(sceKernelSignalSema);
-TRAMPOLINE_INITW(scePthreadDetach);
-TRAMPOLINE_INITW(sceKernelAddTimerEvent);
-TRAMPOLINE_INITW(scePthreadAttrDestroy);
-TRAMPOLINE_INITW(scePthreadCreate);
-TRAMPOLINE_INIT(__error);
-TRAMPOLINE_INITW(scePthreadMutexLock);
-TRAMPOLINE_INITW(sceKernelCreateEventFlag);
-TRAMPOLINE_INITW(scePthreadAttrSetstack);
-TRAMPOLINE_INITW(sceKernelRead);
-TRAMPOLINE_INITW(sceKernelCreateEqueue);
-TRAMPOLINE_INITW(scePthreadAttrSetschedparam);
-TRAMPOLINE_INITW(scePthreadMutexattrInit);
-TRAMPOLINE_INITW(sceKernelSetEventFlag);
-TRAMPOLINE_INITW(scePthreadMutexTimedlock);
-TRAMPOLINE_INITW(scePthreadCondBroadcast);
-TRAMPOLINE_INITW(sceKernelWaitEventFlag);
-TRAMPOLINE_INITW(sceKernelMapNamedDirectMemory);
-TRAMPOLINE_INIT(__stack_chk_fail);
-TRAMPOLINE_INITW(scePthreadGetschedparam);
-TRAMPOLINE_INITW(sceKernelClockGettime);
-TRAMPOLINE_INITW(sceKernelDeleteSema);
-TRAMPOLINE_INITW(scePthreadYield);
-TRAMPOLINE_INITW(sceKernelClose);
-TRAMPOLINE_INITW(scePthreadAttrSetstacksize);
-TRAMPOLINE_INITW(scePthreadSetprio);
-TRAMPOLINE_INITW(sceKernelDeleteTimerEvent);
-TRAMPOLINE_INITW(sceKernelWaitSema);
-TRAMPOLINE_INITW(scePthreadSelf);
-TRAMPOLINE_INITW(scePthreadSetaffinity);
-TRAMPOLINE_INITW(scePthreadMutexInit);
-TRAMPOLINE_INITW(scePthreadAttrSetinheritsched);
-TRAMPOLINE_INITW(sceKernelGettimeofday);
-TRAMPOLINE_INITW(scePthreadGetspecific);
-TRAMPOLINE_INITW(sceKernelWaitEqueue);
-TRAMPOLINE_INITW(scePthreadCondDestroy);
-TRAMPOLINE_INITW(scePthreadKeyCreate);
-TRAMPOLINE_INITW(scePthreadMutexattrSettype);
-TRAMPOLINE_INITW(sceKernelDeleteEqueue);
-TRAMPOLINE_INITW(sceKernelFstat);
-TRAMPOLINE_INITW(sceKernelGetEventId);
-TRAMPOLINE_INITW(scePthreadAttrInit);
-TRAMPOLINE_INITW(scePthreadSetschedparam);
-TRAMPOLINE_INITW(sceKernelLseek);
-TRAMPOLINE_INITW(scePthreadJoin);
-TRAMPOLINE_INITW(sceKernelGetDirectMemorySize);
-TRAMPOLINE_INITW(sceKernelAllocateDirectMemory);
-TRAMPOLINE_INITW(sceKernelVirtualQuery);
-TRAMPOLINE_INITW(scePthreadMutexattrDestroy);
-TRAMPOLINE_INITW(scePthreadMutexUnlock);
-TRAMPOLINE_INITW(scePthreadMutexTrylock);
-TRAMPOLINE_INIT(__tls_get_addr);
-TRAMPOLINE_INITW(sceKernelLoadStartModule);
+// TRAMPOLINE_INIT(sceHttpsLoadCert);
+// TRAMPOLINE_INIT(sceHttpAddRequestHeader);
+// TRAMPOLINE_INIT(sceHttpSetCookieSendCallback);
+// TRAMPOLINE_INIT(sceHttpTerm);
+// TRAMPOLINE_INIT(sceHttpSetCookieRecvCallback);
+// TRAMPOLINE_INIT(sceHttpCreateConnection);
+// TRAMPOLINE_INIT(sceHttpReadData);
+// TRAMPOLINE_INIT(sceHttpDeleteConnection);
+// TRAMPOLINE_INIT(sceHttpSetRequestContentLength);
+// TRAMPOLINE_INIT(sceHttpSetAutoRedirect);
+// TRAMPOLINE_INIT(sceHttpSetCookieEnabled);
+// TRAMPOLINE_INIT(sceHttpGetAllResponseHeaders);
+// TRAMPOLINE_INIT(sceHttpSetRedirectCallback);
+// TRAMPOLINE_INIT(sceHttpParseResponseHeader);
+// TRAMPOLINE_INIT(sceHttpsSetSslCallback);
+// TRAMPOLINE_INIT(sceHttpAbortRequest);
+// TRAMPOLINE_INIT(sceHttpGetCookieEnabled);
+// TRAMPOLINE_INIT(sceHttpAddCookie);
+// TRAMPOLINE_INIT(sceHttpGetAutoRedirect);
+// TRAMPOLINE_INIT(sceHttpSetAuthEnabled);
+// TRAMPOLINE_INIT(sceHttpDeleteRequest);
+// TRAMPOLINE_INIT(sceHttpCreateConnectionWithURL);
+// TRAMPOLINE_INIT(sceHttpCookieFlush);
+// TRAMPOLINE_INIT(sceHttpCreateRequest);
+// TRAMPOLINE_INIT(sceHttpSetSendTimeOut);
+// TRAMPOLINE_INIT(sceHttpSetRecvTimeOut);
+// TRAMPOLINE_INIT(sceHttpGetResponseContentLength);
+// TRAMPOLINE_INIT(sceHttpRemoveRequestHeader);
+// TRAMPOLINE_INIT(sceHttpsUnloadCert);
+// TRAMPOLINE_INIT(sceImeDialogGetStatus);
+// TRAMPOLINE_INIT(sceImeDialogInit);
+// TRAMPOLINE_INIT(sceImeDialogTerm);
+// TRAMPOLINE_INIT(sceImeDialogAbort);
+// TRAMPOLINE_INIT(sceImeDialogGetResult);
+// TRAMPOLINE_INIT(sceJpegDecDecode);
+// TRAMPOLINE_INIT(sceJpegDecDelete);
+// TRAMPOLINE_INIT(sceJpegDecCreate);
+// TRAMPOLINE_INIT(sceJpegDecParseHeader);
+// TRAMPOLINE_INIT(sceJpegDecQueryMemorySize);
+// TRAMPOLINE_INIT(sceMoveGetDeviceInfo);
+// TRAMPOLINE_INIT(sceMoveOpen);
+// TRAMPOLINE_INIT(sceMoveClose);
+// TRAMPOLINE_INIT(sceMoveReadStateRecent);
+// TRAMPOLINE_INIT(sceMoveInit);
+// TRAMPOLINE_INIT(sceMoveTrackerControllersUpdate);
+// TRAMPOLINE_INIT(sceMoveTrackerTerm);
+// TRAMPOLINE_INIT(sceMoveTrackerCameraUpdate);
+// TRAMPOLINE_INIT(sceMoveTrackerInit);
+// TRAMPOLINE_INIT(sceMoveTrackerGetState);
+// TRAMPOLINE_INIT(sceMoveTrackerGetWorkingMemorySize);
+// TRAMPOLINE_INIT(sceMsgDialogUpdateStatus);
+// TRAMPOLINE_INIT(sceMsgDialogOpen);
+// TRAMPOLINE_INIT(sceMsgDialogTerminate);
+// TRAMPOLINE_INIT(sceMsgDialogInitialize);
+// TRAMPOLINE_INIT(sceNetSetsockopt);
+// TRAMPOLINE_INIT(sceNetSocketClose);
+// TRAMPOLINE_INIT(sceNetInetPton);
+// TRAMPOLINE_INIT(sceNetInetNtop);
+// TRAMPOLINE_INIT(sceNetRecv);
+// TRAMPOLINE_INIT(sceNetResolverCreate);
+// TRAMPOLINE_INIT(sceNetErrnoLoc);
+// TRAMPOLINE_INIT(sceNetEpollDestroy);
+// TRAMPOLINE_INIT(sceNetPoolDestroy);
+// TRAMPOLINE_INIT(sceNetResolverStartNtoa);
+// TRAMPOLINE_INIT(sceNetInit);
+// TRAMPOLINE_INIT(sceNetConnect);
+// TRAMPOLINE_INIT(sceNetAccept);
+// TRAMPOLINE_INIT(sceNetSocket);
+// TRAMPOLINE_INIT(sceNetEpollCreate);
+// TRAMPOLINE_INIT(sceNetEpollControl);
+// TRAMPOLINE_INIT(sceNetBind);
+// TRAMPOLINE_INIT(sceNetSend);
+// TRAMPOLINE_INIT(sceNetTerm);
+// TRAMPOLINE_INIT(sceNetPoolCreate);
+// TRAMPOLINE_INIT(sceNetEpollWait);
+// TRAMPOLINE_INIT(sceNetHtons);
+// TRAMPOLINE_INIT(sceNetResolverDestroy);
+// TRAMPOLINE_INIT(sceNetListen);
+// TRAMPOLINE_INIT(sceNetCtlGetNatInfo);
+// TRAMPOLINE_INIT(sceNetCtlUnregisterCallback);
+// TRAMPOLINE_INIT(sceNetCtlRegisterCallback);
+// TRAMPOLINE_INIT(sceNetCtlCheckCallback);
+// TRAMPOLINE_INIT(sceNetCtlGetInfo);
+// TRAMPOLINE_INIT(sceNetCtlGetState);
+// TRAMPOLINE_INIT(sceNpAuthCreateRequest);
+// TRAMPOLINE_INIT(sceNpAuthDeleteRequest);
+// TRAMPOLINE_INIT(sceNpAuthGetAuthorizationCode);
+// TRAMPOLINE_INIT(sceNpCommerceDialogInitialize);
+// TRAMPOLINE_INIT(sceNpCommerceShowPsStoreIcon);
+// TRAMPOLINE_INIT(sceNpCommerceDialogOpen);
+// TRAMPOLINE_INIT(sceNpCommerceDialogUpdateStatus);
+// TRAMPOLINE_INIT(sceNpCommerceHidePsStoreIcon);
+// TRAMPOLINE_INIT(sceNpCommerceDialogTerminate);
+// TRAMPOLINE_INIT(sceNpCommerceDialogGetResult);
+// TRAMPOLINE_INIT(sceNpCmpOnlineId);
+// // TRAMPOLINE_INIT(sceNpInGameMessageDeleteHandle);
+// // TRAMPOLINE_INIT(sceNpCheckCallback);
+// // TRAMPOLINE_INIT(sceNpSetContentRestriction);
+// // TRAMPOLINE_INIT(sceNpSetNpTitleId);
+// // TRAMPOLINE_INIT(sceNpInGameMessageInitialize);
+// // TRAMPOLINE_INIT(sceNpNotifyPlusFeature);
+// // TRAMPOLINE_INIT(sceNpGetAccountCountry);
+// // TRAMPOLINE_INIT(sceNpCreateRequest);
+// // TRAMPOLINE_INIT(sceNpInGameMessageSendData);
+// // TRAMPOLINE_INIT(sceNpAbortRequest);
+// // TRAMPOLINE_INIT(sceNpDeleteRequest);
+// // TRAMPOLINE_INIT(sceNpRegisterStateCallback);
+// // TRAMPOLINE_INIT(sceNpInGameMessagePrepare);
+// // TRAMPOLINE_INIT(sceNpGetOnlineId);
+// // TRAMPOLINE_INIT(sceNpInGameMessageTerminate);
+// // TRAMPOLINE_INIT(sceNpGetState);
+// // TRAMPOLINE_INIT(sceNpCreateAsyncRequest);
+// // TRAMPOLINE_INIT(sceNpGetParentalControlInfo);
+// // TRAMPOLINE_INIT(sceNpUnregisterStateCallback);
+// // TRAMPOLINE_INIT(sceNpGetNpId);
+// // TRAMPOLINE_INIT(sceNpCheckPlus);
+// // TRAMPOLINE_INIT(sceNpInGameMessageCreateHandle);
+// // TRAMPOLINE_INIT(sceNpPollAsync);
+// // TRAMPOLINE_INIT(sceNpSignalingActivateConnection);
+// // TRAMPOLINE_INIT(sceNpSignalingInitialize);
+// // TRAMPOLINE_INIT(sceNpSignalingCreateContext);
+// // TRAMPOLINE_INIT(sceNpSignalingGetConnectionInfo);
+// // TRAMPOLINE_INIT(sceNpSignalingTerminateConnection);
+// // TRAMPOLINE_INIT(sceNpSignalingGetConnectionStatus);
+// // TRAMPOLINE_INIT(sceNpSignalingDeleteContext);
+// // TRAMPOLINE_INIT(sceNpTrophyUnlockTrophy);
+// // TRAMPOLINE_INIT(sceNpTrophyDestroyContext);
+// // TRAMPOLINE_INIT(sceNpTrophyDestroyHandle);
+// // TRAMPOLINE_INIT(sceNpTrophyGetTrophyUnlockState);
+// // TRAMPOLINE_INIT(sceNpTrophyRegisterContext);
+// // TRAMPOLINE_INIT(sceNpTrophyCreateContext);
+// // TRAMPOLINE_INIT(sceNpTrophyCreateHandle);
+// // TRAMPOLINE_INIT(sceNpLookupCreateTitleCtx);
+// // TRAMPOLINE_INIT(sceNpBandwidthTestGetStatus);
+// // TRAMPOLINE_INIT(sceNpLookupNpId);
+// // TRAMPOLINE_INIT(sceNpLookupCreateRequest);
+// // TRAMPOLINE_INIT(sceNpBandwidthTestInitStart);
+// // TRAMPOLINE_INIT(sceNpLookupDeleteTitleCtx);
+// // TRAMPOLINE_INIT(sceNpBandwidthTestShutdown);
+// // TRAMPOLINE_INIT(sceNpLookupDeleteRequest);
+// // TRAMPOLINE_INIT(sceNpWebApiGetErrorCode);
+// // TRAMPOLINE_INIT(sceNpWebApiDeleteHandle);
+// // TRAMPOLINE_INIT(sceNpWebApiCreateHandle);
+// // TRAMPOLINE_INIT(sceNpWebApiReadData);
+// // TRAMPOLINE_INIT(sceNpWebApiInitialize);
+// // TRAMPOLINE_INIT(sceNpWebApiAbortRequest);
+// // TRAMPOLINE_INIT(sceNpWebApiDeleteServicePushEventFilter);
+// // TRAMPOLINE_INIT(sceNpWebApiRegisterPushEventCallback);
+// // TRAMPOLINE_INIT(sceNpWebApiDeleteContext);
+// // TRAMPOLINE_INIT(sceNpWebApiTerminate);
+// // TRAMPOLINE_INIT(sceNpWebApiGetHttpStatusCode);
+// // TRAMPOLINE_INIT(sceNpWebApiRegisterServicePushEventCallback);
+// // TRAMPOLINE_INIT(sceNpWebApiSendRequest);
+// // TRAMPOLINE_INIT(sceNpWebApiDeleteRequest);
+// // TRAMPOLINE_INIT(sceNpWebApiUtilityParseNpId);
+// // TRAMPOLINE_INIT(sceNpWebApiUnregisterPushEventCallback);
+// // TRAMPOLINE_INIT(sceNpWebApiCreateRequest);
+// // TRAMPOLINE_INIT(sceNpWebApiCreateServicePushEventFilter);
+// // TRAMPOLINE_INIT(sceNpWebApiCreateContext);
+// // TRAMPOLINE_INIT(sceNpWebApiCreatePushEventFilter);
+// TRAMPOLINE_INIT(scePadClose);
+// TRAMPOLINE_INIT(scePadSetLightBar);
+// TRAMPOLINE_INIT(scePadReadState);
+// TRAMPOLINE_INIT(scePadGetControllerInformation);
+// TRAMPOLINE_INIT(scePadInit);
+// TRAMPOLINE_INIT(scePadOpen);
+// TRAMPOLINE_INIT(scePadSetVibration);
+// TRAMPOLINE_INIT(scePlayGoGetProgress);
+// TRAMPOLINE_INIT(scePlayGoSetInstallSpeed);
+// TRAMPOLINE_INIT(scePlayGoOpen);
+// TRAMPOLINE_INIT(scePlayGoGetToDoList);
+// TRAMPOLINE_INIT(scePlayGoClose);
+// TRAMPOLINE_INIT(scePlayGoGetInstallSpeed);
+// TRAMPOLINE_INIT(scePlayGoInitialize);
+// TRAMPOLINE_INIT(scePlayGoGetLocus);
+// TRAMPOLINE_INIT(recv);
+// TRAMPOLINE_INIT(sem_post);
+// TRAMPOLINE_INIT(bind);
+// TRAMPOLINE_INIT(socket);
+// TRAMPOLINE_INIT(shutdown);
+// TRAMPOLINE_INIT(connect);
+// TRAMPOLINE_INIT(pthread_setschedparam);
+// TRAMPOLINE_INIT(sem_wait);
+// TRAMPOLINE_INIT(sem_destroy);
+// TRAMPOLINE_INIT(setsockopt);
+// TRAMPOLINE_INIT(send);
+// TRAMPOLINE_INIT(clock_gettime);
+// TRAMPOLINE_INIT(recvfrom);
+// TRAMPOLINE_INIT(sendto);
+// TRAMPOLINE_INIT(sem_init);
+// TRAMPOLINE_INIT(sem_timedwait);
+// TRAMPOLINE_INIT(sceRtcGetCurrentTick);
+// TRAMPOLINE_INIT(sceRtcGetTick);
+// TRAMPOLINE_INIT(sceRtcGetDayOfWeek);
+// TRAMPOLINE_INIT(sceRtcConvertUtcToLocalTime);
+// TRAMPOLINE_INIT(sceRtcGetCurrentClockLocalTime);
+// TRAMPOLINE_INIT(sceRtcSetTime_t);
+// TRAMPOLINE_INIT(sceRtcSetTick);
+// TRAMPOLINE_INIT(sceRtcGetCurrentNetworkTick);
+// TRAMPOLINE_INIT(sceSaveDataMount);
+// TRAMPOLINE_INIT(sceSaveDataSetParam);
+// TRAMPOLINE_INIT(sceSaveDataUmount);
+// TRAMPOLINE_INIT(sceSaveDataDelete);
+// TRAMPOLINE_INIT(sceSaveDataInitialize);
+// TRAMPOLINE_INIT(sceSaveDataSaveIcon);
+// TRAMPOLINE_INIT(sceSaveDataDirNameSearch);
+// TRAMPOLINE_INIT(sceSaveDataTerminate);
+// TRAMPOLINE_INIT(sceSaveDataDialogOpen);
+// TRAMPOLINE_INIT(sceSaveDataDialogUpdateStatus);
+// TRAMPOLINE_INIT(sceSaveDataDialogTerminate);
+// TRAMPOLINE_INIT(sceSaveDataDialogIsReadyToDisplay);
+// TRAMPOLINE_INIT(sceSaveDataDialogClose);
+// TRAMPOLINE_INIT(sceSaveDataDialogProgressBarSetValue);
+// TRAMPOLINE_INIT(sceSaveDataDialogInitialize);
+// TRAMPOLINE_INIT(sceSaveDataDialogGetResult);
+// TRAMPOLINE_INIT(sceSslTerm);
+// TRAMPOLINE_INIT(sceSslInit);
+// TRAMPOLINE_INIT(sceSysmoduleIsLoaded);
+// TRAMPOLINE_INIT(sceSysmoduleLoadModule);
+// TRAMPOLINE_INIT(sceSystemServiceGetDisplaySafeAreaInfo);
+// TRAMPOLINE_INIT(sceSystemServiceReceiveEvent);
+// TRAMPOLINE_INIT(sceSystemServiceHideSplashScreen);
+// TRAMPOLINE_INIT(sceSystemServiceParamGetInt);
+// TRAMPOLINE_INIT(sceSystemServiceGetStatus);
+// TRAMPOLINE_INIT(sceUserServiceGetUserName);
+// TRAMPOLINE_INIT(sceUserServiceGetInitialUser);
+// TRAMPOLINE_INIT(sceUserServiceTerminate);
+// TRAMPOLINE_INIT(sceUserServiceGetLoginUserIdList);
+// TRAMPOLINE_INIT(sceUserServiceInitialize);
+// TRAMPOLINE_INIT(sceUserServiceGetEvent);
+// TRAMPOLINE_INIT(sceVideoOutSetFlipRate);
+// TRAMPOLINE_INIT(sceVideoOutColorSettingsSetGamma_);
+// TRAMPOLINE_INIT(sceVideoOutAddFlipEvent);
+// TRAMPOLINE_INIT(sceVideoOutSetWindowModeMargins);
+// TRAMPOLINE_INIT(sceVideoOutOpen);
+// TRAMPOLINE_INIT(sceVideoOutSetBufferAttribute);
+// TRAMPOLINE_INIT(sceVideoOutAdjustColor_);
+// TRAMPOLINE_INIT(sceVideoOutRegisterBuffers);
+// TRAMPOLINE_INITW(scePthreadSetspecific);
+// TRAMPOLINE_INITW(sceKernelReadTsc);
+// TRAMPOLINE_INITW(scePthreadAttrSetdetachstate);
+// TRAMPOLINE_INITW(sceKernelMkdir);
+// TRAMPOLINE_INITW(sceKernelPollSema);
+// TRAMPOLINE_INITW(sceKernelCreateSema);
+// TRAMPOLINE_INITW(sceKernelOpen);
+// TRAMPOLINE_INITW(sceKernelGetTscFrequency);
+// TRAMPOLINE_INITW(sceKernelUsleep);
+// TRAMPOLINE_INITW(sceKernelGetEventFilter);
+// TRAMPOLINE_INITW(scePthreadMutexDestroy);
+// TRAMPOLINE_INITW(scePthreadCondInit);
+// TRAMPOLINE_INITW(scePthreadExit);
+// TRAMPOLINE_INITW(scePthreadAttrSetaffinity);
+// TRAMPOLINE_INITW(scePthreadAttrSetschedpolicy);
+// TRAMPOLINE_INITW(sceKernelAddUserEvent);
+// TRAMPOLINE_INITW(sceKernelSignalSema);
+// TRAMPOLINE_INITW(scePthreadDetach);
+// TRAMPOLINE_INITW(sceKernelAddTimerEvent);
+// TRAMPOLINE_INITW(scePthreadAttrDestroy);
+// TRAMPOLINE_INITW(scePthreadCreate);
+// TRAMPOLINE_INIT(__error);
+// TRAMPOLINE_INITW(scePthreadMutexLock);
+// TRAMPOLINE_INITW(sceKernelCreateEventFlag);
+// TRAMPOLINE_INITW(scePthreadAttrSetstack);
+// TRAMPOLINE_INITW(sceKernelRead);
+// TRAMPOLINE_INITW(sceKernelCreateEqueue);
+// TRAMPOLINE_INITW(scePthreadAttrSetschedparam);
+// TRAMPOLINE_INITW(scePthreadMutexattrInit);
+// TRAMPOLINE_INITW(sceKernelSetEventFlag);
+// TRAMPOLINE_INITW(scePthreadMutexTimedlock);
+// TRAMPOLINE_INITW(scePthreadCondBroadcast);
+// TRAMPOLINE_INITW(sceKernelWaitEventFlag);
+// TRAMPOLINE_INITW(sceKernelMapNamedDirectMemory);
+// TRAMPOLINE_INIT(__stack_chk_fail);
+// TRAMPOLINE_INITW(scePthreadGetschedparam);
+// TRAMPOLINE_INITW(sceKernelClockGettime);
+// TRAMPOLINE_INITW(sceKernelDeleteSema);
+// TRAMPOLINE_INITW(scePthreadYield);
+// TRAMPOLINE_INITW(sceKernelClose);
+// TRAMPOLINE_INITW(scePthreadAttrSetstacksize);
+// TRAMPOLINE_INITW(scePthreadSetprio);
+// TRAMPOLINE_INITW(sceKernelDeleteTimerEvent);
+// TRAMPOLINE_INITW(sceKernelWaitSema);
+// TRAMPOLINE_INITW(scePthreadSelf);
+// TRAMPOLINE_INITW(scePthreadSetaffinity);
+// TRAMPOLINE_INITW(scePthreadMutexInit);
+// TRAMPOLINE_INITW(scePthreadAttrSetinheritsched);
+// TRAMPOLINE_INITW(sceKernelGettimeofday);
+// TRAMPOLINE_INITW(scePthreadGetspecific);
+// TRAMPOLINE_INITW(sceKernelWaitEqueue);
+// TRAMPOLINE_INITW(scePthreadCondDestroy);
+// TRAMPOLINE_INITW(scePthreadKeyCreate);
+// TRAMPOLINE_INITW(scePthreadMutexattrSettype);
+// TRAMPOLINE_INITW(sceKernelDeleteEqueue);
+// TRAMPOLINE_INITW(sceKernelFstat);
+// TRAMPOLINE_INITW(sceKernelGetEventId);
+// TRAMPOLINE_INITW(scePthreadAttrInit);
+// TRAMPOLINE_INITW(scePthreadSetschedparam);
+// TRAMPOLINE_INITW(sceKernelLseek);
+// TRAMPOLINE_INITW(scePthreadJoin);
+// TRAMPOLINE_INITW(sceKernelGetDirectMemorySize);
+// TRAMPOLINE_INITW(sceKernelAllocateDirectMemory);
+// TRAMPOLINE_INITW(sceKernelVirtualQuery);
+// TRAMPOLINE_INITW(scePthreadMutexattrDestroy);
+// TRAMPOLINE_INITW(scePthreadMutexUnlock);
+// TRAMPOLINE_INITW(scePthreadMutexTrylock);
+// TRAMPOLINE_INIT(__tls_get_addr);
+// TRAMPOLINE_INITW(sceKernelLoadStartModule);
 
 #pragma GCC diagnostic pop
 
@@ -528,368 +583,368 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
 
-    HOOK32(sceAppContentAppParamGetInt);
-    HOOK32(sceAppContentInitialize);
-    HOOK32(sceAppContentTemporaryDataGetAvailableSpaceKb);
-    HOOK32(sceAppContentGetEntitlementKey);
-    HOOK32(sceAppContentTemporaryDataFormat);
-    HOOK32(sceAppContentTemporaryDataMount2);
-    HOOK32(sceAppContentGetAddcontInfoList);
-    HOOK32(sceAudioInOpen);
-    HOOK32(sceAudioInInput);
+    // HOOK32(sceAppContentAppParamGetInt);
+    // HOOK32(sceAppContentInitialize);
+    // HOOK32(sceAppContentTemporaryDataGetAvailableSpaceKb);
+    // HOOK32(sceAppContentGetEntitlementKey);
+    // HOOK32(sceAppContentTemporaryDataFormat);
+    // HOOK32(sceAppContentTemporaryDataMount2);
+    // HOOK32(sceAppContentGetAddcontInfoList);
+    // HOOK32(sceAudioInOpen);
+    // HOOK32(sceAudioInInput);
     HOOK32(sceAudioOutInit);
-    HOOK32(sceAudioOutOutput);
-    HOOK32(sceAudioOutSetVolume);
-    HOOK32(sceAudioOutOpen);
-    HOOK32(sceAudioOutClose);
-    HOOK32(sceAvPlayerPause);
-    HOOK32(sceAvPlayerStart);
-    HOOK32(sceAvPlayerGetVideoDataEx);
-    HOOK32(sceAvPlayerAddSource);
-    HOOK32(sceAvPlayerClose);
-    HOOK32(sceAvPlayerEnableStream);
-    HOOK32(sceAvPlayerSetLooping);
-    HOOK32(sceAvPlayerIsActive);
-    HOOK32(sceAvPlayerGetAudioData);
-    HOOK32(sceAvPlayerJumpToTime);
-    HOOK32(sceAvPlayerInit);
-    HOOK32(sceAvPlayerGetStreamInfo);
-    HOOK32(sceAvPlayerStreamCount);
-    HOOK32(sceAvPlayerResume);
-    HOOK32(sceAvPlayerCurrentTime);
-    HOOK32(sceCameraStop);
-    HOOK32(sceCameraStart);
-    HOOK32(sceCameraOpen);
-    HOOK32(sceCameraClose);
-    HOOK32(sceCameraSetConfig);
-    HOOK32(sceCameraGetConfig);
-    HOOK32(sceCameraSetAttribute);
-    HOOK32(sceCameraGetFrameData);
-    HOOK32(sceCameraIsAttached);
-    HOOK32(sceCommonDialogInitialize);
-    HOOK32(sceCompanionHttpdStop);
-    HOOK32(sceCompanionHttpdAddHeader);
-    HOOK32(sceCompanionHttpdRegisterRequestCallback);
-    HOOK32(sceCompanionHttpdStart);
-    HOOK32(sceCompanionHttpdOptParamInitialize);
-    HOOK32(sceCompanionHttpdSetStatus);
-    HOOK32(sceCompanionHttpdInitialize);
-    HOOK32(sceContentSearchTerm);
-    HOOK32(sceContentSearchGetMyApplicationIndex);
-    HOOK32(sceContentSearchGetContentLastUpdateId);
-    HOOK32(sceContentSearchSearchContent);
-    HOOK32(sceContentSearchInit);
-    HOOK32(sceErrorDialogTerminate);
-    HOOK32(sceErrorDialogInitialize);
-    HOOK32(sceErrorDialogOpen);
-    HOOK32(sceErrorDialogUpdateStatus);
-    HOOK32(sceFiberReturnToThread);
-    HOOK32(sceFiberFinalize);
-    HOOK32(sceFiberRun);
-    HOOK32(sceFiberOptParamInitialize);
-    HOOK32(_sceFiberInitializeImpl);
-    HOOK32(sceFiosOpGetActualCount);
-    HOOK32(sceFiosDHCloseSync);
-    HOOK32(sceFiosOpDelete);
-    HOOK32(sceFiosFHCloseSync);
-    HOOK32(sceFiosFHReadSync);
-    HOOK32(sceFiosFHSyncSync);
-    HOOK32(sceFiosFHGetSize);
-    HOOK32(sceFiosRenameSync);
-    HOOK32(sceFiosDHOpenSync);
-    HOOK32(sceFiosFHWriteSync);
-    HOOK32(sceFiosDeleteSync);
-    HOOK32(sceFiosFileExistsSync);
-    HOOK32(sceFiosDirectoryExistsSync);
-    HOOK32(sceFiosOpWait);
-    HOOK32(sceFiosDirectoryCreateWithModeSync);
-    HOOK32(sceFiosFHOpenSync);
-    HOOK32(sceFiosFHPwriteSync);
-    HOOK32(sceFiosStatSync);
-    HOOK32(sceFiosDHReadSync);
-    HOOK32(sceFiosFHTruncateSync);
-    HOOK32(sceFiosDHOpen);
-    HOOK32(sceFiosInitialize);
-    HOOK32(sceFiosFHSeek);
-    HOOK32(sceGameLiveStreamingTerminate);
-    HOOK32(sceGameLiveStreamingGetCurrentStatus);
-    HOOK32(sceGameLiveStreamingGetProgramInfo);
-    HOOK32(sceGameLiveStreamingGetSocialFeedbackMessages);
-    HOOK32(sceGameLiveStreamingEnableLiveStreaming);
-    HOOK32(sceGameLiveStreamingInitialize);
-    HOOK32(sceGameLiveStreamingClearSocialFeedbackMessages);
-    HOOK32(sceGameLiveStreamingSetPresetSocialFeedbackCommandsDescription);
-    HOOK32(sceGameLiveStreamingSetPresetSocialFeedbackCommands);
-    HOOK32(sceGameLiveStreamingGetSocialFeedbackMessagesCount);
-    HOOK32(sceGnmInsertWaitFlipDone);
-    HOOK32(sceGnmMapComputeQueue);
-    HOOK32(sceGnmInsertPopMarker);
-    HOOK32(sceGnmSetEsShader);
-    HOOK32(sceGnmDrawInitDefaultHardwareState);
-    HOOK32(sceGnmSetCsShader);
-    HOOK32(sceGnmDeleteEqEvent);
-    HOOK32(sceGnmDriverCaptureInProgress);
-    HOOK32(sceGnmSetGsShader);
-    HOOK32(sceGnmSetHsShader);
-    HOOK32(sceGnmInsertPushMarker);
-    HOOK32(sceGnmAddEqEvent);
-    HOOK32(sceGnmSetPsShader);
-    // HOOK32(sceGnmDingDong);
-    HOOK32(sceGnmSetVsShader);
-    HOOK32(sceGnmIsUserPaEnabled);
-    HOOK32(sceGnmDispatchInitDefaultHardwareState);
-    HOOK32(sceGnmDebugHardwareStatus);
-    HOOK32(sceGnmSetLsShader);
-    HOOK32(sceGnmSubmitAndFlipCommandBuffers);
-    HOOK32(sceGnmSubmitDone);
-    HOOK32(sceHttpSetConnectTimeOut);
-    HOOK32(sceHttpGetStatusCode);
-    HOOK32(sceHttpCreateTemplate);
-    HOOK32(sceHttpGetLastErrno);
-    HOOK32(sceHttpSendRequest);
-    HOOK32(sceHttpDeleteTemplate);
-    HOOK32(sceHttpGetAuthEnabled);
-    HOOK32(sceHttpInit);
-    HOOK32(sceHttpCreateRequestWithURL);
-    HOOK32(sceHttpsLoadCert);
-    HOOK32(sceHttpAddRequestHeader);
-    HOOK32(sceHttpSetCookieSendCallback);
-    HOOK32(sceHttpTerm);
-    HOOK32(sceHttpSetCookieRecvCallback);
-    HOOK32(sceHttpCreateConnection);
-    HOOK32(sceHttpReadData);
-    HOOK32(sceHttpDeleteConnection);
-    HOOK32(sceHttpSetRequestContentLength);
-    HOOK32(sceHttpSetAutoRedirect);
-    HOOK32(sceHttpSetCookieEnabled);
-    HOOK32(sceHttpGetAllResponseHeaders);
-    HOOK32(sceHttpSetRedirectCallback);
-    HOOK32(sceHttpParseResponseHeader);
-    HOOK32(sceHttpsSetSslCallback);
-    HOOK32(sceHttpAbortRequest);
-    HOOK32(sceHttpGetCookieEnabled);
-    HOOK32(sceHttpAddCookie);
-    HOOK32(sceHttpGetAutoRedirect);
-    HOOK32(sceHttpSetAuthEnabled);
-    HOOK32(sceHttpDeleteRequest);
-    HOOK32(sceHttpCreateConnectionWithURL);
-    HOOK32(sceHttpCookieFlush);
-    HOOK32(sceHttpCreateRequest);
-    HOOK32(sceHttpSetSendTimeOut);
-    HOOK32(sceHttpSetRecvTimeOut);
-    HOOK32(sceHttpGetResponseContentLength);
-    HOOK32(sceHttpRemoveRequestHeader);
-    HOOK32(sceHttpsUnloadCert);
-    HOOK32(sceImeDialogGetStatus);
-    HOOK32(sceImeDialogInit);
-    HOOK32(sceImeDialogTerm);
-    HOOK32(sceImeDialogAbort);
-    HOOK32(sceImeDialogGetResult);
-    HOOK32(sceJpegDecDecode);
-    HOOK32(sceJpegDecDelete);
-    HOOK32(sceJpegDecCreate);
-    HOOK32(sceJpegDecParseHeader);
-    HOOK32(sceJpegDecQueryMemorySize);
-    HOOK32(sceMoveGetDeviceInfo);
-    HOOK32(sceMoveOpen);
-    HOOK32(sceMoveClose);
-    HOOK32(sceMoveReadStateRecent);
-    HOOK32(sceMoveInit);
-    HOOK32(sceMoveTrackerControllersUpdate);
-    HOOK32(sceMoveTrackerTerm);
-    HOOK32(sceMoveTrackerCameraUpdate);
-    HOOK32(sceMoveTrackerInit);
-    HOOK32(sceMoveTrackerGetState);
-    HOOK32(sceMoveTrackerGetWorkingMemorySize);
-    HOOK32(sceMsgDialogUpdateStatus);
-    HOOK32(sceMsgDialogOpen);
-    HOOK32(sceMsgDialogTerminate);
-    HOOK32(sceMsgDialogInitialize);
-    HOOK32(sceNetSetsockopt);
-    HOOK32(sceNetSocketClose);
-    HOOK32(sceNetInetPton);
-    HOOK32(sceNetInetNtop);
-    HOOK32(sceNetRecv);
-    HOOK32(sceNetResolverCreate);
-    HOOK32(sceNetErrnoLoc);
-    HOOK32(sceNetEpollDestroy);
-    HOOK32(sceNetPoolDestroy);
-    HOOK32(sceNetResolverStartNtoa);
-    HOOK32(sceNetInit);
-    HOOK32(sceNetConnect);
-    HOOK32(sceNetAccept);
-    HOOK32(sceNetSocket);
-    HOOK32(sceNetEpollCreate);
-    HOOK32(sceNetEpollControl);
-    HOOK32(sceNetBind);
-    HOOK32(sceNetSend);
-    HOOK32(sceNetTerm);
-    HOOK32(sceNetPoolCreate);
-    HOOK32(sceNetEpollWait);
-    HOOK32(sceNetHtons);
-    HOOK32(sceNetResolverDestroy);
-    HOOK32(sceNetListen);
-    HOOK32(sceNetCtlGetNatInfo);
-    HOOK32(sceNetCtlUnregisterCallback);
-    HOOK32(sceNetCtlRegisterCallback);
-    HOOK32(sceNetCtlCheckCallback);
-    HOOK32(sceNetCtlGetInfo);
-    HOOK32(sceNetCtlGetState);
-    HOOK32(sceNpAuthCreateRequest);
-    HOOK32(sceNpAuthDeleteRequest);
-    HOOK32(sceNpAuthGetAuthorizationCode);
-    HOOK32(sceNpCommerceDialogInitialize);
-    HOOK32(sceNpCommerceShowPsStoreIcon);
-    HOOK32(sceNpCommerceDialogOpen);
-    HOOK32(sceNpCommerceDialogUpdateStatus);
-    HOOK32(sceNpCommerceHidePsStoreIcon);
-    HOOK32(sceNpCommerceDialogTerminate);
-    HOOK32(sceNpCommerceDialogGetResult);
-    HOOK32(sceNpCmpOnlineId);
-    // HOOK32(sceNpInGameMessageDeleteHandle);
-    // HOOK32(sceNpCheckNpAvailability);
-    // HOOK32(sceNpCheckCallback);
-    // HOOK32(sceNpSetContentRestriction)
-    // HOOK32(sceNpSetNpTitleId);
-    // HOOK32(sceNpInGameMessageInitialize);
-    // HOOK32(sceNpNotifyPlusFeature);
-    // HOOK32(sceNpGetAccountCountry);
-    // HOOK32(sceNpCreateRequest);
-    // HOOK32(sceNpInGameMessageSendData);
-    // HOOK32(sceNpAbortRequest);
-    // HOOK32(sceNpDeleteRequest);
-    // HOOK32(sceNpRegisterStateCallback);
-    // HOOK32(sceNpInGameMessagePrepare);
-    // HOOK32(sceNpGetOnlineId);
-    // HOOK32(sceNpInGameMessageTerminate);
-    // HOOK32(sceNpGetState);
-    // HOOK32(sceNpCreateAsyncRequest);
-    // HOOK32(sceNpGetParentalControlInfo);
-    // HOOK32(sceNpUnregisterStateCallback);
-    // HOOK32(sceNpGetNpId);
-    // HOOK32(sceNpCheckPlus);
-    // HOOK32(sceNpInGameMessageCreateHandle);
-    // HOOK32(sceNpPollAsync);
-    // HOOK32(sceNpSignalingActivateConnection);
-    // HOOK32(sceNpSignalingInitialize);
-    // HOOK32(sceNpSignalingCreateContext);
-    // HOOK32(sceNpSignalingGetConnectionInfo);
-    // HOOK32(sceNpSignalingTerminateConnection);
-    // HOOK32(sceNpSignalingGetConnectionStatus);
-    // HOOK32(sceNpSignalingDeleteContext);
-    // HOOK32(sceNpTrophyUnlockTrophy);
-    // HOOK32(sceNpTrophyDestroyContext);
-    // HOOK32(sceNpTrophyDestroyHandle);
-    // HOOK32(sceNpTrophyGetTrophyUnlockState);
-    // HOOK32(sceNpTrophyRegisterContext);
-    // HOOK32(sceNpTrophyCreateContext);
-    // HOOK32(sceNpTrophyCreateHandle);
-    // HOOK32(sceNpLookupCreateTitleCtx);
-    // HOOK32(sceNpBandwidthTestGetStatus);
-    // HOOK32(sceNpLookupNpId);
-    // HOOK32(sceNpLookupCreateRequest);
-    // HOOK32(sceNpBandwidthTestInitStart);
-    // HOOK32(sceNpLookupDeleteTitleCtx);
-    // HOOK32(sceNpBandwidthTestShutdown);
-    // HOOK32(sceNpLookupDeleteRequest);
-    // HOOK32(sceNpWebApiGetErrorCode);
-    // HOOK32(sceNpWebApiDeleteHandle);
-    // HOOK32(sceNpWebApiCreateHandle);
-    // HOOK32(sceNpWebApiReadData);
-    // HOOK32(sceNpWebApiInitialize);
-    // HOOK32(sceNpWebApiAbortRequest);
-    // HOOK32(sceNpWebApiDeleteServicePushEventFilter);
-    // HOOK32(sceNpWebApiRegisterPushEventCallback);
-    // HOOK32(sceNpWebApiDeleteContext);
-    // HOOK32(sceNpWebApiTerminate);
-    // HOOK32(sceNpWebApiGetHttpStatusCode);
-    // HOOK32(sceNpWebApiRegisterServicePushEventCallback);
-    // HOOK32(sceNpWebApiSendRequest);
-    // HOOK32(sceNpWebApiDeleteRequest);
-    // HOOK32(sceNpWebApiUtilityParseNpId);
-    // HOOK32(sceNpWebApiUnregisterPushEventCallback);
-    // HOOK32(sceNpWebApiCreateRequest);
-    // HOOK32(sceNpWebApiCreateServicePushEventFilter);
-    // HOOK32(sceNpWebApiCreateContext);
-    // HOOK32(sceNpWebApiCreatePushEventFilter);
-    HOOK32(scePadClose);
-    HOOK32(scePadSetLightBar);
-    HOOK32(scePadReadState);
-    HOOK32(scePadGetControllerInformation);
-    HOOK32(scePadInit);
-    HOOK32(scePadOpen);
-    HOOK32(scePadSetVibration);
-    HOOK32(scePlayGoGetProgress);
-    HOOK32(scePlayGoSetInstallSpeed);
-    HOOK32(scePlayGoOpen);
-    HOOK32(scePlayGoGetToDoList);
-    HOOK32(scePlayGoClose);
-    HOOK32(scePlayGoGetInstallSpeed);
-    HOOK32(scePlayGoInitialize);
-    HOOK32(scePlayGoGetLocus);
-    // HOOK32(recv);
-    // HOOK32(sem_post);
-    // HOOK32(bind);
-    // HOOK32(socket);
-    // HOOK32(shutdown);
-    // HOOK32(connect);
-    // HOOK32(pthread_setschedparam);
-    // HOOK32(sem_wait);
-    // HOOK32(sem_destroy);
-    // HOOK32(setsockopt);
-    // HOOK32(send);
-    // HOOK32(clock_gettime);
-    // HOOK32(recvfrom);
-    // HOOK32(sendto);
-    // HOOK32(sem_init);
-    // HOOK32(sem_timedwait);
-    HOOK32(sceRtcGetCurrentTick);
-    HOOK32(sceRtcGetTick);
-    HOOK32(sceRtcGetDayOfWeek);
-    HOOK32(sceRtcConvertUtcToLocalTime);
-    HOOK32(sceRtcGetCurrentClockLocalTime);
-    HOOK32(sceRtcSetTime_t);
-    HOOK32(sceRtcSetTick);
-    HOOK32(sceRtcGetCurrentNetworkTick);
-    HOOK32(sceSaveDataMount);
-    HOOK32(sceSaveDataSetParam);
-    HOOK32(sceSaveDataUmount);
-    HOOK32(sceSaveDataDelete);
-    HOOK32(sceSaveDataInitialize);
-    HOOK32(sceSaveDataSaveIcon);
-    HOOK32(sceSaveDataDirNameSearch);
-    HOOK32(sceSaveDataTerminate);
-    HOOK32(sceSaveDataDialogOpen);
-    HOOK32(sceSaveDataDialogUpdateStatus);
-    HOOK32(sceSaveDataDialogTerminate);
-    HOOK32(sceSaveDataDialogIsReadyToDisplay);
-    HOOK32(sceSaveDataDialogClose);
-    HOOK32(sceSaveDataDialogProgressBarSetValue);
-    HOOK32(sceSaveDataDialogInitialize);
-    HOOK32(sceSaveDataDialogGetResult);
-    HOOK32(sceSslTerm);
-    HOOK32(sceSslInit);
-    HOOK32(sceSysmoduleIsLoaded);
-    HOOK32(sceSysmoduleLoadModule);
-    HOOK32(sceSystemServiceGetDisplaySafeAreaInfo);
-    HOOK32(sceSystemServiceReceiveEvent);
-    HOOK32(sceSystemServiceHideSplashScreen);
-    HOOK32(sceSystemServiceParamGetInt);
-    HOOK32(sceSystemServiceGetStatus);
-    HOOK32(sceUserServiceGetUserName);
-    HOOK32(sceUserServiceGetInitialUser);
-    HOOK32(sceUserServiceTerminate);
-    HOOK32(sceUserServiceGetLoginUserIdList);
-    HOOK32(sceUserServiceInitialize);
-    HOOK32(sceUserServiceGetEvent);
-    HOOK32(sceVideoOutSetFlipRate);
-    HOOK32(sceVideoOutColorSettingsSetGamma_);
-    HOOK32(sceVideoOutAddFlipEvent);
-    HOOK32(sceVideoOutSetWindowModeMargins);
-    HOOK32(sceVideoOutOpen);
-    HOOK32(sceVideoOutSetBufferAttribute);
-    HOOK32(sceVideoOutAdjustColor_);
-    HOOK32(sceVideoOutRegisterBuffers);
+    // HOOK32(sceAudioOutOutput);
+    // HOOK32(sceAudioOutSetVolume);
+    // HOOK32(sceAudioOutOpen);
+    // HOOK32(sceAudioOutClose);
+    // HOOK32(sceAvPlayerPause);
+    // HOOK32(sceAvPlayerStart);
+    // HOOK32(sceAvPlayerGetVideoDataEx);
+    // HOOK32(sceAvPlayerAddSource);
+    // HOOK32(sceAvPlayerClose);
+    // HOOK32(sceAvPlayerEnableStream);
+    // HOOK32(sceAvPlayerSetLooping);
+    // HOOK32(sceAvPlayerIsActive);
+    // HOOK32(sceAvPlayerGetAudioData);
+    // HOOK32(sceAvPlayerJumpToTime);
+    // HOOK32(sceAvPlayerInit);
+    // HOOK32(sceAvPlayerGetStreamInfo);
+    // HOOK32(sceAvPlayerStreamCount);
+    // HOOK32(sceAvPlayerResume);
+    // HOOK32(sceAvPlayerCurrentTime);
+    // HOOK32(sceCameraStop);
+    // HOOK32(sceCameraStart);
+    // HOOK32(sceCameraOpen);
+    // HOOK32(sceCameraClose);
+    // HOOK32(sceCameraSetConfig);
+    // HOOK32(sceCameraGetConfig);
+    // HOOK32(sceCameraSetAttribute);
+    // HOOK32(sceCameraGetFrameData);
+    // HOOK32(sceCameraIsAttached);
+    // HOOK32(sceCommonDialogInitialize);
+    // HOOK32(sceCompanionHttpdStop);
+    // HOOK32(sceCompanionHttpdAddHeader);
+    // HOOK32(sceCompanionHttpdRegisterRequestCallback);
+    // HOOK32(sceCompanionHttpdStart);
+    // HOOK32(sceCompanionHttpdOptParamInitialize);
+    // HOOK32(sceCompanionHttpdSetStatus);
+    // HOOK32(sceCompanionHttpdInitialize);
+    // HOOK32(sceContentSearchTerm);
+    // HOOK32(sceContentSearchGetMyApplicationIndex);
+    // HOOK32(sceContentSearchGetContentLastUpdateId);
+    // HOOK32(sceContentSearchSearchContent);
+    // HOOK32(sceContentSearchInit);
+    // HOOK32(sceErrorDialogTerminate);
+    // HOOK32(sceErrorDialogInitialize);
+    // HOOK32(sceErrorDialogOpen);
+    // HOOK32(sceErrorDialogUpdateStatus);
+    // HOOK32(sceFiberReturnToThread);
+    // HOOK32(sceFiberFinalize);
+    // HOOK32(sceFiberRun);
+    // HOOK32(sceFiberOptParamInitialize);
+    // HOOK32(_sceFiberInitializeImpl);
+    // HOOK32(sceFiosOpGetActualCount);
+    // HOOK32(sceFiosDHCloseSync);
+    // HOOK32(sceFiosOpDelete);
+    // HOOK32(sceFiosFHCloseSync);
+    // HOOK32(sceFiosFHReadSync);
+    // HOOK32(sceFiosFHSyncSync);
+    // HOOK32(sceFiosFHGetSize);
+    // HOOK32(sceFiosRenameSync);
+    // HOOK32(sceFiosDHOpenSync);
+    // HOOK32(sceFiosFHWriteSync);
+    // HOOK32(sceFiosDeleteSync);
+    // HOOK32(sceFiosFileExistsSync);
+    // HOOK32(sceFiosDirectoryExistsSync);
+    // HOOK32(sceFiosOpWait);
+    // HOOK32(sceFiosDirectoryCreateWithModeSync);
+    // HOOK32(sceFiosFHOpenSync);
+    // HOOK32(sceFiosFHPwriteSync);
+    // HOOK32(sceFiosStatSync);
+    // HOOK32(sceFiosDHReadSync);
+    // HOOK32(sceFiosFHTruncateSync);
+    // HOOK32(sceFiosDHOpen);
+    // HOOK32(sceFiosInitialize);
+    // HOOK32(sceFiosFHSeek);
+    // HOOK32(sceGameLiveStreamingTerminate);
+    // HOOK32(sceGameLiveStreamingGetCurrentStatus);
+    // HOOK32(sceGameLiveStreamingGetProgramInfo);
+    // HOOK32(sceGameLiveStreamingGetSocialFeedbackMessages);
+    // HOOK32(sceGameLiveStreamingEnableLiveStreaming);
+    // HOOK32(sceGameLiveStreamingInitialize);
+    // HOOK32(sceGameLiveStreamingClearSocialFeedbackMessages);
+    // HOOK32(sceGameLiveStreamingSetPresetSocialFeedbackCommandsDescription);
+    // HOOK32(sceGameLiveStreamingSetPresetSocialFeedbackCommands);
+    // HOOK32(sceGameLiveStreamingGetSocialFeedbackMessagesCount);
+    // HOOK32(sceGnmInsertWaitFlipDone);
+    // HOOK32(sceGnmMapComputeQueue);
+    // HOOK32(sceGnmInsertPopMarker);
+    // HOOK32(sceGnmSetEsShader);
+    // HOOK32(sceGnmDrawInitDefaultHardwareState);
+    // HOOK32(sceGnmSetCsShader);
+    // HOOK32(sceGnmDeleteEqEvent);
+    // HOOK32(sceGnmDriverCaptureInProgress);
+    // HOOK32(sceGnmSetGsShader);
+    // HOOK32(sceGnmSetHsShader);
+    // HOOK32(sceGnmInsertPushMarker);
+    // HOOK32(sceGnmAddEqEvent);
+    // HOOK32(sceGnmSetPsShader);
+    // // HOOK32(sceGnmDingDong);
+    // HOOK32(sceGnmSetVsShader);
+    // HOOK32(sceGnmIsUserPaEnabled);
+    // HOOK32(sceGnmDispatchInitDefaultHardwareState);
+    // HOOK32(sceGnmDebugHardwareStatus);
+    // HOOK32(sceGnmSetLsShader);
+    // HOOK32(sceGnmSubmitAndFlipCommandBuffers);
+    // HOOK32(sceGnmSubmitDone);
+    // HOOK32(sceHttpSetConnectTimeOut);
+    // HOOK32(sceHttpGetStatusCode);
+    // HOOK32(sceHttpCreateTemplate);
+    // HOOK32(sceHttpGetLastErrno);
+    // HOOK32(sceHttpSendRequest);
+    // HOOK32(sceHttpDeleteTemplate);
+    // HOOK32(sceHttpGetAuthEnabled);
+    // HOOK32(sceHttpInit);
+    // HOOK32(sceHttpCreateRequestWithURL);
+    // HOOK32(sceHttpsLoadCert);
+    // HOOK32(sceHttpAddRequestHeader);
+    // HOOK32(sceHttpSetCookieSendCallback);
+    // HOOK32(sceHttpTerm);
+    // HOOK32(sceHttpSetCookieRecvCallback);
+    // HOOK32(sceHttpCreateConnection);
+    // HOOK32(sceHttpReadData);
+    // HOOK32(sceHttpDeleteConnection);
+    // HOOK32(sceHttpSetRequestContentLength);
+    // HOOK32(sceHttpSetAutoRedirect);
+    // HOOK32(sceHttpSetCookieEnabled);
+    // HOOK32(sceHttpGetAllResponseHeaders);
+    // HOOK32(sceHttpSetRedirectCallback);
+    // HOOK32(sceHttpParseResponseHeader);
+    // HOOK32(sceHttpsSetSslCallback);
+    // HOOK32(sceHttpAbortRequest);
+    // HOOK32(sceHttpGetCookieEnabled);
+    // HOOK32(sceHttpAddCookie);
+    // HOOK32(sceHttpGetAutoRedirect);
+    // HOOK32(sceHttpSetAuthEnabled);
+    // HOOK32(sceHttpDeleteRequest);
+    // HOOK32(sceHttpCreateConnectionWithURL);
+    // HOOK32(sceHttpCookieFlush);
+    // HOOK32(sceHttpCreateRequest);
+    // HOOK32(sceHttpSetSendTimeOut);
+    // HOOK32(sceHttpSetRecvTimeOut);
+    // HOOK32(sceHttpGetResponseContentLength);
+    // HOOK32(sceHttpRemoveRequestHeader);
+    // HOOK32(sceHttpsUnloadCert);
+    // HOOK32(sceImeDialogGetStatus);
+    // HOOK32(sceImeDialogInit);
+    // HOOK32(sceImeDialogTerm);
+    // HOOK32(sceImeDialogAbort);
+    // HOOK32(sceImeDialogGetResult);
+    // HOOK32(sceJpegDecDecode);
+    // HOOK32(sceJpegDecDelete);
+    // HOOK32(sceJpegDecCreate);
+    // HOOK32(sceJpegDecParseHeader);
+    // HOOK32(sceJpegDecQueryMemorySize);
+    // HOOK32(sceMoveGetDeviceInfo);
+    // HOOK32(sceMoveOpen);
+    // HOOK32(sceMoveClose);
+    // HOOK32(sceMoveReadStateRecent);
+    // HOOK32(sceMoveInit);
+    // HOOK32(sceMoveTrackerControllersUpdate);
+    // HOOK32(sceMoveTrackerTerm);
+    // HOOK32(sceMoveTrackerCameraUpdate);
+    // HOOK32(sceMoveTrackerInit);
+    // HOOK32(sceMoveTrackerGetState);
+    // HOOK32(sceMoveTrackerGetWorkingMemorySize);
+    // HOOK32(sceMsgDialogUpdateStatus);
+    // HOOK32(sceMsgDialogOpen);
+    // HOOK32(sceMsgDialogTerminate);
+    // HOOK32(sceMsgDialogInitialize);
+    // HOOK32(sceNetSetsockopt);
+    // HOOK32(sceNetSocketClose);
+    // HOOK32(sceNetInetPton);
+    // HOOK32(sceNetInetNtop);
+    // HOOK32(sceNetRecv);
+    // HOOK32(sceNetResolverCreate);
+    // HOOK32(sceNetErrnoLoc);
+    // HOOK32(sceNetEpollDestroy);
+    // HOOK32(sceNetPoolDestroy);
+    // HOOK32(sceNetResolverStartNtoa);
+    // HOOK32(sceNetInit);
+    // HOOK32(sceNetConnect);
+    // HOOK32(sceNetAccept);
+    // HOOK32(sceNetSocket);
+    // HOOK32(sceNetEpollCreate);
+    // HOOK32(sceNetEpollControl);
+    // HOOK32(sceNetBind);
+    // HOOK32(sceNetSend);
+    // HOOK32(sceNetTerm);
+    // HOOK32(sceNetPoolCreate);
+    // HOOK32(sceNetEpollWait);
+    // HOOK32(sceNetHtons);
+    // HOOK32(sceNetResolverDestroy);
+    // HOOK32(sceNetListen);
+    // HOOK32(sceNetCtlGetNatInfo);
+    // HOOK32(sceNetCtlUnregisterCallback);
+    // HOOK32(sceNetCtlRegisterCallback);
+    // HOOK32(sceNetCtlCheckCallback);
+    // HOOK32(sceNetCtlGetInfo);
+    // HOOK32(sceNetCtlGetState);
+    // HOOK32(sceNpAuthCreateRequest);
+    // HOOK32(sceNpAuthDeleteRequest);
+    // HOOK32(sceNpAuthGetAuthorizationCode);
+    // HOOK32(sceNpCommerceDialogInitialize);
+    // HOOK32(sceNpCommerceShowPsStoreIcon);
+    // HOOK32(sceNpCommerceDialogOpen);
+    // HOOK32(sceNpCommerceDialogUpdateStatus);
+    // HOOK32(sceNpCommerceHidePsStoreIcon);
+    // HOOK32(sceNpCommerceDialogTerminate);
+    // HOOK32(sceNpCommerceDialogGetResult);
+    // HOOK32(sceNpCmpOnlineId);
+    // // HOOK32(sceNpInGameMessageDeleteHandle);
+    // // HOOK32(sceNpCheckNpAvailability);
+    // // HOOK32(sceNpCheckCallback);
+    // // HOOK32(sceNpSetContentRestriction)
+    // // HOOK32(sceNpSetNpTitleId);
+    // // HOOK32(sceNpInGameMessageInitialize);
+    // // HOOK32(sceNpNotifyPlusFeature);
+    // // HOOK32(sceNpGetAccountCountry);
+    // // HOOK32(sceNpCreateRequest);
+    // // HOOK32(sceNpInGameMessageSendData);
+    // // HOOK32(sceNpAbortRequest);
+    // // HOOK32(sceNpDeleteRequest);
+    // // HOOK32(sceNpRegisterStateCallback);
+    // // HOOK32(sceNpInGameMessagePrepare);
+    // // HOOK32(sceNpGetOnlineId);
+    // // HOOK32(sceNpInGameMessageTerminate);
+    // // HOOK32(sceNpGetState);
+    // // HOOK32(sceNpCreateAsyncRequest);
+    // // HOOK32(sceNpGetParentalControlInfo);
+    // // HOOK32(sceNpUnregisterStateCallback);
+    // // HOOK32(sceNpGetNpId);
+    // // HOOK32(sceNpCheckPlus);
+    // // HOOK32(sceNpInGameMessageCreateHandle);
+    // // HOOK32(sceNpPollAsync);
+    // // HOOK32(sceNpSignalingActivateConnection);
+    // // HOOK32(sceNpSignalingInitialize);
+    // // HOOK32(sceNpSignalingCreateContext);
+    // // HOOK32(sceNpSignalingGetConnectionInfo);
+    // // HOOK32(sceNpSignalingTerminateConnection);
+    // // HOOK32(sceNpSignalingGetConnectionStatus);
+    // // HOOK32(sceNpSignalingDeleteContext);
+    // // HOOK32(sceNpTrophyUnlockTrophy);
+    // // HOOK32(sceNpTrophyDestroyContext);
+    // // HOOK32(sceNpTrophyDestroyHandle);
+    // // HOOK32(sceNpTrophyGetTrophyUnlockState);
+    // // HOOK32(sceNpTrophyRegisterContext);
+    // // HOOK32(sceNpTrophyCreateContext);
+    // // HOOK32(sceNpTrophyCreateHandle);
+    // // HOOK32(sceNpLookupCreateTitleCtx);
+    // // HOOK32(sceNpBandwidthTestGetStatus);
+    // // HOOK32(sceNpLookupNpId);
+    // // HOOK32(sceNpLookupCreateRequest);
+    // // HOOK32(sceNpBandwidthTestInitStart);
+    // // HOOK32(sceNpLookupDeleteTitleCtx);
+    // // HOOK32(sceNpBandwidthTestShutdown);
+    // // HOOK32(sceNpLookupDeleteRequest);
+    // // HOOK32(sceNpWebApiGetErrorCode);
+    // // HOOK32(sceNpWebApiDeleteHandle);
+    // // HOOK32(sceNpWebApiCreateHandle);
+    // // HOOK32(sceNpWebApiReadData);
+    // // HOOK32(sceNpWebApiInitialize);
+    // // HOOK32(sceNpWebApiAbortRequest);
+    // // HOOK32(sceNpWebApiDeleteServicePushEventFilter);
+    // // HOOK32(sceNpWebApiRegisterPushEventCallback);
+    // // HOOK32(sceNpWebApiDeleteContext);
+    // // HOOK32(sceNpWebApiTerminate);
+    // // HOOK32(sceNpWebApiGetHttpStatusCode);
+    // // HOOK32(sceNpWebApiRegisterServicePushEventCallback);
+    // // HOOK32(sceNpWebApiSendRequest);
+    // // HOOK32(sceNpWebApiDeleteRequest);
+    // // HOOK32(sceNpWebApiUtilityParseNpId);
+    // // HOOK32(sceNpWebApiUnregisterPushEventCallback);
+    // // HOOK32(sceNpWebApiCreateRequest);
+    // // HOOK32(sceNpWebApiCreateServicePushEventFilter);
+    // // HOOK32(sceNpWebApiCreateContext);
+    // // HOOK32(sceNpWebApiCreatePushEventFilter);
+    // HOOK32(scePadClose);
+    // HOOK32(scePadSetLightBar);
+    // HOOK32(scePadReadState);
+    // HOOK32(scePadGetControllerInformation);
+    // HOOK32(scePadInit);
+    // HOOK32(scePadOpen);
+    // HOOK32(scePadSetVibration);
+    // HOOK32(scePlayGoGetProgress);
+    // HOOK32(scePlayGoSetInstallSpeed);
+    // HOOK32(scePlayGoOpen);
+    // HOOK32(scePlayGoGetToDoList);
+    // HOOK32(scePlayGoClose);
+    // HOOK32(scePlayGoGetInstallSpeed);
+    // HOOK32(scePlayGoInitialize);
+    // HOOK32(scePlayGoGetLocus);
+    // // HOOK32(recv);
+    // // HOOK32(sem_post);
+    // // HOOK32(bind);
+    // // HOOK32(socket);
+    // // HOOK32(shutdown);
+    // // HOOK32(connect);
+    // // HOOK32(pthread_setschedparam);
+    // // HOOK32(sem_wait);
+    // // HOOK32(sem_destroy);
+    // // HOOK32(setsockopt);
+    // // HOOK32(send);
+    // // HOOK32(clock_gettime);
+    // // HOOK32(recvfrom);
+    // // HOOK32(sendto);
+    // // HOOK32(sem_init);
+    // // HOOK32(sem_timedwait);
+    // HOOK32(sceRtcGetCurrentTick);
+    // HOOK32(sceRtcGetTick);
+    // HOOK32(sceRtcGetDayOfWeek);
+    // HOOK32(sceRtcConvertUtcToLocalTime);
+    // HOOK32(sceRtcGetCurrentClockLocalTime);
+    // HOOK32(sceRtcSetTime_t);
+    // HOOK32(sceRtcSetTick);
+    // HOOK32(sceRtcGetCurrentNetworkTick);
+    // HOOK32(sceSaveDataMount);
+    // HOOK32(sceSaveDataSetParam);
+    // HOOK32(sceSaveDataUmount);
+    // HOOK32(sceSaveDataDelete);
+    // HOOK32(sceSaveDataInitialize);
+    // HOOK32(sceSaveDataSaveIcon);
+    // HOOK32(sceSaveDataDirNameSearch);
+    // HOOK32(sceSaveDataTerminate);
+    // HOOK32(sceSaveDataDialogOpen);
+    // HOOK32(sceSaveDataDialogUpdateStatus);
+    // HOOK32(sceSaveDataDialogTerminate);
+    // HOOK32(sceSaveDataDialogIsReadyToDisplay);
+    // HOOK32(sceSaveDataDialogClose);
+    // HOOK32(sceSaveDataDialogProgressBarSetValue);
+    // HOOK32(sceSaveDataDialogInitialize);
+    // HOOK32(sceSaveDataDialogGetResult);
+    // HOOK32(sceSslTerm);
+    // HOOK32(sceSslInit);
+    // HOOK32(sceSysmoduleIsLoaded);
+    // HOOK32(sceSysmoduleLoadModule);
+    // HOOK32(sceSystemServiceGetDisplaySafeAreaInfo);
+    // HOOK32(sceSystemServiceReceiveEvent);
+    // HOOK32(sceSystemServiceHideSplashScreen);
+    // HOOK32(sceSystemServiceParamGetInt);
+    // HOOK32(sceSystemServiceGetStatus);
+    // HOOK32(sceUserServiceGetUserName);
+    // HOOK32(sceUserServiceGetInitialUser);
+    // HOOK32(sceUserServiceTerminate);
+    // HOOK32(sceUserServiceGetLoginUserIdList);
+    // HOOK32(sceUserServiceInitialize);
+    // HOOK32(sceUserServiceGetEvent);
+    // HOOK32(sceVideoOutSetFlipRate);
+    // HOOK32(sceVideoOutColorSettingsSetGamma_);
+    // HOOK32(sceVideoOutAddFlipEvent);
+    // HOOK32(sceVideoOutSetWindowModeMargins);
+    // HOOK32(sceVideoOutOpen);
+    // HOOK32(sceVideoOutSetBufferAttribute);
+    // HOOK32(sceVideoOutAdjustColor_);
+    // HOOK32(sceVideoOutRegisterBuffers);
     // HOOK32(scePthreadSetspecific);
     // HOOK32(sceKernelReadTsc);
     // HOOK32(scePthreadAttrSetdetachstate);
