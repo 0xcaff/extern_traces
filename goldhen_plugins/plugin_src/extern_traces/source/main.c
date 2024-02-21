@@ -5,55 +5,45 @@
 
 #include "plugin_common.h"
 
-static inline __attribute__((always_inline)) void save_args_state()
-{
-    asm volatile(
-        "push %rsp\n\t"
-        "push %rbp\n\t"
+#define SAVE_ARGS_STATE()               \
+    asm volatile(                       \
+        "push %rsp\n\t"                 \
+        "push %rbp\n\t"                 \
+        "push %rdi\n\t"                 \
+        "push %rsi\n\t"                 \
+        "push %rdx\n\t"                 \
+        "push %rcx\n\t"                 \
+        "push %r8\n\t"                  \
+        "push %r9\n\t"                  \
+        "movdqu %xmm0, -0x10(%rsp)\n\t" \
+        "movdqu %xmm1, -0x20(%rsp)\n\t" \
+        "movdqu %xmm2, -0x30(%rsp)\n\t" \
+        "movdqu %xmm3, -0x40(%rsp)\n\t" \
+        "movdqu %xmm4, -0x50(%rsp)\n\t" \
+        "movdqu %xmm5, -0x60(%rsp)\n\t" \
+        "movdqu %xmm6, -0x70(%rsp)\n\t" \
+        "movdqu %xmm7, -0x80(%rsp)\n\t" \
+        "sub $0x80, %rsp\n\t")
 
-        "push %rdi\n\t"
-        "push %rsi\n\t"
-        "push %rdx\n\t"
-        "push %rcx\n\t"
-        "push %r8\n\t"
-        "push %r9\n\t"
-
-        "movdqu %xmm0, -0x10(%rsp)\n\t"
-        "movdqu %xmm1, -0x20(%rsp)\n\t"
-        "movdqu %xmm2, -0x30(%rsp)\n\t"
-        "movdqu %xmm3, -0x40(%rsp)\n\t"
-        "movdqu %xmm4, -0x50(%rsp)\n\t"
-        "movdqu %xmm5, -0x60(%rsp)\n\t"
-        "movdqu %xmm6, -0x70(%rsp)\n\t"
-        "movdqu %xmm7, -0x80(%rsp)\n\t"
-
-        "sub $0x80, %rsp\n\t");
-}
-
-static inline __attribute__((always_inline)) void restore_args_state()
-{
-    asm volatile(
-        "movdqu 0x70(%rsp), %xmm0\n\t"
-        "movdqu 0x60(%rsp), %xmm1\n\t"
-        "movdqu 0x50(%rsp), %xmm2\n\t"
-        "movdqu 0x40(%rsp), %xmm3\n\t"
-        "movdqu 0x30(%rsp), %xmm4\n\t"
-        "movdqu 0x20(%rsp), %xmm5\n\t"
-        "movdqu 0x10(%rsp), %xmm6\n\t"
-        "movdqu 0x00(%rsp), %xmm7\n\t"
-
-        "add $0x80, %rsp\n\t"
-
-        "pop %r9\n\t"
-        "pop %r8\n\t"
-        "pop %rcx\n\t"
-        "pop %rdx\n\t"
-        "pop %rsi\n\t"
-        "pop %rdi\n\t"
-
-        "pop %rbp\n\t"
-        "pop %rsp\n\t");
-}
+#define RESTORE_ARGS_STATE()           \
+    asm volatile(                      \
+        "movdqu 0x70(%rsp), %xmm0\n\t" \
+        "movdqu 0x60(%rsp), %xmm1\n\t" \
+        "movdqu 0x50(%rsp), %xmm2\n\t" \
+        "movdqu 0x40(%rsp), %xmm3\n\t" \
+        "movdqu 0x30(%rsp), %xmm4\n\t" \
+        "movdqu 0x20(%rsp), %xmm5\n\t" \
+        "movdqu 0x10(%rsp), %xmm6\n\t" \
+        "movdqu 0x00(%rsp), %xmm7\n\t" \
+        "add $0x80, %rsp\n\t"          \
+        "pop %r9\n\t"                  \
+        "pop %r8\n\t"                  \
+        "pop %rcx\n\t"                 \
+        "pop %rdx\n\t"                 \
+        "pop %rsi\n\t"                 \
+        "pop %rdi\n\t"                 \
+        "pop %rbp\n\t"                 \
+        "pop %rsp\n\t")
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "Collects traces for external calls";
@@ -95,50 +85,41 @@ void extern_logf(const char *format, ...)
     va_end(args);
 }
 
-#define TRAMPOLINE_INITW(FUNC_NAME)                                  \
-    HOOK_INIT(FUNC_NAME);                                            \
-    void FUNC_NAME##_logger()                                        \
-    {                                                                \
-        extern_logf(#FUNC_NAME "\n");                                \
-    }                                                                \
-    void *FUNC_NAME##_hook()                                         \
-    {                                                                \
-        save_args_state();                                           \
-        FUNC_NAME##_logger();                                        \
-        restore_args_state();                                        \
-        /*                                                           \
-         * rax is unused at this point and is safe to use to hold an \
-         * intermediate value                                        \
-         */                                                          \
-        restore_args_state();                                        \
-        asm volatile(                                                \
-            "mov %0, %%rax\n\t"                                      \
-            "call *%%rax\n\t"                                        \
-            "ret\n\t"                                                \
-            : : "m"(Detour_##FUNC_NAME.StubPtr));                    \
+#define TRAMPOLINE_INITW(FUNC_NAME)                 \
+    HOOK_INIT(FUNC_NAME);                           \
+    void FUNC_NAME##_logger()                       \
+    {                                               \
+        extern_logf(#FUNC_NAME "\n");               \
+    }                                               \
+    __attribute__((naked)) void *FUNC_NAME##_hook() \
+    {                                               \
+        SAVE_ARGS_STATE();                          \
+        asm volatile("call " FUNC_NAME "\n\t" : : );     \
+        RESTORE_ARGS_STATE();                       \
+        asm volatile(                               \
+            "mov %0, %%rax\n\t"                     \
+            "call *%%rax\n\t"                       \
+            "ret\n\t"                               \
+            : : "m"(Detour_##FUNC_NAME.StubPtr));   \
     }
 
-#define TRAMPOLINE_INIT(FUNC_NAME)                                   \
-    HOOK_INIT(FUNC_NAME);                                            \
-    extern void *FUNC_NAME();                                        \
-    void FUNC_NAME##_logger()                                        \
-    {                                                                \
-        extern_logf(#FUNC_NAME "\n");                                \
-    }                                                                \
-    void *FUNC_NAME##_hook()                                         \
-    {                                                                \
-        save_args_state();                                           \
-        FUNC_NAME##_logger();                                        \
-        restore_args_state();                                        \
-        /*                                                           \
-         * rax is unused at this point and is safe to use to hold an \
-         * intermediate value                                        \
-         */                                                          \
-        asm volatile(                                                \
-            "mov %0, %%rax\n\t"                                      \
-            "call *%%rax\n\t"                                        \
-            "ret\n\t"                                                \
-            : : "m"(Detour_##FUNC_NAME.StubPtr));                    \
+#define TRAMPOLINE_INIT(FUNC_NAME)                  \
+    HOOK_INIT(FUNC_NAME);                           \
+    extern void *FUNC_NAME();                       \
+    void FUNC_NAME##_logger()                       \
+    {                                               \
+        extern_logf(#FUNC_NAME "\n");               \
+    }                                               \
+    __attribute__((naked)) void *FUNC_NAME##_hook() \
+    {                                               \
+        SAVE_ARGS_STATE();                          \
+        asm volatile("call " FUNC_NAME "\n\t" : : );     \
+        RESTORE_ARGS_STATE();                       \
+        asm volatile(                               \
+            "mov %0, %%rax\n\t"                     \
+            "call *%%rax\n\t"                       \
+            "ret\n\t"                               \
+            : : "m"(Detour_##FUNC_NAME.StubPtr));   \
     }
 
 #pragma GCC diagnostic push
