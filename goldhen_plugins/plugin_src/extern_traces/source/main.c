@@ -7,8 +7,6 @@
 
 #define SAVE_ARGS_STATE()               \
     asm volatile(                       \
-        "push %rsp\n\t"                 \
-        "push %rbp\n\t"                 \
         "push %rdi\n\t"                 \
         "push %rsi\n\t"                 \
         "push %rdx\n\t"                 \
@@ -25,25 +23,23 @@
         "movdqu %xmm7, -0x80(%rsp)\n\t" \
         "sub $0x80, %rsp\n\t")
 
-#define RESTORE_ARGS_STATE()           \
-    asm volatile(                      \
-        "movdqu 0x70(%rsp), %xmm0\n\t" \
-        "movdqu 0x60(%rsp), %xmm1\n\t" \
-        "movdqu 0x50(%rsp), %xmm2\n\t" \
-        "movdqu 0x40(%rsp), %xmm3\n\t" \
-        "movdqu 0x30(%rsp), %xmm4\n\t" \
-        "movdqu 0x20(%rsp), %xmm5\n\t" \
-        "movdqu 0x10(%rsp), %xmm6\n\t" \
-        "movdqu 0x00(%rsp), %xmm7\n\t" \
-        "add $0x80, %rsp\n\t"          \
-        "pop %r9\n\t"                  \
-        "pop %r8\n\t"                  \
-        "pop %rcx\n\t"                 \
-        "pop %rdx\n\t"                 \
-        "pop %rsi\n\t"                 \
-        "pop %rdi\n\t"                 \
-        "pop %rbp\n\t"                 \
-        "pop %rsp\n\t")
+#define RESTORE_ARGS_STATE()            \
+    asm volatile(                       \
+        "add $0x80, %rsp\n\t"           \
+        "movdqu -0x10(%rsp), %xmm0\n\t" \
+        "movdqu -0x20(%rsp), %xmm1\n\t" \
+        "movdqu -0x30(%rsp), %xmm2\n\t" \
+        "movdqu -0x40(%rsp), %xmm3\n\t" \
+        "movdqu -0x50(%rsp), %xmm4\n\t" \
+        "movdqu -0x60(%rsp), %xmm5\n\t" \
+        "movdqu -0x70(%rsp), %xmm6\n\t" \
+        "movdqu -0x80(%rsp), %xmm7\n\t" \
+        "pop %r9\n\t"                   \
+        "pop %r8\n\t"                   \
+        "pop %rcx\n\t"                  \
+        "pop %rdx\n\t"                  \
+        "pop %rsi\n\t"                  \
+        "pop %rdi\n\t")
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "Collects traces for external calls";
