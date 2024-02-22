@@ -46,39 +46,37 @@ attr_public const char *g_pluginDesc = "Collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
-static FILE *file = NULL;
+static int file_descriptor;
 
-FILE *lazy_file()
+int lazy_file()
 {
-    if (file)
+    if (file_descriptor)
     {
-        return file;
+        return file_descriptor;
     }
 
-    FILE *file_local = fopen("/data/extern.log", "w");
-    if (file_local == NULL)
+    final_printf("opening file...\n");
+    int fd = sceKernelOpen(
+        "/data/extern.log",
+        0x0400 | 0x0200,
+        0666);
+    if (fd < 0)
     {
         final_printf("failed to open file /data/extern.log\n");
         return 0;
     }
+    final_printf("opened file!\n");
 
-    file = file_local;
-    return file_local;
+    file_descriptor = fd;
+    return fd;
 }
 
-void extern_logf(const char *format, ...)
+void extern_logf(const char *str)
 {
-    va_list args;
-    va_start(args, format);
-
-    FILE *stream = lazy_file();
-    vfprintf(stream, format, args);
-
-    // Flush the stream
-    fflush(stream);
-
-    // End variadic argument processing
-    va_end(args);
+    int fd = lazy_file();
+    int len = strlen(str);
+    sceKernelWrite(fd, str, len);
+    sceKernelSync();
 }
 
 #pragma GCC diagnostic push
@@ -534,6 +532,5 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
     UNHOOK(sceAudioOutInit);
-    fclose(file);
     return 0;
 }

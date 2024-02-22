@@ -444,9 +444,9 @@ void ${name}_logger()
 }
 __attribute__((naked)) void *${name}_hook()
 {
-    // SAVE_ARGS_STATE();
-    // asm volatile("call ${name}_logger\\n\\t");
-    // RESTORE_ARGS_STATE();
+    SAVE_ARGS_STATE();
+    asm volatile("call ${name}_logger\\n\\t");
+    RESTORE_ARGS_STATE();
     asm volatile(
         "mov %0, %%rax\\n\\t"
         "jmp *%%rax\\n\\t"
