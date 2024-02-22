@@ -58,7 +58,7 @@ int lazy_file()
     final_printf("opening file...\n");
     int fd = sceKernelOpen(
         "/data/extern.log",
-        0x0400 | 0x0200,
+        0x0001 | 0x0200 | 0x0400 | 0x0080,
         0666);
     if (fd < 0)
     {
@@ -76,7 +76,7 @@ void extern_logf(const char *str)
     int fd = lazy_file();
     int len = strlen(str);
     sceKernelWrite(fd, str, len);
-    sceKernelSync();
+    sceKernelFsync(fd);
 }
 
 #pragma GCC diagnostic push
