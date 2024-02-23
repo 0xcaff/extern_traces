@@ -46,31 +46,6 @@ attr_public const char *g_pluginDesc = "Collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
-static int file_descriptor;
-
-int lazy_file()
-{
-    if (file_descriptor)
-    {
-        return file_descriptor;
-    }
-
-    final_printf("opening file...\n");
-    int fd = sceKernelOpen(
-        "/data/extern.log",
-        0x0001 | 0x0200 | 0x0400 | 0x0080,
-        0666);
-    if (fd < 0)
-    {
-        final_printf("failed to open file /data/extern.log\n");
-        return 0;
-    }
-    final_printf("opened file!\n");
-
-    file_descriptor = fd;
-    return fd;
-}
-
 #define HIGH_WATER_MARK_BYTES (16 * 1024)
 #define MAX_BUFFERED_BYTES (64 * 1024)
 
@@ -108,17 +83,17 @@ typedef struct ThreadLoggingState {
 void flush_queue_add(ThreadLoggingState* input, FlushQueue* queue) {
     uint32_t write_head = queue->write_head_idx;
 
-    if (write_head >= MAX_FLUSH_QUEUE_ENTRIES) {
-        final_printf("flush queue full, no more space, dropping logs\n");
-        return;
-    }
-
     // add to flush queue
     FlushQueueEntry* entry = &queue->entries[write_head];
     strncpy(entry->buffer, input->buffer, input->buffer_idx);
     entry->buffer_len = input->buffer_idx;
 
-    uint32_t next_write_head = write_head + 1;
+    uint32_t next_write_head = (write_head + 1) % MAX_FLUSH_QUEUE_ENTRIES;
+    if (next_write_head == queue->read_head_idx) {
+        final_printf("flush_queue_add: full, dropping logs\n");
+        return;
+    }
+
     queue->write_head_idx = next_write_head;
 
     // reset input
@@ -131,6 +106,7 @@ __thread ThreadLoggingState logging_state;
 int sceRtcGetCurrentTick(uint64_t* tick);
 int scePthreadMutexTrylock(ScePthreadMutex* mutex);
 int scePthreadMutexUnlock(ScePthreadMutex* mutex);
+unsigned int sceKernelSleep(unsigned int seconds);
 
 void extern_logf(const char *msg)
 {
@@ -173,6 +149,58 @@ void extern_logf(const char *msg)
 #include "trampolines.h"
 
 #pragma GCC diagnostic pop
+
+void* flush_thread_start_routine(void* args)
+{
+    final_printf("flush thread: waiting\n");
+
+    sceKernelSleep(5);
+
+    final_printf("flush thread: starting thread\n");
+
+    int fd = sceKernelOpen(
+        "/data/extern.log",
+        0x0001 | 0x0200 | 0x0400 | 0x0080,
+        0666
+    );
+    if (fd < 0)
+    {
+        final_printf("failed to open file /data/extern.log %x\n", fd);
+        return NULL;
+    }
+
+    while (1) {
+        final_printf("flush thread: flushing\n");
+        int ret = scePthreadMutexLock(&flush_queue_mutex);
+        if (ret) {
+            final_printf("flush thread: failed to acquire lock %x\n", ret);
+            continue;
+        }
+
+        final_printf("flush thread: locked\n");
+
+        for (; flush_queue.read_head_idx != flush_queue.write_head_idx; flush_queue.read_head_idx = (flush_queue.read_head_idx+1) % MAX_FLUSH_QUEUE_ENTRIES) {
+            FlushQueueEntry* entry = &flush_queue.entries[flush_queue.read_head_idx];
+            
+            int ret = sceKernelWrite(fd, entry->buffer, entry->buffer_len);
+            if (ret) {
+                final_printf("flush thread: write failed %x\n", ret);
+                continue;
+            }
+
+            final_printf("flush thread: wrote entry %d\n", flush_queue.read_head_idx);
+        }
+
+        ret = scePthreadMutexUnlock(&flush_queue_mutex);
+        if (ret) {
+            final_printf("flush thread: failed to release lock %x\n", ret);
+            continue;
+        }
+        final_printf("flush thread: unlocked\n");
+
+        sceKernelSleep(1);
+    };
+}
 
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
@@ -611,6 +639,12 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     // HOOK32(scePthreadMutexTrylock);
     // // HOOK32(__tls_get_addr);
     // // HOOK32(sceKernelLoadStartModule);
+
+    OrbisPthread thread;
+    int ret = scePthreadCreate(&thread, NULL, flush_thread_start_routine, NULL, STRINGIFY(flush_thread_start_routine));
+    if (ret) {
+        final_printf("scePthreadCreate failed %x", ret);
+    }
 
     return 0;
 }
