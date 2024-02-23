@@ -109,6 +109,11 @@ long sceKernelWrite(int, const void *, unsigned long);
 void extern_logf(const char *msg)
 {
     int len = strlen(msg);
+    if (logging_state.buffer_idx + len >= MAX_BUFFERED_BYTES) {
+        printf("extern_traces: extern_logf dropping logs\n");
+        return;
+    }
+
     strncpy(&logging_state.buffer[logging_state.buffer_idx], msg, len);
     logging_state.buffer_idx += len;
 
