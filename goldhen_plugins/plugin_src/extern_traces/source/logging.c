@@ -1,10 +1,48 @@
 #include "logging.h"
+#include <stdatomic.h>
+#include <stdbool.h>
 #include <string.h>
 
-int printf(const char*, ...);
+int printf(const char *, ...);
 
 typedef unsigned int uint32_t;
 typedef unsigned long uint64_t;
+
+typedef struct
+{
+    atomic_flag locked;
+} atomic_mutex;
+
+// Static initialization of an atomic_mutex instance
+#define ATOMIC_MUTEX_INIT          \
+    {                              \
+        .locked = ATOMIC_FLAG_INIT \
+    }
+
+void atomic_mutex_init(atomic_mutex *mutex)
+{
+    atomic_flag_clear(&mutex->locked);
+}
+
+void atomic_mutex_lock(atomic_mutex *mutex)
+{
+    while (atomic_flag_test_and_set_explicit(&mutex->locked, memory_order_acquire))
+    {
+        // Active waiting
+    }
+}
+
+bool atomic_mutex_trylock(atomic_mutex *mutex)
+{
+    // Try to acquire the lock without blocking
+    // Returns false if the lock is already held, true if lock acquisition is successful
+    return !atomic_flag_test_and_set_explicit(&mutex->locked, memory_order_acquire);
+}
+
+void atomic_mutex_unlock(atomic_mutex *mutex)
+{
+    atomic_flag_clear_explicit(&mutex->locked, memory_order_release);
+}
 
 #define HIGH_WATER_MARK_BYTES (64 * 1024)
 #define MAX_BUFFERED_BYTES (128 * 1024)
@@ -12,10 +50,6 @@ typedef unsigned long uint64_t;
 _Static_assert(
     HIGH_WATER_MARK_BYTES < MAX_BUFFERED_BYTES,
     "high water mark must be smaller than max buffer size");
-
-// Not sure of the exact size of the mutex, so blocking off more bytes than we
-// probably need.
-typedef char ScePthreadMutex[1024];
 
 #define MAX_FLUSH_QUEUE_ENTRIES 1024
 
@@ -33,7 +67,7 @@ typedef struct FlushQueue
 } FlushQueue;
 
 static FlushQueue flush_queue;
-static ScePthreadMutex flush_queue_mutex;
+static atomic_mutex flush_queue_mutex = ATOMIC_MUTEX_INIT;
 
 typedef struct ThreadLoggingState
 {
@@ -68,9 +102,6 @@ void flush_queue_add(ThreadLoggingState *input, FlushQueue *queue)
 __thread ThreadLoggingState logging_state;
 
 int sceRtcGetCurrentTick(uint64_t *tick);
-int scePthreadMutexTrylock(ScePthreadMutex *mutex);
-int scePthreadMutexLock(ScePthreadMutex *mutex);
-int scePthreadMutexUnlock(ScePthreadMutex *mutex);
 unsigned int sceKernelSleep(unsigned int seconds);
 int sceKernelOpen(const char *, int, uint64_t);
 long sceKernelWrite(int, const void *, unsigned long);
@@ -97,17 +128,12 @@ void extern_logf(const char *msg)
     if (logging_state.buffer_idx >= HIGH_WATER_MARK_BYTES || (current_time - logging_state.start_time) >= 1 * 1000 * 1000)
     {
         // if past the high water mark or more than 1 second since the buffer init, attempt to flush
-        int ret = scePthreadMutexTrylock(&flush_queue_mutex);
-        if (!ret)
+        bool locked = atomic_mutex_trylock(&flush_queue_mutex);
+        if (locked)
         {
             // locked, add to flush queue
             flush_queue_add(&logging_state, &flush_queue);
-            int ret = scePthreadMutexUnlock(&flush_queue_mutex);
-            if (ret)
-            {
-                // error occured
-                printf("extern_traces: scePThreadMutexUnlock non-ok value %x\n", ret);
-            }
+            atomic_mutex_unlock(&flush_queue_mutex);
         }
         else
         {
@@ -138,13 +164,7 @@ void *flush_thread_start_routine(void *args)
     while (1)
     {
         printf("extern_traces: flush thread: flushing\n");
-        int ret = scePthreadMutexLock(&flush_queue_mutex);
-        if (ret)
-        {
-            printf("extern_traces: flush thread: failed to acquire lock %x\n", ret);
-            continue;
-        }
-
+        atomic_mutex_lock(&flush_queue_mutex);
         printf("extern_traces: flush thread: locked\n");
 
         for (; flush_queue.read_head_idx != flush_queue.write_head_idx; flush_queue.read_head_idx = (flush_queue.read_head_idx + 1) % MAX_FLUSH_QUEUE_ENTRIES)
@@ -161,12 +181,7 @@ void *flush_thread_start_routine(void *args)
             printf("extern_traces: flush thread: wrote entry %d\n", flush_queue.read_head_idx);
         }
 
-        ret = scePthreadMutexUnlock(&flush_queue_mutex);
-        if (ret)
-        {
-            printf("extern_traces: flush thread: failed to release lock %x\n", ret);
-            continue;
-        }
+        atomic_mutex_unlock(&flush_queue_mutex);
         printf("extern_traces: flush thread: unlocked\n");
 
         sceKernelSleep(1);
