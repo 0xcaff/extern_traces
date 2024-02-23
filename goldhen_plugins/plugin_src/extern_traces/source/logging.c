@@ -152,7 +152,7 @@ void *flush_thread_start_routine(void *args)
             FlushQueueEntry *entry = &flush_queue.entries[flush_queue.read_head_idx];
 
             int ret = sceKernelWrite(fd, entry->buffer, entry->buffer_len);
-            if (ret)
+            if (ret < 0)
             {
                 printf("extern_traces: flush thread: write failed %x\n", ret);
                 continue;
