@@ -6,8 +6,8 @@ int printf(const char*, ...);
 typedef unsigned int uint32_t;
 typedef unsigned long uint64_t;
 
-#define HIGH_WATER_MARK_BYTES (16 * 1024)
-#define MAX_BUFFERED_BYTES (64 * 1024)
+#define HIGH_WATER_MARK_BYTES (64 * 1024)
+#define MAX_BUFFERED_BYTES (128 * 1024)
 
 _Static_assert(
     HIGH_WATER_MARK_BYTES < MAX_BUFFERED_BYTES,
