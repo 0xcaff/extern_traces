@@ -54,7 +54,7 @@ void flush_queue_add(ThreadLoggingState *input, FlushQueue *queue)
     uint32_t next_write_head = (write_head + 1) % MAX_FLUSH_QUEUE_ENTRIES;
     if (next_write_head == queue->read_head_idx)
     {
-        printf("flush_queue_add: full, dropping logs\n");
+        printf("extern_traces: flush_queue_add: full, dropping logs\n");
         return;
     }
 
@@ -85,7 +85,7 @@ void extern_logf(const char *msg)
     int ret = sceRtcGetCurrentTick(&current_time);
     if (ret != 0)
     {
-        printf("sceRtcGetCurrentTick failed\n");
+        printf("extern_traces: sceRtcGetCurrentTick failed\n");
         return;
     }
 
@@ -106,7 +106,7 @@ void extern_logf(const char *msg)
             if (ret)
             {
                 // error occured
-                printf("scePThreadMutexUnlock non-ok value %x\n", ret);
+                printf("extern_traces: scePThreadMutexUnlock non-ok value %x\n", ret);
             }
         }
         else
@@ -119,11 +119,11 @@ void extern_logf(const char *msg)
 
 void *flush_thread_start_routine(void *args)
 {
-    printf("flush thread: waiting\n");
+    printf("extern_traces: flush thread: waiting\n");
 
     sceKernelSleep(5);
 
-    printf("flush thread: starting thread\n");
+    printf("extern_traces: flush thread: starting thread\n");
 
     int fd = sceKernelOpen(
         "/data/extern.log",
@@ -131,21 +131,21 @@ void *flush_thread_start_routine(void *args)
         0666);
     if (fd < 0)
     {
-        printf("failed to open file /data/extern.log %x\n", fd);
+        printf("extern_traces: failed to open file /data/extern.log %x\n", fd);
         return 0;
     }
 
     while (1)
     {
-        printf("flush thread: flushing\n");
+        printf("extern_traces: flush thread: flushing\n");
         int ret = scePthreadMutexLock(&flush_queue_mutex);
         if (ret)
         {
-            printf("flush thread: failed to acquire lock %x\n", ret);
+            printf("extern_traces: flush thread: failed to acquire lock %x\n", ret);
             continue;
         }
 
-        printf("flush thread: locked\n");
+        printf("extern_traces: flush thread: locked\n");
 
         for (; flush_queue.read_head_idx != flush_queue.write_head_idx; flush_queue.read_head_idx = (flush_queue.read_head_idx + 1) % MAX_FLUSH_QUEUE_ENTRIES)
         {
@@ -154,20 +154,20 @@ void *flush_thread_start_routine(void *args)
             int ret = sceKernelWrite(fd, entry->buffer, entry->buffer_len);
             if (ret)
             {
-                printf("flush thread: write failed %x\n", ret);
+                printf("extern_traces: flush thread: write failed %x\n", ret);
                 continue;
             }
 
-            printf("flush thread: wrote entry %d\n", flush_queue.read_head_idx);
+            printf("extern_traces: flush thread: wrote entry %d\n", flush_queue.read_head_idx);
         }
 
         ret = scePthreadMutexUnlock(&flush_queue_mutex);
         if (ret)
         {
-            printf("flush thread: failed to release lock %x\n", ret);
+            printf("extern_traces: flush thread: failed to release lock %x\n", ret);
             continue;
         }
-        printf("flush thread: unlocked\n");
+        printf("extern_traces: flush thread: unlocked\n");
 
         sceKernelSleep(1);
     };
