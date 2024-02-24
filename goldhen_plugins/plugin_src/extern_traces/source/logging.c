@@ -99,23 +99,86 @@ void flush_queue_add(ThreadLoggingState *input, FlushQueue *queue)
     input->start_time = 0;
 }
 
-__thread ThreadLoggingState logging_state;
-
 int sceRtcGetCurrentTick(uint64_t *tick);
 unsigned int sceKernelSleep(unsigned int seconds);
 int sceKernelOpen(const char *, int, uint64_t);
 long sceKernelWrite(int, const void *, unsigned long);
 
+typedef int ScePthreadKey;
+int scePthreadKeyCreate(ScePthreadKey *key, void (*destructor)(void *));
+void *scePthreadGetspecific(ScePthreadKey key);
+int scePthreadSetspecific(ScePthreadKey key, const void *value);
+
+static ScePthreadKey thread_idx_key;
+static uint64_t next_thread_idx;
+static atomic_mutex next_thread_idx_mutex;
+
+void initialize_key()
+{
+    int ret = scePthreadKeyCreate(&thread_idx_key, NULL);
+    if (ret != 0)
+    {
+        printf("extern_traces: failed to initialize key %x\n", ret);
+        return;
+    }
+
+    atomic_mutex_init(&next_thread_idx_mutex);
+}
+
+#define MAX_THREADS 1024
+static ThreadLoggingState logging_states[MAX_THREADS];
+
+int64_t current_thread_logging_state_idx()
+{
+    void *value = scePthreadGetspecific(thread_idx_key);
+    if (value != NULL)
+    {
+        return (int64_t)(value);
+    }
+
+    atomic_mutex_lock(&next_thread_idx_mutex);
+
+    uint64_t thread_idx = next_thread_idx;
+    if (thread_idx >= MAX_THREADS)
+    {
+        printf("extern_traces: no more threads available\n");
+        atomic_mutex_unlock(&next_thread_idx_mutex);
+        return -1;
+    }
+
+    next_thread_idx = next_thread_idx + 1;
+
+    atomic_mutex_unlock(&next_thread_idx_mutex);
+
+    int ret = scePthreadSetspecific(thread_idx_key, (const void *)thread_idx);
+    if (ret != 0)
+    {
+        printf("extern_traces: scePthreadSetSpecific failed %x\n", ret);
+        return -1;
+    }
+
+    return next_thread_idx;
+}
+
 void extern_logf(const char *msg)
 {
+    int64_t logging_state_idx = current_thread_logging_state_idx();
+    if (logging_state_idx == -1)
+    {
+        return;
+    }
+
+    ThreadLoggingState *logging_state = &logging_states[logging_state_idx];
+
     int len = strlen(msg);
-    if (logging_state.buffer_idx + len >= MAX_BUFFERED_BYTES) {
+    if (logging_state->buffer_idx + len >= MAX_BUFFERED_BYTES)
+    {
         printf("extern_traces: extern_logf dropping logs\n");
         return;
     }
 
-    strncpy(&logging_state.buffer[logging_state.buffer_idx], msg, len);
-    logging_state.buffer_idx += len;
+    strncpy(&logging_state->buffer[logging_state->buffer_idx], msg, len);
+    logging_state->buffer_idx += len;
 
     uint64_t current_time;
     int ret = sceRtcGetCurrentTick(&current_time);
@@ -125,19 +188,19 @@ void extern_logf(const char *msg)
         return;
     }
 
-    if (!logging_state.start_time)
+    if (!logging_state->start_time)
     {
-        logging_state.start_time = current_time;
+        logging_state->start_time = current_time;
     }
 
-    if (logging_state.buffer_idx >= HIGH_WATER_MARK_BYTES || (current_time - logging_state.start_time) >= 1 * 1000 * 1000)
+    if (logging_state->buffer_idx >= HIGH_WATER_MARK_BYTES || (current_time - logging_state->start_time) >= 1 * 1000 * 1000)
     {
         // if past the high water mark or more than 1 second since the buffer init, attempt to flush
         bool locked = atomic_mutex_trylock(&flush_queue_mutex);
         if (locked)
         {
             // locked, add to flush queue
-            flush_queue_add(&logging_state, &flush_queue);
+            flush_queue_add(logging_state, &flush_queue);
             atomic_mutex_unlock(&flush_queue_mutex);
         }
         else
