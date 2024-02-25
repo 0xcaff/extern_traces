@@ -205,7 +205,7 @@ imports = [
     ("sceNetCtlGetNatInfo", False),
     ("sceNetCtlUnregisterCallback", False),
     ("sceNetCtlRegisterCallback", False),
-    ("sceNetCtlCheckCallback", False),
+    # ("sceNetCtlCheckCallback", False),
     ("sceNetCtlGetInfo", False),
     ("sceNetCtlGetState", False),
     ("sceNpAuthCreateRequest", False),
