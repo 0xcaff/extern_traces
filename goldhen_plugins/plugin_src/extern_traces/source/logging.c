@@ -104,60 +104,47 @@ unsigned int sceKernelSleep(unsigned int seconds);
 int sceKernelOpen(const char *, int, uint64_t);
 long sceKernelWrite(int, const void *, unsigned long);
 
-typedef int ScePthreadKey;
-int scePthreadKeyCreate(ScePthreadKey *key, void (*destructor)(void *));
-void *scePthreadGetspecific(ScePthreadKey key);
-int scePthreadSetspecific(ScePthreadKey key, const void *value);
-
-static ScePthreadKey thread_idx_key;
-static uint64_t next_thread_idx;
-static atomic_mutex next_thread_idx_mutex;
-
-void initialize_key()
-{
-    int ret = scePthreadKeyCreate(&thread_idx_key, NULL);
-    if (ret != 0)
-    {
-        printf("extern_traces: failed to initialize key %x\n", ret);
-        return;
-    }
-
-    atomic_mutex_init(&next_thread_idx_mutex);
-}
+void *scePthreadSelf();
 
 #define MAX_THREADS 1024
-static ThreadLoggingState logging_states[MAX_THREADS];
 
-int64_t current_thread_logging_state_idx()
+typedef struct ThreadLoggingStateEntry
 {
-    void *value = scePthreadGetspecific(thread_idx_key);
-    if (value != NULL)
+    void *ptr;
+    ThreadLoggingState thread_logging_state;
+} ThreadLoggingStateEntry;
+
+static ThreadLoggingStateEntry logging_states[MAX_THREADS];
+
+static atomic_mutex logging_states_mutex = ATOMIC_MUTEX_INIT;
+static int next_entry_idx = 0;
+
+int current_thread_logging_state_idx()
+{
+    void *item = scePthreadSelf();
+    for (int i = 0; i < MAX_THREADS; i++)
     {
-        return (int64_t)(value);
+        ThreadLoggingStateEntry *entry = &logging_states[i];
+        if (entry->ptr == item)
+        {
+            return i;
+        }
     }
 
-    atomic_mutex_lock(&next_thread_idx_mutex);
-
-    uint64_t thread_idx = next_thread_idx;
-    if (thread_idx >= MAX_THREADS)
+    if (next_entry_idx >= MAX_THREADS)
     {
-        printf("extern_traces: no more threads available\n");
-        atomic_mutex_unlock(&next_thread_idx_mutex);
+        printf("extern_traces: too many threads, dropping logs\n");
         return -1;
     }
 
-    next_thread_idx = next_thread_idx + 1;
+    atomic_mutex_lock(&logging_states_mutex);
 
-    atomic_mutex_unlock(&next_thread_idx_mutex);
+    logging_states[next_entry_idx].ptr = item;
+    next_entry_idx = next_entry_idx + 1;
 
-    int ret = scePthreadSetspecific(thread_idx_key, (const void *)thread_idx);
-    if (ret != 0)
-    {
-        printf("extern_traces: scePthreadSetSpecific failed %x\n", ret);
-        return -1;
-    }
+    atomic_mutex_unlock(&logging_states_mutex);
 
-    return next_thread_idx;
+    return next_entry_idx - 1;
 }
 
 void extern_logf(const char *msg)
@@ -168,7 +155,7 @@ void extern_logf(const char *msg)
         return;
     }
 
-    ThreadLoggingState *logging_state = &logging_states[logging_state_idx];
+    ThreadLoggingState *logging_state = &logging_states[logging_state_idx].thread_logging_state;
 
     int len = strlen(msg);
     if (logging_state->buffer_idx + len >= MAX_BUFFERED_BYTES)
