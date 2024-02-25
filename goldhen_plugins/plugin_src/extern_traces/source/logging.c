@@ -149,7 +149,6 @@ int current_thread_logging_state_idx()
 
 void extern_logf(const char *msg)
 {
-    printf("extern_traces: %s\n", msg);
     int64_t logging_state_idx = current_thread_logging_state_idx();
     if (logging_state_idx == -1)
     {
