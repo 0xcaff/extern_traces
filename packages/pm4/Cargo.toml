@@ -12,3 +12,7 @@ anyhow = "1.0.79"
 byteorder = "1.5.0"
 strum = { version = "0.25.0", features = ["derive"] }
 pm4_internal_macros = { path = "../pm4_internal_macros" }
+
+[dev-dependencies]
+hex-literal = "0.4.1"
+insta = { version = "1.33.0" }
