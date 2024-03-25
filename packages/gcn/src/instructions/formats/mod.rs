@@ -89,7 +89,7 @@ pub enum FormattedInstruction {
 }
 
 impl FormattedInstruction {
-    pub fn has_literal_constant(&self) {
+    pub fn has_literal_constant(&self) -> bool {
         matches!(
             self,
             FormattedInstruction::SOP2(
@@ -129,7 +129,7 @@ impl FormattedInstruction {
                 src0: SourceOperand::Scalar(ScalarSourceOperand::LiteralConstant),
                 ..
             })
-        );
+        )
     }
 }
 

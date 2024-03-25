@@ -7,13 +7,13 @@ use bits_macros::FromBits;
 #[bits(32)]
 pub struct VOPCInstruction {
     #[bits(24, 17)]
-    op: VOPCOpCode,
+    pub op: VOPCOpCode,
 
     #[bits(8, 0)]
-    src0: SourceOperand,
+    pub src0: SourceOperand,
 
     #[bits(16, 9)]
-    vsrc1: VectorGPR,
+    pub vsrc1: VectorGPR,
 }
 
 impl DisplayInstruction for VOPCInstruction {

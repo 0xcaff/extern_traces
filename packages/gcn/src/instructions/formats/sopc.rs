@@ -11,13 +11,13 @@ use bits_macros::FromBits;
 #[bits(32)]
 pub struct SOPCInstruction {
     #[bits(22, 16)]
-    op: SOPCOpCode,
+    pub op: SOPCOpCode,
 
     #[bits(7, 0)]
-    ssrc0: ScalarSourceOperand,
+    pub ssrc0: ScalarSourceOperand,
 
     #[bits(15, 8)]
-    ssrc1: ScalarSourceOperand,
+    pub ssrc1: ScalarSourceOperand,
 }
 
 impl DisplayInstruction for SOPCInstruction {

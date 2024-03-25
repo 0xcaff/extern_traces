@@ -31,13 +31,15 @@ impl Instruction {
 
         let inner = FormattedInstruction::parse(token, &mut reader)?;
 
+        let literal_constant = if inner.has_literal_constant() {
+            Some(reader.read_u32()?)
+        } else {
+            None
+        };
+
         Ok(Self {
             inner,
-            literal_constant: if inner.has_literal_constant() {
-                Some(reader.read_u32()?)
-            } else {
-                None
-            },
+            literal_constant,
             program_counter,
         })
     }
