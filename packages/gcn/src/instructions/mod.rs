@@ -18,6 +18,7 @@ pub use operands::*;
 #[derive(Debug)]
 pub struct Instruction {
     pub inner: FormattedInstruction,
+    pub literal_constant: Option<u32>,
     pub program_counter: u64,
 }
 
@@ -28,8 +29,15 @@ impl Instruction {
     ) -> Result<Instruction, anyhow::Error> {
         let token = reader.read_u32()?;
 
+        let inner = FormattedInstruction::parse(token, &mut reader)?;
+
         Ok(Self {
-            inner: FormattedInstruction::parse(token, &mut reader)?,
+            inner,
+            literal_constant: if inner.has_literal_constant() {
+                Some(reader.read_u32()?)
+            } else {
+                None
+            },
             program_counter,
         })
     }

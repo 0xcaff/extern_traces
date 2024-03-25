@@ -131,10 +131,10 @@ impl FromBits<9> for OpCode {
 }
 
 #[derive(Debug)]
-struct TransformedOperand {
-    operand: SourceOperand,
-    abs: bool,
-    neg: bool,
+pub struct TransformedOperand {
+    pub operand: SourceOperand,
+    pub abs: bool,
+    pub neg: bool,
 }
 
 impl TransformedOperand {

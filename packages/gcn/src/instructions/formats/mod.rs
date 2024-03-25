@@ -15,6 +15,7 @@ pub use crate::instructions::formats::vop2::VOP2Instruction;
 pub use crate::instructions::formats::vop3::VOP3Instruction;
 pub use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::reader::Reader;
+use crate::{SOPKOpCode, ScalarSourceOperand, SourceOperand, VOP2OpCode};
 use bits::FromBits;
 use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
 use std::io;
@@ -85,6 +86,51 @@ pub enum FormattedInstruction {
 
     #[pattern(0b0111110)]
     VOPC(VOPCInstruction),
+}
+
+impl FormattedInstruction {
+    pub fn has_literal_constant(&self) {
+        matches!(
+            self,
+            FormattedInstruction::SOP2(
+                SOP2Instruction {
+                    ssrc0: ScalarSourceOperand::LiteralConstant,
+                    ..
+                } | SOP2Instruction {
+                    ssrc1: ScalarSourceOperand::LiteralConstant,
+                    ..
+                },
+            ) | FormattedInstruction::SOPK(SOPKInstruction {
+                op: SOPKOpCode::s_setreg_imm32_b32,
+                ..
+            }) | FormattedInstruction::SOP1(SOP1Instruction {
+                ssrc0: ScalarSourceOperand::LiteralConstant,
+                ..
+            }) | FormattedInstruction::SOPC(
+                SOPCInstruction {
+                    ssrc0: ScalarSourceOperand::LiteralConstant,
+                    ..
+                } | SOPCInstruction {
+                    ssrc1: ScalarSourceOperand::LiteralConstant,
+                    ..
+                },
+            ) | FormattedInstruction::VOP1(VOP1Instruction {
+                src0: SourceOperand::Scalar(ScalarSourceOperand::LiteralConstant),
+                ..
+            }) | FormattedInstruction::VOP2(
+                VOP2Instruction {
+                    src0: SourceOperand::Scalar(ScalarSourceOperand::LiteralConstant),
+                    ..
+                } | VOP2Instruction {
+                    op: VOP2OpCode::v_madmk_f32 | VOP2OpCode::v_madak_f32,
+                    ..
+                },
+            ) | FormattedInstruction::VOPC(VOPCInstruction {
+                src0: SourceOperand::Scalar(ScalarSourceOperand::LiteralConstant),
+                ..
+            })
+        );
+    }
 }
 
 pub trait ParseInstruction<R: Reader> {
