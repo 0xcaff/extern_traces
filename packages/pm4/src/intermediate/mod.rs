@@ -360,7 +360,7 @@ pub struct PixelShaderUserData(pub Vec<UserDataEntry>);
 #[allow(dead_code)]
 pub struct VertexShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
-    pub address: u32,
+    pub entrypoint_gpu_address: u32,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_VS)]
     resource1: SPI_SHADER_PGM_RSRC1_VS,
