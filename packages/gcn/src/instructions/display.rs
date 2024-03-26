@@ -1,5 +1,5 @@
 pub trait DisplayInstruction {
-    fn display(&self) -> DisplayableInstruction;
+    fn display(&self, literal_constant: Option<u32>) -> DisplayableInstruction;
 }
 
 #[derive(Debug)]

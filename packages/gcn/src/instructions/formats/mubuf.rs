@@ -65,7 +65,7 @@ impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
 }
 
 impl DisplayInstruction for MUBUFInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             // todo: figure out sizes

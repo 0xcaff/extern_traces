@@ -28,14 +28,13 @@ impl GCNInstructionStream {
     }
 
     pub fn displayed(&self) -> String {
-        self.instructions
-            .iter()
-            .map(|it| {
-                let display = it.inner.display();
-
-                format!("{} {}", display.op, display.args.join(", "))
-            })
-            .collect::<Vec<_>>()
-            .join("\n")
+        display_instructions(self.instructions.iter())
     }
+}
+
+pub fn display_instructions<'a>(instructions: impl Iterator<Item = &'a Instruction>) -> String {
+    instructions
+        .map(|it| it.display().to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
 }

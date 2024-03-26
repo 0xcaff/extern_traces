@@ -23,6 +23,10 @@ pub struct Instruction {
 }
 
 impl Instruction {
+    pub fn display(&self) -> DisplayableInstruction {
+        self.inner.display(self.literal_constant)
+    }
+
     pub fn parse(
         mut reader: impl Read,
         program_counter: u64,

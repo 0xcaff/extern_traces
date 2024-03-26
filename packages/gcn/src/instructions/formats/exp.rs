@@ -61,7 +61,7 @@ fn vsrc(idx: u8) -> impl Fn(usize) -> Option<VectorGPR> {
 }
 
 impl DisplayInstruction for ExpInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         DisplayableInstruction {
             op: "exp".to_string(),
             args: {

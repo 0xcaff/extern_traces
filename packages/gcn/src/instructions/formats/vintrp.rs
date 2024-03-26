@@ -53,7 +53,7 @@ impl FromBits<6> for Attr {
 }
 
 impl DisplayInstruction for VINTRPInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         let op_info = self.op.instruction_info();
 
         DisplayableInstruction {

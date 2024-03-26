@@ -21,14 +21,14 @@ pub struct SOP1Instruction {
 }
 
 impl DisplayInstruction for SOP1Instruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, literal_constant: Option<u32>) -> DisplayableInstruction {
         let op_info = self.op.instruction_info();
 
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
                 self.sdst.display(&op_info.definitions[0]),
-                self.ssrc0.display(&op_info.operands[0]),
+                self.ssrc0.display(&op_info.operands[0], literal_constant),
             ],
         }
     }

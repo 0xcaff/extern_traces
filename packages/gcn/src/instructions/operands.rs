@@ -129,7 +129,7 @@ impl FromBits<8> for ScalarSourceOperand {
 }
 
 impl ScalarSourceOperand {
-    pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
+    pub fn display(&self, operand_info: &Option<OperandInfo>, literal_constant: Option<u32>) -> String {
         match self {
             ScalarSourceOperand::Destination(dst) => dst.display(operand_info),
             ScalarSourceOperand::IntegerConstant(value) => format!("{}", value.value()),
@@ -141,7 +141,7 @@ impl ScalarSourceOperand {
                 unimplemented!()
             }
             ScalarSourceOperand::LiteralConstant => {
-                unimplemented!()
+                format!("0x{:x}", literal_constant.unwrap())
             }
         }
     }
@@ -167,9 +167,9 @@ impl FromBits<9> for SourceOperand {
 }
 
 impl SourceOperand {
-    pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
+    pub fn display(&self, operand_info: &Option<OperandInfo>, literal_constant: Option<u32>) -> String {
         match self {
-            SourceOperand::Scalar(value) => value.display(operand_info),
+            SourceOperand::Scalar(value) => value.display(operand_info, literal_constant),
             SourceOperand::VectorGPR(value) => value.display(operand_info),
         }
     }

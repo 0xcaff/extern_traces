@@ -93,7 +93,7 @@ impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
 }
 
 impl DisplayInstruction for MTBufInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             // todo: figure out sizes

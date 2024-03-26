@@ -43,7 +43,7 @@ impl<R: Reader> ParseInstruction<R> for DSInstruction {
 }
 
 impl DisplayInstruction for DSInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         // todo: implement
         DisplayableInstruction {
             op: "unknown".to_string(),

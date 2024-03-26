@@ -17,13 +17,13 @@ pub struct VOPCInstruction {
 }
 
 impl DisplayInstruction for VOPCInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, literal_constant: Option<u32>) -> DisplayableInstruction {
         let op_info = self.op.instruction_info();
 
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
-                self.src0.display(&op_info.operands[0]),
+                self.src0.display(&op_info.operands[0], literal_constant),
                 self.vsrc1.display(&op_info.operands[1]),
             ],
         }

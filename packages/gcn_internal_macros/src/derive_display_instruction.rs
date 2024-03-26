@@ -19,14 +19,14 @@ pub fn derive_display_instruction(input: DeriveInput) -> Result<TokenStream2, sy
             let variant_ident = &it.ident;
 
             Ok(quote! {
-                #enum_ident::#variant_ident(it) => crate::DisplayInstruction::display(it),
+                #enum_ident::#variant_ident(it) => crate::DisplayInstruction::display(it, literal_constant),
             })
         })
         .collect::<Result<Vec<_>, _>>()?;
 
     Ok(quote! {
         impl crate::DisplayInstruction for FormattedInstruction {
-            fn display(&self) -> crate::DisplayableInstruction {
+            fn display(&self, literal_constant: Option<u32>) -> crate::DisplayableInstruction {
                 match self {
                     #(#branches)*
                 }

@@ -159,7 +159,7 @@ impl TransformedOperand {
     }
 
     fn display(&self, operand_info: &Option<OperandInfo>) -> String {
-        let result = format!("{}", self.operand.display(operand_info));
+        let result = format!("{}", self.operand.display(operand_info, None));
 
         let result = if self.abs {
             format!("abs({})", result)
@@ -178,7 +178,7 @@ impl TransformedOperand {
 }
 
 impl DisplayInstruction for VOP3Instruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         let op_info = self.op.instruction_info();
 
         // todo: argument count

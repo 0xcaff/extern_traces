@@ -28,7 +28,7 @@ pub struct SMEMInstruction {
 }
 
 impl DisplayInstruction for SMEMInstruction {
-    fn display(&self) -> DisplayableInstruction {
+    fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
