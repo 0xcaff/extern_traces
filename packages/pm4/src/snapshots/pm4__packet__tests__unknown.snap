@@ -1,6 +1,6 @@
 ---
 source: packages/pm4/src/packet.rs
-expression: "PM4Packet::parse_all(&bytes)"
+expression: "PM4Packet::parse_all(bytes)"
 ---
 Ok(
     [

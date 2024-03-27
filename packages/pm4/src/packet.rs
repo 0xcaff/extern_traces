@@ -301,8 +301,15 @@ mod tests {
     use crate::PM4Packet;
 
     #[test]
-    fn test() {
+    fn unknown() {
         let bytes = &include_bytes!("./test_data/unknown.pm4")[..];
+
+        insta::assert_debug_snapshot!(PM4Packet::parse_all(bytes));
+    }
+
+    #[test]
+    fn compute_and_graphics() {
+        let bytes = &include_bytes!("./test_data/compute_and_graphics.pm4")[..];
 
         insta::assert_debug_snapshot!(PM4Packet::parse_all(bytes));
     }
