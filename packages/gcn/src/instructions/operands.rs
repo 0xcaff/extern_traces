@@ -1,6 +1,6 @@
-use std::fmt;
 use crate::instructions::instruction_info::OperandInfo;
 use bits::FromBits;
+use std::fmt;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
 #[derive(Debug, Clone)]
