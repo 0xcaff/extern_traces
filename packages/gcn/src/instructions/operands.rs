@@ -1,3 +1,4 @@
+use std::fmt;
 use crate::instructions::instruction_info::OperandInfo;
 use bits::FromBits;
 
@@ -70,7 +71,7 @@ pub enum ScalarSourceOperand {
     LiteralConstant,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct InlineIntegerConstant {
     value: u8,
 }
@@ -83,6 +84,14 @@ impl InlineIntegerConstant {
             193..=208 => (-(self.value as i16 - 193 + 1)) as i8, // maps 193..208 to -1..-16
             _ => panic!("unexpected value {}", self.value),
         }
+    }
+}
+
+impl fmt::Debug for InlineIntegerConstant {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_tuple("InlineIntegerConstant")
+            .field(&self.value())
+            .finish()
     }
 }
 
