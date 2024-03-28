@@ -23,7 +23,7 @@ pub fn derive_parse_packet_value(input: DeriveInput) -> Result<TokenStream, syn:
             let variant_type = &field.ty;
 
             Ok(quote! {
-                <#variant_type as crate::packet_value::ParseType3Packet>::CODE =>
+                <#variant_type as crate::packet_value::ParseType3Packet>::OP =>
                     #ident::#variant_ident(<#variant_type as crate::packet_value::ParseType3Packet>::parse_type3_packet(body)),
             })
         })

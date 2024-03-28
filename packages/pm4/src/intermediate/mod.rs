@@ -6,16 +6,16 @@ use crate::packet_value::{
     SetShaderRegisterPacket, Type3PacketValue,
 };
 use crate::{
-    PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet, CB_COLOR0_ATTRIB,
-    CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE, CB_COLOR0_VIEW,
-    CB_SHADER_MASK, CB_TARGET_MASK, COMPUTE_NUM_THREAD_X, COMPUTE_PGM_HI, COMPUTE_PGM_RSRC1,
-    COMPUTE_PGM_RSRC2, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE, DB_DEPTH_SLICE,
-    DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL, DB_STENCIL_INFO,
-    DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL,
-    PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL, SPI_PS_INPUT_CNTL_0,
-    SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL, SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS,
-    SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS,
-    SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
+    DispatchDirectPacket, PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet,
+    CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE,
+    CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, COMPUTE_NUM_THREAD_X, COMPUTE_PGM_HI,
+    COMPUTE_PGM_RSRC1, COMPUTE_PGM_RSRC2, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE,
+    DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL,
+    DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR,
+    PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL,
+    SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL, SPI_SHADER_COL_FORMAT,
+    SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS,
+    SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
 };
 use pm4_internal_macros::{Build, BuildUserData};
 
@@ -24,6 +24,10 @@ pub enum Command {
     Draw {
         draw_packet: DrawIndexAutoPacket,
         pipeline: GraphicsPipeline,
+    },
+    Dispatch {
+        dispatch_packet: DispatchDirectPacket,
+        pipeline: ComputePipeline,
     },
     EndOfPipe(EventWriteEndOfPipePacket),
 }
@@ -69,6 +73,19 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
                 result.push(Command::Draw {
                     draw_packet: draw_packet.clone(),
                     pipeline: graphics_pipeline_builder.clone().finalize().unwrap(),
+                });
+            }
+            PM4Packet::Type3(Type3Packet {
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Compute,
+                        ..
+                    },
+                value: Type3PacketValue::DispatchDirect(dispatch_packet),
+            }) => {
+                result.push(Command::Dispatch {
+                    dispatch_packet: dispatch_packet.clone(),
+                    pipeline: compute_pipeline_builder.clone().finalize().unwrap(),
                 });
             }
             PM4Packet::Type3(Type3Packet {
