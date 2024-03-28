@@ -90,7 +90,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
             }
             PM4Packet::Type3(Type3Packet {
                 header: _,
-                value: Type3PacketValue::EndOfPipe(end_of_pipe),
+                value: Type3PacketValue::EventWriteEndOfPipe(end_of_pipe),
             }) => result.push(Command::EndOfPipe(end_of_pipe.clone())),
             _ => {}
         }

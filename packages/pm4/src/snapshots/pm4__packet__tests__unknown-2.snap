@@ -7,13 +7,7 @@ expression: convert(packets.as_slice())
         EventWriteEndOfPipePacket {
             invalidate_writeback_l2: false,
             event_index: 5,
-            event_type: VGT_EVENT_INITIATOR {
-                EVENT_TYPE: CACHE_FLUSH_TS,
-                ADDRESS_HI: Usize(
-                    0,
-                ),
-                EXTENDED_EVENT: false,
-            },
+            event_type: CACHE_FLUSH_TS,
             address: 553061990912,
             immediate: 0,
         },
@@ -22,13 +16,7 @@ expression: convert(packets.as_slice())
         EventWriteEndOfPipePacket {
             invalidate_writeback_l2: false,
             event_index: 5,
-            event_type: VGT_EVENT_INITIATOR {
-                EVENT_TYPE: CACHE_FLUSH_TS,
-                ADDRESS_HI: Usize(
-                    0,
-                ),
-                EXTENDED_EVENT: false,
-            },
+            event_type: CACHE_FLUSH_TS,
             address: 553061990920,
             immediate: 0,
         },
@@ -37,13 +25,7 @@ expression: convert(packets.as_slice())
         EventWriteEndOfPipePacket {
             invalidate_writeback_l2: false,
             event_index: 5,
-            event_type: VGT_EVENT_INITIATOR {
-                EVENT_TYPE: CACHE_FLUSH_TS,
-                ADDRESS_HI: Usize(
-                    0,
-                ),
-                EXTENDED_EVENT: false,
-            },
+            event_type: CACHE_FLUSH_TS,
             address: 553061989664,
             immediate: 0,
         },
@@ -52,13 +34,7 @@ expression: convert(packets.as_slice())
         EventWriteEndOfPipePacket {
             invalidate_writeback_l2: false,
             event_index: 5,
-            event_type: VGT_EVENT_INITIATOR {
-                EVENT_TYPE: CACHE_FLUSH_TS,
-                ADDRESS_HI: Usize(
-                    0,
-                ),
-                EXTENDED_EVENT: false,
-            },
+            event_type: CACHE_FLUSH_TS,
             address: 550804862288,
             immediate: 1,
         },

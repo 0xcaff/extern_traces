@@ -4,19 +4,22 @@ pub use crate::packet_value::draw_index_auto::DrawIndexAutoPacket;
 pub use crate::packet_value::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 pub use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
 use pm4_internal_macros::ParsePacketValue;
+use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 
 mod dispatch_direct;
 mod draw_index_auto;
 mod event_write_end_of_pipe;
+mod event_write_end_of_shader;
 mod register;
 
 #[derive(Debug, ParsePacketValue)]
 pub enum Type3PacketValue {
     SetContextRegister(SetContextRegisterPacket),
     SetShaderRegister(SetShaderRegisterPacket),
-    EndOfPipe(EventWriteEndOfPipePacket),
+    EventWriteEndOfPipe(EventWriteEndOfPipePacket),
     DrawIndexAuto(DrawIndexAutoPacket),
     DispatchDirect(DispatchDirectPacket),
+    EventWriteEndOfShader(EventWriteEndOfShaderPacket),
     // todo: index_type
     // todo: set_uconfig_register
     Unknown { op: OpCode, body: Vec<u32> },
