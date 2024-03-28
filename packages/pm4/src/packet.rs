@@ -160,64 +160,6 @@ pub enum Function {
     GreaterThan,
 }
 
-#[derive(Debug)]
-pub struct WaitRegisterMemoryPacket {
-    pub engine: Engine,
-    pub function: Function,
-
-    pub tcl1_volatile_action_enable: bool,
-    pub texture_cache_volatile_action_enable: bool,
-    pub texture_cache_write_back_action_enable: bool,
-    pub color_buffer_action_enable: bool,
-    pub depth_buffer_action_enable: bool,
-
-    pub reference_value: u32,
-    pub poll_address_swap: u8,
-    pub poll_address: MemoryAddress,
-    pub mask: u32,
-    pub poll_interval: u16,
-}
-
-impl ParseType3Packet for WaitRegisterMemoryPacket {
-    fn parse_type3_packet(body: Vec<u32>) -> Self {
-        Self {
-            engine: match bitrange(8, 8).of_32(body[0]) {
-                0 => Engine::MicroEngine,
-                1 => Engine::PrefetchParser,
-                _ => unreachable!(),
-            },
-            poll_address: match bitrange(4, 4).of_32(body[0]) {
-                0 => MemoryAddress::Register(bitrange(15, 0).of_32(body[1]) as _),
-                1 => MemoryAddress::Memory(
-                    (bitrange(31, 2).of_32(body[1]) | bitrange(15, 0).of_32(body[2]) << 30) as _,
-                ),
-                _ => unreachable!(),
-            },
-            poll_address_swap: bitrange(1, 0).of_32(body[1]) as _,
-            function: match bitrange(2, 0).of_32(body[0]) {
-                0b000 => Function::Always,
-                0b001 => Function::LessThan,
-                0b010 => Function::LessThanEqual,
-                0b011 => Function::Equal,
-                0b100 => Function::NotEqual,
-                0b101 => Function::GreaterThanEqual,
-                0b110 => Function::GreaterThan,
-                value => panic!("unexpected value {}", value),
-            },
-
-            tcl1_volatile_action_enable: bit(15, body[0] as _),
-            texture_cache_volatile_action_enable: bit(16, body[0] as _),
-            texture_cache_write_back_action_enable: bit(18, body[0] as _),
-            color_buffer_action_enable: bit(25, body[0] as _),
-            depth_buffer_action_enable: bit(26, body[0] as _),
-
-            reference_value: body[3],
-            mask: body[4],
-            poll_interval: bitrange(15, 0).of_32(body[5]) as _,
-        }
-    }
-}
-
 #[derive(Debug, Clone)]
 pub struct DrawIndexAutoPacket {
     pub index_count: u32,
@@ -294,9 +236,6 @@ impl Type3PacketValue {
             OpCode::EVENT_WRITE_EOP => {
                 Type3PacketValue::EndOfPipe(EndOfPipePacket::parse_type3_packet(body))
             }
-            OpCode::ACQUIRE_MEM => Type3PacketValue::WaitRegisterMemory(
-                WaitRegisterMemoryPacket::parse_type3_packet(body),
-            ),
             OpCode::DRAW_INDEX_AUTO => {
                 Type3PacketValue::DrawIndexAuto(DrawIndexAutoPacket::parse_type3_packet(body))
             }
