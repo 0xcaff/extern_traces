@@ -1,7 +1,7 @@
 use anyhow::format_err;
 use strum::FromRepr;
 
-#[derive(Debug, FromRepr)]
+#[derive(Eq, PartialEq, Debug, FromRepr)]
 #[allow(non_camel_case_types)]
 #[repr(u8)]
 pub enum OpCode {

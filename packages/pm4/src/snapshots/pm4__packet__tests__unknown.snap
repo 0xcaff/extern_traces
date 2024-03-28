@@ -12,7 +12,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: CONTEXT_CONTROL,
+                    op: CONTEXT_CONTROL,
                     body: [
                         2147483648,
                         2147483648,
@@ -28,7 +28,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: CLEAR_STATE,
+                    op: CLEAR_STATE,
                     body: [
                         0,
                     ],
@@ -43,7 +43,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: ACQUIRE_MEM,
+                    op: ACQUIRE_MEM,
                     body: [
                         784629696,
                         4294967295,
@@ -529,7 +529,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NUM_INSTANCES,
+                    op: NUM_INSTANCES,
                     body: [
                         1,
                     ],
@@ -1069,7 +1069,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: SET_UCONFIG_REG,
+                    op: SET_UCONFIG_REG,
                     body: [
                         512,
                         3758096384,
@@ -1085,7 +1085,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -1227,7 +1227,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: WAIT_REG_MEM,
+                    op: WAIT_REG_MEM,
                     body: [
                         19,
                         719338224,
@@ -1594,7 +1594,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         70780800,
                     ],
@@ -2109,7 +2109,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: INDEX_TYPE,
+                    op: INDEX_TYPE,
                     body: [
                         0,
                     ],
@@ -2419,7 +2419,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: SET_UCONFIG_REG,
+                    op: SET_UCONFIG_REG,
                     body: [
                         578,
                         0,
@@ -2882,7 +2882,7 @@ Ok(
                     predicate: false,
                 },
                 value: EndOfPipe(
-                    EndOfPipePacket {
+                    EventWriteEndOfPipePacket {
                         invalidate_writeback_l2: false,
                         event_index: 5,
                         event_type: VGT_EVENT_INITIATOR {
@@ -2906,7 +2906,7 @@ Ok(
                     predicate: false,
                 },
                 value: EndOfPipe(
-                    EndOfPipePacket {
+                    EventWriteEndOfPipePacket {
                         invalidate_writeback_l2: false,
                         event_index: 5,
                         event_type: VGT_EVENT_INITIATOR {
@@ -2930,7 +2930,7 @@ Ok(
                     predicate: false,
                 },
                 value: EndOfPipe(
-                    EndOfPipePacket {
+                    EventWriteEndOfPipePacket {
                         invalidate_writeback_l2: false,
                         event_index: 5,
                         event_type: VGT_EVENT_INITIATOR {
@@ -2954,7 +2954,7 @@ Ok(
                     predicate: false,
                 },
                 value: EndOfPipe(
-                    EndOfPipePacket {
+                    EventWriteEndOfPipePacket {
                         invalidate_writeback_l2: false,
                         event_index: 5,
                         event_type: VGT_EVENT_INITIATOR {
@@ -2978,7 +2978,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752500087,
                         0,

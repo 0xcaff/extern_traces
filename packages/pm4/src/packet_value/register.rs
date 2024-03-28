@@ -1,3 +1,4 @@
+use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::registers::ParseRegisterEntry;
 use crate::{Register, RegisterEntry};
@@ -9,6 +10,8 @@ pub struct SetContextRegisterPacket {
 }
 
 impl ParseType3Packet for SetContextRegisterPacket {
+    const OP: OpCode = OpCode::SET_CONTEXT_REG;
+
     fn parse_type3_packet(mut body: Vec<u32>) -> Self {
         let value_header = body.remove(0);
         let offset = bitrange(15, 0).of_32(value_header) as u16;
@@ -34,6 +37,8 @@ pub struct SetShaderRegisterPacket {
 }
 
 impl ParseType3Packet for SetShaderRegisterPacket {
+    const OP: OpCode = OpCode::SET_SH_REG;
+
     fn parse_type3_packet(mut body: Vec<u32>) -> Self {
         let value_header = body.remove(0);
         let offset = bitrange(15, 0).of_32(value_header) as u16;

@@ -12,7 +12,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: CONTEXT_CONTROL,
+                    op: CONTEXT_CONTROL,
                     body: [
                         2147483648,
                         2147483648,
@@ -28,7 +28,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: CLEAR_STATE,
+                    op: CLEAR_STATE,
                     body: [
                         0,
                     ],
@@ -43,7 +43,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: ACQUIRE_MEM,
+                    op: ACQUIRE_MEM,
                     body: [
                         784629696,
                         4294967295,
@@ -529,7 +529,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NUM_INSTANCES,
+                    op: NUM_INSTANCES,
                     body: [
                         1,
                     ],
@@ -1113,7 +1113,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: SET_UCONFIG_REG,
+                    op: SET_UCONFIG_REG,
                     body: [
                         512,
                         3758096384,
@@ -1158,7 +1158,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -1291,7 +1291,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: WAIT_REG_MEM,
+                    op: WAIT_REG_MEM,
                     body: [
                         19,
                         4076948848,
@@ -1649,7 +1649,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         70780800,
                     ],
@@ -1862,7 +1862,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         70780800,
                     ],
@@ -1877,7 +1877,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752506368,
                         4278386688,
@@ -2038,7 +2038,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -2063,7 +2063,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752506368,
                         2088960,
@@ -2080,7 +2080,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: DMA_DATA,
+                    op: DMA_DATA,
                     body: [
                         1610612736,
                         16813056,
@@ -2100,7 +2100,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -2150,7 +2150,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -2200,7 +2200,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -2267,7 +2267,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -2284,7 +2284,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752510464,
                         0,
@@ -2302,7 +2302,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: EVENT_WRITE_EOS,
+                    op: EVENT_WRITE_EOS,
                     body: [
                         1583,
                         8736,
@@ -2320,7 +2320,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: WAIT_REG_MEM,
+                    op: WAIT_REG_MEM,
                     body: [
                         19,
                         8736,
@@ -2340,7 +2340,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: ACQUIRE_MEM,
+                    op: ACQUIRE_MEM,
                     body: [
                         2160328704,
                         1,
@@ -2360,7 +2360,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498177,
                         1819242324,
@@ -2839,7 +2839,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -2864,7 +2864,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752506368,
                         0,
@@ -3283,7 +3283,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         70780800,
                     ],
@@ -3298,7 +3298,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: DMA_DATA,
+                    op: DMA_DATA,
                     body: [
                         1610612736,
                         16813312,
@@ -3318,7 +3318,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -3554,7 +3554,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -3579,7 +3579,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: SET_UCONFIG_REG,
+                    op: SET_UCONFIG_REG,
                     body: [
                         578,
                         17,
@@ -3595,7 +3595,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: INDEX_TYPE,
+                    op: INDEX_TYPE,
                     body: [
                         1024,
                     ],
@@ -3631,7 +3631,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -3725,7 +3725,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498178,
                         0,
@@ -4093,7 +4093,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -4456,7 +4456,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -4481,7 +4481,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752506368,
                         1137967104,
@@ -4504,7 +4504,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: SET_UCONFIG_REG,
+                    op: SET_UCONFIG_REG,
                     body: [
                         578,
                         4,
@@ -4520,7 +4520,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: INDEX_TYPE,
+                    op: INDEX_TYPE,
                     body: [
                         0,
                     ],
@@ -4568,7 +4568,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: DMA_DATA,
+                    op: DMA_DATA,
                     body: [
                         1610612736,
                         16786176,
@@ -4588,7 +4588,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -4658,7 +4658,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -4708,7 +4708,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752498189,
                     ],
@@ -4758,7 +4758,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: DMA_DATA,
+                    op: DMA_DATA,
                     body: [
                         1610612736,
                         16785920,
@@ -4803,7 +4803,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: DRAW_INDEX_2,
+                    op: DRAW_INDEX_2,
                     body: [
                         6,
                         63701504,
@@ -4822,7 +4822,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         0,
                         0,
@@ -4839,7 +4839,7 @@ Ok(
                     predicate: false,
                 },
                 value: EndOfPipe(
-                    EndOfPipePacket {
+                    EventWriteEndOfPipePacket {
                         invalidate_writeback_l2: false,
                         event_index: 5,
                         event_type: VGT_EVENT_INITIATOR {
@@ -4863,7 +4863,7 @@ Ok(
                     predicate: false,
                 },
                 value: Unknown {
-                    opcode: NOP,
+                    op: NOP,
                     body: [
                         1752500088,
                         2366400,

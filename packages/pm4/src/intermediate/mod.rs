@@ -2,8 +2,8 @@ pub mod build;
 
 use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
 use crate::packet_value::{
-    DrawIndexAutoPacket, EndOfPipePacket, SetContextRegisterPacket, SetShaderRegisterPacket,
-    Type3PacketValue,
+    DrawIndexAutoPacket, EventWriteEndOfPipePacket, SetContextRegisterPacket,
+    SetShaderRegisterPacket, Type3PacketValue,
 };
 use crate::{
     PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet, CB_COLOR0_ATTRIB,
@@ -25,7 +25,7 @@ pub enum Command {
         draw_packet: DrawIndexAutoPacket,
         pipeline: GraphicsPipeline,
     },
-    EndOfPipe(EndOfPipePacket),
+    EndOfPipe(EventWriteEndOfPipePacket),
 }
 
 pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {

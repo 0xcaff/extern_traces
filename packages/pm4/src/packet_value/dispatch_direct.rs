@@ -1,3 +1,4 @@
+use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 
 #[derive(Debug)]
@@ -11,6 +12,8 @@ pub struct DispatchDirectPacket {
 }
 
 impl ParseType3Packet for DispatchDirectPacket {
+    const OP: OpCode = OpCode::DISPATCH_DIRECT;
+
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
             dim_x: body[0],

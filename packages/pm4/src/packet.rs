@@ -1,5 +1,5 @@
 use crate::op_codes::OpCode;
-use crate::packet_value::Type3PacketValue;
+use crate::packet_value::{ParsePacketValue, Type3PacketValue};
 use crate::reader::Reader;
 use bits::bitrange;
 use std::io::Cursor;
