@@ -2142,15 +2142,14 @@ Ok(
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    opcode: DISPATCH_DIRECT,
-                    body: [
-                        32640,
-                        1,
-                        1,
-                        1,
-                    ],
-                },
+                value: DispatchDirect(
+                    DispatchDirectPacket {
+                        dim_x: 32640,
+                        dim_y: 1,
+                        dim_z: 1,
+                        initiator: 1,
+                    },
+                ),
             },
         ),
         Type3(

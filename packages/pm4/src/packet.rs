@@ -89,6 +89,7 @@ pub enum Type3PacketValue {
     EndOfPipe(EndOfPipePacket),
     WaitRegisterMemory(WaitRegisterMemoryPacket),
     DrawIndexAuto(DrawIndexAutoPacket),
+    DispatchDirect(DispatchDirectPacket),
     // todo: index_type
     // todo: set_uconfig_register
     Unknown { opcode: OpCode, body: Vec<u32> },
@@ -232,6 +233,27 @@ impl ParseType3Packet for DrawIndexAutoPacket {
     }
 }
 
+#[derive(Debug)]
+pub struct DispatchDirectPacket {
+    dim_x: u32,
+    dim_y: u32,
+    dim_z: u32,
+
+    // todo: parse initiator field
+    initiator: u32,
+}
+
+impl ParseType3Packet for DispatchDirectPacket {
+    fn parse_type3_packet(body: Vec<u32>) -> Self {
+        Self {
+            dim_x: body[0],
+            dim_y: body[1],
+            dim_z: body[2],
+            initiator: body[3],
+        }
+    }
+}
+
 impl Type3PacketValue {
     pub fn parse(opcode: OpCode, mut body: Vec<u32>) -> Type3PacketValue {
         match opcode {
@@ -277,6 +299,9 @@ impl Type3PacketValue {
             ),
             OpCode::DRAW_INDEX_AUTO => {
                 Type3PacketValue::DrawIndexAuto(DrawIndexAutoPacket::parse_type3_packet(body))
+            }
+            OpCode::DISPATCH_DIRECT => {
+                Type3PacketValue::DispatchDirect(DispatchDirectPacket::parse_type3_packet(body))
             }
             _ => Type3PacketValue::Unknown { opcode, body },
         }
