@@ -2,16 +2,16 @@ use crate::op_codes::OpCode;
 use crate::{ParseType3Packet, VGT_EVENT_TYPE};
 use bits::{bitrange, FromBits};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EventWriteEndOfShaderPacket {
-    event_index: u8,
-    event_type: VGT_EVENT_TYPE,
-    address: u64,
-    data: Data,
+    pub event_index: u8,
+    pub event_type: VGT_EVENT_TYPE,
+    pub address: u64,
+    pub data: Data,
 }
 
-#[derive(Debug)]
-enum Data {
+#[derive(Debug, Clone)]
+pub enum Data {
     StorePacketData { data: u32 },
     LoadGDS { size: u16, gds_index: u16 },
 }

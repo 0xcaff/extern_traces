@@ -1,12 +1,13 @@
 pub mod build;
 
+use crate::dispatch_direct::DispatchDirectPacket;
+use crate::draw_index_auto::DrawIndexAutoPacket;
+use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
+use crate::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
-use crate::packet_value::{
-    DrawIndexAutoPacket, EventWriteEndOfPipePacket, SetContextRegisterPacket,
-    SetShaderRegisterPacket, Type3PacketValue,
-};
+use crate::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
 use crate::{
-    DispatchDirectPacket, PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet,
+    PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet, Type3PacketValue,
     CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE,
     CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, COMPUTE_NUM_THREAD_X, COMPUTE_PGM_HI,
     COMPUTE_PGM_RSRC1, COMPUTE_PGM_RSRC2, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE,
@@ -30,6 +31,7 @@ pub enum Command {
         pipeline: ComputePipeline,
     },
     EndOfPipe(EventWriteEndOfPipePacket),
+    EndOfShader(EventWriteEndOfShaderPacket),
 }
 
 pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
@@ -87,6 +89,16 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
                     dispatch_packet: dispatch_packet.clone(),
                     pipeline: compute_pipeline_builder.clone().finalize().unwrap(),
                 });
+            }
+            PM4Packet::Type3(Type3Packet {
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Compute,
+                        ..
+                    },
+                value: Type3PacketValue::EventWriteEndOfShader(packet),
+            }) => {
+                result.push(Command::EndOfShader(packet.clone()));
             }
             PM4Packet::Type3(Type3Packet {
                 header: _,

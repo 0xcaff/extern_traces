@@ -134,6 +134,16 @@ expression: convert(packets.as_slice())
             ),
         },
     },
+    EndOfShader(
+        EventWriteEndOfShaderPacket {
+            event_index: 6,
+            event_type: CS_DONE,
+            address: 549755818256,
+            data: StorePacketData {
+                data: 1,
+            },
+        },
+    ),
     Draw {
         draw_packet: DrawIndexAutoPacket {
             index_count: 3,
