@@ -95,19 +95,23 @@ pub enum ShaderType {
 
 #[cfg(test)]
 mod tests {
-    use crate::PM4Packet;
+    use crate::{convert, PM4Packet};
 
     #[test]
     fn unknown() {
         let bytes = &include_bytes!("./test_data/unknown.pm4")[..];
+        let packets = PM4Packet::parse_all(bytes).unwrap();
 
-        insta::assert_debug_snapshot!(PM4Packet::parse_all(bytes));
+        insta::assert_debug_snapshot!(packets);
+        insta::assert_debug_snapshot!(convert(packets.as_slice()));
     }
 
     #[test]
     fn compute_and_graphics() {
         let bytes = &include_bytes!("./test_data/compute_and_graphics.pm4")[..];
+        let packets = PM4Packet::parse_all(bytes).unwrap();
 
-        insta::assert_debug_snapshot!(PM4Packet::parse_all(bytes));
+        insta::assert_debug_snapshot!(packets);
+        insta::assert_debug_snapshot!(convert(packets.as_slice()));
     }
 }

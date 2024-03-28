@@ -1,7 +1,7 @@
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DispatchDirectPacket {
     pub dim_x: u32,
     pub dim_y: u32,

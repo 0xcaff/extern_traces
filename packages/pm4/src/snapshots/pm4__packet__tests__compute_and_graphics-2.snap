@@ -1,0 +1,715 @@
+---
+source: packages/pm4/src/packet.rs
+expression: convert(packets.as_slice())
+---
+[
+    Dispatch {
+        dispatch_packet: DispatchDirectPacket {
+            dim_x: 32640,
+            dim_y: 1,
+            dim_z: 1,
+            initiator: 1,
+        },
+        pipeline: ComputePipeline {
+            address_lo: 2147549324,
+            address_hi: COMPUTE_PGM_HI {
+                DATA: Usize(
+                    0,
+                ),
+                INST_ATC: false,
+            },
+            resource1: COMPUTE_PGM_RSRC1 {
+                VGPRS: Usize(
+                    0,
+                ),
+                SGPRS: Usize(
+                    1,
+                ),
+                PRIORITY: Usize(
+                    0,
+                ),
+                FLOAT_MODE: FP_16_64_DENORMS,
+                PRIV: false,
+                DX10_CLAMP: true,
+                DEBUG_MODE: false,
+                IEEE_MODE: false,
+                BULKY: false,
+                CDBG_USER: false,
+            },
+            resource2: COMPUTE_PGM_RSRC2 {
+                SCRATCH_EN: false,
+                USER_SGPR: Usize(
+                    12,
+                ),
+                TRAP_PRESENT: false,
+                TGID_X_EN: true,
+                TGID_Y_EN: false,
+                TGID_Z_EN: false,
+                TG_SIZE_EN: false,
+                TIDIG_COMP_CNT: Usize(
+                    0,
+                ),
+                EXCP_EN_MSB: Usize(
+                    0,
+                ),
+                LDS_SIZE: Usize(
+                    0,
+                ),
+            },
+            thread_x: COMPUTE_NUM_THREAD_X {
+                NUM_THREAD_FULL: Usize(
+                    64,
+                ),
+                NUM_THREAD_PARTIAL: Usize(
+                    0,
+                ),
+            },
+            thread_y: COMPUTE_NUM_THREAD_X {
+                NUM_THREAD_FULL: Usize(
+                    1,
+                ),
+                NUM_THREAD_PARTIAL: Usize(
+                    0,
+                ),
+            },
+            thread_z: COMPUTE_NUM_THREAD_X {
+                NUM_THREAD_FULL: Usize(
+                    1,
+                ),
+                NUM_THREAD_PARTIAL: Usize(
+                    0,
+                ),
+            },
+            user_data: ComputeUserData(
+                [
+                    UserDataEntry {
+                        slot: 0,
+                        value: 8432,
+                    },
+                    UserDataEntry {
+                        slot: 1,
+                        value: 262272,
+                    },
+                    UserDataEntry {
+                        slot: 2,
+                        value: 1,
+                    },
+                    UserDataEntry {
+                        slot: 3,
+                        value: 537018372,
+                    },
+                    UserDataEntry {
+                        slot: 4,
+                        value: 21921792,
+                    },
+                    UserDataEntry {
+                        slot: 5,
+                        value: 290944,
+                    },
+                    UserDataEntry {
+                        slot: 6,
+                        value: 2088960,
+                    },
+                    UserDataEntry {
+                        slot: 7,
+                        value: 402800644,
+                    },
+                    UserDataEntry {
+                        slot: 8,
+                        value: 8556,
+                    },
+                    UserDataEntry {
+                        slot: 9,
+                        value: 1048704,
+                    },
+                    UserDataEntry {
+                        slot: 10,
+                        value: 1,
+                    },
+                    UserDataEntry {
+                        slot: 11,
+                        value: 537362348,
+                    },
+                ],
+            ),
+        },
+    },
+    Draw {
+        draw_packet: DrawIndexAutoPacket {
+            index_count: 3,
+            draw_initiator: VGT_DRAW_INITIATOR {
+                SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                MAJOR_MODE: DI_MAJOR_MODE_0,
+                SPRITE_EN_R6XX: false,
+                NOT_EOP: false,
+                USE_OPAQUE: false,
+            },
+        },
+        pipeline: GraphicsPipeline {
+            depth_buffer: DepthBuffer {
+                stencil: Stencil {
+                    read_base: Some(
+                        2147667968,
+                    ),
+                    write_base: Some(
+                        2147667968,
+                    ),
+                    info: Some(
+                        DB_STENCIL_INFO {
+                            FORMAT: STENCIL_8,
+                            TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
+                            TILE_MODE_INDEX: Usize(
+                                0,
+                            ),
+                            ALLOW_EXPCLEAR: false,
+                            TILE_STENCIL_DISABLE: true,
+                        },
+                    ),
+                },
+                depth: Depth {
+                    control: DB_DEPTH_CONTROL {
+                        STENCIL_ENABLE: false,
+                        Z_ENABLE: true,
+                        Z_WRITE_ENABLE: true,
+                        DEPTH_BOUNDS_ENABLE: false,
+                        ZFUNC: FRAG_ALWAYS,
+                        BACKFACE_ENABLE: false,
+                        STENCILFUNC: FRAG_NEVER,
+                        STENCILFUNC_BF: FRAG_NEVER,
+                        ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
+                        DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
+                    },
+                    clear: Some(
+                        1065353216,
+                    ),
+                    size: Some(
+                        DB_DEPTH_SIZE {
+                            PITCH_TILE_MAX: Usize(
+                                255,
+                            ),
+                            HEIGHT_TILE_MAX: Usize(
+                                143,
+                            ),
+                        },
+                    ),
+                    slice: Some(
+                        DB_DEPTH_SLICE {
+                            SLICE_TILE_MAX: Usize(
+                                36863,
+                            ),
+                        },
+                    ),
+                    info: Some(
+                        DB_DEPTH_INFO {
+                            ADDR5_SWIZZLE_MASK: Usize(
+                                1,
+                            ),
+                            ARRAY_MODE: ARRAY_2D_TILED_THIN1,
+                            PIPE_CONFIG: ADDR_SURF_P8_32x32_16x16,
+                            BANK_WIDTH: ADDR_SURF_BANK_WIDTH_1,
+                            BANK_HEIGHT: ADDR_SURF_BANK_HEIGHT_4,
+                            MACRO_TILE_ASPECT: ADDR_SURF_MACRO_ASPECT_4,
+                            NUM_BANKS: ADDR_SURF_16_BANK,
+                        },
+                    ),
+                    view: Some(
+                        DB_DEPTH_VIEW {
+                            SLICE_START: Usize(
+                                0,
+                            ),
+                            SLICE_MAX: Usize(
+                                0,
+                            ),
+                            Z_READ_ONLY: false,
+                            STENCIL_READ_ONLY: false,
+                        },
+                    ),
+                },
+                z: Z {
+                    read_base: Some(
+                        2147677184,
+                    ),
+                    write_base: Some(
+                        2147677184,
+                    ),
+                    info: Some(
+                        DB_Z_INFO {
+                            FORMAT: Z_32_FLOAT,
+                            NUM_SAMPLES: Usize(
+                                0,
+                            ),
+                            TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
+                            TILE_MODE_INDEX: Usize(
+                                0,
+                            ),
+                            ALLOW_EXPCLEAR: false,
+                            READ_SIZE: false,
+                            TILE_SURFACE_ENABLE: true,
+                            ZRANGE_PRECISION: true,
+                        },
+                    ),
+                },
+                render_control: DB_RENDER_CONTROL {
+                    DEPTH_CLEAR_ENABLE: true,
+                    STENCIL_CLEAR_ENABLE: false,
+                    DEPTH_COPY: false,
+                    STENCIL_COPY: false,
+                    RESUMMARIZE_ENABLE: false,
+                    STENCIL_COMPRESS_DISABLE: false,
+                    DEPTH_COMPRESS_DISABLE: false,
+                    COPY_CENTROID: false,
+                    COPY_SAMPLE: Usize(
+                        0,
+                    ),
+                },
+                shader_control: DB_SHADER_CONTROL {
+                    Z_EXPORT_ENABLE: false,
+                    STENCIL_TEST_VAL_EXPORT_ENABLE: false,
+                    STENCIL_OP_VAL_EXPORT_ENABLE: false,
+                    Z_ORDER: EARLY_Z_THEN_LATE_Z,
+                    KILL_ENABLE: false,
+                    COVERAGE_TO_MASK_ENABLE: false,
+                    MASK_EXPORT_ENABLE: false,
+                    EXEC_ON_HIER_FAIL: false,
+                    EXEC_ON_NOOP: false,
+                    ALPHA_TO_MASK_DISABLE: false,
+                    DEPTH_BEFORE_SHADER: false,
+                    CONSERVATIVE_Z_EXPORT: EXPORT_ANY_Z,
+                },
+                htile: Some(
+                    HTile {
+                        hitle_data_base: 2147667200,
+                        htile_surface: DB_HTILE_SURFACE {
+                            LINEAR: false,
+                            FULL_CACHE: false,
+                            HTILE_USES_PRELOAD_WIN: false,
+                            PRELOAD: true,
+                            PREFETCH_WIDTH: Usize(
+                                0,
+                            ),
+                            PREFETCH_HEIGHT: Usize(
+                                0,
+                            ),
+                            DST_OUTSIDE_ZERO_TO_ONE: false,
+                        },
+                    },
+                ),
+            },
+            primitive_assembly: PrimitiveAssembly {
+                clip: Clip {
+                    viewport: ClipViewport {
+                        xscale: 1148190720,
+                        xoffset: 1148190720,
+                        yscale: 3288793088,
+                        yoffset: 1141309440,
+                        zscale: 1056964608,
+                        zoffset: 1056964608,
+                    },
+                    viewport_transform_engine_control: PA_CL_VTE_CNTL {
+                        VPORT_X_SCALE_ENA: true,
+                        VPORT_X_OFFSET_ENA: true,
+                        VPORT_Y_SCALE_ENA: true,
+                        VPORT_Y_OFFSET_ENA: true,
+                        VPORT_Z_SCALE_ENA: true,
+                        VPORT_Z_OFFSET_ENA: true,
+                        VTX_XY_FMT: false,
+                        VTX_Z_FMT: false,
+                        VTX_W0_FMT: true,
+                        PERFCOUNTER_REF: false,
+                    },
+                    vertex_shader_out_control: Some(
+                        PA_CL_VS_OUT_CNTL {
+                            CLIP_DIST_ENA_0: false,
+                            CLIP_DIST_ENA_1: false,
+                            CLIP_DIST_ENA_2: false,
+                            CLIP_DIST_ENA_3: false,
+                            CLIP_DIST_ENA_4: false,
+                            CLIP_DIST_ENA_5: false,
+                            CLIP_DIST_ENA_6: false,
+                            CLIP_DIST_ENA_7: false,
+                            CULL_DIST_ENA_0: false,
+                            CULL_DIST_ENA_1: false,
+                            CULL_DIST_ENA_2: false,
+                            CULL_DIST_ENA_3: false,
+                            CULL_DIST_ENA_4: false,
+                            CULL_DIST_ENA_5: false,
+                            CULL_DIST_ENA_6: false,
+                            CULL_DIST_ENA_7: false,
+                            USE_VTX_POINT_SIZE: false,
+                            USE_VTX_EDGE_FLAG: false,
+                            USE_VTX_RENDER_TARGET_INDX: false,
+                            USE_VTX_VIEWPORT_INDX: false,
+                            USE_VTX_KILL_FLAG: false,
+                            VS_OUT_MISC_VEC_ENA: false,
+                            VS_OUT_CCDIST0_VEC_ENA: false,
+                            VS_OUT_CCDIST1_VEC_ENA: false,
+                            VS_OUT_MISC_SIDE_BUS_ENA: false,
+                            USE_VTX_GS_CUT_FLAG: false,
+                        },
+                    ),
+                    guard_band: GuardBand {
+                        vertical_clip: 1114539196,
+                        vertical_discard: 1065353216,
+                        horizontal_clip: 1107593351,
+                        horizontal_discard: 1065353216,
+                    },
+                },
+                scissor_clip: ScissorClip {
+                    viewport_zmin0: 0,
+                    viewport_zmax0: 1065353216,
+                    screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                        TL_X: Usize(
+                            0,
+                        ),
+                        TL_Y: Usize(
+                            0,
+                        ),
+                    },
+                    screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                        BR_X: Usize(
+                            1920,
+                        ),
+                        BR_Y: Usize(
+                            1080,
+                        ),
+                    },
+                },
+                shader_unit: ShaderUnit {
+                    hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
+                        HW_SCREEN_OFFSET_X: Usize(
+                            60,
+                        ),
+                        HW_SCREEN_OFFSET_Y: Usize(
+                            32,
+                        ),
+                    },
+                    control: None,
+                },
+            },
+            target_mask: CB_TARGET_MASK {
+                TARGET0_ENABLE: Usize(
+                    0,
+                ),
+                TARGET1_ENABLE: Usize(
+                    0,
+                ),
+                TARGET2_ENABLE: Usize(
+                    0,
+                ),
+                TARGET3_ENABLE: Usize(
+                    0,
+                ),
+                TARGET4_ENABLE: Usize(
+                    0,
+                ),
+                TARGET5_ENABLE: Usize(
+                    0,
+                ),
+                TARGET6_ENABLE: Usize(
+                    0,
+                ),
+                TARGET7_ENABLE: Usize(
+                    0,
+                ),
+            },
+            shader_mask: CB_SHADER_MASK {
+                OUTPUT0_ENABLE: Usize(
+                    15,
+                ),
+                OUTPUT1_ENABLE: Usize(
+                    0,
+                ),
+                OUTPUT2_ENABLE: Usize(
+                    0,
+                ),
+                OUTPUT3_ENABLE: Usize(
+                    0,
+                ),
+                OUTPUT4_ENABLE: Usize(
+                    0,
+                ),
+                OUTPUT5_ENABLE: Usize(
+                    0,
+                ),
+                OUTPUT6_ENABLE: Usize(
+                    0,
+                ),
+                OUTPUT7_ENABLE: Usize(
+                    0,
+                ),
+            },
+            color0: ColorBuffer {
+                base: 2147569280,
+                pitch: CB_COLOR0_PITCH {
+                    TILE_MAX: Usize(
+                        239,
+                    ),
+                    FMASK_TILE_MAX: Usize(
+                        239,
+                    ),
+                },
+                slice: CB_COLOR0_SLICE {
+                    TILE_MAX: Usize(
+                        32639,
+                    ),
+                },
+                view: CB_COLOR0_VIEW {
+                    SLICE_START: Usize(
+                        0,
+                    ),
+                    SLICE_MAX: Usize(
+                        0,
+                    ),
+                },
+                info: CB_COLOR0_INFO {
+                    ENDIAN: ENDIAN_NONE,
+                    FORMAT: COLOR_8_8_8_8,
+                    LINEAR_GENERAL: false,
+                    NUMBER_TYPE: NUMBER_UNORM,
+                    COMP_SWAP: SWAP_ALT,
+                    FAST_CLEAR: false,
+                    COMPRESSION: false,
+                    BLEND_CLAMP: true,
+                    BLEND_BYPASS: false,
+                    SIMPLE_FLOAT: false,
+                    ROUND_MODE: false,
+                    CMASK_IS_LINEAR: false,
+                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                    FMASK_COMPRESSION_DISABLE: false,
+                },
+                attrib: CB_COLOR0_ATTRIB {
+                    TILE_MODE_INDEX: Usize(
+                        10,
+                    ),
+                    FMASK_TILE_MODE_INDEX: Usize(
+                        10,
+                    ),
+                    FMASK_BANK_HEIGHT: Usize(
+                        0,
+                    ),
+                    NUM_SAMPLES: Usize(
+                        0,
+                    ),
+                    NUM_FRAGMENTS: Usize(
+                        0,
+                    ),
+                    FORCE_DST_ALPHA_1: false,
+                },
+                mask: 0,
+                mask_slice: CB_COLOR0_CMASK_SLICE {
+                    TILE_MAX: Usize(
+                        0,
+                    ),
+                },
+                fmask: 0,
+                fmask_slice: CB_COLOR0_SLICE {
+                    TILE_MAX: Usize(
+                        0,
+                    ),
+                },
+                clear_word_0: 0,
+                clear_word_1: 0,
+            },
+            shader: Shader {
+                z_format: SPI_SHADER_Z_FORMAT {
+                    Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                },
+                col_format: SPI_SHADER_COL_FORMAT {
+                    COL0_EXPORT_FORMAT: SPI_SHADER_32_ABGR,
+                    COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                    COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                    COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                    COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                    COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                    COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                    COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                },
+                pos_format: Some(
+                    SPI_SHADER_POS_FORMAT {
+                        POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
+                        POS1_EXPORT_FORMAT: SPI_SHADER_NONE,
+                        POS2_EXPORT_FORMAT: SPI_SHADER_NONE,
+                        POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
+                    },
+                ),
+                barycentric_control: SPI_BARYC_CNTL {
+                    PERSP_CENTER_CNTL: false,
+                    PERSP_CENTROID_CNTL: false,
+                    LINEAR_CENTER_CNTL: false,
+                    LINEAR_CENTROID_CNTL: false,
+                    POS_FLOAT_LOCATION: Usize(
+                        0,
+                    ),
+                    POS_FLOAT_ULC: false,
+                    FRONT_FACE_ALL_BITS: false,
+                },
+            },
+            pixel_shader: PixelShader {
+                address: 2147549325,
+                resource1: SPI_SHADER_PGM_RSRC1_PS {
+                    VGPRS: Usize(
+                        0,
+                    ),
+                    SGPRS: Usize(
+                        0,
+                    ),
+                    PRIORITY: Usize(
+                        0,
+                    ),
+                    FLOAT_MODE: FP_16_64_DENORMS,
+                    PRIV: false,
+                    DX10_CLAMP: true,
+                    DEBUG_MODE: false,
+                    IEEE_MODE: false,
+                    CU_GROUP_DISABLE: false,
+                    CACHE_CTL: Usize(
+                        0,
+                    ),
+                    CDBG_USER: false,
+                },
+                resource2: SPI_SHADER_PGM_RSRC2_PS {
+                    SCRATCH_EN: false,
+                    USER_SGPR: Usize(
+                        4,
+                    ),
+                    TRAP_PRESENT: false,
+                    WAVE_CNT_EN: false,
+                    EXTRA_LDS_SIZE: Usize(
+                        0,
+                    ),
+                },
+                input: SPI_PS_INPUT_ENA {
+                    PERSP_SAMPLE_ENA: false,
+                    PERSP_CENTER_ENA: true,
+                    PERSP_CENTROID_ENA: false,
+                    PERSP_PULL_MODEL_ENA: false,
+                    LINEAR_SAMPLE_ENA: false,
+                    LINEAR_CENTER_ENA: false,
+                    LINEAR_CENTROID_ENA: false,
+                    LINE_STIPPLE_TEX_ENA: false,
+                    POS_X_FLOAT_ENA: false,
+                    POS_Y_FLOAT_ENA: false,
+                    POS_Z_FLOAT_ENA: false,
+                    POS_W_FLOAT_ENA: false,
+                    FRONT_FACE_ENA: false,
+                    ANCILLARY_ENA: false,
+                    SAMPLE_COVERAGE_ENA: false,
+                    POS_FIXED_PT_ENA: false,
+                },
+                input_address: SPI_PS_INPUT_ENA {
+                    PERSP_SAMPLE_ENA: false,
+                    PERSP_CENTER_ENA: true,
+                    PERSP_CENTROID_ENA: false,
+                    PERSP_PULL_MODEL_ENA: false,
+                    LINEAR_SAMPLE_ENA: false,
+                    LINEAR_CENTER_ENA: false,
+                    LINEAR_CENTROID_ENA: false,
+                    LINE_STIPPLE_TEX_ENA: false,
+                    POS_X_FLOAT_ENA: false,
+                    POS_Y_FLOAT_ENA: false,
+                    POS_Z_FLOAT_ENA: false,
+                    POS_W_FLOAT_ENA: false,
+                    FRONT_FACE_ENA: false,
+                    ANCILLARY_ENA: false,
+                    SAMPLE_COVERAGE_ENA: false,
+                    POS_FIXED_PT_ENA: false,
+                },
+                in_control: SPI_PS_IN_CONTROL {
+                    NUM_INTERP: Usize(
+                        0,
+                    ),
+                    PARAM_GEN: false,
+                    BC_OPTIMIZE_DISABLE: false,
+                },
+                input_control: None,
+                user_data: PixelShaderUserData(
+                    [
+                        UserDataEntry {
+                            slot: 0,
+                            value: 9136,
+                        },
+                        UserDataEntry {
+                            slot: 1,
+                            value: 1048704,
+                        },
+                        UserDataEntry {
+                            slot: 2,
+                            value: 1,
+                        },
+                        UserDataEntry {
+                            slot: 3,
+                            value: 537362348,
+                        },
+                    ],
+                ),
+            },
+            vertex_shader: Some(
+                VertexShader {
+                    entrypoint_gpu_address: 266338545,
+                    resource1: SPI_SHADER_PGM_RSRC1_VS {
+                        VGPRS: Usize(
+                            0,
+                        ),
+                        SGPRS: Usize(
+                            0,
+                        ),
+                        PRIORITY: Usize(
+                            0,
+                        ),
+                        FLOAT_MODE: FP_16_64_DENORMS,
+                        PRIV: false,
+                        DX10_CLAMP: false,
+                        DEBUG_MODE: false,
+                        IEEE_MODE: false,
+                        VGPR_COMP_CNT: Usize(
+                            0,
+                        ),
+                        CU_GROUP_ENABLE: false,
+                        CACHE_CTL: Usize(
+                            0,
+                        ),
+                        CDBG_USER: false,
+                    },
+                    resource2: SPI_SHADER_PGM_RSRC2_VS {
+                        SCRATCH_EN: false,
+                        USER_SGPR: Usize(
+                            2,
+                        ),
+                        TRAP_PRESENT: false,
+                        OC_LDS_EN: false,
+                        SO_BASE0_EN: false,
+                        SO_BASE1_EN: false,
+                        SO_BASE2_EN: false,
+                        SO_BASE3_EN: false,
+                        SO_EN: false,
+                    },
+                    out_config: SPI_VS_OUT_CONFIG {
+                        VS_EXPORT_COUNT: Usize(
+                            0,
+                        ),
+                        VS_HALF_PACK: false,
+                    },
+                    user_data: VertexShaderUserData(
+                        [],
+                    ),
+                },
+            ),
+        },
+    },
+    EndOfPipe(
+        EventWriteEndOfPipePacket {
+            invalidate_writeback_l2: false,
+            event_index: 5,
+            event_type: VGT_EVENT_INITIATOR {
+                EVENT_TYPE: CACHE_FLUSH_TS,
+                ADDRESS_HI: Usize(
+                    0,
+                ),
+                EXTENDED_EVENT: false,
+            },
+            address: 549758180280,
+            immediate: 1,
+        },
+    ),
+]
