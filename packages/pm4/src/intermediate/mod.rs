@@ -1,16 +1,21 @@
 pub mod build;
 
 use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
+use crate::packet_value::{
+    DrawIndexAutoPacket, EndOfPipePacket, SetContextRegisterPacket, SetShaderRegisterPacket,
+    Type3PacketValue,
+};
 use crate::{
-    DrawIndexAutoPacket, EndOfPipePacket, PM4Packet, RegisterEntry, Type3Packet, Type3PacketValue,
-    CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE,
-    CB_COLOR0_VIEW, CB_SHADER_MASK, CB_TARGET_MASK, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE,
-    DB_DEPTH_SLICE, DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL,
-    DB_STENCIL_INFO, DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR,
-    PA_SC_SCREEN_SCISSOR_TL, PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL,
-    SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL, SPI_SHADER_COL_FORMAT,
-    SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS,
-    SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
+    PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet, CB_COLOR0_ATTRIB,
+    CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE, CB_COLOR0_VIEW,
+    CB_SHADER_MASK, CB_TARGET_MASK, COMPUTE_NUM_THREAD_X, COMPUTE_PGM_HI, COMPUTE_PGM_RSRC1,
+    COMPUTE_PGM_RSRC2, DB_DEPTH_CONTROL, DB_DEPTH_INFO, DB_DEPTH_SIZE, DB_DEPTH_SLICE,
+    DB_DEPTH_VIEW, DB_HTILE_SURFACE, DB_RENDER_CONTROL, DB_SHADER_CONTROL, DB_STENCIL_INFO,
+    DB_Z_INFO, PA_CL_VS_OUT_CNTL, PA_CL_VTE_CNTL, PA_SC_SCREEN_SCISSOR_BR, PA_SC_SCREEN_SCISSOR_TL,
+    PA_SU_HARDWARE_SCREEN_OFFSET, PA_SU_SC_MODE_CNTL, SPI_BARYC_CNTL, SPI_PS_INPUT_CNTL_0,
+    SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL, SPI_SHADER_COL_FORMAT, SPI_SHADER_PGM_RSRC1_PS,
+    SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS,
+    SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
 };
 use pm4_internal_macros::{Build, BuildUserData};
 
@@ -26,36 +31,44 @@ pub enum Command {
 pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
     let mut result = vec![];
 
-    let mut builder = <GraphicsPipeline as Build<RegisterEntry>>::Builder::new();
+    let mut graphics_pipeline_builder = <GraphicsPipeline as Build<RegisterEntry>>::Builder::new();
+    let mut compute_pipeline_builder = <ComputePipeline as Build<RegisterEntry>>::Builder::new();
 
     for packet in commands {
         match packet {
             PM4Packet::Type3(Type3Packet {
-                header: _,
-                value: Type3PacketValue::SetContextRegister { values },
+                header: Type3Header { shader_type, .. },
+                value: Type3PacketValue::SetContextRegister(SetContextRegisterPacket { values }),
             })
             | PM4Packet::Type3(Type3Packet {
-                header: _,
-                value: Type3PacketValue::SetShaderRegister { values },
+                header: Type3Header { shader_type, .. },
+                value: Type3PacketValue::SetShaderRegister(SetShaderRegisterPacket { values }),
             }) => {
                 for entry in values {
                     let Some(entry) = entry else {
                         continue;
                     };
 
-                    let accepted = builder.update(entry);
+                    let accepted = match shader_type {
+                        ShaderType::Graphics => graphics_pipeline_builder.update(entry),
+                        ShaderType::Compute => compute_pipeline_builder.update(entry),
+                    };
                     if let None = accepted {
                         // todo: log
                     }
                 }
             }
             PM4Packet::Type3(Type3Packet {
-                header: _,
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Graphics,
+                        ..
+                    },
                 value: Type3PacketValue::DrawIndexAuto(draw_packet),
             }) => {
                 result.push(Command::Draw {
                     draw_packet: draw_packet.clone(),
-                    pipeline: builder.clone().finalize().unwrap(),
+                    pipeline: graphics_pipeline_builder.clone().finalize().unwrap(),
                 });
             }
             PM4Packet::Type3(Type3Packet {
@@ -390,3 +403,34 @@ pub struct UserDataEntry {
     pub slot: u8,
     pub value: u32,
 }
+
+#[derive(Debug, Build)]
+#[entry(RegisterEntry)]
+pub struct ComputePipeline {
+    #[entry(RegisterEntry::COMPUTE_PGM_LO)]
+    address_lo: u32,
+
+    #[entry(RegisterEntry::COMPUTE_PGM_HI)]
+    address_hi: COMPUTE_PGM_HI,
+
+    #[entry(RegisterEntry::COMPUTE_PGM_RSRC1)]
+    resource1: COMPUTE_PGM_RSRC1,
+
+    #[entry(RegisterEntry::COMPUTE_PGM_RSRC2)]
+    resource2: COMPUTE_PGM_RSRC2,
+
+    #[entry(RegisterEntry::COMPUTE_NUM_THREAD_X)]
+    thread_x: COMPUTE_NUM_THREAD_X,
+
+    #[entry(RegisterEntry::COMPUTE_NUM_THREAD_Y)]
+    thread_y: COMPUTE_NUM_THREAD_X,
+
+    #[entry(RegisterEntry::COMPUTE_NUM_THREAD_Z)]
+    thread_z: COMPUTE_NUM_THREAD_X,
+
+    user_data: ComputeUserData,
+}
+
+#[derive(Debug, BuildUserData)]
+#[user_data(COMPUTE_USER_DATA_, 0..=15)]
+pub struct ComputeUserData(pub Vec<UserDataEntry>);

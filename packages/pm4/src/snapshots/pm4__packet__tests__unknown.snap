@@ -42,22 +42,42 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: WaitRegisterMemory(
-                    WaitRegisterMemoryPacket {
-                        engine: PrefetchParser,
-                        function: Always,
-                        tcl1_volatile_action_enable: false,
-                        texture_cache_volatile_action_enable: false,
-                        texture_cache_write_back_action_enable: true,
-                        color_buffer_action_enable: true,
-                        depth_buffer_action_enable: true,
-                        reference_value: 0,
-                        poll_address_swap: 3,
-                        poll_address: Register(
-                            65535,
-                        ),
-                        mask: 0,
-                        poll_interval: 10,
+                value: Unknown {
+                    opcode: ACQUIRE_MEM,
+                    body: [
+                        784629696,
+                        4294967295,
+                        0,
+                        0,
+                        0,
+                        10,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                COMPUTE_STATIC_THREAD_MGMT_SE0(
+                                    COMPUTE_STATIC_THREAD_MGMT_SE0 {
+                                        SH0_CU_EN: Usize(
+                                            65535,
+                                        ),
+                                        SH1_CU_EN: Usize(
+                                            65535,
+                                        ),
+                                    },
+                                ),
+                            ),
+                        ],
                     },
                 ),
             },
@@ -69,22 +89,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            COMPUTE_STATIC_THREAD_MGMT_SE0(
-                                COMPUTE_STATIC_THREAD_MGMT_SE0 {
-                                    SH0_CU_EN: Usize(
-                                        65535,
-                                    ),
-                                    SH1_CU_EN: Usize(
-                                        65535,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                COMPUTE_STATIC_THREAD_MGMT_SE1(
+                                    COMPUTE_STATIC_THREAD_MGMT_SE0 {
+                                        SH0_CU_EN: Usize(
+                                            65535,
+                                        ),
+                                        SH1_CU_EN: Usize(
+                                            65535,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -94,22 +116,32 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            COMPUTE_STATIC_THREAD_MGMT_SE1(
-                                COMPUTE_STATIC_THREAD_MGMT_SE0 {
-                                    SH0_CU_EN: Usize(
-                                        65535,
-                                    ),
-                                    SH1_CU_EN: Usize(
-                                        65535,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                COMPUTE_RESOURCE_LIMITS(
+                                    COMPUTE_RESOURCE_LIMITS {
+                                        WAVES_PER_SH: Usize(
+                                            0,
+                                        ),
+                                        TG_PER_CU: Usize(
+                                            0,
+                                        ),
+                                        LOCK_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                        SIMD_DEST_CNTL: false,
+                                        FORCE_SIMD_DIST: false,
+                                        CU_GROUP_COUNT: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -119,30 +151,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            COMPUTE_RESOURCE_LIMITS(
-                                COMPUTE_RESOURCE_LIMITS {
-                                    WAVES_PER_SH: Usize(
-                                        0,
-                                    ),
-                                    TG_PER_CU: Usize(
-                                        0,
-                                    ),
-                                    LOCK_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                    SIMD_DEST_CNTL: false,
-                                    FORCE_SIMD_DIST: false,
-                                    CU_GROUP_COUNT: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_VTX_CNTL(
+                                    PA_SU_VTX_CNTL {
+                                        PIX_CENTER: true,
+                                        ROUND_MODE: X_ROUND_TO_EVEN,
+                                        QUANT_MODE: X_16_8_FIXED_POINT_1_256TH,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -152,19 +175,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_VTX_CNTL(
-                                PA_SU_VTX_CNTL {
-                                    PIX_CENTER: true,
-                                    ROUND_MODE: X_ROUND_TO_EVEN,
-                                    QUANT_MODE: X_16_8_FIXED_POINT_1_256TH,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_LINE_CNTL(
+                                    PA_SU_LINE_CNTL {
+                                        WIDTH: Usize(
+                                            8,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -174,19 +199,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_LINE_CNTL(
-                                PA_SU_LINE_CNTL {
-                                    WIDTH: Usize(
-                                        8,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_POINT_SIZE(
+                                    PA_SU_POINT_SIZE {
+                                        HEIGHT: Usize(
+                                            8,
+                                        ),
+                                        WIDTH: Usize(
+                                            8,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -196,22 +226,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_POINT_SIZE(
-                                PA_SU_POINT_SIZE {
-                                    HEIGHT: Usize(
-                                        8,
-                                    ),
-                                    WIDTH: Usize(
-                                        8,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_POINT_MINMAX(
+                                    PA_SU_POINT_MINMAX {
+                                        MIN_SIZE: Usize(
+                                            0,
+                                        ),
+                                        MAX_SIZE: Usize(
+                                            65535,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -221,22 +253,39 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_POINT_MINMAX(
-                                PA_SU_POINT_MINMAX {
-                                    MIN_SIZE: Usize(
-                                        0,
-                                    ),
-                                    MAX_SIZE: Usize(
-                                        65535,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_CLIP_CNTL(
+                                    PA_CL_CLIP_CNTL {
+                                        UCP_ENA_0: false,
+                                        UCP_ENA_1: false,
+                                        UCP_ENA_2: false,
+                                        UCP_ENA_3: false,
+                                        UCP_ENA_4: false,
+                                        UCP_ENA_5: false,
+                                        PS_UCP_Y_SCALE_NEG: false,
+                                        PS_UCP_MODE: Usize(
+                                            0,
+                                        ),
+                                        CLIP_DISABLE: false,
+                                        UCP_CULL_ONLY_ENA: false,
+                                        BOUNDARY_EDGE_FLAG_ENA: false,
+                                        DX_CLIP_SPACE_DEF: false,
+                                        DIS_CLIP_ERR_DETECT: false,
+                                        VTX_KILL_OR: false,
+                                        DX_RASTERIZATION_KILL: false,
+                                        DX_LINEAR_ATTR_CLIP_ENA: false,
+                                        VTE_VPORT_PROVOKE_DISABLE: false,
+                                        ZCLIP_NEAR_DISABLE: false,
+                                        ZCLIP_FAR_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -246,37 +295,28 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_CLIP_CNTL(
-                                PA_CL_CLIP_CNTL {
-                                    UCP_ENA_0: false,
-                                    UCP_ENA_1: false,
-                                    UCP_ENA_2: false,
-                                    UCP_ENA_3: false,
-                                    UCP_ENA_4: false,
-                                    UCP_ENA_5: false,
-                                    PS_UCP_Y_SCALE_NEG: false,
-                                    PS_UCP_MODE: Usize(
-                                        0,
-                                    ),
-                                    CLIP_DISABLE: false,
-                                    UCP_CULL_ONLY_ENA: false,
-                                    BOUNDARY_EDGE_FLAG_ENA: false,
-                                    DX_CLIP_SPACE_DEF: false,
-                                    DIS_CLIP_ERR_DETECT: false,
-                                    VTX_KILL_OR: false,
-                                    DX_RASTERIZATION_KILL: false,
-                                    DX_LINEAR_ATTR_CLIP_ENA: false,
-                                    VTE_VPORT_PROVOKE_DISABLE: false,
-                                    ZCLIP_NEAR_DISABLE: false,
-                                    ZCLIP_FAR_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_VTE_CNTL(
+                                    PA_CL_VTE_CNTL {
+                                        VPORT_X_SCALE_ENA: true,
+                                        VPORT_X_OFFSET_ENA: true,
+                                        VPORT_Y_SCALE_ENA: true,
+                                        VPORT_Y_OFFSET_ENA: true,
+                                        VPORT_Z_SCALE_ENA: true,
+                                        VPORT_Z_OFFSET_ENA: true,
+                                        VTX_XY_FMT: false,
+                                        VTX_Z_FMT: false,
+                                        VTX_W0_FMT: true,
+                                        PERFCOUNTER_REF: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -286,26 +326,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_VTE_CNTL(
-                                PA_CL_VTE_CNTL {
-                                    VPORT_X_SCALE_ENA: true,
-                                    VPORT_X_OFFSET_ENA: true,
-                                    VPORT_Y_SCALE_ENA: true,
-                                    VPORT_Y_OFFSET_ENA: true,
-                                    VPORT_Z_SCALE_ENA: true,
-                                    VPORT_Z_OFFSET_ENA: true,
-                                    VTX_XY_FMT: false,
-                                    VTX_Z_FMT: false,
-                                    VTX_W0_FMT: true,
-                                    PERFCOUNTER_REF: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_CLIPRECT_RULE(
+                                    PA_SC_CLIPRECT_RULE,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -315,15 +346,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_CLIPRECT_RULE(
-                                PA_SC_CLIPRECT_RULE,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_OUT_DEALLOC_CNTL(
+                                    VGT_OUT_DEALLOC_CNTL {
+                                        DEALLOC_DIST: Usize(
+                                            16,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -333,19 +370,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_OUT_DEALLOC_CNTL(
-                                VGT_OUT_DEALLOC_CNTL {
-                                    DEALLOC_DIST: Usize(
-                                        16,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_VERT_CLIP_ADJ(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -355,15 +390,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_VERT_CLIP_ADJ(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_HORZ_CLIP_ADJ(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -373,15 +410,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_HORZ_CLIP_ADJ(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_VERT_DISC_ADJ(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -391,15 +430,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_VERT_DISC_ADJ(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_HORZ_DISC_ADJ(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -409,15 +450,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_HORZ_DISC_ADJ(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR_CONTROL(
+                                    CB_COLOR_CONTROL {
+                                        DEGAMMA_ENABLE: false,
+                                        MODE: CB_NORMAL,
+                                        ROP3: ROP3_COPY,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -427,19 +474,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR_CONTROL(
-                                CB_COLOR_CONTROL {
-                                    DEGAMMA_ENABLE: false,
-                                    MODE: CB_NORMAL,
-                                    ROP3: ROP3_COPY,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_AA_MASK_X0Y0_X1Y0(
+                                    PA_SC_AA_MASK_X0Y0_X1Y0 {
+                                        AA_MASK_X0Y0: Usize(
+                                            65535,
+                                        ),
+                                        AA_MASK_X1Y0: Usize(
+                                            65535,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -449,47 +501,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_AA_MASK_X0Y0_X1Y0(
-                                PA_SC_AA_MASK_X0Y0_X1Y0 {
-                                    AA_MASK_X0Y0: Usize(
-                                        65535,
-                                    ),
-                                    AA_MASK_X1Y0: Usize(
-                                        65535,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_AA_MASK_X0Y1_X1Y1(
+                                    PA_SC_AA_MASK_X0Y1_X1Y1 {
+                                        AA_MASK_X0Y1: Usize(
+                                            65535,
+                                        ),
+                                        AA_MASK_X1Y1: Usize(
+                                            65535,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_AA_MASK_X0Y1_X1Y1(
-                                PA_SC_AA_MASK_X0Y1_X1Y1 {
-                                    AA_MASK_X0Y1: Usize(
-                                        65535,
-                                    ),
-                                    AA_MASK_X1Y1: Usize(
-                                        65535,
-                                    ),
-                                },
-                            ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -514,25 +543,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            SPI_SHADER_PGM_RSRC3_PS(
-                                SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_PS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: Usize(
+                                            511,
+                                        ),
+                                        WAVE_LIMIT: Usize(
+                                            0,
+                                        ),
+                                        LOCK_LOW_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -542,25 +573,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            SPI_SHADER_PGM_RSRC3_VS(
-                                SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_VS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: Usize(
+                                            511,
+                                        ),
+                                        WAVE_LIMIT: Usize(
+                                            0,
+                                        ),
+                                        LOCK_LOW_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -570,25 +603,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            SPI_SHADER_PGM_RSRC3_GS(
-                                SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_GS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: Usize(
+                                            511,
+                                        ),
+                                        WAVE_LIMIT: Usize(
+                                            0,
+                                        ),
+                                        LOCK_LOW_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -598,25 +633,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            SPI_SHADER_PGM_RSRC3_ES(
-                                SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_ES(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: Usize(
+                                            511,
+                                        ),
+                                        WAVE_LIMIT: Usize(
+                                            0,
+                                        ),
+                                        LOCK_LOW_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -626,22 +663,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            SPI_SHADER_PGM_RSRC3_HS(
-                                SPI_SHADER_PGM_RSRC3_HS {
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_HS(
+                                    SPI_SHADER_PGM_RSRC3_HS {
+                                        WAVE_LIMIT: Usize(
+                                            0,
+                                        ),
+                                        LOCK_LOW_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -651,25 +690,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister {
-                    values: [
-                        Some(
-                            SPI_SHADER_PGM_RSRC3_LS(
-                                SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_LS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: Usize(
+                                            511,
+                                        ),
+                                        WAVE_LIMIT: Usize(
+                                            0,
+                                        ),
+                                        LOCK_LOW_THRESHOLD: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -679,20 +720,22 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            SPI_VS_OUT_CONFIG(
-                                SPI_VS_OUT_CONFIG {
-                                    VS_EXPORT_COUNT: Usize(
-                                        1,
-                                    ),
-                                    VS_HALF_PACK: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_VS_OUT_CONFIG(
+                                    SPI_VS_OUT_CONFIG {
+                                        VS_EXPORT_COUNT: Usize(
+                                            1,
+                                        ),
+                                        VS_HALF_PACK: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -702,15 +745,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_MIN_VTX_INDX(
-                                0,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MIN_VTX_INDX(
+                                    0,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -720,15 +765,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_MAX_VTX_INDX(
-                                4294967295,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MAX_VTX_INDX(
+                                    4294967295,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -738,15 +785,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_MULTI_PRIM_IB_RESET_INDX(
-                                0,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MULTI_PRIM_IB_RESET_INDX(
+                                    0,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -756,19 +805,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_OUTPUT_PATH_CNTL(
-                                VGT_OUTPUT_PATH_CNTL {
-                                    PATH_SELECT: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_OUTPUT_PATH_CNTL(
+                                    VGT_OUTPUT_PATH_CNTL {
+                                        PATH_SELECT: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -778,35 +829,37 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_GS_MODE(
-                                VGT_GS_MODE {
-                                    MODE: GS_OFF,
-                                    RESERVED_0: false,
-                                    CUT_MODE: GS_CUT_1024,
-                                    RESERVED_1: Usize(
-                                        0,
-                                    ),
-                                    GS_C_PACK_EN: false,
-                                    RESERVED_2: false,
-                                    ES_PASSTHRU: false,
-                                    COMPUTE_MODE: false,
-                                    FAST_COMPUTE_MODE: false,
-                                    ELEMENT_INFO_EN: false,
-                                    PARTIAL_THD_AT_EOI: false,
-                                    SUPPRESS_CUTS: false,
-                                    ES_WRITE_OPTIMIZE: false,
-                                    GS_WRITE_OPTIMIZE: false,
-                                    ONCHIP: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_MODE(
+                                    VGT_GS_MODE {
+                                        MODE: GS_OFF,
+                                        RESERVED_0: false,
+                                        CUT_MODE: GS_CUT_1024,
+                                        RESERVED_1: Usize(
+                                            0,
+                                        ),
+                                        GS_C_PACK_EN: false,
+                                        RESERVED_2: false,
+                                        ES_PASSTHRU: false,
+                                        COMPUTE_MODE: false,
+                                        FAST_COMPUTE_MODE: false,
+                                        ELEMENT_INFO_EN: false,
+                                        PARTIAL_THD_AT_EOI: false,
+                                        SUPPRESS_CUTS: false,
+                                        ES_WRITE_OPTIMIZE: false,
+                                        GS_WRITE_OPTIMIZE: false,
+                                        ONCHIP: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -816,17 +869,19 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_VTX_CNT_EN(
-                                VGT_VTX_CNT_EN {
-                                    VTX_CNT_EN: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_VTX_CNT_EN(
+                                    VGT_VTX_CNT_EN {
+                                        VTX_CNT_EN: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -836,20 +891,22 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_MODE_CNTL_0(
-                                PA_SC_MODE_CNTL_0 {
-                                    MSAA_ENABLE: false,
-                                    VPORT_SCISSOR_ENABLE: false,
-                                    LINE_STIPPLE_ENABLE: false,
-                                    SEND_UNLIT_STILES_TO_PKR: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_MODE_CNTL_0(
+                                    PA_SC_MODE_CNTL_0 {
+                                        MSAA_ENABLE: false,
+                                        VPORT_SCISSOR_ENABLE: false,
+                                        LINE_STIPPLE_ENABLE: false,
+                                        SEND_UNLIT_STILES_TO_PKR: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -859,46 +916,48 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_MODE_CNTL_1(
-                                PA_SC_MODE_CNTL_1 {
-                                    WALK_SIZE: false,
-                                    WALK_ALIGNMENT: false,
-                                    WALK_ALIGN8_PRIM_FITS_ST: false,
-                                    WALK_FENCE_ENABLE: false,
-                                    WALK_FENCE_SIZE: Usize(
-                                        0,
-                                    ),
-                                    SUPERTILE_WALK_ORDER_ENABLE: false,
-                                    TILE_WALK_ORDER_ENABLE: false,
-                                    TILE_COVER_DISABLE: false,
-                                    TILE_COVER_NO_SCISSOR: false,
-                                    ZMM_LINE_EXTENT: false,
-                                    ZMM_LINE_OFFSET: false,
-                                    ZMM_RECT_EXTENT: false,
-                                    KILL_PIX_POST_HI_Z: false,
-                                    KILL_PIX_POST_DETAIL_MASK: false,
-                                    PS_ITER_SAMPLE: false,
-                                    MULTI_SHADER_ENGINE_PRIM_DISCARD_ENABLE: false,
-                                    MULTI_GPU_SUPERTILE_ENABLE: false,
-                                    GPU_ID_OVERRIDE_ENABLE: false,
-                                    GPU_ID_OVERRIDE: Usize(
-                                        0,
-                                    ),
-                                    MULTI_GPU_PRIM_DISCARD_ENABLE: false,
-                                    FORCE_EOV_CNTDWN_ENABLE: true,
-                                    FORCE_EOV_REZ_ENABLE: true,
-                                    OUT_OF_ORDER_PRIMITIVE_ENABLE: false,
-                                    OUT_OF_ORDER_WATER_MARK: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_MODE_CNTL_1(
+                                    PA_SC_MODE_CNTL_1 {
+                                        WALK_SIZE: false,
+                                        WALK_ALIGNMENT: false,
+                                        WALK_ALIGN8_PRIM_FITS_ST: false,
+                                        WALK_FENCE_ENABLE: false,
+                                        WALK_FENCE_SIZE: Usize(
+                                            0,
+                                        ),
+                                        SUPERTILE_WALK_ORDER_ENABLE: false,
+                                        TILE_WALK_ORDER_ENABLE: false,
+                                        TILE_COVER_DISABLE: false,
+                                        TILE_COVER_NO_SCISSOR: false,
+                                        ZMM_LINE_EXTENT: false,
+                                        ZMM_LINE_OFFSET: false,
+                                        ZMM_RECT_EXTENT: false,
+                                        KILL_PIX_POST_HI_Z: false,
+                                        KILL_PIX_POST_DETAIL_MASK: false,
+                                        PS_ITER_SAMPLE: false,
+                                        MULTI_SHADER_ENGINE_PRIM_DISCARD_ENABLE: false,
+                                        MULTI_GPU_SUPERTILE_ENABLE: false,
+                                        GPU_ID_OVERRIDE_ENABLE: false,
+                                        GPU_ID_OVERRIDE: Usize(
+                                            0,
+                                        ),
+                                        MULTI_GPU_PRIM_DISCARD_ENABLE: false,
+                                        FORCE_EOV_CNTDWN_ENABLE: true,
+                                        FORCE_EOV_REZ_ENABLE: true,
+                                        OUT_OF_ORDER_PRIMITIVE_ENABLE: false,
+                                        OUT_OF_ORDER_WATER_MARK: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -908,29 +967,31 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_AA_CONFIG(
-                                PA_SC_AA_CONFIG {
-                                    MSAA_NUM_SAMPLES: Usize(
-                                        0,
-                                    ),
-                                    AA_MASK_CENTROID_DTMN: false,
-                                    MAX_SAMPLE_DIST: Usize(
-                                        0,
-                                    ),
-                                    MSAA_EXPOSED_SAMPLES: Usize(
-                                        0,
-                                    ),
-                                    DETAIL_TO_EXPOSED_MODE: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_AA_CONFIG(
+                                    PA_SC_AA_CONFIG {
+                                        MSAA_NUM_SAMPLES: Usize(
+                                            0,
+                                        ),
+                                        AA_MASK_CENTROID_DTMN: false,
+                                        MAX_SAMPLE_DIST: Usize(
+                                            0,
+                                        ),
+                                        MSAA_EXPOSED_SAMPLES: Usize(
+                                            0,
+                                        ),
+                                        DETAIL_TO_EXPOSED_MODE: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -940,20 +1001,22 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_POLY_OFFSET_DB_FMT_CNTL(
-                                PA_SU_POLY_OFFSET_DB_FMT_CNTL {
-                                    POLY_OFFSET_NEG_NUM_DB_BITS: Usize(
-                                        233,
-                                    ),
-                                    POLY_OFFSET_DB_IS_FLOAT_FMT: true,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_POLY_OFFSET_DB_FMT_CNTL(
+                                    PA_SU_POLY_OFFSET_DB_FMT_CNTL {
+                                        POLY_OFFSET_NEG_NUM_DB_BITS: Usize(
+                                            233,
+                                        ),
+                                        POLY_OFFSET_DB_IS_FLOAT_FMT: true,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -963,37 +1026,39 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_GS_PER_ES(
-                                VGT_GS_PER_ES {
-                                    GS_PER_ES: Usize(
-                                        256,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_PER_ES(
+                                    VGT_GS_PER_ES {
+                                        GS_PER_ES: Usize(
+                                            256,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_ES_PER_GS(
-                                VGT_ES_PER_GS {
-                                    ES_PER_GS: Usize(
-                                        256,
-                                    ),
-                                },
+                            Some(
+                                VGT_ES_PER_GS(
+                                    VGT_ES_PER_GS {
+                                        ES_PER_GS: Usize(
+                                            256,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_GS_PER_VS(
-                                VGT_GS_PER_VS {
-                                    GS_PER_VS: Usize(
-                                        4,
-                                    ),
-                                },
+                            Some(
+                                VGT_GS_PER_VS(
+                                    VGT_GS_PER_VS {
+                                        GS_PER_VS: Usize(
+                                            4,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1181,18 +1246,20 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_SHADER_STAGES_EN(
-                                VGT_SHADER_STAGES_EN {
-                                    HS_EN: HS_STAGE_OFF,
-                                    DYNAMIC_HS: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_SHADER_STAGES_EN(
+                                    VGT_SHADER_STAGES_EN {
+                                        HS_EN: HS_STAGE_OFF,
+                                        DYNAMIC_HS: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1202,15 +1269,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            TA_BC_BASE_ADDR(
-                                2152706625,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                TA_BC_BASE_ADDR(
+                                    2152706625,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1220,19 +1289,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_ESGS_RING_ITEMSIZE(
-                                VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        128,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_ESGS_RING_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: Usize(
+                                            128,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1242,46 +1313,48 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_GS_VERT_ITEMSIZE(
-                                VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        16,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: Usize(
+                                            16,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_GS_VERT_ITEMSIZE_1(
-                                VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        0,
-                                    ),
-                                },
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_1(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_GS_VERT_ITEMSIZE_2(
-                                VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        0,
-                                    ),
-                                },
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_2(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_GS_VERT_ITEMSIZE_3(
-                                VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        0,
-                                    ),
-                                },
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_3(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1291,37 +1364,39 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_GSVS_RING_OFFSET_1(
-                                VGT_GSVS_RING_OFFSET_1 {
-                                    OFFSET: Usize(
-                                        1024,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GSVS_RING_OFFSET_1(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: Usize(
+                                            1024,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_GSVS_RING_OFFSET_2(
-                                VGT_GSVS_RING_OFFSET_1 {
-                                    OFFSET: Usize(
-                                        1024,
-                                    ),
-                                },
+                            Some(
+                                VGT_GSVS_RING_OFFSET_2(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: Usize(
+                                            1024,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            VGT_GSVS_RING_OFFSET_3(
-                                VGT_GSVS_RING_OFFSET_1 {
-                                    OFFSET: Usize(
-                                        1024,
-                                    ),
-                                },
+                            Some(
+                                VGT_GSVS_RING_OFFSET_3(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: Usize(
+                                            1024,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1331,19 +1406,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_GS_MAX_VERT_OUT(
-                                VGT_GS_MAX_VERT_OUT {
-                                    MAX_VERT_OUT: Usize(
-                                        64,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_MAX_VERT_OUT(
+                                    VGT_GS_MAX_VERT_OUT {
+                                        MAX_VERT_OUT: Usize(
+                                            64,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1353,19 +1430,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_GSVS_RING_ITEMSIZE(
-                                VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        1024,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GSVS_RING_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: Usize(
+                                            1024,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1375,91 +1454,93 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR0_BASE(
-                                2152488960,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR0_BASE(
+                                    2152488960,
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_PITCH(
-                                CB_COLOR0_PITCH {
-                                    TILE_MAX: Usize(
-                                        239,
-                                    ),
-                                    FMASK_TILE_MAX: Usize(
-                                        239,
-                                    ),
-                                },
+                            Some(
+                                CB_COLOR0_PITCH(
+                                    CB_COLOR0_PITCH {
+                                        TILE_MAX: Usize(
+                                            239,
+                                        ),
+                                        FMASK_TILE_MAX: Usize(
+                                            239,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_SLICE(
-                                CB_COLOR0_SLICE {
-                                    TILE_MAX: Usize(
-                                        32639,
-                                    ),
-                                },
+                            Some(
+                                CB_COLOR0_SLICE(
+                                    CB_COLOR0_SLICE {
+                                        TILE_MAX: Usize(
+                                            32639,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_VIEW(
-                                CB_COLOR0_VIEW {
-                                    SLICE_START: Usize(
-                                        0,
-                                    ),
-                                    SLICE_MAX: Usize(
-                                        0,
-                                    ),
-                                },
+                            Some(
+                                CB_COLOR0_VIEW(
+                                    CB_COLOR0_VIEW {
+                                        SLICE_START: Usize(
+                                            0,
+                                        ),
+                                        SLICE_MAX: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_8_8_8_8,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_ALT,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: true,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: true,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                            Some(
+                                CB_COLOR0_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_8_8_8_8,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_ALT,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: true,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: true,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_ATTRIB(
-                                CB_COLOR0_ATTRIB {
-                                    TILE_MODE_INDEX: Usize(
-                                        10,
-                                    ),
-                                    FMASK_TILE_MODE_INDEX: Usize(
-                                        10,
-                                    ),
-                                    FMASK_BANK_HEIGHT: Usize(
-                                        0,
-                                    ),
-                                    NUM_SAMPLES: Usize(
-                                        0,
-                                    ),
-                                    NUM_FRAGMENTS: Usize(
-                                        0,
-                                    ),
-                                    FORCE_DST_ALPHA_1: false,
-                                },
+                            Some(
+                                CB_COLOR0_ATTRIB(
+                                    CB_COLOR0_ATTRIB {
+                                        TILE_MODE_INDEX: Usize(
+                                            10,
+                                        ),
+                                        FMASK_TILE_MODE_INDEX: Usize(
+                                            10,
+                                        ),
+                                        FMASK_BANK_HEIGHT: Usize(
+                                            0,
+                                        ),
+                                        NUM_SAMPLES: Usize(
+                                            0,
+                                        ),
+                                        NUM_FRAGMENTS: Usize(
+                                            0,
+                                        ),
+                                        FORCE_DST_ALPHA_1: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1469,38 +1550,40 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR0_CMASK(
-                                0,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR0_CMASK(
+                                    0,
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_CMASK_SLICE(
-                                CB_COLOR0_CMASK_SLICE {
-                                    TILE_MAX: Usize(
-                                        0,
-                                    ),
-                                },
+                            Some(
+                                CB_COLOR0_CMASK_SLICE(
+                                    CB_COLOR0_CMASK_SLICE {
+                                        TILE_MAX: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_FMASK(
-                                0,
+                            Some(
+                                CB_COLOR0_FMASK(
+                                    0,
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_COLOR0_FMASK_SLICE(
-                                CB_COLOR0_SLICE {
-                                    TILE_MAX: Usize(
-                                        0,
-                                    ),
-                                },
+                            Some(
+                                CB_COLOR0_FMASK_SLICE(
+                                    CB_COLOR0_SLICE {
+                                        TILE_MAX: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1525,31 +1608,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR1_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR1_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1559,31 +1644,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR2_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR2_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1593,31 +1680,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR3_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR3_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1627,31 +1716,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR4_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR4_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1661,31 +1752,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR5_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR5_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1695,31 +1788,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR6_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR6_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1729,31 +1824,33 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_COLOR7_INFO(
-                                CB_COLOR0_INFO {
-                                    ENDIAN: ENDIAN_NONE,
-                                    FORMAT: COLOR_INVALID,
-                                    LINEAR_GENERAL: false,
-                                    NUMBER_TYPE: NUMBER_UNORM,
-                                    COMP_SWAP: SWAP_STD,
-                                    FAST_CLEAR: false,
-                                    COMPRESSION: false,
-                                    BLEND_CLAMP: false,
-                                    BLEND_BYPASS: false,
-                                    SIMPLE_FLOAT: false,
-                                    ROUND_MODE: false,
-                                    CMASK_IS_LINEAR: false,
-                                    BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
-                                    BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
-                                    FMASK_COMPRESSION_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR7_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1763,28 +1860,30 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_Z_INFO(
-                                DB_Z_INFO {
-                                    FORMAT: Z_INVALID,
-                                    NUM_SAMPLES: Usize(
-                                        0,
-                                    ),
-                                    TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
-                                    TILE_MODE_INDEX: Usize(
-                                        0,
-                                    ),
-                                    ALLOW_EXPCLEAR: false,
-                                    READ_SIZE: false,
-                                    TILE_SURFACE_ENABLE: false,
-                                    ZRANGE_PRECISION: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_Z_INFO(
+                                    DB_Z_INFO {
+                                        FORMAT: Z_INVALID,
+                                        NUM_SAMPLES: Usize(
+                                            0,
+                                        ),
+                                        TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
+                                        TILE_MODE_INDEX: Usize(
+                                            0,
+                                        ),
+                                        ALLOW_EXPCLEAR: false,
+                                        READ_SIZE: false,
+                                        TILE_SURFACE_ENABLE: false,
+                                        ZRANGE_PRECISION: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1794,23 +1893,25 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_STENCIL_INFO(
-                                DB_STENCIL_INFO {
-                                    FORMAT: STENCIL_INVALID,
-                                    TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
-                                    TILE_MODE_INDEX: Usize(
-                                        0,
-                                    ),
-                                    ALLOW_EXPCLEAR: false,
-                                    TILE_STENCIL_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCIL_INFO(
+                                    DB_STENCIL_INFO {
+                                        FORMAT: STENCIL_INVALID,
+                                        TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
+                                        TILE_MODE_INDEX: Usize(
+                                            0,
+                                        ),
+                                        ALLOW_EXPCLEAR: false,
+                                        TILE_STENCIL_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1820,17 +1921,19 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_MULTI_PRIM_IB_RESET_EN(
-                                VGT_MULTI_PRIM_IB_RESET_EN {
-                                    RESET_EN: true,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MULTI_PRIM_IB_RESET_EN(
+                                    VGT_MULTI_PRIM_IB_RESET_EN {
+                                        RESET_EN: true,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1840,15 +1943,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_MULTI_PRIM_IB_RESET_INDX(
-                                65535,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MULTI_PRIM_IB_RESET_INDX(
+                                    65535,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1858,22 +1963,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_STENCIL_CONTROL(
-                                DB_STENCIL_CONTROL {
-                                    STENCILFAIL: STENCIL_KEEP,
-                                    STENCILZPASS: STENCIL_KEEP,
-                                    STENCILZFAIL: STENCIL_KEEP,
-                                    STENCILFAIL_BF: STENCIL_KEEP,
-                                    STENCILZPASS_BF: STENCIL_KEEP,
-                                    STENCILZFAIL_BF: STENCIL_KEEP,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCIL_CONTROL(
+                                    DB_STENCIL_CONTROL {
+                                        STENCILFAIL: STENCIL_KEEP,
+                                        STENCILZPASS: STENCIL_KEEP,
+                                        STENCILZFAIL: STENCIL_KEEP,
+                                        STENCILFAIL_BF: STENCIL_KEEP,
+                                        STENCILZPASS_BF: STENCIL_KEEP,
+                                        STENCILZFAIL_BF: STENCIL_KEEP,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1883,37 +1990,39 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_CLIP_CNTL(
-                                PA_CL_CLIP_CNTL {
-                                    UCP_ENA_0: false,
-                                    UCP_ENA_1: false,
-                                    UCP_ENA_2: false,
-                                    UCP_ENA_3: false,
-                                    UCP_ENA_4: false,
-                                    UCP_ENA_5: false,
-                                    PS_UCP_Y_SCALE_NEG: false,
-                                    PS_UCP_MODE: Usize(
-                                        0,
-                                    ),
-                                    CLIP_DISABLE: false,
-                                    UCP_CULL_ONLY_ENA: false,
-                                    BOUNDARY_EDGE_FLAG_ENA: false,
-                                    DX_CLIP_SPACE_DEF: false,
-                                    DIS_CLIP_ERR_DETECT: false,
-                                    VTX_KILL_OR: false,
-                                    DX_RASTERIZATION_KILL: false,
-                                    DX_LINEAR_ATTR_CLIP_ENA: false,
-                                    VTE_VPORT_PROVOKE_DISABLE: false,
-                                    ZCLIP_NEAR_DISABLE: false,
-                                    ZCLIP_FAR_DISABLE: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_CLIP_CNTL(
+                                    PA_CL_CLIP_CNTL {
+                                        UCP_ENA_0: false,
+                                        UCP_ENA_1: false,
+                                        UCP_ENA_2: false,
+                                        UCP_ENA_3: false,
+                                        UCP_ENA_4: false,
+                                        UCP_ENA_5: false,
+                                        PS_UCP_Y_SCALE_NEG: false,
+                                        PS_UCP_MODE: Usize(
+                                            0,
+                                        ),
+                                        CLIP_DISABLE: false,
+                                        UCP_CULL_ONLY_ENA: false,
+                                        BOUNDARY_EDGE_FLAG_ENA: false,
+                                        DX_CLIP_SPACE_DEF: false,
+                                        DIS_CLIP_ERR_DETECT: false,
+                                        VTX_KILL_OR: false,
+                                        DX_RASTERIZATION_KILL: false,
+                                        DX_LINEAR_ATTR_CLIP_ENA: false,
+                                        VTE_VPORT_PROVOKE_DISABLE: false,
+                                        ZCLIP_NEAR_DISABLE: false,
+                                        ZCLIP_FAR_DISABLE: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1923,27 +2032,29 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_RENDER_CONTROL(
-                                DB_RENDER_CONTROL {
-                                    DEPTH_CLEAR_ENABLE: false,
-                                    STENCIL_CLEAR_ENABLE: false,
-                                    DEPTH_COPY: false,
-                                    STENCIL_COPY: false,
-                                    RESUMMARIZE_ENABLE: false,
-                                    STENCIL_COMPRESS_DISABLE: false,
-                                    DEPTH_COMPRESS_DISABLE: false,
-                                    COPY_CENTROID: false,
-                                    COPY_SAMPLE: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_RENDER_CONTROL(
+                                    DB_RENDER_CONTROL {
+                                        DEPTH_CLEAR_ENABLE: false,
+                                        STENCIL_CLEAR_ENABLE: false,
+                                        DEPTH_COPY: false,
+                                        STENCIL_COPY: false,
+                                        RESUMMARIZE_ENABLE: false,
+                                        STENCIL_COMPRESS_DISABLE: false,
+                                        DEPTH_COMPRESS_DISABLE: false,
+                                        COPY_CENTROID: false,
+                                        COPY_SAMPLE: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1953,15 +2064,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_DEPTH_CLEAR(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_DEPTH_CLEAR(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -1971,19 +2084,21 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_STENCIL_CLEAR(
-                                DB_STENCIL_CLEAR {
-                                    CLEAR: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCIL_CLEAR(
+                                    DB_STENCIL_CLEAR {
+                                        CLEAR: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2008,15 +2123,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            VGT_INDX_OFFSET(
-                                0,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_INDX_OFFSET(
+                                    0,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2026,25 +2143,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND0_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: true,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND0_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: true,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2054,25 +2173,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND1_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND1_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2082,25 +2203,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND2_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND2_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2110,25 +2233,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND3_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND3_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2138,25 +2263,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND4_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND4_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2166,25 +2293,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND5_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND5_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2194,25 +2323,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND6_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND6_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2222,25 +2353,27 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND7_CONTROL(
-                                CB_BLEND0_CONTROL {
-                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                                    ALPHA_SRCBLEND: BLEND_ONE,
-                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                                    ALPHA_DESTBLEND: BLEND_ONE,
-                                    SEPARATE_ALPHA_BLEND: true,
-                                    ENABLE: false,
-                                    DISABLE_ROP3: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND7_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2250,30 +2383,32 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_BLEND_RED(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND_RED(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_BLEND_GREEN(
-                                1065353216,
+                            Some(
+                                CB_BLEND_GREEN(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_BLEND_BLUE(
-                                1065353216,
+                            Some(
+                                CB_BLEND_BLUE(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                        Some(
-                            CB_BLEND_ALPHA(
-                                1065353216,
+                            Some(
+                                CB_BLEND_ALPHA(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2299,26 +2434,28 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_DEPTH_CONTROL(
-                                DB_DEPTH_CONTROL {
-                                    STENCIL_ENABLE: false,
-                                    Z_ENABLE: false,
-                                    Z_WRITE_ENABLE: false,
-                                    DEPTH_BOUNDS_ENABLE: false,
-                                    ZFUNC: FRAG_LEQUAL,
-                                    BACKFACE_ENABLE: false,
-                                    STENCILFUNC: FRAG_NEVER,
-                                    STENCILFUNC_BF: FRAG_NEVER,
-                                    ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
-                                    DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_DEPTH_CONTROL(
+                                    DB_DEPTH_CONTROL {
+                                        STENCIL_ENABLE: false,
+                                        Z_ENABLE: false,
+                                        Z_WRITE_ENABLE: false,
+                                        DEPTH_BOUNDS_ENABLE: false,
+                                        ZFUNC: FRAG_LEQUAL,
+                                        BACKFACE_ENABLE: false,
+                                        STENCILFUNC: FRAG_NEVER,
+                                        STENCILFUNC_BF: FRAG_NEVER,
+                                        ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
+                                        DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2328,46 +2465,48 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            DB_STENCILREFMASK(
-                                DB_STENCILREFMASK {
-                                    STENCILTESTVAL: Usize(
-                                        0,
-                                    ),
-                                    STENCILMASK: Usize(
-                                        255,
-                                    ),
-                                    STENCILWRITEMASK: Usize(
-                                        255,
-                                    ),
-                                    STENCILOPVAL: Usize(
-                                        1,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCILREFMASK(
+                                    DB_STENCILREFMASK {
+                                        STENCILTESTVAL: Usize(
+                                            0,
+                                        ),
+                                        STENCILMASK: Usize(
+                                            255,
+                                        ),
+                                        STENCILWRITEMASK: Usize(
+                                            255,
+                                        ),
+                                        STENCILOPVAL: Usize(
+                                            1,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            DB_STENCILREFMASK_BF(
-                                DB_STENCILREFMASK_BF {
-                                    STENCILTESTVAL_BF: Usize(
-                                        0,
-                                    ),
-                                    STENCILMASK_BF: Usize(
-                                        255,
-                                    ),
-                                    STENCILWRITEMASK_BF: Usize(
-                                        255,
-                                    ),
-                                    STENCILOPVAL_BF: Usize(
-                                        1,
-                                    ),
-                                },
+                            Some(
+                                DB_STENCILREFMASK_BF(
+                                    DB_STENCILREFMASK_BF {
+                                        STENCILTESTVAL_BF: Usize(
+                                            0,
+                                        ),
+                                        STENCILMASK_BF: Usize(
+                                            255,
+                                        ),
+                                        STENCILWRITEMASK_BF: Usize(
+                                            255,
+                                        ),
+                                        STENCILOPVAL_BF: Usize(
+                                            1,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2377,40 +2516,42 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            CB_TARGET_MASK(
-                                CB_TARGET_MASK {
-                                    TARGET0_ENABLE: Usize(
-                                        15,
-                                    ),
-                                    TARGET1_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET2_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET3_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET4_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET5_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET6_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET7_ENABLE: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_TARGET_MASK(
+                                    CB_TARGET_MASK {
+                                        TARGET0_ENABLE: Usize(
+                                            15,
+                                        ),
+                                        TARGET1_ENABLE: Usize(
+                                            0,
+                                        ),
+                                        TARGET2_ENABLE: Usize(
+                                            0,
+                                        ),
+                                        TARGET3_ENABLE: Usize(
+                                            0,
+                                        ),
+                                        TARGET4_ENABLE: Usize(
+                                            0,
+                                        ),
+                                        TARGET5_ENABLE: Usize(
+                                            0,
+                                        ),
+                                        TARGET6_ENABLE: Usize(
+                                            0,
+                                        ),
+                                        TARGET7_ENABLE: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2420,20 +2561,22 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_VPORT_ZMIN_0(
-                                0,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_VPORT_ZMIN_0(
+                                    0,
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_SC_VPORT_ZMAX_0(
-                                1065353216,
+                            Some(
+                                PA_SC_VPORT_ZMAX_0(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2443,40 +2586,42 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_VPORT_XSCALE(
-                                1148190720,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_VPORT_XSCALE(
+                                    1148190720,
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_CL_VPORT_XOFFSET(
-                                1148190720,
+                            Some(
+                                PA_CL_VPORT_XOFFSET(
+                                    1148190720,
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_CL_VPORT_YSCALE(
-                                3288793088,
+                            Some(
+                                PA_CL_VPORT_YSCALE(
+                                    3288793088,
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_CL_VPORT_YOFFSET(
-                                1141309440,
+                            Some(
+                                PA_CL_VPORT_YOFFSET(
+                                    1141309440,
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_CL_VPORT_ZSCALE(
-                                1056964608,
+                            Some(
+                                PA_CL_VPORT_ZSCALE(
+                                    1056964608,
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_CL_VPORT_ZOFFSET(
-                                1056964608,
+                            Some(
+                                PA_CL_VPORT_ZOFFSET(
+                                    1056964608,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2486,26 +2631,28 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_VTE_CNTL(
-                                PA_CL_VTE_CNTL {
-                                    VPORT_X_SCALE_ENA: true,
-                                    VPORT_X_OFFSET_ENA: true,
-                                    VPORT_Y_SCALE_ENA: true,
-                                    VPORT_Y_OFFSET_ENA: true,
-                                    VPORT_Z_SCALE_ENA: true,
-                                    VPORT_Z_OFFSET_ENA: true,
-                                    VTX_XY_FMT: false,
-                                    VTX_Z_FMT: false,
-                                    VTX_W0_FMT: true,
-                                    PERFCOUNTER_REF: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_VTE_CNTL(
+                                    PA_CL_VTE_CNTL {
+                                        VPORT_X_SCALE_ENA: true,
+                                        VPORT_X_OFFSET_ENA: true,
+                                        VPORT_Y_SCALE_ENA: true,
+                                        VPORT_Y_OFFSET_ENA: true,
+                                        VPORT_Z_SCALE_ENA: true,
+                                        VPORT_Z_OFFSET_ENA: true,
+                                        VTX_XY_FMT: false,
+                                        VTX_Z_FMT: false,
+                                        VTX_W0_FMT: true,
+                                        PERFCOUNTER_REF: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2515,34 +2662,36 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_SCREEN_SCISSOR_TL(
-                                PA_SC_SCREEN_SCISSOR_TL {
-                                    TL_X: Usize(
-                                        0,
-                                    ),
-                                    TL_Y: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_SCREEN_SCISSOR_TL(
+                                    PA_SC_SCREEN_SCISSOR_TL {
+                                        TL_X: Usize(
+                                            0,
+                                        ),
+                                        TL_Y: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_SC_SCREEN_SCISSOR_BR(
-                                PA_SC_SCREEN_SCISSOR_BR {
-                                    BR_X: Usize(
-                                        1920,
-                                    ),
-                                    BR_Y: Usize(
-                                        1080,
-                                    ),
-                                },
+                            Some(
+                                PA_SC_SCREEN_SCISSOR_BR(
+                                    PA_SC_SCREEN_SCISSOR_BR {
+                                        BR_X: Usize(
+                                            1920,
+                                        ),
+                                        BR_Y: Usize(
+                                            1080,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2552,22 +2701,24 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_HARDWARE_SCREEN_OFFSET(
-                                PA_SU_HARDWARE_SCREEN_OFFSET {
-                                    HW_SCREEN_OFFSET_X: Usize(
-                                        60,
-                                    ),
-                                    HW_SCREEN_OFFSET_Y: Usize(
-                                        34,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET(
+                                    PA_SU_HARDWARE_SCREEN_OFFSET {
+                                        HW_SCREEN_OFFSET_X: Usize(
+                                            60,
+                                        ),
+                                        HW_SCREEN_OFFSET_Y: Usize(
+                                            34,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2577,15 +2728,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_VERT_CLIP_ADJ(
-                                1114550848,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_VERT_CLIP_ADJ(
+                                    1114550848,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2595,15 +2748,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_HORZ_CLIP_ADJ(
-                                1107593351,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_HORZ_CLIP_ADJ(
+                                    1107593351,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2613,15 +2768,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_VERT_DISC_ADJ(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_VERT_DISC_ADJ(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2631,15 +2788,17 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_CL_GB_HORZ_DISC_ADJ(
-                                1065353216,
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_GB_HORZ_DISC_ADJ(
+                                    1065353216,
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2649,34 +2808,36 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SC_SCREEN_SCISSOR_TL(
-                                PA_SC_SCREEN_SCISSOR_TL {
-                                    TL_X: Usize(
-                                        0,
-                                    ),
-                                    TL_Y: Usize(
-                                        0,
-                                    ),
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_SCREEN_SCISSOR_TL(
+                                    PA_SC_SCREEN_SCISSOR_TL {
+                                        TL_X: Usize(
+                                            0,
+                                        ),
+                                        TL_Y: Usize(
+                                            0,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                        Some(
-                            PA_SC_SCREEN_SCISSOR_BR(
-                                PA_SC_SCREEN_SCISSOR_BR {
-                                    BR_X: Usize(
-                                        1920,
-                                    ),
-                                    BR_Y: Usize(
-                                        1080,
-                                    ),
-                                },
+                            Some(
+                                PA_SC_SCREEN_SCISSOR_BR(
+                                    PA_SC_SCREEN_SCISSOR_BR {
+                                        BR_X: Usize(
+                                            1920,
+                                        ),
+                                        BR_Y: Usize(
+                                            1080,
+                                        ),
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
@@ -2686,29 +2847,31 @@ Ok(
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetContextRegister {
-                    values: [
-                        Some(
-                            PA_SU_SC_MODE_CNTL(
-                                PA_SU_SC_MODE_CNTL {
-                                    CULL_FRONT: false,
-                                    CULL_BACK: false,
-                                    FACE: false,
-                                    POLY_MODE: X_DISABLE_POLY_MODE,
-                                    POLYMODE_FRONT_PTYPE: X_DRAW_TRIANGLES,
-                                    POLYMODE_BACK_PTYPE: X_DRAW_TRIANGLES,
-                                    POLY_OFFSET_FRONT_ENABLE: false,
-                                    POLY_OFFSET_BACK_ENABLE: false,
-                                    POLY_OFFSET_PARA_ENABLE: false,
-                                    VTX_WINDOW_OFFSET_ENABLE: false,
-                                    PROVOKING_VTX_LAST: false,
-                                    PERSP_CORR_DIS: false,
-                                    MULTI_PRIM_IB_ENA: false,
-                                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_SC_MODE_CNTL(
+                                    PA_SU_SC_MODE_CNTL {
+                                        CULL_FRONT: false,
+                                        CULL_BACK: false,
+                                        FACE: false,
+                                        POLY_MODE: X_DISABLE_POLY_MODE,
+                                        POLYMODE_FRONT_PTYPE: X_DRAW_TRIANGLES,
+                                        POLYMODE_BACK_PTYPE: X_DRAW_TRIANGLES,
+                                        POLY_OFFSET_FRONT_ENABLE: false,
+                                        POLY_OFFSET_BACK_ENABLE: false,
+                                        POLY_OFFSET_PARA_ENABLE: false,
+                                        VTX_WINDOW_OFFSET_ENABLE: false,
+                                        PROVOKING_VTX_LAST: false,
+                                        PERSP_CORR_DIS: false,
+                                        MULTI_PRIM_IB_ENA: false,
+                                    },
+                                ),
                             ),
-                        ),
-                    ],
-                },
+                        ],
+                    },
+                ),
             },
         ),
         Type3(
