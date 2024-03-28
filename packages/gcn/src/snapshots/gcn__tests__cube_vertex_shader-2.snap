@@ -3,12 +3,12 @@ source: packages/gcn/src/lib.rs
 expression: shader.displayed()
 ---
 s_swappc_b64 s[0:1], s[0:1]
-s_load_dwordx4 s[0:3], s[6:7]
+s_load_dwordx4 s[0:3], s[6:7], 0x0
 s_waitcnt 0xc07f
-s_buffer_load_dwordx4 s[4:7], s[0:1]
-s_buffer_load_dwordx4 s[8:11], s[0:1]
-s_buffer_load_dwordx4 s[12:15], s[0:1]
-s_buffer_load_dwordx4 s[0:3], s[0:1]
+s_buffer_load_dwordx4 s[4:7], s[0:1], 0x8
+s_buffer_load_dwordx4 s[8:11], s[0:1], 0xc
+s_buffer_load_dwordx4 s[12:15], s[0:1], 0x4
+s_buffer_load_dwordx4 s[0:3], s[0:1], 0x0
 s_waitcnt 0x71
 v_mul_f32 v7, s4, v6
 v_mul_f32 v0, s5, v6

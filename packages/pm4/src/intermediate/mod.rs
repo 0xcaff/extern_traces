@@ -425,7 +425,7 @@ pub struct UserDataEntry {
 #[entry(RegisterEntry)]
 pub struct ComputePipeline {
     #[entry(RegisterEntry::COMPUTE_PGM_LO)]
-    address_lo: u32,
+    pub address_lo: u32,
 
     #[entry(RegisterEntry::COMPUTE_PGM_HI)]
     address_hi: COMPUTE_PGM_HI,
@@ -445,7 +445,7 @@ pub struct ComputePipeline {
     #[entry(RegisterEntry::COMPUTE_NUM_THREAD_Z)]
     thread_z: COMPUTE_NUM_THREAD_X,
 
-    user_data: ComputeUserData,
+    pub user_data: ComputeUserData,
 }
 
 #[derive(Debug, BuildUserData)]

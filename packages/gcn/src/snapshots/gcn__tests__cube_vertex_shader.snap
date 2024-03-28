@@ -17,6 +17,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 0,
     },
     Instruction {
@@ -31,6 +32,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 4,
     },
     Instruction {
@@ -40,6 +42,7 @@ expression: shader.debug()
                 simm16: 49279,
             },
         ),
+        literal_constant: None,
         program_counter: 8,
     },
     Instruction {
@@ -54,6 +57,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 12,
     },
     Instruction {
@@ -68,6 +72,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 16,
     },
     Instruction {
@@ -82,6 +87,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 20,
     },
     Instruction {
@@ -96,6 +102,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 24,
     },
     Instruction {
@@ -105,6 +112,7 @@ expression: shader.debug()
                 simm16: 113,
             },
         ),
+        literal_constant: None,
         program_counter: 28,
     },
     Instruction {
@@ -126,6 +134,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 32,
     },
     Instruction {
@@ -147,6 +156,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 36,
     },
     Instruction {
@@ -168,6 +178,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 40,
     },
     Instruction {
@@ -189,6 +200,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 44,
     },
     Instruction {
@@ -210,6 +222,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 48,
     },
     Instruction {
@@ -231,6 +244,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 52,
     },
     Instruction {
@@ -252,6 +266,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 56,
     },
     Instruction {
@@ -273,6 +288,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 60,
     },
     Instruction {
@@ -294,6 +310,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 64,
     },
     Instruction {
@@ -315,6 +332,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 68,
     },
     Instruction {
@@ -336,6 +354,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 72,
     },
     Instruction {
@@ -357,6 +376,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 76,
     },
     Instruction {
@@ -378,6 +398,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 80,
     },
     Instruction {
@@ -399,6 +420,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 84,
     },
     Instruction {
@@ -420,6 +442,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 88,
     },
     Instruction {
@@ -441,6 +464,7 @@ expression: shader.debug()
                 },
             },
         ),
+        literal_constant: None,
         program_counter: 92,
     },
     Instruction {
@@ -474,6 +498,7 @@ expression: shader.debug()
                 ),
             },
         ),
+        literal_constant: None,
         program_counter: 96,
     },
     Instruction {
@@ -483,6 +508,7 @@ expression: shader.debug()
                 simm16: 16240,
             },
         ),
+        literal_constant: None,
         program_counter: 104,
     },
     Instruction {
@@ -508,6 +534,7 @@ expression: shader.debug()
                 vsrc3: None,
             },
         ),
+        literal_constant: None,
         program_counter: 108,
     },
     Instruction {
@@ -517,6 +544,7 @@ expression: shader.debug()
                 simm16: 0,
             },
         ),
+        literal_constant: None,
         program_counter: 116,
     },
 ]
