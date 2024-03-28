@@ -4,7 +4,6 @@ use bits::{bitrange, FromBits};
 
 #[derive(Debug, Clone)]
 pub struct EventWriteEndOfShaderPacket {
-    pub event_index: u8,
     pub event_type: VGT_EVENT_TYPE,
     pub address: u64,
     pub data: Data,
@@ -22,6 +21,7 @@ impl ParseType3Packet for EventWriteEndOfShaderPacket {
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         let event_cntl = body[0];
         let event_index = bitrange(11, 8).of_32(event_cntl) as u8;
+        assert_eq!(event_index, 0b0110);
         let event_type = bitrange(5, 0).of_32(event_cntl) as u8;
 
         let address_lo = bitrange(31, 2).of_32(body[1]);
@@ -33,7 +33,6 @@ impl ParseType3Packet for EventWriteEndOfShaderPacket {
         let data_info = body[3];
 
         Self {
-            event_index,
             event_type: VGT_EVENT_TYPE::from_bits(event_type as usize),
             address: { (address_lo << 1) | (address_hi << 32) } as _,
             data: {

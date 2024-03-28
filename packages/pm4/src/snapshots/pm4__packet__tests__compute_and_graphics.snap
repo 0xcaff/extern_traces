@@ -2302,7 +2302,6 @@ expression: packets
             },
             value: EventWriteEndOfShader(
                 EventWriteEndOfShaderPacket {
-                    event_index: 6,
                     event_type: CS_DONE,
                     address: 549755818256,
                     data: StorePacketData {
