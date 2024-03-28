@@ -34,7 +34,7 @@ impl GCNInstructionStream {
 
 pub fn display_instructions<'a>(instructions: impl Iterator<Item = &'a Instruction>) -> String {
     instructions
-        .map(|it| it.display().to_string())
+        .map(|it| format!("0x{:04x}: {}", it.program_counter, it.display().to_string()))
         .collect::<Vec<_>>()
         .join("\n")
 }

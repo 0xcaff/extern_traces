@@ -2,18 +2,18 @@
 source: packages/gcn/src/lib.rs
 expression: shader.displayed()
 ---
-s_mov_b32 vcc_hi, 0xd
-s_mul_i32 vcc_lo, s12, 64
-s_buffer_load_dword s[12:15], s[8:9], 0x0
-v_add_co_u32 v0, vcc_lo, v0
-s_waitcnt 0x7f
-v_cmpx_gt_u32 s12, v0
-s_cbranch_execz 0xa
-s_buffer_load_dword s[8:11], s[8:9], 0x1
-s_waitcnt 0x7f
-v_and_b32 v1, s8, v0
-buffer_load_format_x SKIPPED
-v_cmpx_gt_u32 exec, s6, v0, s0
-s_waitcnt 0xf70
-buffer_store_format_x SKIPPED
-s_endpgm 0x0
+0x0000: s_mov_b32 vcc_hi, 0xd
+0x0008: s_mul_i32 vcc_lo, s12, 64
+0x000c: s_buffer_load_dword s[12:15], s[8:9], 0x0
+0x0010: v_add_co_u32 v0, vcc_lo, v0
+0x0014: s_waitcnt 0x7f
+0x0018: v_cmpx_gt_u32 s12, v0
+0x001c: s_cbranch_execz 0xa
+0x0020: s_buffer_load_dword s[8:11], s[8:9], 0x1
+0x0024: s_waitcnt 0x7f
+0x0028: v_and_b32 v1, s8, v0
+0x002c: buffer_load_format_x SKIPPED
+0x0034: v_cmpx_gt_u32 exec, s6, v0, s0
+0x003c: s_waitcnt 0xf70
+0x0040: buffer_store_format_x SKIPPED
+0x0048: s_endpgm 0x0
