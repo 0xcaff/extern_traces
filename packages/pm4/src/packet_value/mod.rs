@@ -2,9 +2,9 @@ use crate::op_codes::OpCode;
 pub use crate::packet_value::dispatch_direct::DispatchDirectPacket;
 pub use crate::packet_value::draw_index_auto::DrawIndexAutoPacket;
 pub use crate::packet_value::event_write_end_of_pipe::EventWriteEndOfPipePacket;
+use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 pub use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
 use pm4_internal_macros::ParsePacketValue;
-use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 
 mod dispatch_direct;
 mod draw_index_auto;
