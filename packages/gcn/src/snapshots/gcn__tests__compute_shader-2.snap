@@ -1,0 +1,19 @@
+---
+source: packages/gcn/src/lib.rs
+expression: shader.displayed()
+---
+s_mov_b32 vcc_hi, 0xd
+s_mul_i32 vcc_lo, s12, 64
+s_buffer_load_dword s[12:15], s[8:9], 0x0
+v_add_co_u32 v0, vcc_lo, v0
+s_waitcnt 0x7f
+v_cmpx_gt_u32 s12, v0
+s_cbranch_execz 0xa
+s_buffer_load_dword s[8:11], s[8:9], 0x1
+s_waitcnt 0x7f
+v_and_b32 v1, s8, v0
+buffer_load_format_x SKIPPED
+v_cmpx_gt_u32 exec, s6, v0, s0
+s_waitcnt 0xf70
+buffer_store_format_x SKIPPED
+s_endpgm 0x0

@@ -208,6 +208,10 @@ impl FromBits<8> for VectorGPR {
 
 impl VectorGPR {
     pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
+        if let Some(OperandInfo::Exec) = operand_info {
+            return "exec".to_string();
+        }
+
         let size = match operand_info {
             Some(OperandInfo::Size(words)) => *words,
             Some(_) => unimplemented!("not implemented"),
