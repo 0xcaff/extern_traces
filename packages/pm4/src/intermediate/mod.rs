@@ -449,13 +449,13 @@ pub struct ComputePipeline {
     resource2: COMPUTE_PGM_RSRC2,
 
     #[entry(RegisterEntry::COMPUTE_NUM_THREAD_X)]
-    thread_x: COMPUTE_NUM_THREAD_X,
+    pub thread_x: COMPUTE_NUM_THREAD_X,
 
     #[entry(RegisterEntry::COMPUTE_NUM_THREAD_Y)]
-    thread_y: COMPUTE_NUM_THREAD_X,
+    pub thread_y: COMPUTE_NUM_THREAD_X,
 
     #[entry(RegisterEntry::COMPUTE_NUM_THREAD_Z)]
-    thread_z: COMPUTE_NUM_THREAD_X,
+    pub thread_z: COMPUTE_NUM_THREAD_X,
 
     pub user_data: ComputeUserData,
 }

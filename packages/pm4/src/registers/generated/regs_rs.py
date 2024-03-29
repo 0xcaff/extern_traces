@@ -82,7 +82,7 @@ pub struct ${name} {
 % for field in unique(fields.fields, lambda it: it.name):
     % if field.name not in ignored:
     #[bits(${field.bits[1]}, ${field.bits[0]})]
-    ${field.name}: ${(
+    pub ${field.name}: ${(
         field.enum_ref if hasattr(field, 'enum_ref') else
         "bool" if ((field.bits[1] - field.bits[0]) == 0) else
         "Usize"
