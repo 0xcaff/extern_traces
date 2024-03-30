@@ -443,10 +443,10 @@ pub struct ComputePipeline {
     address_hi: COMPUTE_PGM_HI,
 
     #[entry(RegisterEntry::COMPUTE_PGM_RSRC1)]
-    resource1: COMPUTE_PGM_RSRC1,
+    pub resource1: COMPUTE_PGM_RSRC1,
 
     #[entry(RegisterEntry::COMPUTE_PGM_RSRC2)]
-    resource2: COMPUTE_PGM_RSRC2,
+    pub resource2: COMPUTE_PGM_RSRC2,
 
     #[entry(RegisterEntry::COMPUTE_NUM_THREAD_X)]
     pub thread_x: COMPUTE_NUM_THREAD_X,
