@@ -25,6 +25,7 @@ ignored = [
     "GS_EN",
     "ES_EN",
     "LS_EN",
+    "CLIP_RULE",
 ]
 
 template = """
