@@ -154,7 +154,7 @@ struct DepthBuffer {
     z: Z,
 
     #[entry(RegisterEntry::DB_RENDER_CONTROL)]
-    render_control: DB_RENDER_CONTROL,
+    render_control: Option<DB_RENDER_CONTROL>,
 
     #[entry(RegisterEntry::DB_SHADER_CONTROL)]
     shader_control: DB_SHADER_CONTROL,
@@ -250,9 +250,9 @@ pub struct ColorBuffer {
     #[entry(RegisterEntry::CB_COLOR0_FMASK_SLICE)]
     fmask_slice: CB_COLOR0_SLICE,
     #[entry(RegisterEntry::CB_COLOR0_CLEAR_WORD0)]
-    clear_word_0: u32,
+    clear_word_0: Option<u32>,
     #[entry(RegisterEntry::CB_COLOR0_CLEAR_WORD1)]
-    clear_word_1: u32,
+    clear_word_1: Option<u32>,
 }
 
 #[derive(Build, Debug)]

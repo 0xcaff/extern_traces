@@ -258,19 +258,21 @@ expression: convert(packets.as_slice())
                         },
                     ),
                 },
-                render_control: DB_RENDER_CONTROL {
-                    DEPTH_CLEAR_ENABLE: true,
-                    STENCIL_CLEAR_ENABLE: false,
-                    DEPTH_COPY: false,
-                    STENCIL_COPY: false,
-                    RESUMMARIZE_ENABLE: false,
-                    STENCIL_COMPRESS_DISABLE: false,
-                    DEPTH_COMPRESS_DISABLE: false,
-                    COPY_CENTROID: false,
-                    COPY_SAMPLE: Usize(
-                        0,
-                    ),
-                },
+                render_control: Some(
+                    DB_RENDER_CONTROL {
+                        DEPTH_CLEAR_ENABLE: true,
+                        STENCIL_CLEAR_ENABLE: false,
+                        DEPTH_COPY: false,
+                        STENCIL_COPY: false,
+                        RESUMMARIZE_ENABLE: false,
+                        STENCIL_COMPRESS_DISABLE: false,
+                        DEPTH_COMPRESS_DISABLE: false,
+                        COPY_CENTROID: false,
+                        COPY_SAMPLE: Usize(
+                            0,
+                        ),
+                    },
+                ),
                 shader_control: DB_SHADER_CONTROL {
                     Z_EXPORT_ENABLE: false,
                     STENCIL_TEST_VAL_EXPORT_ENABLE: false,
@@ -517,8 +519,12 @@ expression: convert(packets.as_slice())
                         0,
                     ),
                 },
-                clear_word_0: 0,
-                clear_word_1: 0,
+                clear_word_0: Some(
+                    0,
+                ),
+                clear_word_1: Some(
+                    0,
+                ),
             },
             shader: Shader {
                 z_format: SPI_SHADER_Z_FORMAT {
