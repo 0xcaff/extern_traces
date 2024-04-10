@@ -114,4 +114,13 @@ mod tests {
         insta::assert_debug_snapshot!(packets);
         insta::assert_debug_snapshot!(convert(packets.as_slice()));
     }
+
+    #[test]
+    fn sample1() {
+        let bytes = &include_bytes!("./test_data/354185f086261349c2311cb16f78cd2d23694b585827d5d21497810e759a1b40.draw.pm4")[..];
+        let packets = PM4Packet::parse_all(bytes).unwrap();
+
+        insta::assert_debug_snapshot!(packets);
+        insta::assert_debug_snapshot!(convert(packets.as_slice()));
+    }
 }
