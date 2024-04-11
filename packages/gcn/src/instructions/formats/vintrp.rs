@@ -24,9 +24,9 @@ pub struct VINTRPInstruction {
     pub vdst: VectorGPR,
 }
 
-#[derive(FromRepr, Debug, AsRefStr)]
+#[derive(FromRepr, Debug, AsRefStr, Copy, Clone)]
 #[repr(usize)]
-enum AttributeChannel {
+pub enum AttributeChannel {
     #[strum(serialize = "x")]
     X = 0,
     #[strum(serialize = "y")]
