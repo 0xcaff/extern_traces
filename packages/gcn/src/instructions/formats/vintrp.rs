@@ -9,19 +9,19 @@ use strum::{AsRefStr, FromRepr};
 #[bits(32)]
 pub struct VINTRPInstruction {
     #[bits(17, 16)]
-    op: VINTRPOpCode,
+    pub op: VINTRPOpCode,
 
     #[bits(7, 0)]
-    vsrc: VectorGPR,
+    pub vsrc: VectorGPR,
 
     #[bits(9, 8)]
-    attribute_channel: AttributeChannel,
+    pub attribute_channel: AttributeChannel,
 
     #[bits(15, 10)]
-    attr: Attr,
+    pub attr: Attr,
 
     #[bits(25, 18)]
-    vdst: VectorGPR,
+    pub vdst: VectorGPR,
 }
 
 #[derive(FromRepr, Debug, AsRefStr)]
@@ -44,7 +44,7 @@ impl FromBits<2> for AttributeChannel {
 }
 
 #[derive(Debug)]
-struct Attr(u8);
+pub struct Attr(pub u8);
 
 impl FromBits<6> for Attr {
     fn from_bits(value: usize) -> Self {
