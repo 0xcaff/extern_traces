@@ -41,7 +41,14 @@ impl<R: Reader> ParseInstruction<R> for ExpInstruction {
 
 fn vsrc(idx: u8) -> impl Fn(usize) -> Option<VectorGPR> {
     move |token: usize| {
-        let enabled = bit(idx, token);
+        let compress = bit(10, token);
+        let enabled = {
+            if compress && idx >= 2 {
+                false
+            } else {
+                bit(idx, token)
+            }
+        };
 
         if !enabled {
             return None;
