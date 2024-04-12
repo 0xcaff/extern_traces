@@ -16,5 +16,5 @@ expression: shader.displayed()
 0x0030: s_waitcnt 0x3f70
 0x0034: v_cvt_pkrtz_f16_f32 v0, v0, v1
 0x0038: v_cvt_pkrtz_f16_f32 v1, v2, 1.f, s0
-0x0040: exp mrt_color0, v0, v1, v128, v128, compress, done, vm
+0x0040: exp mrt_color0, v0, v1, off, off, compress, done, vm
 0x0048: s_endpgm 0x0

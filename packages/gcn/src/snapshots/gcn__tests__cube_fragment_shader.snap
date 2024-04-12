@@ -291,16 +291,8 @@ expression: shader.debug()
                         register_idx: 1,
                     },
                 ),
-                vsrc2: Some(
-                    VectorGPR {
-                        register_idx: 128,
-                    },
-                ),
-                vsrc3: Some(
-                    VectorGPR {
-                        register_idx: 128,
-                    },
-                ),
+                vsrc2: None,
+                vsrc3: None,
             },
         ),
         literal_constant: None,
