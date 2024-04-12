@@ -1,7 +1,7 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::operands::VectorGPR;
 use crate::{DisplayInstruction, DisplayableInstruction};
-use bits::{bit, bitrange, FromBits};
+use bits::{bit, bitrange, Bits, FromBits};
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
@@ -39,8 +39,10 @@ impl<R: Reader> ParseInstruction<R> for ExpInstruction {
     }
 }
 
-fn vsrc(idx: u8) -> impl Fn(usize) -> Option<VectorGPR> {
-    move |token: usize| {
+fn vsrc<T: Bits>(idx: u8) -> impl Fn(T) -> Option<VectorGPR> {
+    move |token: T| {
+        let token = token.full();
+
         let compress = bit(10, token);
         let enabled = {
             if compress && idx >= 2 {
@@ -54,16 +56,13 @@ fn vsrc(idx: u8) -> impl Fn(usize) -> Option<VectorGPR> {
             return None;
         }
 
-        Some(VectorGPR::from_bits(
-            (match idx {
-                0 => bitrange(39, 32),
-                1 => bitrange(47, 40),
-                2 => bitrange(55, 48),
-                3 => bitrange(63, 56),
-                _ => unreachable!("invalid index"),
-            })
-            .of(token),
-        ))
+        Some(VectorGPR::from_bits(match idx {
+            0 => token.slice(39, 32),
+            1 => token.slice(47, 40),
+            2 => token.slice(55, 48),
+            3 => token.slice(63, 56),
+            _ => unreachable!("invalid index"),
+        }))
     }
 }
 
@@ -120,7 +119,9 @@ pub enum ExportTarget {
 }
 
 impl FromBits<6> for ExportTarget {
-    fn from_bits(value: usize) -> Self {
+    fn from_bits(value: impl Bits) -> Self {
+        let value = value.full();
+
         match value {
             0..=7 => ExportTarget::RenderTarget(value as _),
             8 => ExportTarget::Z,

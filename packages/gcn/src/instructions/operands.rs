@@ -1,5 +1,5 @@
 use crate::instructions::instruction_info::OperandInfo;
-use bits::FromBits;
+use bits::{Bits, FromBits};
 use std::fmt;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
@@ -18,8 +18,8 @@ pub enum ScalarDestinationOperand {
 }
 
 impl FromBits<7> for ScalarDestinationOperand {
-    fn from_bits(value: usize) -> Self {
-        let value = value as u8;
+    fn from_bits(value: impl Bits) -> Self {
+        let value = value.full() as u8;
         match value {
             0..=103 => ScalarDestinationOperand::ScalarGPR(value),
             106 => ScalarDestinationOperand::VccLo,
@@ -117,8 +117,8 @@ impl InlineFloatConstant {
 }
 
 impl FromBits<8> for ScalarSourceOperand {
-    fn from_bits(value: usize) -> Self {
-        let encoded = value as u8;
+    fn from_bits(value: impl Bits) -> Self {
+        let encoded = value.full() as u8;
         match encoded {
             0..=127 => ScalarSourceOperand::Destination(ScalarDestinationOperand::from_bits(value)),
 
@@ -167,8 +167,8 @@ pub enum SourceOperand {
 }
 
 impl FromBits<9> for SourceOperand {
-    fn from_bits(value: usize) -> Self {
-        let value = value as u16;
+    fn from_bits(value: impl Bits) -> Self {
+        let value = value.full() as u16;
         match value {
             0..=255 => SourceOperand::Scalar(ScalarSourceOperand::from_bits(value as usize)),
             256..=511 => SourceOperand::VectorGPR(VectorGPR {
@@ -198,8 +198,8 @@ pub struct VectorGPR {
 }
 
 impl FromBits<8> for VectorGPR {
-    fn from_bits(value: usize) -> Self {
-        let value = value as u8;
+    fn from_bits(value: impl Bits) -> Self {
+        let value = value.full() as u8;
         VectorGPR {
             register_idx: value,
         }
@@ -247,8 +247,10 @@ impl ScalarGeneralPurposeRegisterGroup {
 }
 
 impl FromBits<5> for ScalarGeneralPurposeRegisterGroup {
-    fn from_bits(value: usize) -> Self {
-        Self { value: value as _ }
+    fn from_bits(value: impl Bits) -> Self {
+        Self {
+            value: value.full() as _,
+        }
     }
 }
 

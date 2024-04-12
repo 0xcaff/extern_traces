@@ -3,7 +3,7 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MTBUFOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
-use bits::FromBits;
+use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
@@ -71,8 +71,8 @@ pub struct MTBufInstruction {
 struct NumberFormat(u8);
 
 impl FromBits<3> for NumberFormat {
-    fn from_bits(value: usize) -> Self {
-        Self(value as _)
+    fn from_bits(value: impl Bits) -> Self {
+        Self(value.full() as _)
     }
 }
 
@@ -80,8 +80,8 @@ impl FromBits<3> for NumberFormat {
 struct DataFormat(u8);
 
 impl FromBits<4> for DataFormat {
-    fn from_bits(value: usize) -> Self {
-        DataFormat(value as _)
+    fn from_bits(value: impl Bits) -> Self {
+        DataFormat(value.full() as _)
     }
 }
 

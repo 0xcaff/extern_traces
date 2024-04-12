@@ -2,7 +2,7 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MUBUFOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
-use bits::FromBits;
+use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
@@ -52,8 +52,8 @@ pub struct MUBUFInstruction {
 pub struct Offset(pub u16);
 
 impl FromBits<12> for Offset {
-    fn from_bits(value: usize) -> Self {
-        Offset(value as u16)
+    fn from_bits(value: impl Bits) -> Self {
+        Offset(value.full() as u16)
     }
 }
 

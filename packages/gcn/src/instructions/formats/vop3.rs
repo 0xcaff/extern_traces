@@ -4,7 +4,7 @@ use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
 use anyhow::format_err;
-use bits::{bitrange, FromBits};
+use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::FromRepr;
 
@@ -43,8 +43,8 @@ enum OutputModifier {
 }
 
 impl FromBits<2> for OutputModifier {
-    fn from_bits(value: usize) -> Self {
-        Self::from_repr(value).unwrap()
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full()).unwrap()
     }
 }
 
@@ -66,8 +66,8 @@ impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
     }
 }
 
-fn src(idx: u8) -> impl Fn(usize) -> TransformedOperand {
-    move |token| TransformedOperand::parse(token as _, idx)
+fn src<T: Bits>(idx: u8) -> impl Fn(T) -> TransformedOperand {
+    move |token| TransformedOperand::parse(token, idx)
 }
 
 #[derive(Debug)]
@@ -125,8 +125,8 @@ impl AsRef<str> for OpCode {
 }
 
 impl FromBits<9> for OpCode {
-    fn from_bits(value: usize) -> Self {
-        Self::decode(value).unwrap()
+    fn from_bits(value: impl Bits) -> Self {
+        Self::decode(value.full()).unwrap()
     }
 }
 
@@ -138,7 +138,7 @@ pub struct TransformedOperand {
 }
 
 impl TransformedOperand {
-    fn parse(token: u64, idx: u8) -> TransformedOperand {
+    fn parse(token: impl Bits, idx: u8) -> TransformedOperand {
         let highest_idx = match idx {
             0 => 40,
             1 => 49,
@@ -146,14 +146,14 @@ impl TransformedOperand {
             _ => panic!("invalid index {}", idx),
         };
 
-        let op_value = bitrange(highest_idx, highest_idx - 8).of(token as _);
+        let op_value = token.slice(highest_idx, highest_idx - 8);
 
         let abs_idx = 10 - idx;
         let neg_idx = 63 - idx;
 
         TransformedOperand {
-            abs: bitrange(abs_idx, abs_idx).of(token as _) == 1,
-            neg: bitrange(neg_idx, neg_idx).of(token as _) == 1,
+            abs: token.slice(abs_idx, abs_idx).full() == 1,
+            neg: token.slice(neg_idx, neg_idx).full() == 1,
             operand: SourceOperand::from_bits(op_value),
         }
     }

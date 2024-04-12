@@ -1,3 +1,4 @@
+use bits::Bits;
 use bits::FromBits;
 
 #[derive(Clone, Debug)]
@@ -13,8 +14,8 @@ macro_rules! from_bits_impls {
     ($($n:expr),*) => {
         $(
             impl FromBits<$n> for Usize {
-                fn from_bits(value: usize) -> Self {
-                    Self(value as _)
+                fn from_bits(value: impl Bits) -> Self {
+                    Self(value.full() as _)
                 }
             }
         )*

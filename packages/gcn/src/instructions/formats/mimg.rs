@@ -2,7 +2,7 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MIMGOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
-use bits::FromBits;
+use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
@@ -52,8 +52,8 @@ pub struct MIMGInstruction {
 struct DMask(u8);
 
 impl FromBits<4> for DMask {
-    fn from_bits(value: usize) -> Self {
-        DMask(value as _)
+    fn from_bits(value: impl Bits) -> Self {
+        DMask(value.full() as _)
     }
 }
 

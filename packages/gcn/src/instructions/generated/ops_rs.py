@@ -25,7 +25,7 @@ template = """
 
 use strum::FromRepr;
 use strum::AsRefStr;
-use bits::FromBits;
+use bits::{FromBits, Bits};
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 
 % for format, format_ops in ops:
@@ -40,8 +40,8 @@ pub enum ${format}OpCode {
 
 % if format in FORMATS:
 impl FromBits<${FORMATS[format]}> for ${format}OpCode {
-    fn from_bits(value: usize) -> Self {
-        Self::from_repr(value).unwrap()
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full()).unwrap()
     }
 }
 %endif

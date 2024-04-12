@@ -36,7 +36,7 @@ template = """
 
 use strum::FromRepr;
 use bits_macros::FromBits;
-use bits::FromBits;
+use bits::{Bits, FromBits};
 use crate::registers::usize::Usize;
 use pm4_internal_macros::ParseRegisterEntry;
 use crate::intermediate::build::Marker;
@@ -59,15 +59,15 @@ pub enum ${name} {
 }
 
 impl FromBits<${ceil(log2(1 + max(map(lambda it: it.value, entries.entries))))}> for ${name} {
-    fn from_bits(value: usize) -> Self {
-        Self::from_repr(value).unwrap()
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full()).unwrap()
     }
 }
 
 % if name in overrides:
 impl FromBits<${overrides[name]}> for ${name} {
-    fn from_bits(value: usize) -> Self {
-        Self::from_repr(value).unwrap()
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full()).unwrap()
     }
 }
 

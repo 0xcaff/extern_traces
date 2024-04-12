@@ -1,7 +1,7 @@
 use crate::instructions::generated::VINTRPOpCode;
 use crate::instructions::operands::VectorGPR;
 use crate::{DisplayInstruction, DisplayableInstruction};
-use bits::FromBits;
+use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::{AsRefStr, FromRepr};
 
@@ -38,8 +38,8 @@ pub enum AttributeChannel {
 }
 
 impl FromBits<2> for AttributeChannel {
-    fn from_bits(value: usize) -> Self {
-        Self::from_repr(value).unwrap()
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full()).unwrap()
     }
 }
 
@@ -47,8 +47,8 @@ impl FromBits<2> for AttributeChannel {
 pub struct Attr(pub u8);
 
 impl FromBits<6> for Attr {
-    fn from_bits(value: usize) -> Self {
-        Self(value as _)
+    fn from_bits(value: impl Bits) -> Self {
+        Self(value.full() as _)
     }
 }
 

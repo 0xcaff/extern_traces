@@ -23,7 +23,7 @@ pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
 
     Ok(quote! {
         impl ::bits::FromBits<#bits_length> for #struct_ident {
-            fn from_bits(value: usize) -> Self {
+            fn from_bits(value: impl ::bits::Bits) -> Self {
                 #struct_ident {
                     #(#initializers)*
                 }
@@ -61,7 +61,7 @@ fn field(field: &Field) -> Result<TokenStream, syn::Error> {
             let len = (range.highest_bit - range.lowest_bit + 1) as usize;
 
             quote! {
-                #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(::bits::bitrange(#highest_bit, #lowest_bit).of(value)),
+                #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(value.slice(#highest_bit, #lowest_bit)),
             }
         }
         FromBitsFieldAttribute::With(expr) => {

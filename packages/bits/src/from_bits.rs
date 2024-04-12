@@ -1,28 +1,30 @@
-pub trait FromBits<const BITS: usize> {
-    fn from_bits(value: usize) -> Self;
+use crate::Bits;
+
+pub trait FromBits<const BITS: usize>: Sized {
+    fn from_bits(value: impl Bits) -> Self;
 }
 
 impl FromBits<16> for u16 {
-    fn from_bits(value: usize) -> Self {
-        value as u16
+    fn from_bits(value: impl Bits) -> Self {
+        value.full() as _
     }
 }
 
 impl FromBits<8> for u8 {
-    fn from_bits(value: usize) -> Self {
-        value as u8
+    fn from_bits(value: impl Bits) -> Self {
+        value.full() as _
     }
 }
 
 impl FromBits<1> for bool {
-    fn from_bits(value: usize) -> Self {
-        value != 0
+    fn from_bits(value: impl Bits) -> Self {
+        value.full() != 0
     }
 }
 
 impl FromBits<32> for u32 {
-    fn from_bits(value: usize) -> Self {
-        value as _
+    fn from_bits(value: impl Bits) -> Self {
+        value.full() as _
     }
 }
 
@@ -30,8 +32,8 @@ macro_rules! from_bits_impls {
     ($($n:expr),*) => {
         $(
             impl FromBits<$n> for usize {
-                fn from_bits(value: usize) -> Self {
-                    value
+                fn from_bits(value: impl Bits) -> Self {
+                    value.full()
                 }
             }
         )*
