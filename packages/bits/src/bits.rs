@@ -1,7 +1,7 @@
 use crate::bitrange;
 
 pub trait Bits: Copy {
-    fn slice(&self, most_significant_idx: u8, least_significant_idx: u8) -> Self;
+    fn slice(&self, most_significant_idx: u8, least_significant_idx: u8) -> impl Bits;
 
     fn full(&self) -> usize;
 }
