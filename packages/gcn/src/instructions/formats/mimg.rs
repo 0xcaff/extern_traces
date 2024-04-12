@@ -9,43 +9,43 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct MIMGInstruction {
     #[bits(24, 18)]
-    op: MIMGOpCode,
+    pub op: MIMGOpCode,
 
     #[bits(11, 8)]
-    dmask: DMask,
+    pub dmask: DMask,
 
     #[bits(12, 12)]
-    unorm: bool,
+    pub unorm: bool,
 
     #[bits(13, 13)]
-    glc: bool,
+    pub glc: bool,
 
     #[bits(14, 14)]
-    da: bool,
+    pub da: bool,
 
     #[bits(15, 15)]
-    r128: bool,
+    pub r128: bool,
 
     #[bits(16, 16)]
-    tfe: bool,
+    pub tfe: bool,
 
     #[bits(17, 17)]
-    lwe: bool,
+    pub lwe: bool,
 
     #[bits(25, 25)]
-    slc: bool,
+    pub slc: bool,
 
     #[bits(39, 32)]
-    vaddr: VectorGPR,
+    pub vaddr: VectorGPR,
 
     #[bits(47, 40)]
-    vdata: VectorGPR,
+    pub vdata: VectorGPR,
 
     #[bits(52, 48)]
-    srsrc: ScalarGeneralPurposeRegisterGroup,
+    pub srsrc: ScalarGeneralPurposeRegisterGroup,
 
     #[bits(57, 53)]
-    ssamp: ScalarGeneralPurposeRegisterGroup,
+    pub ssamp: ScalarGeneralPurposeRegisterGroup,
 }
 
 #[derive(Debug)]

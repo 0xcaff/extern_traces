@@ -233,8 +233,12 @@ pub struct ScalarGeneralPurposeRegisterGroup {
 }
 
 impl ScalarGeneralPurposeRegisterGroup {
+    pub fn lowest_register_idx(&self) -> u8 {
+        self.value << 2
+    }
+
     pub fn lowest_register(&self) -> ScalarDestinationOperand {
-        ScalarDestinationOperand::from_bits((self.value << 2) as usize)
+        ScalarDestinationOperand::from_bits(self.lowest_register_idx() as usize)
     }
 
     pub fn highest_register(&self) -> ScalarDestinationOperand {
