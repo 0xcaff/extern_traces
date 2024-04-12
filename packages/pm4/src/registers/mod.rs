@@ -1,7 +1,5 @@
 mod entry;
 pub mod generated;
-mod usize;
-
 use generated::Register;
 
 pub use entry::ParseRegisterEntry;
