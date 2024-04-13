@@ -34,7 +34,7 @@ pub struct VOP3Instruction {
 }
 
 #[derive(Debug, FromRepr)]
-#[repr(usize)]
+#[repr(u8)]
 enum OutputModifier {
     None = 0,
     Mul2 = 1,
@@ -44,7 +44,7 @@ enum OutputModifier {
 
 impl FromBits<2> for OutputModifier {
     fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full()).unwrap()
+        Self::from_repr(value.full() as u8).unwrap()
     }
 }
 
@@ -62,7 +62,7 @@ impl OutputModifier {
 impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(VOP3Instruction::from_bits(token as usize))
+        Ok(VOP3Instruction::from_bits(token))
     }
 }
 
@@ -79,7 +79,7 @@ pub enum OpCode {
 }
 
 impl OpCode {
-    fn from(op: usize) -> Option<OpCode> {
+    fn from(op: u64) -> Option<OpCode> {
         if let Some(value) = VOPCOpCode::from_repr(op) {
             return Some(OpCode::VOPC(value));
         };
@@ -99,7 +99,7 @@ impl OpCode {
         None
     }
 
-    fn decode(op: usize) -> Result<OpCode, anyhow::Error> {
+    fn decode(op: u64) -> Result<OpCode, anyhow::Error> {
         Ok(Self::from(op).ok_or_else(|| format_err!("unknown op code {} for VOP3", op))?)
     }
 

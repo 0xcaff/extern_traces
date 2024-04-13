@@ -21,7 +21,7 @@ pub struct SMEMInstruction {
     pub imm: bool,
 
     #[bits(14, 9)]
-    pub sbase: usize,
+    pub sbase: u64,
 
     #[bits(21, 15)]
     pub sdst: ScalarDestinationOperand,

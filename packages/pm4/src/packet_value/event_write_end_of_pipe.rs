@@ -1,7 +1,7 @@
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::VGT_EVENT_TYPE;
-use bits::{bitrange, FromBits};
+use bits::{bitrange, Bits, FromBits};
 
 #[derive(Debug, Clone)]
 pub struct EventWriteEndOfPipePacket {
@@ -24,7 +24,7 @@ impl ParseType3Packet for EventWriteEndOfPipePacket {
             false
         };
         let event_index = bitrange(11, 8).of_32(event_control) as u8;
-        let event_type = VGT_EVENT_TYPE::from_bits(bitrange(5, 0).of_32(event_control));
+        let event_type = VGT_EVENT_TYPE::from_bits(event_control.slice(5, 0));
 
         let address = (body[1] as u64) | ((bitrange(15, 0).of_32(body[2]) << 32) as u64);
         let immediate = (body[3] as u64) | ((body[4] as u64) << 32);

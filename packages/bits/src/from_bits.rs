@@ -31,7 +31,7 @@ impl FromBits<32> for u32 {
 macro_rules! from_bits_impls {
     ($($n:expr),*) => {
         $(
-            impl FromBits<$n> for usize {
+            impl FromBits<$n> for u64 {
                 fn from_bits(value: impl Bits) -> Self {
                     value.full()
                 }

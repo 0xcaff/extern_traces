@@ -15,7 +15,7 @@ impl ParseType3Packet for DrawIndexAutoPacket {
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
             index_count: body[0],
-            draw_initiator: VGT_DRAW_INITIATOR::from_bits(body[1] as usize),
+            draw_initiator: VGT_DRAW_INITIATOR::from_bits(body[1]),
         }
     }
 }

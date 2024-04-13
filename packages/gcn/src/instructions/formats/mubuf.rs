@@ -60,7 +60,7 @@ impl FromBits<12> for Offset {
 impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(MUBUFInstruction::from_bits(token as usize))
+        Ok(MUBUFInstruction::from_bits(token))
     }
 }
 

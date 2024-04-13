@@ -35,7 +35,7 @@ pub struct ExpInstruction {
 impl<R: Reader> ParseInstruction<R> for ExpInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(ExpInstruction::from_bits(token as usize))
+        Ok(ExpInstruction::from_bits(token))
     }
 }
 

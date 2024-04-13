@@ -167,10 +167,10 @@ pub enum SourceOperand {
 }
 
 impl FromBits<9> for SourceOperand {
-    fn from_bits(value: impl Bits) -> Self {
-        let value = value.full() as u16;
+    fn from_bits(raw_value: impl Bits) -> Self {
+        let value = raw_value.full() as u16;
         match value {
-            0..=255 => SourceOperand::Scalar(ScalarSourceOperand::from_bits(value as usize)),
+            0..=255 => SourceOperand::Scalar(ScalarSourceOperand::from_bits(raw_value)),
             256..=511 => SourceOperand::VectorGPR(VectorGPR {
                 register_idx: (value - 256) as u8,
             }), // 256..=511 to VGPR0..VGPR255
@@ -238,11 +238,11 @@ impl ScalarGeneralPurposeRegisterGroup {
     }
 
     pub fn lowest_register(&self) -> ScalarDestinationOperand {
-        ScalarDestinationOperand::from_bits(self.lowest_register_idx() as usize)
+        ScalarDestinationOperand::ScalarGPR(self.lowest_register_idx())
     }
 
     pub fn highest_register(&self) -> ScalarDestinationOperand {
-        ScalarDestinationOperand::from_bits(((self.value << 2) + 3) as usize)
+        ScalarDestinationOperand::ScalarGPR(self.lowest_register_idx() + 3)
     }
 }
 

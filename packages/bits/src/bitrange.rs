@@ -6,16 +6,16 @@
 #[derive(PartialEq, Eq, Debug)]
 pub struct BitRange {
     least_significant_idx: u8,
-    mask: usize,
+    mask: u64,
 }
 
 impl BitRange {
-    pub fn of(&self, value: usize) -> usize {
+    pub fn of(&self, value: u64) -> u64 {
         (value >> self.least_significant_idx) & self.mask
     }
 
     pub fn of_32(&self, value: u32) -> usize {
-        self.of(value as _)
+        self.of(value as _) as _
     }
 }
 
@@ -24,7 +24,7 @@ impl BitRange {
 /// Bits will maintain the ordering of their input.
 pub const fn bitrange(most_significant_idx: u8, least_significant_idx: u8) -> BitRange {
     let len = most_significant_idx - least_significant_idx + 1;
-    let mask = ((1usize) << len) - 1;
+    let mask = ((1u64) << len) - 1;
 
     BitRange {
         least_significant_idx,
@@ -32,7 +32,7 @@ pub const fn bitrange(most_significant_idx: u8, least_significant_idx: u8) -> Bi
     }
 }
 
-pub fn bit(idx: u8, of: usize) -> bool {
+pub fn bit(idx: u8, of: u64) -> bool {
     match bitrange(idx, idx).of(of) {
         0 => false,
         1 => true,

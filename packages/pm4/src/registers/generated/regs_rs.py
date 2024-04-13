@@ -37,11 +37,10 @@ template = """
 use strum::FromRepr;
 use bits_macros::FromBits;
 use bits::{Bits, FromBits};
-use crate::registers::usize::Usize;
 use pm4_internal_macros::ParseRegisterEntry;
 use crate::intermediate::build::Marker;
 
-#[repr(usize)]
+#[repr(u64)]
 #[derive(FromRepr, Debug)]
 pub enum Register {
 % for register_mapping in regdb.register_mappings():
@@ -50,7 +49,7 @@ pub enum Register {
 }
 
 % for (name, entries) in regdb.enums():
-#[repr(usize)]
+#[repr(u64)]
 #[derive(Clone, FromRepr, Debug)]
 pub enum ${name} {
 % for entry in entries.entries:
@@ -85,8 +84,10 @@ pub struct ${name} {
     #[bits(${field.bits[1]}, ${field.bits[0]})]
     pub ${field.name}: ${(
         field.enum_ref if hasattr(field, 'enum_ref') else
-        "bool" if ((field.bits[1] - field.bits[0]) == 0) else
-        "Usize"
+        "bool" if ((field.bits[1] - field.bits[0]) + 1 == 1) else
+        "u16" if ((field.bits[1] - field.bits[0]) + 1 == 16) else
+        "u32" if ((field.bits[1] - field.bits[0]) + 1 == 32) else
+        "u64"
     )},
     % endif
 % endfor

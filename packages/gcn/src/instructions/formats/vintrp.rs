@@ -25,7 +25,7 @@ pub struct VINTRPInstruction {
 }
 
 #[derive(FromRepr, Debug, AsRefStr, Copy, Clone)]
-#[repr(usize)]
+#[repr(u8)]
 pub enum AttributeChannel {
     #[strum(serialize = "x")]
     X = 0,
@@ -39,7 +39,7 @@ pub enum AttributeChannel {
 
 impl FromBits<2> for AttributeChannel {
     fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full()).unwrap()
+        Self::from_repr(value.full() as u8).unwrap()
     }
 }
 

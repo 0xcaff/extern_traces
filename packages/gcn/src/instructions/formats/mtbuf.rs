@@ -88,7 +88,7 @@ impl FromBits<4> for DataFormat {
 impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
     fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(MTBufInstruction::from_bits(token as usize))
+        Ok(MTBufInstruction::from_bits(token))
     }
 }
 

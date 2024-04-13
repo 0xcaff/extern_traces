@@ -23,7 +23,7 @@ impl ParseType3Packet for SetContextRegisterPacket {
                 .map(|(idx, value)| {
                     let offset = offset + idx as u16;
 
-                    let register = Register::from_repr(((offset as usize) << 2) + 0x028000);
+                    let register = Register::from_repr(((offset as u64) << 2) + 0x028000);
                     register.map(|it| RegisterEntry::parse_register_entry(it, value))
                 })
                 .collect(),
@@ -50,7 +50,7 @@ impl ParseType3Packet for SetShaderRegisterPacket {
                 .map(|(idx, value)| {
                     let offset = offset + idx as u16;
 
-                    let register = Register::from_repr(((offset as usize) << 2) + 0xB000);
+                    let register = Register::from_repr(((offset as u64) << 2) + 0xB000);
                     register.map(|it| RegisterEntry::parse_register_entry(it, value))
                 })
                 .collect(),

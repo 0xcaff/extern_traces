@@ -19,7 +19,7 @@ pub fn derive_parse_register_entry(derive_input: DeriveInput) -> Result<TokenStr
                 let ident = &it.ident;
 
                 Ok(quote! {
-                    #register_attr => Self::#ident(<_ as FromBits<32>>::from_bits(value as usize)),
+                    #register_attr => Self::#ident(<_ as FromBits<32>>::from_bits(value)),
                 })
             })
             .collect::<Result<Vec<_>, syn::Error>>()?

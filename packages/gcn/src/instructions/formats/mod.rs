@@ -144,7 +144,7 @@ impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
     where
         Self: Sized,
     {
-        Ok(Self::from_bits(token as usize))
+        Ok(Self::from_bits(token))
     }
 }
 

@@ -29,7 +29,7 @@ use bits::{FromBits, Bits};
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 
 % for format, format_ops in ops:
-#[repr(usize)]
+#[repr(u64)]
 #[allow(non_camel_case_types)]
 #[derive(Eq, PartialEq, Clone, Copy, Debug, FromRepr, AsRefStr)]
 pub enum ${format}OpCode {
