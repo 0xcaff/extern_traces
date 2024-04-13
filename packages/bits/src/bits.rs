@@ -34,15 +34,15 @@ impl Bits for u32 {
     }
 }
 
-impl Bits for &[u32] {
+impl Bits for &[u64] {
     fn slice(&self, most_significant_idx: u8, least_significant_idx: u8) -> impl Bits {
-        let most_significant_elem_idx = most_significant_idx / 32;
-        let least_significant_elem_idx = least_significant_idx / 32;
+        let most_significant_elem_idx = most_significant_idx / 64;
+        let least_significant_elem_idx = least_significant_idx / 64;
 
         assert_eq!(most_significant_elem_idx, least_significant_elem_idx);
 
         self[most_significant_elem_idx as usize]
-            .slice(most_significant_idx % 32, least_significant_idx % 32)
+            .slice(most_significant_idx % 64, least_significant_idx % 64)
     }
 
     fn full(&self) -> u64 {
