@@ -1,8 +1,8 @@
 use bits_macros::FromBits;
 
-#[derive(FromBits)]
+#[derive(FromBits, Debug)]
 #[bits(128)]
-struct SamplerResource {
+pub struct SamplerResource {
     #[bits(2, 0)]
     clamp_x: u64,
 
@@ -79,7 +79,7 @@ struct SamplerResource {
     border_color_type: u64,
 }
 
-#[derive(FromBits)]
+#[derive(FromBits, Debug)]
 #[bits(12)]
 struct LodFixed {
     #[bits(3, 0)]

@@ -4,7 +4,6 @@ mod formats;
 mod generated;
 mod instruction_info;
 mod operands;
-mod resources;
 
 use std::io::Read;
 

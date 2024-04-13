@@ -3,8 +3,10 @@
 mod instructions;
 mod reader;
 pub mod test_utils;
+mod resources;
 
 pub use instructions::*;
+pub use resources::*;
 
 #[cfg(test)]
 mod tests {
