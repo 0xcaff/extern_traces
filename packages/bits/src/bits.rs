@@ -41,7 +41,7 @@ impl Bits for &[u32] {
 
         assert_eq!(most_significant_elem_idx, least_significant_elem_idx);
 
-        self[(most_significant_elem_idx as usize)]
+        self[most_significant_elem_idx as usize]
             .slice(most_significant_idx % 32, least_significant_idx % 32)
     }
 
