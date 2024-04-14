@@ -2,7 +2,7 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MIMGOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
-use bits::{Bits, FromBits};
+use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
@@ -49,11 +49,23 @@ pub struct MIMGInstruction {
 }
 
 #[derive(Debug)]
-struct DMask(u8);
+pub struct DMask(u8);
 
 impl FromBits<4> for DMask {
     fn from_bits(value: impl Bits) -> Self {
         DMask(value.full() as _)
+    }
+}
+
+impl DMask {
+    pub fn indices(&self) -> impl Iterator<Item = u8> + '_ {
+        (0..4).into_iter().flat_map(|idx| {
+            let enabled = bit(idx, self.0 as _);
+            if !enabled {
+                return None;
+            }
+            return Some(idx);
+        })
     }
 }
 

@@ -2,7 +2,7 @@ use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::FromRepr;
 
-#[derive(FromBits, Debug, Hash, Eq, PartialEq)]
+#[derive(FromBits, Debug, Hash, Eq, PartialEq, Clone)]
 #[bits(256)]
 pub struct TextureResource {
     #[bits(37, 0)]
@@ -97,7 +97,7 @@ impl TextureResource {
 // From GPCS4
 // https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1385-L1433
 #[allow(non_camel_case_types)]
-#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
 #[repr(u8)]
 pub enum SurfaceFormat {
     /// Invalid surface format.
@@ -206,7 +206,7 @@ impl FromBits<6> for SurfaceFormat {
     }
 }
 
-#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
 #[repr(u8)]
 pub enum BufferChannelType {
     ///< Stored as <c>uint X\<N</c>, interpreted as <c>float X/(N-1)</c>.
@@ -238,7 +238,7 @@ impl FromBits<4> for BufferChannelType {
 }
 
 // From https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1820-L1827
-#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
 #[repr(u8)]
 pub enum TextureType {
     ///< One-dimensional texture.
@@ -266,7 +266,7 @@ impl FromBits<4> for TextureType {
 }
 
 // From https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1542-L1574
-#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
 #[repr(u8)]
 pub enum TileMode {
     // Depth modes (for depth buffers)
@@ -338,7 +338,7 @@ impl FromBits<5> for TileMode {
     }
 }
 
-#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
 #[repr(u8)]
 pub enum DestinationChannelSelect {
     Zero = 0,

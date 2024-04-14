@@ -1,6 +1,6 @@
 use bits_macros::FromBits;
 
-#[derive(FromBits, Debug, Hash, PartialEq, Eq)]
+#[derive(FromBits, Debug, Hash, PartialEq, Eq, Clone)]
 #[bits(128)]
 pub struct SamplerResource {
     #[bits(2, 0)]
@@ -79,7 +79,7 @@ pub struct SamplerResource {
     pub border_color_type: u64,
 }
 
-#[derive(FromBits, Debug, Hash, PartialEq, Eq)]
+#[derive(FromBits, Debug, Hash, PartialEq, Eq, Clone)]
 #[bits(12)]
 struct LodFixed {
     #[bits(3, 0)]
