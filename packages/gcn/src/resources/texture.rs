@@ -2,89 +2,89 @@ use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::FromRepr;
 
-#[derive(FromBits, Debug)]
+#[derive(FromBits, Debug, Hash, Eq, PartialEq)]
 #[bits(256)]
 pub struct TextureResource {
     #[bits(37, 0)]
-    base_addr_256: u64,
+    pub base_addr_256: u64,
 
     #[bits(39, 38)]
-    mtype_l2: u64,
+    pub mtype_l2: u64,
 
     #[bits(51, 40)]
-    min_lod: u64,
+    pub min_lod: u64,
 
     #[bits(57, 52)]
-    dfmt: SurfaceFormat,
+    pub dfmt: SurfaceFormat,
 
     #[bits(61, 58)]
-    nfmt: u64,
+    pub nfmt: BufferChannelType,
 
     #[bits(63, 62)]
-    mtype: u64,
+    pub mtype: u64,
 
     #[bits(77, 64)]
-    width: u64,
+    pub width: u64,
 
     #[bits(91, 78)]
-    height: u64,
+    pub height: u64,
 
     #[bits(94, 92)]
-    perf_mod: u64,
+    pub perf_mod: u64,
 
     #[bits(95, 95)]
-    interlaced: bool,
+    pub interlaced: bool,
 
     #[bits(98, 96)]
-    dst_sel_x: DestinationChannelSelect,
+    pub dst_sel_x: DestinationChannelSelect,
 
     #[bits(101, 99)]
-    dst_sel_y: DestinationChannelSelect,
+    pub dst_sel_y: DestinationChannelSelect,
 
     #[bits(104, 102)]
-    dst_sel_z: DestinationChannelSelect,
+    pub dst_sel_z: DestinationChannelSelect,
 
     #[bits(107, 105)]
-    dst_sel_w: DestinationChannelSelect,
+    pub dst_sel_w: DestinationChannelSelect,
 
     #[bits(111, 108)]
-    base_level: u64,
+    pub base_level: u64,
 
     #[bits(115, 112)]
-    last_level: u64,
+    pub last_level: u64,
 
     #[bits(120, 116)]
-    tiling_idx: TileMode,
+    pub tiling_idx: TileMode,
 
     #[bits(121, 121)]
-    pow2pad: bool,
+    pub pow2pad: bool,
 
     #[bits(122, 122)]
-    mtype_2: bool,
+    pub mtype_2: bool,
 
     #[bits(127, 124)]
-    typ: TextureType,
+    pub texture_type: TextureType,
 
     #[bits(140, 128)]
-    depth: u64,
+    pub depth: u64,
 
     #[bits(154, 141)]
-    pitch: u64,
+    pub pitch: u64,
 
     #[bits(172, 160)]
-    base_array: u64,
+    pub base_array: u64,
 
     #[bits(185, 173)]
-    last_array: u64,
+    pub last_array: u64,
 
     #[bits(203, 192)]
-    min_lod_warn: u64,
+    pub min_lod_warn: u64,
 
     #[bits(211, 204)]
-    counter_bank_id: u64,
+    pub counter_bank_id: u64,
 
     #[bits(212, 212)]
-    lod_hdw_cnt_en: bool,
+    pub lod_hdw_cnt_en: bool,
 }
 
 impl TextureResource {
@@ -97,7 +97,7 @@ impl TextureResource {
 // From GPCS4
 // https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1385-L1433
 #[allow(non_camel_case_types)]
-#[derive(FromRepr, Debug)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
 #[repr(u8)]
 pub enum SurfaceFormat {
     /// Invalid surface format.
@@ -206,8 +206,39 @@ impl FromBits<6> for SurfaceFormat {
     }
 }
 
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
+#[repr(u8)]
+pub enum BufferChannelType {
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float X/(N-1)</c>.
+    UNorm = 0x00000000,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>float MAX(-1,X/(N/2-1))</c>.
+    SNorm = 0x00000001,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float X</c>.
+    UScaled = 0x00000002,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>float X</c>.
+    SScaled = 0x00000003,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>uint X</c>. Not filterable.
+    UInt = 0x00000004,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>int X</c>. Not filterable.
+    SInt = 0x00000005,
+    ///< Stored as <c>int -N/2<=X\<N/2</c>, interpreted as <c>float ((X+N/2)/(N-1))*2-1</c>.
+    SNormNoZero = 0x00000006,
+    ///< Stored as <c>float</c>, interpreted as <c>float</c>.
+    Float = 0x00000007,
+    //<  – 32-bit: SE8M23, bias 127, range <c>(-2^129..2^129)</c>
+    //<  – 16-bit: SE5M10, bias 15, range <c>(-2^17..2^17)</c>
+    //<  – 11-bit: E5M6 bias 15, range <c>[0..2^17)</c>
+    //<  – 10-bit: E5M5 bias 15, range <c>[0..2^17)</c>
+}
+
+impl FromBits<4> for BufferChannelType {
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full() as u8).unwrap()
+    }
+}
+
 // From https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1820-L1827
-#[derive(FromRepr, Debug)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
 #[repr(u8)]
 pub enum TextureType {
     ///< One-dimensional texture.
@@ -235,7 +266,7 @@ impl FromBits<4> for TextureType {
 }
 
 // From https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1542-L1574
-#[derive(FromRepr, Debug)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
 #[repr(u8)]
 pub enum TileMode {
     // Depth modes (for depth buffers)
@@ -307,7 +338,7 @@ impl FromBits<5> for TileMode {
     }
 }
 
-#[derive(FromRepr, Debug)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq)]
 #[repr(u8)]
 pub enum DestinationChannelSelect {
     Zero = 0,
