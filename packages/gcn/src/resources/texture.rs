@@ -4,7 +4,7 @@ use strum::FromRepr;
 
 #[derive(FromBits, Debug, Hash, Eq, PartialEq, Clone)]
 #[bits(256)]
-pub struct TextureResource {
+pub struct TextureBufferResource {
     #[bits(37, 0)]
     pub base_addr_256: u64,
 
@@ -87,7 +87,7 @@ pub struct TextureResource {
     pub lod_hdw_cnt_en: bool,
 }
 
-impl TextureResource {
+impl TextureBufferResource {
     pub fn base_address(&self) -> u64 {
         // drop the top 6 bits, shift the remaining 32 bits into a 40-bit address
         (self.base_addr_256 & u32::MAX as u64) << 8
