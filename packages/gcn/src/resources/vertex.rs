@@ -1,5 +1,8 @@
+use bits_macros::FromBits;
 use crate::{BufferChannelType, DestinationChannelSelect};
 
+#[derive(FromBits)]
+#[bits(128)]
 pub struct VertexBufferResource {
     #[bits(43, 0)]
     pub base: u64,

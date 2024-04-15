@@ -237,6 +237,12 @@ impl FromBits<4> for BufferChannelType {
     }
 }
 
+impl FromBits<3> for BufferChannelType {
+    fn from_bits(value: impl Bits) -> Self {
+        Self::from_repr(value.full() as u8).unwrap()
+    }
+}
+
 // From https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1820-L1827
 #[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
 #[repr(u8)]
