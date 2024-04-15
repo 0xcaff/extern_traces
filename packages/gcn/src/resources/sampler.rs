@@ -81,10 +81,10 @@ pub struct SamplerResource {
 
 #[derive(FromBits, Debug, Hash, PartialEq, Eq, Clone)]
 #[bits(12)]
-struct LodFixed {
+pub struct LodFixed {
     #[bits(3, 0)]
-    int: u64,
+    pub int: u64,
 
     #[bits(11, 4)]
-    frac: u8,
+    pub frac: u8,
 }
