@@ -1,9 +1,11 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MIMGOpCode;
+use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::{DisplayInstruction, DisplayableInstruction, ScalarDestinationOperand};
 use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
+use std::fmt;
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
@@ -48,7 +50,6 @@ pub struct MIMGInstruction {
     pub ssamp: ScalarGeneralPurposeRegisterGroup,
 }
 
-#[derive(Debug)]
 pub struct DMask(u8);
 
 impl FromBits<4> for DMask {
@@ -64,8 +65,26 @@ impl DMask {
             if !enabled {
                 return None;
             }
+
             return Some(idx);
         })
+    }
+}
+
+impl fmt::Debug for DMask {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(&format!(
+            "dmask({})",
+            self.indices()
+                .map(|it| match it {
+                    0 => "r",
+                    1 => "g",
+                    2 => "b",
+                    3 => "a",
+                    _ => unreachable!(),
+                })
+                .collect::<String>(),
+        ))
     }
 }
 
@@ -78,12 +97,51 @@ impl<R: Reader> ParseInstruction<R> for MIMGInstruction {
 
 impl DisplayInstruction for MIMGInstruction {
     fn display(&self, _: Option<u32>) -> DisplayableInstruction {
+        let indices = self.dmask.indices().collect::<Vec<_>>();
+
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
-            args: vec![
-                // todo: figure out sizes
-                "SKIPPED".to_string(),
-            ],
+            args: {
+                let mut args = vec![
+                    self.vdata
+                        .display(&Some(OperandInfo::Size(indices.len() as u8))),
+                    self.vaddr.display(&Some(OperandInfo::Size(2))),
+                    ScalarDestinationOperand::ScalarGPR(self.srsrc.lowest_register_idx())
+                        .display(&Some(OperandInfo::Size(if self.r128 { 4 } else { 8 }))),
+                    self.ssamp.display(),
+                    format!("{:?}", self.dmask),
+                ];
+
+                if self.unorm {
+                    args.push("unorm".into());
+                }
+
+                if self.glc {
+                    args.push("glc".into());
+                }
+
+                if self.da {
+                    args.push("da".into());
+                }
+
+                if self.r128 {
+                    args.push("r128".into());
+                }
+
+                if self.tfe {
+                    args.push("tfe".into());
+                }
+
+                if self.lwe {
+                    args.push("lwe".into());
+                }
+
+                if self.slc {
+                    args.push("slc".into());
+                }
+
+                args
+            },
         }
     }
 }
