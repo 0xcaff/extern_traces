@@ -2,7 +2,8 @@ use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::ScalarDestinationOperand::ScalarGPR;
+use crate::{DisplayInstruction, DisplayableInstruction, ScalarSourceOperand, VOP2Instruction};
 use anyhow::format_err;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
@@ -12,30 +13,30 @@ use strum::FromRepr;
 #[bits(64)]
 pub struct VOP3Instruction {
     #[bits(25, 17)]
-    op: OpCode,
+    pub op: OpCode,
 
     #[bits(7, 0)]
-    vdst: VectorGPR,
+    pub vdst: VectorGPR,
 
     #[bits(src(0))]
-    src0: TransformedOperand,
+    pub src0: TransformedOperand,
 
     #[bits(src(1))]
-    src1: TransformedOperand,
+    pub src1: TransformedOperand,
 
     #[bits(src(2))]
-    src2: TransformedOperand,
+    pub src2: TransformedOperand,
 
     #[bits(11, 11)]
-    clamp: bool,
+    pub clamp: bool,
 
     #[bits(60, 59)]
-    output_modifier: OutputModifier,
+    pub output_modifier: OutputModifier,
 }
 
 #[derive(Debug, FromRepr)]
 #[repr(u8)]
-enum OutputModifier {
+pub enum OutputModifier {
     None = 0,
     Mul2 = 1,
     Mul4 = 2,
@@ -202,6 +203,32 @@ impl DisplayInstruction for VOP3Instruction {
 
                 args
             },
+        }
+    }
+}
+
+impl From<VOP2Instruction> for VOP3Instruction {
+    fn from(value: VOP2Instruction) -> Self {
+        Self {
+            op: OpCode::VOP2(value.op),
+            vdst: value.vdst,
+            src0: TransformedOperand {
+                operand: value.src0,
+                abs: false,
+                neg: false,
+            },
+            src1: TransformedOperand {
+                operand: SourceOperand::VectorGPR(value.vsrc1),
+                abs: false,
+                neg: false,
+            },
+            src2: TransformedOperand {
+                operand: SourceOperand::Scalar(ScalarSourceOperand::Destination(ScalarGPR(0))),
+                abs: false,
+                neg: false,
+            },
+            clamp: false,
+            output_modifier: OutputModifier::None,
         }
     }
 }
