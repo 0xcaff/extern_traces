@@ -12,7 +12,7 @@ pub use crate::instructions::formats::sopp::SOPPInstruction;
 pub use crate::instructions::formats::vintrp::VINTRPInstruction;
 pub use crate::instructions::formats::vop1::VOP1Instruction;
 pub use crate::instructions::formats::vop2::VOP2Instruction;
-pub use crate::instructions::formats::vop3::VOP3Instruction;
+pub use crate::instructions::formats::vop3::*;
 pub use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::reader::Reader;
 use crate::{SOPKOpCode, ScalarSourceOperand, SourceOperand, VOP2OpCode};

@@ -7,7 +7,7 @@ use bits_macros::FromBits;
 ///
 /// Vector instruction taking two inputs and producing one output. Can be
 /// followed by a 32-bit literal constant.
-#[derive(Debug, FromBits)]
+#[derive(Debug, FromBits, Clone)]
 #[bits(32)]
 pub struct VOP2Instruction {
     #[bits(30, 25)]

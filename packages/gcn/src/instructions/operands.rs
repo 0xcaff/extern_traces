@@ -160,7 +160,7 @@ impl ScalarSourceOperand {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SourceOperand {
     Scalar(ScalarSourceOperand),
     VectorGPR(VectorGPR),
@@ -192,7 +192,7 @@ impl SourceOperand {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct VectorGPR {
     pub register_idx: u8,
 }
