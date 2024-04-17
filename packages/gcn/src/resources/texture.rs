@@ -18,7 +18,7 @@ pub struct TextureBufferResource {
     pub dfmt: SurfaceFormat,
 
     #[bits(61, 58)]
-    pub nfmt: BufferChannelType,
+    pub nfmt: TextureChannelType,
 
     #[bits(63, 62)]
     pub mtype: u64,
@@ -231,13 +231,48 @@ pub enum BufferChannelType {
     //<  – 10-bit: E5M5 bias 15, range <c>[0..2^17)</c>
 }
 
-impl FromBits<4> for BufferChannelType {
+impl FromBits<3> for BufferChannelType {
     fn from_bits(value: impl Bits) -> Self {
         Self::from_repr(value.full() as u8).unwrap()
     }
 }
 
-impl FromBits<3> for BufferChannelType {
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
+#[repr(u8)]
+pub enum TextureChannelType {
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float X/(N-1)</c>.
+    UNorm = 0x00000000,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>float MAX(-1,X/(N/2-1))</c>.
+    SNorm = 0x00000001,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float X</c>.
+    UScaled = 0x00000002,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>float X</c>.
+    SScaled = 0x00000003,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>uint X</c>. Not filterable.
+    UInt = 0x00000004,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>int X</c>. Not filterable.
+    SInt = 0x00000005,
+    ///< Stored as <c>int -N/2\<=X\<N/2</c>, interpreted as <c>float ((X+N/2)/(N-1))*2-1</c>.
+    SNormNoZero = 0x00000006,
+    ///< Stored as <c>float</c>, interpreted as <c>float</c>.
+    Float = 0x00000007,
+    //<  – 32-bit: SE8M23, bias 127, range <c>(-2^129..2^129)</c>
+    //<  – 16-bit: SE5M10, bias 15, range <c>(-2^17..2^17)</c>
+    //<  – 11-bit: E5M6 bias 15, range <c>[0..2^17)</c>
+    //<  – 10-bit: E5M5 bias 15, range <c>[0..2^17)</c>
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float sRGB(X/(N-1))</c>. Srgb only applies to the XYZ channels of the texture; the W channel is always linear.
+    Srgb = 0x00000009,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float MAX(-1,(X-N/2)/(N/2-1))</c>.
+    UBNorm = 0x0000000A,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float (X/(N-1))*2-1</c>.
+    UBNormNoZero = 0x0000000B,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>int X-N/2</c>. Not blendable or filterable.
+    UBInt = 0x0000000C,
+    ///< Stored as <c>uint X\<N</c>, interpreted as <c>float X-N/2</c>.
+    UBScaled = 0x0000000D,
+}
+
+impl FromBits<4> for TextureChannelType {
     fn from_bits(value: impl Bits) -> Self {
         Self::from_repr(value.full() as u8).unwrap()
     }
