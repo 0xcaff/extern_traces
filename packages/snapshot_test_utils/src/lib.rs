@@ -3,7 +3,7 @@
 //! finding unintended changes.
 
 use std::fs::OpenOptions;
-use std::io::{Read, Write};
+use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::Path;
 use std::{fs, io};
 
@@ -120,6 +120,7 @@ fn update_snapshot(snapshot_path: impl AsRef<Path>, expected: &str) -> Result<bo
     file.read_to_string(&mut file_contents)?;
 
     let bytes = expected.as_bytes();
+    file.seek(SeekFrom::Start(0))?;
     file.write_all(bytes)?;
     file.set_len(bytes.len() as _)?;
 

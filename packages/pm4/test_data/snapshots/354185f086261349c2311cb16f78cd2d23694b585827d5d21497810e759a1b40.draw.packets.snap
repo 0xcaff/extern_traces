@@ -983,13 +983,24 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    512,
-                    3758096384,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            GRBM_GFX_INDEX(
+                                GRBM_GFX_INDEX {
+                                    INSTANCE_INDEX: 0,
+                                    SH_INDEX: 0,
+                                    SE_INDEX: 0,
+                                    SH_BROADCAST_WRITES: true,
+                                    INSTANCE_BROADCAST_WRITES: true,
+                                    SE_BROADCAST_WRITES: true,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(
@@ -2096,13 +2107,19 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    578,
-                    4,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            VGT_PRIMITIVE_TYPE(
+                                VGT_PRIMITIVE_TYPE {
+                                    PRIM_TYPE: DI_PT_TRILIST,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(
@@ -3029,13 +3046,19 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    578,
-                    4,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            VGT_PRIMITIVE_TYPE(
+                                VGT_PRIMITIVE_TYPE {
+                                    PRIM_TYPE: DI_PT_TRILIST,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(
@@ -3804,13 +3827,19 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    578,
-                    4,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            VGT_PRIMITIVE_TYPE(
+                                VGT_PRIMITIVE_TYPE {
+                                    PRIM_TYPE: DI_PT_TRILIST,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(

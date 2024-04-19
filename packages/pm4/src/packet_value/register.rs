@@ -57,3 +57,35 @@ impl ParseType3Packet for SetShaderRegisterPacket {
         }
     }
 }
+
+#[derive(Debug)]
+pub struct SetUConfigRegisterPacket {
+    pub values: Vec<Option<RegisterEntry>>,
+}
+
+impl ParseType3Packet for SetUConfigRegisterPacket {
+    const OP: OpCode = OpCode::SET_UCONFIG_REG;
+
+    fn parse_type3_packet(body: Vec<u32>) -> Self {
+        // Implemented looking at the writer side in mesa
+        // https://gitlab.freedesktop.org/mesa/mesa/blob/d09ad16fd4a0596fb6c97cffaf0fdf031053b5a4/src/amd/vulkan/radv_cs.h#L160-L176
+        Self {
+            values: body
+                .chunks(2)
+                .map(|it| {
+                    let &[key, value] = it else { unreachable!() };
+
+                    // todo: not exactly sure what this field is, it always seems to be zero?
+                    let idx = bitrange(31, 28).of_32(key);
+                    assert_eq!(idx, 0);
+
+                    let register = bitrange(27, 0).of_32(key);
+
+                    let register = Register::from_repr(((register as u64) << 2) + 0x00030000);
+
+                    register.map(|it| RegisterEntry::parse_register_entry(it, value))
+                })
+                .collect(),
+        }
+    }
+}

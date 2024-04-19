@@ -973,13 +973,19 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    578,
-                    17,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            VGT_PRIMITIVE_TYPE(
+                                VGT_PRIMITIVE_TYPE {
+                                    PRIM_TYPE: DI_PT_RECTLIST,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(
@@ -2078,13 +2084,19 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    578,
-                    17,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            VGT_PRIMITIVE_TYPE(
+                                VGT_PRIMITIVE_TYPE {
+                                    PRIM_TYPE: DI_PT_RECTLIST,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(
@@ -3425,13 +3437,19 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: SET_UCONFIG_REG,
-                body: [
-                    578,
-                    4,
-                ],
-            },
+            value: SetUConfigRegister(
+                SetUConfigRegisterPacket {
+                    values: [
+                        Some(
+                            VGT_PRIMITIVE_TYPE(
+                                VGT_PRIMITIVE_TYPE {
+                                    PRIM_TYPE: DI_PT_TRILIST,
+                                },
+                            ),
+                        ),
+                    ],
+                },
+            ),
         },
     ),
     Type3(
