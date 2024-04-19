@@ -168,9 +168,7 @@ expression: shader.debug()
         inner: MIMG(
             MIMGInstruction {
                 op: image_sample,
-                dmask: DMask(
-                    7,
-                ),
+                dmask: dmask(rgb),
                 unorm: false,
                 glc: false,
                 da: false,
