@@ -11,12 +11,15 @@ pub use resources::*;
 #[cfg(test)]
 mod tests {
     use crate::test_utils::GCNInstructionStream;
-    use std::{fs, io};
     use std::fs::{File, OpenOptions};
     use std::io::{Read, Seek, SeekFrom, Write};
     use std::path::{Path, PathBuf};
+    use std::{fs, io};
 
-    fn update_snapshot(snapshot_path: impl AsRef<Path>, expected: String) -> Result<bool, io::Error> {
+    fn update_snapshot(
+        snapshot_path: impl AsRef<Path>,
+        expected: String,
+    ) -> Result<bool, io::Error> {
         let mut file = OpenOptions::new()
             .create(true)
             .read(true)
@@ -26,9 +29,9 @@ mod tests {
         let mut file_contents = String::new();
         file.read_to_string(&mut file_contents)?;
 
-        file.set_len(0)?;
-
-        file.write_all(expected.as_bytes())?;
+        let bytes = expected.as_bytes();
+        file.write_all(bytes)?;
+        file.set_len(bytes.len() as _)?;
 
         Ok(expected == file_contents)
     }
