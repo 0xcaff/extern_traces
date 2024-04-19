@@ -44,7 +44,7 @@ use crate::intermediate::build::Marker;
 #[derive(FromRepr, Debug)]
 pub enum Register {
 % for register_mapping in regdb.register_mappings():
-    ${register_mapping.name} = ${register_mapping.map.at},
+    ${register_mapping.name} = ${hex(register_mapping.map.at)},
 % endfor
 }
 
