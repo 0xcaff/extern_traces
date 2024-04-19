@@ -15,4 +15,4 @@ bits_macros = { path = "../bits_macros" }
 
 [dev-dependencies]
 insta = { version = "1.33.0" }
-glob = "0.3.1"
+snapshot_test_utils = { path = "../snapshot_test_utils" }

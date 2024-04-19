@@ -11,63 +11,28 @@ pub use resources::*;
 #[cfg(test)]
 mod tests {
     use crate::test_utils::GCNInstructionStream;
+    use snapshot_test_utils::generate_snapshots;
     use std::fs::{File, OpenOptions};
     use std::io::{Read, Seek, SeekFrom, Write};
     use std::path::{Path, PathBuf};
     use std::{fs, io};
 
-    fn update_snapshot(
-        snapshot_path: impl AsRef<Path>,
-        expected: String,
-    ) -> Result<bool, io::Error> {
-        let mut file = OpenOptions::new()
-            .create(true)
-            .read(true)
-            .write(true)
-            .open(snapshot_path)?;
-
-        let mut file_contents = String::new();
-        file.read_to_string(&mut file_contents)?;
-
-        let bytes = expected.as_bytes();
-        file.write_all(bytes)?;
-        file.set_len(bytes.len() as _)?;
-
-        Ok(expected == file_contents)
-    }
-
     #[test]
     fn test_snapshots() -> Result<(), anyhow::Error> {
-        for input_path in glob::glob("test_data/**/*.sb")? {
-            let input_path = input_path?;
+        generate_snapshots(
+            "test_data/captured/**/*.sb",
+            "test_data/captured",
+            "test_data/snapshots",
+            |input, collector| {
+                let shader = GCNInstructionStream::new(&input).unwrap();
 
-            let relative_path = input_path.strip_prefix("test_data/captured")?;
+                collector.result("debug", &shader.debug())?;
 
-            let snapshot_folder = Path::new("test_data/snapshots").join(relative_path);
-            fs::create_dir_all(snapshot_folder.parent().unwrap())?;
+                collector.result("display", &shader.displayed())?;
 
-            let input = fs::read(input_path)?;
-
-            let shader = GCNInstructionStream::new(&input).unwrap();
-
-            {
-                let mut path = snapshot_folder.clone();
-                path.set_extension("debug.snap");
-
-                update_snapshot(&path, shader.debug())?;
-            }
-
-            {
-                let mut path = snapshot_folder.clone();
-                path.set_extension("display.snap");
-
-                update_snapshot(&path, shader.displayed())?;
-            }
-        }
-
-        // todo: report test failures
-
-        Ok(())
+                Ok(())
+            },
+        )
     }
 
     #[test]
