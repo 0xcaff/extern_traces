@@ -1,7 +1,3 @@
----
-source: packages/pm4/src/packet.rs
-expression: packets
----
 [
     Type3(
         Type3Packet {
@@ -67,12 +63,8 @@ expression: packets
                         Some(
                             COMPUTE_STATIC_THREAD_MGMT_SE0(
                                 COMPUTE_STATIC_THREAD_MGMT_SE0 {
-                                    SH0_CU_EN: Usize(
-                                        65535,
-                                    ),
-                                    SH1_CU_EN: Usize(
-                                        65535,
-                                    ),
+                                    SH0_CU_EN: 65535,
+                                    SH1_CU_EN: 65535,
                                 },
                             ),
                         ),
@@ -94,12 +86,8 @@ expression: packets
                         Some(
                             COMPUTE_STATIC_THREAD_MGMT_SE1(
                                 COMPUTE_STATIC_THREAD_MGMT_SE0 {
-                                    SH0_CU_EN: Usize(
-                                        65535,
-                                    ),
-                                    SH1_CU_EN: Usize(
-                                        65535,
-                                    ),
+                                    SH0_CU_EN: 65535,
+                                    SH1_CU_EN: 65535,
                                 },
                             ),
                         ),
@@ -121,20 +109,12 @@ expression: packets
                         Some(
                             COMPUTE_RESOURCE_LIMITS(
                                 COMPUTE_RESOURCE_LIMITS {
-                                    WAVES_PER_SH: Usize(
-                                        0,
-                                    ),
-                                    TG_PER_CU: Usize(
-                                        0,
-                                    ),
-                                    LOCK_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    WAVES_PER_SH: 0,
+                                    TG_PER_CU: 0,
+                                    LOCK_THRESHOLD: 0,
                                     SIMD_DEST_CNTL: false,
                                     FORCE_SIMD_DIST: false,
-                                    CU_GROUP_COUNT: Usize(
-                                        0,
-                                    ),
+                                    CU_GROUP_COUNT: 0,
                                 },
                             ),
                         ),
@@ -180,9 +160,7 @@ expression: packets
                         Some(
                             PA_SU_LINE_CNTL(
                                 PA_SU_LINE_CNTL {
-                                    WIDTH: Usize(
-                                        8,
-                                    ),
+                                    WIDTH: 8,
                                 },
                             ),
                         ),
@@ -204,12 +182,8 @@ expression: packets
                         Some(
                             PA_SU_POINT_SIZE(
                                 PA_SU_POINT_SIZE {
-                                    HEIGHT: Usize(
-                                        8,
-                                    ),
-                                    WIDTH: Usize(
-                                        8,
-                                    ),
+                                    HEIGHT: 8,
+                                    WIDTH: 8,
                                 },
                             ),
                         ),
@@ -231,12 +205,8 @@ expression: packets
                         Some(
                             PA_SU_POINT_MINMAX(
                                 PA_SU_POINT_MINMAX {
-                                    MIN_SIZE: Usize(
-                                        0,
-                                    ),
-                                    MAX_SIZE: Usize(
-                                        65535,
-                                    ),
+                                    MIN_SIZE: 0,
+                                    MAX_SIZE: 65535,
                                 },
                             ),
                         ),
@@ -265,9 +235,7 @@ expression: packets
                                     UCP_ENA_4: false,
                                     UCP_ENA_5: false,
                                     PS_UCP_Y_SCALE_NEG: false,
-                                    PS_UCP_MODE: Usize(
-                                        0,
-                                    ),
+                                    PS_UCP_MODE: 0,
                                     CLIP_DISABLE: false,
                                     UCP_CULL_ONLY_ENA: false,
                                     BOUNDARY_EDGE_FLAG_ENA: false,
@@ -351,9 +319,7 @@ expression: packets
                         Some(
                             VGT_OUT_DEALLOC_CNTL(
                                 VGT_OUT_DEALLOC_CNTL {
-                                    DEALLOC_DIST: Usize(
-                                        16,
-                                    ),
+                                    DEALLOC_DIST: 16,
                                 },
                             ),
                         ),
@@ -479,12 +445,8 @@ expression: packets
                         Some(
                             PA_SC_AA_MASK_X0Y0_X1Y0(
                                 PA_SC_AA_MASK_X0Y0_X1Y0 {
-                                    AA_MASK_X0Y0: Usize(
-                                        65535,
-                                    ),
-                                    AA_MASK_X1Y0: Usize(
-                                        65535,
-                                    ),
+                                    AA_MASK_X0Y0: 65535,
+                                    AA_MASK_X1Y0: 65535,
                                 },
                             ),
                         ),
@@ -506,12 +468,8 @@ expression: packets
                         Some(
                             PA_SC_AA_MASK_X0Y1_X1Y1(
                                 PA_SC_AA_MASK_X0Y1_X1Y1 {
-                                    AA_MASK_X0Y1: Usize(
-                                        65535,
-                                    ),
-                                    AA_MASK_X1Y1: Usize(
-                                        65535,
-                                    ),
+                                    AA_MASK_X0Y1: 65535,
+                                    AA_MASK_X1Y1: 65535,
                                 },
                             ),
                         ),
@@ -548,15 +506,9 @@ expression: packets
                         Some(
                             SPI_SHADER_PGM_RSRC3_PS(
                                 SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    CU_EN: 511,
+                                    WAVE_LIMIT: 0,
+                                    LOCK_LOW_THRESHOLD: 0,
                                 },
                             ),
                         ),
@@ -578,15 +530,9 @@ expression: packets
                         Some(
                             SPI_SHADER_PGM_RSRC3_VS(
                                 SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    CU_EN: 511,
+                                    WAVE_LIMIT: 0,
+                                    LOCK_LOW_THRESHOLD: 0,
                                 },
                             ),
                         ),
@@ -608,15 +554,9 @@ expression: packets
                         Some(
                             SPI_SHADER_PGM_RSRC3_GS(
                                 SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    CU_EN: 511,
+                                    WAVE_LIMIT: 0,
+                                    LOCK_LOW_THRESHOLD: 0,
                                 },
                             ),
                         ),
@@ -638,15 +578,9 @@ expression: packets
                         Some(
                             SPI_SHADER_PGM_RSRC3_ES(
                                 SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    CU_EN: 511,
+                                    WAVE_LIMIT: 0,
+                                    LOCK_LOW_THRESHOLD: 0,
                                 },
                             ),
                         ),
@@ -668,12 +602,8 @@ expression: packets
                         Some(
                             SPI_SHADER_PGM_RSRC3_HS(
                                 SPI_SHADER_PGM_RSRC3_HS {
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    WAVE_LIMIT: 0,
+                                    LOCK_LOW_THRESHOLD: 0,
                                 },
                             ),
                         ),
@@ -695,15 +625,9 @@ expression: packets
                         Some(
                             SPI_SHADER_PGM_RSRC3_LS(
                                 SPI_SHADER_PGM_RSRC3_PS {
-                                    CU_EN: Usize(
-                                        511,
-                                    ),
-                                    WAVE_LIMIT: Usize(
-                                        0,
-                                    ),
-                                    LOCK_LOW_THRESHOLD: Usize(
-                                        0,
-                                    ),
+                                    CU_EN: 511,
+                                    WAVE_LIMIT: 0,
+                                    LOCK_LOW_THRESHOLD: 0,
                                 },
                             ),
                         ),
@@ -725,9 +649,7 @@ expression: packets
                         Some(
                             SPI_VS_OUT_CONFIG(
                                 SPI_VS_OUT_CONFIG {
-                                    VS_EXPORT_COUNT: Usize(
-                                        1,
-                                    ),
+                                    VS_EXPORT_COUNT: 1,
                                     VS_HALF_PACK: false,
                                 },
                             ),
@@ -810,9 +732,7 @@ expression: packets
                         Some(
                             VGT_OUTPUT_PATH_CNTL(
                                 VGT_OUTPUT_PATH_CNTL {
-                                    PATH_SELECT: Usize(
-                                        0,
-                                    ),
+                                    PATH_SELECT: 0,
                                 },
                             ),
                         ),
@@ -837,9 +757,7 @@ expression: packets
                                     MODE: GS_OFF,
                                     RESERVED_0: false,
                                     CUT_MODE: GS_CUT_1024,
-                                    RESERVED_1: Usize(
-                                        0,
-                                    ),
+                                    RESERVED_1: 0,
                                     GS_C_PACK_EN: false,
                                     RESERVED_2: false,
                                     ES_PASSTHRU: false,
@@ -850,9 +768,7 @@ expression: packets
                                     SUPPRESS_CUTS: false,
                                     ES_WRITE_OPTIMIZE: false,
                                     GS_WRITE_OPTIMIZE: false,
-                                    ONCHIP: Usize(
-                                        0,
-                                    ),
+                                    ONCHIP: 0,
                                 },
                             ),
                         ),
@@ -925,9 +841,7 @@ expression: packets
                                     WALK_ALIGNMENT: false,
                                     WALK_ALIGN8_PRIM_FITS_ST: false,
                                     WALK_FENCE_ENABLE: false,
-                                    WALK_FENCE_SIZE: Usize(
-                                        0,
-                                    ),
+                                    WALK_FENCE_SIZE: 0,
                                     SUPERTILE_WALK_ORDER_ENABLE: false,
                                     TILE_WALK_ORDER_ENABLE: false,
                                     TILE_COVER_DISABLE: false,
@@ -941,16 +855,12 @@ expression: packets
                                     MULTI_SHADER_ENGINE_PRIM_DISCARD_ENABLE: false,
                                     MULTI_GPU_SUPERTILE_ENABLE: false,
                                     GPU_ID_OVERRIDE_ENABLE: false,
-                                    GPU_ID_OVERRIDE: Usize(
-                                        0,
-                                    ),
+                                    GPU_ID_OVERRIDE: 0,
                                     MULTI_GPU_PRIM_DISCARD_ENABLE: false,
                                     FORCE_EOV_CNTDWN_ENABLE: true,
                                     FORCE_EOV_REZ_ENABLE: true,
                                     OUT_OF_ORDER_PRIMITIVE_ENABLE: false,
-                                    OUT_OF_ORDER_WATER_MARK: Usize(
-                                        0,
-                                    ),
+                                    OUT_OF_ORDER_WATER_MARK: 0,
                                 },
                             ),
                         ),
@@ -972,19 +882,11 @@ expression: packets
                         Some(
                             PA_SC_AA_CONFIG(
                                 PA_SC_AA_CONFIG {
-                                    MSAA_NUM_SAMPLES: Usize(
-                                        0,
-                                    ),
+                                    MSAA_NUM_SAMPLES: 0,
                                     AA_MASK_CENTROID_DTMN: false,
-                                    MAX_SAMPLE_DIST: Usize(
-                                        0,
-                                    ),
-                                    MSAA_EXPOSED_SAMPLES: Usize(
-                                        0,
-                                    ),
-                                    DETAIL_TO_EXPOSED_MODE: Usize(
-                                        0,
-                                    ),
+                                    MAX_SAMPLE_DIST: 0,
+                                    MSAA_EXPOSED_SAMPLES: 0,
+                                    DETAIL_TO_EXPOSED_MODE: 0,
                                 },
                             ),
                         ),
@@ -1006,9 +908,7 @@ expression: packets
                         Some(
                             PA_SU_POLY_OFFSET_DB_FMT_CNTL(
                                 PA_SU_POLY_OFFSET_DB_FMT_CNTL {
-                                    POLY_OFFSET_NEG_NUM_DB_BITS: Usize(
-                                        233,
-                                    ),
+                                    POLY_OFFSET_NEG_NUM_DB_BITS: 233,
                                     POLY_OFFSET_DB_IS_FLOAT_FMT: true,
                                 },
                             ),
@@ -1031,27 +931,21 @@ expression: packets
                         Some(
                             VGT_GS_PER_ES(
                                 VGT_GS_PER_ES {
-                                    GS_PER_ES: Usize(
-                                        256,
-                                    ),
+                                    GS_PER_ES: 256,
                                 },
                             ),
                         ),
                         Some(
                             VGT_ES_PER_GS(
                                 VGT_ES_PER_GS {
-                                    ES_PER_GS: Usize(
-                                        256,
-                                    ),
+                                    ES_PER_GS: 256,
                                 },
                             ),
                         ),
                         Some(
                             VGT_GS_PER_VS(
                                 VGT_GS_PER_VS {
-                                    GS_PER_VS: Usize(
-                                        4,
-                                    ),
+                                    GS_PER_VS: 4,
                                 },
                             ),
                         ),
@@ -1294,9 +1188,7 @@ expression: packets
                         Some(
                             VGT_ESGS_RING_ITEMSIZE(
                                 VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        128,
-                                    ),
+                                    ITEMSIZE: 128,
                                 },
                             ),
                         ),
@@ -1318,36 +1210,28 @@ expression: packets
                         Some(
                             VGT_GS_VERT_ITEMSIZE(
                                 VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        16,
-                                    ),
+                                    ITEMSIZE: 16,
                                 },
                             ),
                         ),
                         Some(
                             VGT_GS_VERT_ITEMSIZE_1(
                                 VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        0,
-                                    ),
+                                    ITEMSIZE: 0,
                                 },
                             ),
                         ),
                         Some(
                             VGT_GS_VERT_ITEMSIZE_2(
                                 VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        0,
-                                    ),
+                                    ITEMSIZE: 0,
                                 },
                             ),
                         ),
                         Some(
                             VGT_GS_VERT_ITEMSIZE_3(
                                 VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        0,
-                                    ),
+                                    ITEMSIZE: 0,
                                 },
                             ),
                         ),
@@ -1369,27 +1253,21 @@ expression: packets
                         Some(
                             VGT_GSVS_RING_OFFSET_1(
                                 VGT_GSVS_RING_OFFSET_1 {
-                                    OFFSET: Usize(
-                                        1024,
-                                    ),
+                                    OFFSET: 1024,
                                 },
                             ),
                         ),
                         Some(
                             VGT_GSVS_RING_OFFSET_2(
                                 VGT_GSVS_RING_OFFSET_1 {
-                                    OFFSET: Usize(
-                                        1024,
-                                    ),
+                                    OFFSET: 1024,
                                 },
                             ),
                         ),
                         Some(
                             VGT_GSVS_RING_OFFSET_3(
                                 VGT_GSVS_RING_OFFSET_1 {
-                                    OFFSET: Usize(
-                                        1024,
-                                    ),
+                                    OFFSET: 1024,
                                 },
                             ),
                         ),
@@ -1411,9 +1289,7 @@ expression: packets
                         Some(
                             VGT_GS_MAX_VERT_OUT(
                                 VGT_GS_MAX_VERT_OUT {
-                                    MAX_VERT_OUT: Usize(
-                                        64,
-                                    ),
+                                    MAX_VERT_OUT: 64,
                                 },
                             ),
                         ),
@@ -1435,9 +1311,7 @@ expression: packets
                         Some(
                             VGT_GSVS_RING_ITEMSIZE(
                                 VGT_ESGS_RING_ITEMSIZE {
-                                    ITEMSIZE: Usize(
-                                        1024,
-                                    ),
+                                    ITEMSIZE: 1024,
                                 },
                             ),
                         ),
@@ -1464,33 +1338,23 @@ expression: packets
                         Some(
                             CB_COLOR0_PITCH(
                                 CB_COLOR0_PITCH {
-                                    TILE_MAX: Usize(
-                                        239,
-                                    ),
-                                    FMASK_TILE_MAX: Usize(
-                                        239,
-                                    ),
+                                    TILE_MAX: 239,
+                                    FMASK_TILE_MAX: 239,
                                 },
                             ),
                         ),
                         Some(
                             CB_COLOR0_SLICE(
                                 CB_COLOR0_SLICE {
-                                    TILE_MAX: Usize(
-                                        32639,
-                                    ),
+                                    TILE_MAX: 32639,
                                 },
                             ),
                         ),
                         Some(
                             CB_COLOR0_VIEW(
                                 CB_COLOR0_VIEW {
-                                    SLICE_START: Usize(
-                                        0,
-                                    ),
-                                    SLICE_MAX: Usize(
-                                        0,
-                                    ),
+                                    SLICE_START: 0,
+                                    SLICE_MAX: 0,
                                 },
                             ),
                         ),
@@ -1518,21 +1382,11 @@ expression: packets
                         Some(
                             CB_COLOR0_ATTRIB(
                                 CB_COLOR0_ATTRIB {
-                                    TILE_MODE_INDEX: Usize(
-                                        10,
-                                    ),
-                                    FMASK_TILE_MODE_INDEX: Usize(
-                                        10,
-                                    ),
-                                    FMASK_BANK_HEIGHT: Usize(
-                                        0,
-                                    ),
-                                    NUM_SAMPLES: Usize(
-                                        0,
-                                    ),
-                                    NUM_FRAGMENTS: Usize(
-                                        0,
-                                    ),
+                                    TILE_MODE_INDEX: 10,
+                                    FMASK_TILE_MODE_INDEX: 10,
+                                    FMASK_BANK_HEIGHT: 0,
+                                    NUM_SAMPLES: 0,
+                                    NUM_FRAGMENTS: 0,
                                     FORCE_DST_ALPHA_1: false,
                                 },
                             ),
@@ -1560,9 +1414,7 @@ expression: packets
                         Some(
                             CB_COLOR0_CMASK_SLICE(
                                 CB_COLOR0_CMASK_SLICE {
-                                    TILE_MAX: Usize(
-                                        0,
-                                    ),
+                                    TILE_MAX: 0,
                                 },
                             ),
                         ),
@@ -1574,9 +1426,7 @@ expression: packets
                         Some(
                             CB_COLOR0_FMASK_SLICE(
                                 CB_COLOR0_SLICE {
-                                    TILE_MAX: Usize(
-                                        0,
-                                    ),
+                                    TILE_MAX: 0,
                                 },
                             ),
                         ),
@@ -1866,13 +1716,9 @@ expression: packets
                             DB_Z_INFO(
                                 DB_Z_INFO {
                                     FORMAT: Z_INVALID,
-                                    NUM_SAMPLES: Usize(
-                                        0,
-                                    ),
+                                    NUM_SAMPLES: 0,
                                     TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
-                                    TILE_MODE_INDEX: Usize(
-                                        0,
-                                    ),
+                                    TILE_MODE_INDEX: 0,
                                     ALLOW_EXPCLEAR: false,
                                     READ_SIZE: false,
                                     TILE_SURFACE_ENABLE: false,
@@ -1900,9 +1746,7 @@ expression: packets
                                 DB_STENCIL_INFO {
                                     FORMAT: STENCIL_INVALID,
                                     TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
-                                    TILE_MODE_INDEX: Usize(
-                                        0,
-                                    ),
+                                    TILE_MODE_INDEX: 0,
                                     ALLOW_EXPCLEAR: false,
                                     TILE_STENCIL_DISABLE: false,
                                 },
@@ -2002,9 +1846,7 @@ expression: packets
                                     UCP_ENA_4: false,
                                     UCP_ENA_5: false,
                                     PS_UCP_Y_SCALE_NEG: false,
-                                    PS_UCP_MODE: Usize(
-                                        0,
-                                    ),
+                                    PS_UCP_MODE: 0,
                                     CLIP_DISABLE: false,
                                     UCP_CULL_ONLY_ENA: false,
                                     BOUNDARY_EDGE_FLAG_ENA: false,
@@ -2045,9 +1887,7 @@ expression: packets
                                     STENCIL_COMPRESS_DISABLE: false,
                                     DEPTH_COMPRESS_DISABLE: false,
                                     COPY_CENTROID: false,
-                                    COPY_SAMPLE: Usize(
-                                        0,
-                                    ),
+                                    COPY_SAMPLE: 0,
                                 },
                             ),
                         ),
@@ -2089,9 +1929,7 @@ expression: packets
                         Some(
                             DB_STENCIL_CLEAR(
                                 DB_STENCIL_CLEAR {
-                                    CLEAR: Usize(
-                                        0,
-                                    ),
+                                    CLEAR: 0,
                                 },
                             ),
                         ),
@@ -2470,36 +2308,20 @@ expression: packets
                         Some(
                             DB_STENCILREFMASK(
                                 DB_STENCILREFMASK {
-                                    STENCILTESTVAL: Usize(
-                                        0,
-                                    ),
-                                    STENCILMASK: Usize(
-                                        255,
-                                    ),
-                                    STENCILWRITEMASK: Usize(
-                                        255,
-                                    ),
-                                    STENCILOPVAL: Usize(
-                                        1,
-                                    ),
+                                    STENCILTESTVAL: 0,
+                                    STENCILMASK: 255,
+                                    STENCILWRITEMASK: 255,
+                                    STENCILOPVAL: 1,
                                 },
                             ),
                         ),
                         Some(
                             DB_STENCILREFMASK_BF(
                                 DB_STENCILREFMASK_BF {
-                                    STENCILTESTVAL_BF: Usize(
-                                        0,
-                                    ),
-                                    STENCILMASK_BF: Usize(
-                                        255,
-                                    ),
-                                    STENCILWRITEMASK_BF: Usize(
-                                        255,
-                                    ),
-                                    STENCILOPVAL_BF: Usize(
-                                        1,
-                                    ),
+                                    STENCILTESTVAL_BF: 0,
+                                    STENCILMASK_BF: 255,
+                                    STENCILWRITEMASK_BF: 255,
+                                    STENCILOPVAL_BF: 1,
                                 },
                             ),
                         ),
@@ -2521,30 +2343,14 @@ expression: packets
                         Some(
                             CB_TARGET_MASK(
                                 CB_TARGET_MASK {
-                                    TARGET0_ENABLE: Usize(
-                                        15,
-                                    ),
-                                    TARGET1_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET2_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET3_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET4_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET5_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET6_ENABLE: Usize(
-                                        0,
-                                    ),
-                                    TARGET7_ENABLE: Usize(
-                                        0,
-                                    ),
+                                    TARGET0_ENABLE: 15,
+                                    TARGET1_ENABLE: 0,
+                                    TARGET2_ENABLE: 0,
+                                    TARGET3_ENABLE: 0,
+                                    TARGET4_ENABLE: 0,
+                                    TARGET5_ENABLE: 0,
+                                    TARGET6_ENABLE: 0,
+                                    TARGET7_ENABLE: 0,
                                 },
                             ),
                         ),
@@ -2667,24 +2473,16 @@ expression: packets
                         Some(
                             PA_SC_SCREEN_SCISSOR_TL(
                                 PA_SC_SCREEN_SCISSOR_TL {
-                                    TL_X: Usize(
-                                        0,
-                                    ),
-                                    TL_Y: Usize(
-                                        0,
-                                    ),
+                                    TL_X: 0,
+                                    TL_Y: 0,
                                 },
                             ),
                         ),
                         Some(
                             PA_SC_SCREEN_SCISSOR_BR(
                                 PA_SC_SCREEN_SCISSOR_BR {
-                                    BR_X: Usize(
-                                        1920,
-                                    ),
-                                    BR_Y: Usize(
-                                        1080,
-                                    ),
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
                                 },
                             ),
                         ),
@@ -2706,12 +2504,8 @@ expression: packets
                         Some(
                             PA_SU_HARDWARE_SCREEN_OFFSET(
                                 PA_SU_HARDWARE_SCREEN_OFFSET {
-                                    HW_SCREEN_OFFSET_X: Usize(
-                                        60,
-                                    ),
-                                    HW_SCREEN_OFFSET_Y: Usize(
-                                        34,
-                                    ),
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 34,
                                 },
                             ),
                         ),
@@ -2813,24 +2607,16 @@ expression: packets
                         Some(
                             PA_SC_SCREEN_SCISSOR_TL(
                                 PA_SC_SCREEN_SCISSOR_TL {
-                                    TL_X: Usize(
-                                        0,
-                                    ),
-                                    TL_Y: Usize(
-                                        0,
-                                    ),
+                                    TL_X: 0,
+                                    TL_Y: 0,
                                 },
                             ),
                         ),
                         Some(
                             PA_SC_SCREEN_SCISSOR_BR(
                                 PA_SC_SCREEN_SCISSOR_BR {
-                                    BR_X: Usize(
-                                        1920,
-                                    ),
-                                    BR_Y: Usize(
-                                        1080,
-                                    ),
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
                                 },
                             ),
                         ),

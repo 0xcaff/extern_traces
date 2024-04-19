@@ -1,7 +1,3 @@
----
-source: packages/pm4/src/packet.rs
-expression: convert(packets.as_slice())
----
 [
     EndOfPipe(
         EventWriteEndOfPipePacket {
@@ -22,21 +18,13 @@ expression: convert(packets.as_slice())
         pipeline: ComputePipeline {
             address_lo: 2148532233,
             address_hi: COMPUTE_PGM_HI {
-                DATA: Usize(
-                    0,
-                ),
+                DATA: 0,
                 INST_ATC: false,
             },
             resource1: COMPUTE_PGM_RSRC1 {
-                VGPRS: Usize(
-                    0,
-                ),
-                SGPRS: Usize(
-                    2,
-                ),
-                PRIORITY: Usize(
-                    0,
-                ),
+                VGPRS: 0,
+                SGPRS: 2,
+                PRIORITY: 0,
                 FLOAT_MODE: FP_16_64_DENORMS,
                 PRIV: false,
                 DX10_CLAMP: false,
@@ -47,47 +35,27 @@ expression: convert(packets.as_slice())
             },
             resource2: COMPUTE_PGM_RSRC2 {
                 SCRATCH_EN: false,
-                USER_SGPR: Usize(
-                    16,
-                ),
+                USER_SGPR: 16,
                 TRAP_PRESENT: false,
                 TGID_X_EN: true,
                 TGID_Y_EN: false,
                 TGID_Z_EN: false,
                 TG_SIZE_EN: false,
-                TIDIG_COMP_CNT: Usize(
-                    0,
-                ),
-                EXCP_EN_MSB: Usize(
-                    0,
-                ),
-                LDS_SIZE: Usize(
-                    0,
-                ),
+                TIDIG_COMP_CNT: 0,
+                EXCP_EN_MSB: 0,
+                LDS_SIZE: 0,
             },
             thread_x: COMPUTE_NUM_THREAD_X {
-                NUM_THREAD_FULL: Usize(
-                    64,
-                ),
-                NUM_THREAD_PARTIAL: Usize(
-                    0,
-                ),
+                NUM_THREAD_FULL: 64,
+                NUM_THREAD_PARTIAL: 0,
             },
             thread_y: COMPUTE_NUM_THREAD_X {
-                NUM_THREAD_FULL: Usize(
-                    1,
-                ),
-                NUM_THREAD_PARTIAL: Usize(
-                    0,
-                ),
+                NUM_THREAD_FULL: 1,
+                NUM_THREAD_PARTIAL: 0,
             },
             thread_z: COMPUTE_NUM_THREAD_X {
-                NUM_THREAD_FULL: Usize(
-                    1,
-                ),
-                NUM_THREAD_PARTIAL: Usize(
-                    0,
-                ),
+                NUM_THREAD_FULL: 1,
+                NUM_THREAD_PARTIAL: 0,
             },
             user_data: ComputeUserData(
                 [
@@ -274,30 +242,18 @@ expression: convert(packets.as_slice())
                     viewport_zmin0: 0,
                     viewport_zmax0: 1065353216,
                     screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                        TL_X: Usize(
-                            0,
-                        ),
-                        TL_Y: Usize(
-                            0,
-                        ),
+                        TL_X: 0,
+                        TL_Y: 0,
                     },
                     screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                        BR_X: Usize(
-                            1920,
-                        ),
-                        BR_Y: Usize(
-                            1080,
-                        ),
+                        BR_X: 1920,
+                        BR_Y: 1080,
                     },
                 },
                 shader_unit: ShaderUnit {
                     hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                        HW_SCREEN_OFFSET_X: Usize(
-                            60,
-                        ),
-                        HW_SCREEN_OFFSET_Y: Usize(
-                            32,
-                        ),
+                        HW_SCREEN_OFFSET_X: 60,
+                        HW_SCREEN_OFFSET_Y: 32,
                     },
                     control: Some(
                         PA_SU_SC_MODE_CNTL {
@@ -319,79 +275,37 @@ expression: convert(packets.as_slice())
                 },
             },
             target_mask: CB_TARGET_MASK {
-                TARGET0_ENABLE: Usize(
-                    15,
-                ),
-                TARGET1_ENABLE: Usize(
-                    0,
-                ),
-                TARGET2_ENABLE: Usize(
-                    0,
-                ),
-                TARGET3_ENABLE: Usize(
-                    0,
-                ),
-                TARGET4_ENABLE: Usize(
-                    0,
-                ),
-                TARGET5_ENABLE: Usize(
-                    0,
-                ),
-                TARGET6_ENABLE: Usize(
-                    0,
-                ),
-                TARGET7_ENABLE: Usize(
-                    0,
-                ),
+                TARGET0_ENABLE: 15,
+                TARGET1_ENABLE: 0,
+                TARGET2_ENABLE: 0,
+                TARGET3_ENABLE: 0,
+                TARGET4_ENABLE: 0,
+                TARGET5_ENABLE: 0,
+                TARGET6_ENABLE: 0,
+                TARGET7_ENABLE: 0,
             },
             shader_mask: CB_SHADER_MASK {
-                OUTPUT0_ENABLE: Usize(
-                    15,
-                ),
-                OUTPUT1_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT2_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT3_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT4_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT5_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT6_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT7_ENABLE: Usize(
-                    0,
-                ),
+                OUTPUT0_ENABLE: 15,
+                OUTPUT1_ENABLE: 0,
+                OUTPUT2_ENABLE: 0,
+                OUTPUT3_ENABLE: 0,
+                OUTPUT4_ENABLE: 0,
+                OUTPUT5_ENABLE: 0,
+                OUTPUT6_ENABLE: 0,
+                OUTPUT7_ENABLE: 0,
             },
             color0: ColorBuffer {
                 base: 2148532352,
                 pitch: CB_COLOR0_PITCH {
-                    TILE_MAX: Usize(
-                        239,
-                    ),
-                    FMASK_TILE_MAX: Usize(
-                        239,
-                    ),
+                    TILE_MAX: 239,
+                    FMASK_TILE_MAX: 239,
                 },
                 slice: CB_COLOR0_SLICE {
-                    TILE_MAX: Usize(
-                        32639,
-                    ),
+                    TILE_MAX: 32639,
                 },
                 view: CB_COLOR0_VIEW {
-                    SLICE_START: Usize(
-                        0,
-                    ),
-                    SLICE_MAX: Usize(
-                        0,
-                    ),
+                    SLICE_START: 0,
+                    SLICE_MAX: 0,
                 },
                 info: CB_COLOR0_INFO {
                     ENDIAN: ENDIAN_NONE,
@@ -411,34 +325,20 @@ expression: convert(packets.as_slice())
                     FMASK_COMPRESSION_DISABLE: false,
                 },
                 attrib: CB_COLOR0_ATTRIB {
-                    TILE_MODE_INDEX: Usize(
-                        10,
-                    ),
-                    FMASK_TILE_MODE_INDEX: Usize(
-                        10,
-                    ),
-                    FMASK_BANK_HEIGHT: Usize(
-                        0,
-                    ),
-                    NUM_SAMPLES: Usize(
-                        0,
-                    ),
-                    NUM_FRAGMENTS: Usize(
-                        0,
-                    ),
+                    TILE_MODE_INDEX: 10,
+                    FMASK_TILE_MODE_INDEX: 10,
+                    FMASK_BANK_HEIGHT: 0,
+                    NUM_SAMPLES: 0,
+                    NUM_FRAGMENTS: 0,
                     FORCE_DST_ALPHA_1: false,
                 },
                 mask: 0,
                 mask_slice: CB_COLOR0_CMASK_SLICE {
-                    TILE_MAX: Usize(
-                        0,
-                    ),
+                    TILE_MAX: 0,
                 },
                 fmask: 0,
                 fmask_slice: CB_COLOR0_SLICE {
-                    TILE_MAX: Usize(
-                        0,
-                    ),
+                    TILE_MAX: 0,
                 },
                 clear_word_0: None,
                 clear_word_1: None,
@@ -470,9 +370,7 @@ expression: convert(packets.as_slice())
                     PERSP_CENTROID_CNTL: false,
                     LINEAR_CENTER_CNTL: false,
                     LINEAR_CENTROID_CNTL: false,
-                    POS_FLOAT_LOCATION: Usize(
-                        0,
-                    ),
+                    POS_FLOAT_LOCATION: 0,
                     POS_FLOAT_ULC: false,
                     FRONT_FACE_ALL_BITS: false,
                 },
@@ -480,36 +378,24 @@ expression: convert(packets.as_slice())
             pixel_shader: PixelShader {
                 address: 2148773073,
                 resource1: SPI_SHADER_PGM_RSRC1_PS {
-                    VGPRS: Usize(
-                        2,
-                    ),
-                    SGPRS: Usize(
-                        2,
-                    ),
-                    PRIORITY: Usize(
-                        0,
-                    ),
+                    VGPRS: 2,
+                    SGPRS: 2,
+                    PRIORITY: 0,
                     FLOAT_MODE: FP_16_64_DENORMS,
                     PRIV: false,
                     DX10_CLAMP: false,
                     DEBUG_MODE: false,
                     IEEE_MODE: false,
                     CU_GROUP_DISABLE: false,
-                    CACHE_CTL: Usize(
-                        0,
-                    ),
+                    CACHE_CTL: 0,
                     CDBG_USER: false,
                 },
                 resource2: SPI_SHADER_PGM_RSRC2_PS {
                     SCRATCH_EN: false,
-                    USER_SGPR: Usize(
-                        16,
-                    ),
+                    USER_SGPR: 16,
                     TRAP_PRESENT: false,
                     WAVE_CNT_EN: false,
-                    EXTRA_LDS_SIZE: Usize(
-                        0,
-                    ),
+                    EXTRA_LDS_SIZE: 0,
                 },
                 input: SPI_PS_INPUT_ENA {
                     PERSP_SAMPLE_ENA: false,
@@ -548,24 +434,16 @@ expression: convert(packets.as_slice())
                     POS_FIXED_PT_ENA: false,
                 },
                 in_control: SPI_PS_IN_CONTROL {
-                    NUM_INTERP: Usize(
-                        2,
-                    ),
+                    NUM_INTERP: 2,
                     PARAM_GEN: false,
                     BC_OPTIMIZE_DISABLE: false,
                 },
                 input_control: Some(
                     SPI_PS_INPUT_CNTL_0 {
-                        OFFSET: Usize(
-                            0,
-                        ),
-                        DEFAULT_VAL: Usize(
-                            0,
-                        ),
+                        OFFSET: 0,
+                        DEFAULT_VAL: 0,
                         FLAT_SHADE: false,
-                        CYL_WRAP: Usize(
-                            0,
-                        ),
+                        CYL_WRAP: 0,
                         PT_SPRITE_TEX: false,
                         DUP: false,
                     },
@@ -627,34 +505,22 @@ expression: convert(packets.as_slice())
                 VertexShader {
                     entrypoint_gpu_address: 2148773072,
                     resource1: SPI_SHADER_PGM_RSRC1_VS {
-                        VGPRS: Usize(
-                            3,
-                        ),
-                        SGPRS: Usize(
-                            2,
-                        ),
-                        PRIORITY: Usize(
-                            0,
-                        ),
+                        VGPRS: 3,
+                        SGPRS: 2,
+                        PRIORITY: 0,
                         FLOAT_MODE: FP_16_64_DENORMS,
                         PRIV: false,
                         DX10_CLAMP: false,
                         DEBUG_MODE: false,
                         IEEE_MODE: false,
-                        VGPR_COMP_CNT: Usize(
-                            0,
-                        ),
+                        VGPR_COMP_CNT: 0,
                         CU_GROUP_ENABLE: false,
-                        CACHE_CTL: Usize(
-                            0,
-                        ),
+                        CACHE_CTL: 0,
                         CDBG_USER: false,
                     },
                     resource2: SPI_SHADER_PGM_RSRC2_VS {
                         SCRATCH_EN: false,
-                        USER_SGPR: Usize(
-                            12,
-                        ),
+                        USER_SGPR: 12,
                         TRAP_PRESENT: false,
                         OC_LDS_EN: false,
                         SO_BASE0_EN: false,
@@ -664,9 +530,7 @@ expression: convert(packets.as_slice())
                         SO_EN: false,
                     },
                     out_config: SPI_VS_OUT_CONFIG {
-                        VS_EXPORT_COUNT: Usize(
-                            1,
-                        ),
+                        VS_EXPORT_COUNT: 1,
                         VS_HALF_PACK: false,
                     },
                     user_data: VertexShaderUserData(
@@ -831,30 +695,18 @@ expression: convert(packets.as_slice())
                     viewport_zmin0: 0,
                     viewport_zmax0: 1065353216,
                     screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                        TL_X: Usize(
-                            0,
-                        ),
-                        TL_Y: Usize(
-                            0,
-                        ),
+                        TL_X: 0,
+                        TL_Y: 0,
                     },
                     screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                        BR_X: Usize(
-                            1920,
-                        ),
-                        BR_Y: Usize(
-                            1080,
-                        ),
+                        BR_X: 1920,
+                        BR_Y: 1080,
                     },
                 },
                 shader_unit: ShaderUnit {
                     hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                        HW_SCREEN_OFFSET_X: Usize(
-                            60,
-                        ),
-                        HW_SCREEN_OFFSET_Y: Usize(
-                            32,
-                        ),
+                        HW_SCREEN_OFFSET_X: 60,
+                        HW_SCREEN_OFFSET_Y: 32,
                     },
                     control: Some(
                         PA_SU_SC_MODE_CNTL {
@@ -876,79 +728,37 @@ expression: convert(packets.as_slice())
                 },
             },
             target_mask: CB_TARGET_MASK {
-                TARGET0_ENABLE: Usize(
-                    15,
-                ),
-                TARGET1_ENABLE: Usize(
-                    0,
-                ),
-                TARGET2_ENABLE: Usize(
-                    0,
-                ),
-                TARGET3_ENABLE: Usize(
-                    0,
-                ),
-                TARGET4_ENABLE: Usize(
-                    0,
-                ),
-                TARGET5_ENABLE: Usize(
-                    0,
-                ),
-                TARGET6_ENABLE: Usize(
-                    0,
-                ),
-                TARGET7_ENABLE: Usize(
-                    0,
-                ),
+                TARGET0_ENABLE: 15,
+                TARGET1_ENABLE: 0,
+                TARGET2_ENABLE: 0,
+                TARGET3_ENABLE: 0,
+                TARGET4_ENABLE: 0,
+                TARGET5_ENABLE: 0,
+                TARGET6_ENABLE: 0,
+                TARGET7_ENABLE: 0,
             },
             shader_mask: CB_SHADER_MASK {
-                OUTPUT0_ENABLE: Usize(
-                    15,
-                ),
-                OUTPUT1_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT2_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT3_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT4_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT5_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT6_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT7_ENABLE: Usize(
-                    0,
-                ),
+                OUTPUT0_ENABLE: 15,
+                OUTPUT1_ENABLE: 0,
+                OUTPUT2_ENABLE: 0,
+                OUTPUT3_ENABLE: 0,
+                OUTPUT4_ENABLE: 0,
+                OUTPUT5_ENABLE: 0,
+                OUTPUT6_ENABLE: 0,
+                OUTPUT7_ENABLE: 0,
             },
             color0: ColorBuffer {
                 base: 2148532352,
                 pitch: CB_COLOR0_PITCH {
-                    TILE_MAX: Usize(
-                        239,
-                    ),
-                    FMASK_TILE_MAX: Usize(
-                        239,
-                    ),
+                    TILE_MAX: 239,
+                    FMASK_TILE_MAX: 239,
                 },
                 slice: CB_COLOR0_SLICE {
-                    TILE_MAX: Usize(
-                        32639,
-                    ),
+                    TILE_MAX: 32639,
                 },
                 view: CB_COLOR0_VIEW {
-                    SLICE_START: Usize(
-                        0,
-                    ),
-                    SLICE_MAX: Usize(
-                        0,
-                    ),
+                    SLICE_START: 0,
+                    SLICE_MAX: 0,
                 },
                 info: CB_COLOR0_INFO {
                     ENDIAN: ENDIAN_NONE,
@@ -968,34 +778,20 @@ expression: convert(packets.as_slice())
                     FMASK_COMPRESSION_DISABLE: false,
                 },
                 attrib: CB_COLOR0_ATTRIB {
-                    TILE_MODE_INDEX: Usize(
-                        10,
-                    ),
-                    FMASK_TILE_MODE_INDEX: Usize(
-                        10,
-                    ),
-                    FMASK_BANK_HEIGHT: Usize(
-                        0,
-                    ),
-                    NUM_SAMPLES: Usize(
-                        0,
-                    ),
-                    NUM_FRAGMENTS: Usize(
-                        0,
-                    ),
+                    TILE_MODE_INDEX: 10,
+                    FMASK_TILE_MODE_INDEX: 10,
+                    FMASK_BANK_HEIGHT: 0,
+                    NUM_SAMPLES: 0,
+                    NUM_FRAGMENTS: 0,
                     FORCE_DST_ALPHA_1: false,
                 },
                 mask: 0,
                 mask_slice: CB_COLOR0_CMASK_SLICE {
-                    TILE_MAX: Usize(
-                        0,
-                    ),
+                    TILE_MAX: 0,
                 },
                 fmask: 0,
                 fmask_slice: CB_COLOR0_SLICE {
-                    TILE_MAX: Usize(
-                        0,
-                    ),
+                    TILE_MAX: 0,
                 },
                 clear_word_0: None,
                 clear_word_1: None,
@@ -1027,9 +823,7 @@ expression: convert(packets.as_slice())
                     PERSP_CENTROID_CNTL: false,
                     LINEAR_CENTER_CNTL: false,
                     LINEAR_CENTROID_CNTL: false,
-                    POS_FLOAT_LOCATION: Usize(
-                        0,
-                    ),
+                    POS_FLOAT_LOCATION: 0,
                     POS_FLOAT_ULC: false,
                     FRONT_FACE_ALL_BITS: false,
                 },
@@ -1037,36 +831,24 @@ expression: convert(packets.as_slice())
             pixel_shader: PixelShader {
                 address: 2148773073,
                 resource1: SPI_SHADER_PGM_RSRC1_PS {
-                    VGPRS: Usize(
-                        2,
-                    ),
-                    SGPRS: Usize(
-                        2,
-                    ),
-                    PRIORITY: Usize(
-                        0,
-                    ),
+                    VGPRS: 2,
+                    SGPRS: 2,
+                    PRIORITY: 0,
                     FLOAT_MODE: FP_16_64_DENORMS,
                     PRIV: false,
                     DX10_CLAMP: false,
                     DEBUG_MODE: false,
                     IEEE_MODE: false,
                     CU_GROUP_DISABLE: false,
-                    CACHE_CTL: Usize(
-                        0,
-                    ),
+                    CACHE_CTL: 0,
                     CDBG_USER: false,
                 },
                 resource2: SPI_SHADER_PGM_RSRC2_PS {
                     SCRATCH_EN: false,
-                    USER_SGPR: Usize(
-                        16,
-                    ),
+                    USER_SGPR: 16,
                     TRAP_PRESENT: false,
                     WAVE_CNT_EN: false,
-                    EXTRA_LDS_SIZE: Usize(
-                        0,
-                    ),
+                    EXTRA_LDS_SIZE: 0,
                 },
                 input: SPI_PS_INPUT_ENA {
                     PERSP_SAMPLE_ENA: false,
@@ -1105,24 +887,16 @@ expression: convert(packets.as_slice())
                     POS_FIXED_PT_ENA: false,
                 },
                 in_control: SPI_PS_IN_CONTROL {
-                    NUM_INTERP: Usize(
-                        2,
-                    ),
+                    NUM_INTERP: 2,
                     PARAM_GEN: false,
                     BC_OPTIMIZE_DISABLE: false,
                 },
                 input_control: Some(
                     SPI_PS_INPUT_CNTL_0 {
-                        OFFSET: Usize(
-                            0,
-                        ),
-                        DEFAULT_VAL: Usize(
-                            0,
-                        ),
+                        OFFSET: 0,
+                        DEFAULT_VAL: 0,
                         FLAT_SHADE: false,
-                        CYL_WRAP: Usize(
-                            0,
-                        ),
+                        CYL_WRAP: 0,
                         PT_SPRITE_TEX: false,
                         DUP: false,
                     },
@@ -1232,34 +1006,22 @@ expression: convert(packets.as_slice())
                 VertexShader {
                     entrypoint_gpu_address: 2148773072,
                     resource1: SPI_SHADER_PGM_RSRC1_VS {
-                        VGPRS: Usize(
-                            3,
-                        ),
-                        SGPRS: Usize(
-                            2,
-                        ),
-                        PRIORITY: Usize(
-                            0,
-                        ),
+                        VGPRS: 3,
+                        SGPRS: 2,
+                        PRIORITY: 0,
                         FLOAT_MODE: FP_16_64_DENORMS,
                         PRIV: false,
                         DX10_CLAMP: false,
                         DEBUG_MODE: false,
                         IEEE_MODE: false,
-                        VGPR_COMP_CNT: Usize(
-                            0,
-                        ),
+                        VGPR_COMP_CNT: 0,
                         CU_GROUP_ENABLE: false,
-                        CACHE_CTL: Usize(
-                            0,
-                        ),
+                        CACHE_CTL: 0,
                         CDBG_USER: false,
                     },
                     resource2: SPI_SHADER_PGM_RSRC2_VS {
                         SCRATCH_EN: false,
-                        USER_SGPR: Usize(
-                            12,
-                        ),
+                        USER_SGPR: 12,
                         TRAP_PRESENT: false,
                         OC_LDS_EN: false,
                         SO_BASE0_EN: false,
@@ -1269,9 +1031,7 @@ expression: convert(packets.as_slice())
                         SO_EN: false,
                     },
                     out_config: SPI_VS_OUT_CONFIG {
-                        VS_EXPORT_COUNT: Usize(
-                            1,
-                        ),
+                        VS_EXPORT_COUNT: 1,
                         VS_HALF_PACK: false,
                     },
                     user_data: VertexShaderUserData(
@@ -1468,30 +1228,18 @@ expression: convert(packets.as_slice())
                     viewport_zmin0: 0,
                     viewport_zmax0: 1065353216,
                     screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                        TL_X: Usize(
-                            0,
-                        ),
-                        TL_Y: Usize(
-                            0,
-                        ),
+                        TL_X: 0,
+                        TL_Y: 0,
                     },
                     screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                        BR_X: Usize(
-                            1920,
-                        ),
-                        BR_Y: Usize(
-                            1080,
-                        ),
+                        BR_X: 1920,
+                        BR_Y: 1080,
                     },
                 },
                 shader_unit: ShaderUnit {
                     hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                        HW_SCREEN_OFFSET_X: Usize(
-                            60,
-                        ),
-                        HW_SCREEN_OFFSET_Y: Usize(
-                            32,
-                        ),
+                        HW_SCREEN_OFFSET_X: 60,
+                        HW_SCREEN_OFFSET_Y: 32,
                     },
                     control: Some(
                         PA_SU_SC_MODE_CNTL {
@@ -1513,79 +1261,37 @@ expression: convert(packets.as_slice())
                 },
             },
             target_mask: CB_TARGET_MASK {
-                TARGET0_ENABLE: Usize(
-                    15,
-                ),
-                TARGET1_ENABLE: Usize(
-                    0,
-                ),
-                TARGET2_ENABLE: Usize(
-                    0,
-                ),
-                TARGET3_ENABLE: Usize(
-                    0,
-                ),
-                TARGET4_ENABLE: Usize(
-                    0,
-                ),
-                TARGET5_ENABLE: Usize(
-                    0,
-                ),
-                TARGET6_ENABLE: Usize(
-                    0,
-                ),
-                TARGET7_ENABLE: Usize(
-                    0,
-                ),
+                TARGET0_ENABLE: 15,
+                TARGET1_ENABLE: 0,
+                TARGET2_ENABLE: 0,
+                TARGET3_ENABLE: 0,
+                TARGET4_ENABLE: 0,
+                TARGET5_ENABLE: 0,
+                TARGET6_ENABLE: 0,
+                TARGET7_ENABLE: 0,
             },
             shader_mask: CB_SHADER_MASK {
-                OUTPUT0_ENABLE: Usize(
-                    15,
-                ),
-                OUTPUT1_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT2_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT3_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT4_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT5_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT6_ENABLE: Usize(
-                    0,
-                ),
-                OUTPUT7_ENABLE: Usize(
-                    0,
-                ),
+                OUTPUT0_ENABLE: 15,
+                OUTPUT1_ENABLE: 0,
+                OUTPUT2_ENABLE: 0,
+                OUTPUT3_ENABLE: 0,
+                OUTPUT4_ENABLE: 0,
+                OUTPUT5_ENABLE: 0,
+                OUTPUT6_ENABLE: 0,
+                OUTPUT7_ENABLE: 0,
             },
             color0: ColorBuffer {
                 base: 2148532352,
                 pitch: CB_COLOR0_PITCH {
-                    TILE_MAX: Usize(
-                        239,
-                    ),
-                    FMASK_TILE_MAX: Usize(
-                        239,
-                    ),
+                    TILE_MAX: 239,
+                    FMASK_TILE_MAX: 239,
                 },
                 slice: CB_COLOR0_SLICE {
-                    TILE_MAX: Usize(
-                        32639,
-                    ),
+                    TILE_MAX: 32639,
                 },
                 view: CB_COLOR0_VIEW {
-                    SLICE_START: Usize(
-                        0,
-                    ),
-                    SLICE_MAX: Usize(
-                        0,
-                    ),
+                    SLICE_START: 0,
+                    SLICE_MAX: 0,
                 },
                 info: CB_COLOR0_INFO {
                     ENDIAN: ENDIAN_NONE,
@@ -1605,34 +1311,20 @@ expression: convert(packets.as_slice())
                     FMASK_COMPRESSION_DISABLE: false,
                 },
                 attrib: CB_COLOR0_ATTRIB {
-                    TILE_MODE_INDEX: Usize(
-                        10,
-                    ),
-                    FMASK_TILE_MODE_INDEX: Usize(
-                        10,
-                    ),
-                    FMASK_BANK_HEIGHT: Usize(
-                        0,
-                    ),
-                    NUM_SAMPLES: Usize(
-                        0,
-                    ),
-                    NUM_FRAGMENTS: Usize(
-                        0,
-                    ),
+                    TILE_MODE_INDEX: 10,
+                    FMASK_TILE_MODE_INDEX: 10,
+                    FMASK_BANK_HEIGHT: 0,
+                    NUM_SAMPLES: 0,
+                    NUM_FRAGMENTS: 0,
                     FORCE_DST_ALPHA_1: false,
                 },
                 mask: 0,
                 mask_slice: CB_COLOR0_CMASK_SLICE {
-                    TILE_MAX: Usize(
-                        0,
-                    ),
+                    TILE_MAX: 0,
                 },
                 fmask: 0,
                 fmask_slice: CB_COLOR0_SLICE {
-                    TILE_MAX: Usize(
-                        0,
-                    ),
+                    TILE_MAX: 0,
                 },
                 clear_word_0: None,
                 clear_word_1: None,
@@ -1664,9 +1356,7 @@ expression: convert(packets.as_slice())
                     PERSP_CENTROID_CNTL: false,
                     LINEAR_CENTER_CNTL: false,
                     LINEAR_CENTROID_CNTL: false,
-                    POS_FLOAT_LOCATION: Usize(
-                        0,
-                    ),
+                    POS_FLOAT_LOCATION: 0,
                     POS_FLOAT_ULC: false,
                     FRONT_FACE_ALL_BITS: false,
                 },
@@ -1674,36 +1364,24 @@ expression: convert(packets.as_slice())
             pixel_shader: PixelShader {
                 address: 2148773073,
                 resource1: SPI_SHADER_PGM_RSRC1_PS {
-                    VGPRS: Usize(
-                        2,
-                    ),
-                    SGPRS: Usize(
-                        2,
-                    ),
-                    PRIORITY: Usize(
-                        0,
-                    ),
+                    VGPRS: 2,
+                    SGPRS: 2,
+                    PRIORITY: 0,
                     FLOAT_MODE: FP_16_64_DENORMS,
                     PRIV: false,
                     DX10_CLAMP: false,
                     DEBUG_MODE: false,
                     IEEE_MODE: false,
                     CU_GROUP_DISABLE: false,
-                    CACHE_CTL: Usize(
-                        0,
-                    ),
+                    CACHE_CTL: 0,
                     CDBG_USER: false,
                 },
                 resource2: SPI_SHADER_PGM_RSRC2_PS {
                     SCRATCH_EN: false,
-                    USER_SGPR: Usize(
-                        16,
-                    ),
+                    USER_SGPR: 16,
                     TRAP_PRESENT: false,
                     WAVE_CNT_EN: false,
-                    EXTRA_LDS_SIZE: Usize(
-                        0,
-                    ),
+                    EXTRA_LDS_SIZE: 0,
                 },
                 input: SPI_PS_INPUT_ENA {
                     PERSP_SAMPLE_ENA: false,
@@ -1742,24 +1420,16 @@ expression: convert(packets.as_slice())
                     POS_FIXED_PT_ENA: false,
                 },
                 in_control: SPI_PS_IN_CONTROL {
-                    NUM_INTERP: Usize(
-                        2,
-                    ),
+                    NUM_INTERP: 2,
                     PARAM_GEN: false,
                     BC_OPTIMIZE_DISABLE: false,
                 },
                 input_control: Some(
                     SPI_PS_INPUT_CNTL_0 {
-                        OFFSET: Usize(
-                            0,
-                        ),
-                        DEFAULT_VAL: Usize(
-                            0,
-                        ),
+                        OFFSET: 0,
+                        DEFAULT_VAL: 0,
                         FLAT_SHADE: false,
-                        CYL_WRAP: Usize(
-                            0,
-                        ),
+                        CYL_WRAP: 0,
                         PT_SPRITE_TEX: false,
                         DUP: false,
                     },
@@ -1917,34 +1587,22 @@ expression: convert(packets.as_slice())
                 VertexShader {
                     entrypoint_gpu_address: 2148773072,
                     resource1: SPI_SHADER_PGM_RSRC1_VS {
-                        VGPRS: Usize(
-                            3,
-                        ),
-                        SGPRS: Usize(
-                            2,
-                        ),
-                        PRIORITY: Usize(
-                            0,
-                        ),
+                        VGPRS: 3,
+                        SGPRS: 2,
+                        PRIORITY: 0,
                         FLOAT_MODE: FP_16_64_DENORMS,
                         PRIV: false,
                         DX10_CLAMP: false,
                         DEBUG_MODE: false,
                         IEEE_MODE: false,
-                        VGPR_COMP_CNT: Usize(
-                            0,
-                        ),
+                        VGPR_COMP_CNT: 0,
                         CU_GROUP_ENABLE: false,
-                        CACHE_CTL: Usize(
-                            0,
-                        ),
+                        CACHE_CTL: 0,
                         CDBG_USER: false,
                     },
                     resource2: SPI_SHADER_PGM_RSRC2_VS {
                         SCRATCH_EN: false,
-                        USER_SGPR: Usize(
-                            12,
-                        ),
+                        USER_SGPR: 12,
                         TRAP_PRESENT: false,
                         OC_LDS_EN: false,
                         SO_BASE0_EN: false,
@@ -1954,9 +1612,7 @@ expression: convert(packets.as_slice())
                         SO_EN: false,
                     },
                     out_config: SPI_VS_OUT_CONFIG {
-                        VS_EXPORT_COUNT: Usize(
-                            1,
-                        ),
+                        VS_EXPORT_COUNT: 1,
                         VS_HALF_PACK: false,
                     },
                     user_data: VertexShaderUserData(

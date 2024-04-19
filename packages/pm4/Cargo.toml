@@ -15,3 +15,4 @@ pm4_internal_macros = { path = "../pm4_internal_macros" }
 
 [dev-dependencies]
 insta = { version = "1.33.0" }
+snapshot_test_utils = { path = "../snapshot_test_utils" }

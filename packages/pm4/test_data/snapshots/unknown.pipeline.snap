@@ -1,7 +1,3 @@
----
-source: packages/pm4/src/packet.rs
-expression: convert(packets.as_slice())
----
 [
     EndOfPipe(
         EventWriteEndOfPipePacket {
