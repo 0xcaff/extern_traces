@@ -171,7 +171,7 @@ pub struct VertexGrouperTesselator {
 struct DepthBuffer {
     stencil: Stencil,
     depth: Depth,
-    z: Z,
+    z: Option<Z>,
 
     #[entry(RegisterEntry::DB_RENDER_CONTROL)]
     render_control: Option<DB_RENDER_CONTROL>,
@@ -221,13 +221,13 @@ struct Depth {
 #[allow(dead_code)]
 struct Z {
     #[entry(RegisterEntry::DB_Z_READ_BASE)]
-    read_base: Option<u32>,
+    read_base: u32,
 
     #[entry(RegisterEntry::DB_Z_WRITE_BASE)]
-    write_base: Option<u32>,
+    write_base: u32,
 
     #[entry(RegisterEntry::DB_Z_INFO)]
-    info: Option<DB_Z_INFO>,
+    info: DB_Z_INFO,
 }
 
 #[derive(Build, Debug)]
@@ -249,7 +249,7 @@ struct Stencil {
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
 pub struct ColorBuffer {
-    pub color0: Option<ColorBufferColorInstance>,
+    pub color0: Option<ColorBufferInstance>,
 
     #[entry(RegisterEntry::CB_TARGET_MASK)]
     target_mask: CB_TARGET_MASK,
@@ -260,7 +260,7 @@ pub struct ColorBuffer {
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
-pub struct ColorBufferColorInstance {
+pub struct ColorBufferInstance {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
     pub base: u32,
     #[entry(RegisterEntry::CB_COLOR0_PITCH)]

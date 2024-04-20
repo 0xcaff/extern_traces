@@ -159,11 +159,7 @@
                     info: None,
                     view: None,
                 },
-                z: Z {
-                    read_base: None,
-                    write_base: None,
-                    info: None,
-                },
+                z: None,
                 render_control: None,
                 shader_control: Some(
                     DB_SHADER_CONTROL {
@@ -624,11 +620,7 @@
                     info: None,
                     view: None,
                 },
-                z: Z {
-                    read_base: None,
-                    write_base: None,
-                    info: None,
-                },
+                z: None,
                 render_control: None,
                 shader_control: None,
                 htile: None,
@@ -824,11 +816,7 @@
                     info: None,
                     view: None,
                 },
-                z: Z {
-                    read_base: None,
-                    write_base: None,
-                    info: None,
-                },
+                z: None,
                 render_control: None,
                 shader_control: None,
                 htile: None,

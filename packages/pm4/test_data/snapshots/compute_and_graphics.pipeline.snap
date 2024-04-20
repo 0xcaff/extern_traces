@@ -190,15 +190,11 @@
                         },
                     ),
                 },
-                z: Z {
-                    read_base: Some(
-                        2147677184,
-                    ),
-                    write_base: Some(
-                        2147677184,
-                    ),
-                    info: Some(
-                        DB_Z_INFO {
+                z: Some(
+                    Z {
+                        read_base: 2147677184,
+                        write_base: 2147677184,
+                        info: DB_Z_INFO {
                             FORMAT: Z_32_FLOAT,
                             NUM_SAMPLES: 0,
                             TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
@@ -208,8 +204,8 @@
                             TILE_SURFACE_ENABLE: true,
                             ZRANGE_PRECISION: true,
                         },
-                    ),
-                },
+                    },
+                ),
                 render_control: Some(
                     DB_RENDER_CONTROL {
                         DEPTH_CLEAR_ENABLE: true,
