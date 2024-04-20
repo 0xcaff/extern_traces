@@ -249,7 +249,7 @@ struct Stencil {
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
 pub struct ColorBuffer {
-    color0: Option<ColorBufferColorInstance>,
+    pub color0: Option<ColorBufferColorInstance>,
 
     #[entry(RegisterEntry::CB_TARGET_MASK)]
     target_mask: CB_TARGET_MASK,

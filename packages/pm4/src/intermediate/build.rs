@@ -101,8 +101,8 @@ impl<EntryType, T: Build<EntryType>> Finalize<Option<T>> for OptionBuilder<Entry
 
 #[cfg(test)]
 mod tests {
-    use pm4_internal_macros::Build;
     use crate::build::{Build, Builder, Finalize, Initialize};
+    use pm4_internal_macros::Build;
 
     #[test]
     fn test_partial_finalize_fails() {
