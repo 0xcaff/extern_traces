@@ -22,6 +22,7 @@ use crate::{
     VGT_PRIMITIVE_TYPE,
 };
 use pm4_internal_macros::{Build, BuildUserData};
+use std::mem;
 
 #[derive(Debug)]
 pub enum Command {
@@ -37,7 +38,7 @@ pub enum Command {
     EndOfShader(EventWriteEndOfShaderPacket),
 }
 
-pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
+pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
     let mut result = vec![];
 
     let mut graphics_pipeline_builder = <GraphicsPipeline as Build<RegisterEntry>>::Builder::new();
@@ -79,9 +80,14 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
                     },
                 value: Type3PacketValue::DrawIndexAuto(draw_packet),
             }) => {
+                let finalized_pipeline = mem::replace(
+                    &mut graphics_pipeline_builder,
+                    GraphicsPipelineBuilder::new(),
+                );
+
                 result.push(Command::Draw {
                     draw_packet: draw_packet.clone(),
-                    pipeline: graphics_pipeline_builder.clone().finalize().unwrap(),
+                    pipeline: finalized_pipeline.finalize()?,
                 });
             }
             PM4Packet::Type3(Type3Packet {
@@ -92,9 +98,12 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
                     },
                 value: Type3PacketValue::DispatchDirect(dispatch_packet),
             }) => {
+                let finalized_pipeline =
+                    mem::replace(&mut compute_pipeline_builder, ComputePipelineBuilder::new());
+
                 result.push(Command::Dispatch {
                     dispatch_packet: dispatch_packet.clone(),
-                    pipeline: compute_pipeline_builder.clone().finalize().unwrap(),
+                    pipeline: finalized_pipeline.finalize()?,
                 });
             }
             PM4Packet::Type3(Type3Packet {
@@ -115,7 +124,7 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
         }
     }
 
-    result
+    Ok(result)
 }
 
 /// A structured intermediate representation of data in pm4 graphics pipeline.
