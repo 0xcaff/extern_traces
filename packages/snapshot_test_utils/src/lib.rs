@@ -2,6 +2,7 @@
 //! against a snapshot of the expected output, which is saved to disk. This is useful for
 //! finding unintended changes.
 
+use anyhow::Context;
 use std::fs::OpenOptions;
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::Path;
@@ -87,7 +88,7 @@ pub fn generate_snapshots<
 
         let relative_path = input_path.strip_prefix(input_base)?;
 
-        let snapshot_folder = Path::new(snapshots_base).join(relative_path);
+        let snapshot_folder = Path::new(snapshots_base).join(&relative_path);
         fs::create_dir_all(snapshot_folder.parent().unwrap())?;
 
         let mut collector = TestResultCollectorFn {
@@ -101,9 +102,9 @@ pub fn generate_snapshots<
             },
         };
 
-        let input = fs::read(input_path)?;
+        let input = fs::read(&input_path)?;
 
-        run_test(input, &mut collector)?;
+        run_test(input, &mut collector).context(format!("{:?}", &input_path))?;
     }
 
     Ok(())

@@ -12,9 +12,12 @@ fn snapshots() -> Result<(), anyhow::Error> {
 
             collector.result("packets", &format!("{:#?}", packets))?;
 
-            collector.result("pipeline", &format!("{:#?}", convert(packets.as_slice())))?;
+            let converted = convert(packets.as_slice())?;
+            collector.result("pipeline", &format!("{:#?}", converted))?;
 
             Ok(())
         },
-    )
+    )?;
+
+    Ok(())
 }

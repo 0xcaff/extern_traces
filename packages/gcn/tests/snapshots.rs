@@ -16,5 +16,7 @@ fn snapshots() -> Result<(), anyhow::Error> {
 
             Ok(())
         },
-    )
+    )?;
+
+    Ok(())
 }
