@@ -23,6 +23,7 @@ pub enum Type3PacketValue {
     DispatchDirect(DispatchDirectPacket),
     EventWriteEndOfShader(EventWriteEndOfShaderPacket),
     // todo: index_type
+    // todo: acquire memory
     Unknown { op: OpCode, body: Vec<u32> },
 }
 
