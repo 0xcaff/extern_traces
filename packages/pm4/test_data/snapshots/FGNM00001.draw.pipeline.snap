@@ -222,6 +222,11 @@
                     0,
                 ),
             },
+            vertex_grouper_tesselator: VertexGrouperTesselator {
+                primitive_type: VGT_PRIMITIVE_TYPE {
+                    PRIM_TYPE: DI_PT_RECTLIST,
+                },
+            },
             shader: Shader {
                 z_format: SPI_SHADER_Z_FORMAT {
                     Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
@@ -660,6 +665,11 @@
                 clear_word_1: Some(
                     0,
                 ),
+            },
+            vertex_grouper_tesselator: VertexGrouperTesselator {
+                primitive_type: VGT_PRIMITIVE_TYPE {
+                    PRIM_TYPE: DI_PT_RECTLIST,
+                },
             },
             shader: Shader {
                 z_format: SPI_SHADER_Z_FORMAT {
@@ -1123,6 +1133,11 @@
                 clear_word_1: Some(
                     0,
                 ),
+            },
+            vertex_grouper_tesselator: VertexGrouperTesselator {
+                primitive_type: VGT_PRIMITIVE_TYPE {
+                    PRIM_TYPE: DI_PT_TRILIST,
+                },
             },
             shader: Shader {
                 z_format: SPI_SHADER_Z_FORMAT {

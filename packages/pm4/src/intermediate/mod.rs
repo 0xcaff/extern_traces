@@ -5,7 +5,9 @@ use crate::draw_index_auto::DrawIndexAutoPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
-use crate::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
+use crate::register::{
+    SetContextRegisterPacket, SetShaderRegisterPacket, SetUConfigRegisterPacket,
+};
 use crate::{
     PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet, Type3PacketValue,
     CB_COLOR0_ATTRIB, CB_COLOR0_CMASK_SLICE, CB_COLOR0_INFO, CB_COLOR0_PITCH, CB_COLOR0_SLICE,
@@ -17,6 +19,7 @@ use crate::{
     SPI_PS_INPUT_CNTL_0, SPI_PS_INPUT_ENA, SPI_PS_IN_CONTROL, SPI_SHADER_COL_FORMAT,
     SPI_SHADER_PGM_RSRC1_PS, SPI_SHADER_PGM_RSRC1_VS, SPI_SHADER_PGM_RSRC2_PS,
     SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT, SPI_VS_OUT_CONFIG,
+    VGT_PRIMITIVE_TYPE,
 };
 use pm4_internal_macros::{Build, BuildUserData};
 
@@ -49,6 +52,10 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
             | PM4Packet::Type3(Type3Packet {
                 header: Type3Header { shader_type, .. },
                 value: Type3PacketValue::SetShaderRegister(SetShaderRegisterPacket { values }),
+            })
+            | PM4Packet::Type3(Type3Packet {
+                header: Type3Header { shader_type, .. },
+                value: Type3PacketValue::SetUConfigRegister(SetUConfigRegisterPacket { values }),
             }) => {
                 for entry in values {
                     let Some(entry) = entry else {
@@ -115,8 +122,8 @@ pub fn convert(commands: &[PM4Packet]) -> Vec<Command> {
 ///
 /// The goal with this is:
 /// * Validate structural assumptions about the input stream like the pipeline
-///   will always include an DB_DEPT_CONTROL entry or a SPI_SHADER_PGM_LO_PS
-///   will always be accompanied with a SPI_SHADER_PGM_RSRC1_PS entry.
+///   will always include an DB_DEPT_CONTROL entry or an SPI_SHADER_PGM_LO_PS
+///   will always be accompanied by a SPI_SHADER_PGM_RSRC1_PS entry.
 ///
 /// * Express as complete a set of possible information available to downstream
 ///   code to get a sense of implementation completeness. Things are grouped
@@ -140,9 +147,19 @@ pub struct GraphicsPipeline {
 
     pub color0: ColorBuffer,
 
+    pub vertex_grouper_tesselator: VertexGrouperTesselator,
+
     shader: Shader,
     pub pixel_shader: PixelShader,
     pub vertex_shader: Option<VertexShader>,
+}
+
+#[derive(Build, Debug)]
+#[entry(RegisterEntry)]
+#[allow(dead_code)]
+struct VertexGrouperTesselator {
+    #[entry(RegisterEntry::VGT_PRIMITIVE_TYPE)]
+    pub primitive_type: VGT_PRIMITIVE_TYPE,
 }
 
 #[derive(Build, Debug)]
