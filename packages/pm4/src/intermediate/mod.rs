@@ -157,7 +157,7 @@ pub struct GraphicsPipeline {
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
-struct VertexGrouperTesselator {
+pub struct VertexGrouperTesselator {
     #[entry(RegisterEntry::VGT_PRIMITIVE_TYPE)]
     pub primitive_type: VGT_PRIMITIVE_TYPE,
 }
