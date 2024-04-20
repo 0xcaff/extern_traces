@@ -146,19 +146,13 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
 pub struct GraphicsPipeline {
     depth_buffer: DepthBuffer,
 
-    primitive_assembly: PrimitiveAssembly,
+    primitive_assembly: Option<PrimitiveAssembly>,
 
-    #[entry(RegisterEntry::CB_TARGET_MASK)]
-    target_mask: CB_TARGET_MASK,
-
-    #[entry(RegisterEntry::CB_SHADER_MASK)]
-    shader_mask: CB_SHADER_MASK,
-
-    pub color0: ColorBuffer,
+    pub color_buffer: Option<ColorBuffer>,
 
     pub vertex_grouper_tesselator: VertexGrouperTesselator,
 
-    shader: Shader,
+    shader: Option<Shader>,
     pub pixel_shader: PixelShader,
     pub vertex_shader: Option<VertexShader>,
 }
@@ -183,7 +177,7 @@ struct DepthBuffer {
     render_control: Option<DB_RENDER_CONTROL>,
 
     #[entry(RegisterEntry::DB_SHADER_CONTROL)]
-    shader_control: DB_SHADER_CONTROL,
+    shader_control: Option<DB_SHADER_CONTROL>,
 
     htile: Option<HTile>,
 }
@@ -204,7 +198,7 @@ struct HTile {
 #[allow(dead_code)]
 struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
-    control: DB_DEPTH_CONTROL,
+    control: Option<DB_DEPTH_CONTROL>,
 
     #[entry(RegisterEntry::DB_DEPTH_CLEAR)]
     clear: Option<u32>,
@@ -255,6 +249,18 @@ struct Stencil {
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
 pub struct ColorBuffer {
+    color0: Option<ColorBufferColorInstance>,
+
+    #[entry(RegisterEntry::CB_TARGET_MASK)]
+    target_mask: CB_TARGET_MASK,
+    #[entry(RegisterEntry::CB_SHADER_MASK)]
+    shader_mask: CB_SHADER_MASK,
+}
+
+#[derive(Build, Debug)]
+#[entry(RegisterEntry)]
+#[allow(dead_code)]
+pub struct ColorBufferColorInstance {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
     pub base: u32,
     #[entry(RegisterEntry::CB_COLOR0_PITCH)]
@@ -300,7 +306,7 @@ struct Clip {
     viewport_transform_engine_control: PA_CL_VTE_CNTL,
 
     #[entry(RegisterEntry::PA_CL_VS_OUT_CNTL)]
-    vertex_shader_out_control: Option<PA_CL_VS_OUT_CNTL>,
+    vertex_shader_out_control: PA_CL_VS_OUT_CNTL,
 
     guard_band: GuardBand,
 }
@@ -404,13 +410,13 @@ pub struct PixelShader {
     resource2: SPI_SHADER_PGM_RSRC2_PS,
 
     #[entry(RegisterEntry::SPI_PS_INPUT_ENA)]
-    input: SPI_PS_INPUT_ENA,
+    input: Option<SPI_PS_INPUT_ENA>,
 
     #[entry(RegisterEntry::SPI_PS_INPUT_ADDR)]
-    input_address: SPI_PS_INPUT_ENA,
+    input_address: Option<SPI_PS_INPUT_ENA>,
 
     #[entry(RegisterEntry::SPI_PS_IN_CONTROL)]
-    in_control: SPI_PS_IN_CONTROL,
+    in_control: Option<SPI_PS_IN_CONTROL>,
 
     #[entry(RegisterEntry::SPI_PS_INPUT_CNTL_0)]
     input_control: Option<SPI_PS_INPUT_CNTL_0>,
@@ -437,7 +443,7 @@ pub struct VertexShader {
     resource2: SPI_SHADER_PGM_RSRC2_VS,
 
     #[entry(RegisterEntry::SPI_VS_OUT_CONFIG)]
-    out_config: SPI_VS_OUT_CONFIG,
+    out_config: Option<SPI_VS_OUT_CONFIG>,
 
     pub user_data: VertexShaderUserData,
 }
