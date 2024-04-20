@@ -98,3 +98,39 @@ impl<EntryType, T: Build<EntryType>> Finalize<Option<T>> for OptionBuilder<Entry
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use pm4_internal_macros::Build;
+    use crate::build::{Build, Builder, Finalize, Initialize};
+
+    #[test]
+    fn test_partial_finalize_fails() {
+        enum ContainerKeyEnum {
+            First(u32),
+            Second(u32),
+        }
+
+        #[derive(Debug, Build)]
+        #[entry(ContainerKeyEnum)]
+        struct Container {
+            child: Option<ChildContainer>,
+        }
+
+        #[derive(Debug, Build)]
+        #[entry(ContainerKeyEnum)]
+        struct ChildContainer {
+            #[entry(ContainerKeyEnum::First)]
+            first: u32,
+
+            #[entry(ContainerKeyEnum::Second)]
+            second: u32,
+        }
+
+        let mut builder = <Container as Build<ContainerKeyEnum>>::Builder::new();
+
+        assert!(builder.update(&ContainerKeyEnum::First(0)).is_some());
+
+        assert!((builder.finalize() as Result<Container, _>).is_err());
+    }
+}
