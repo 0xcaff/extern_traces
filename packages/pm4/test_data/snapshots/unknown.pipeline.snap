@@ -1,38 +1,2239 @@
-[
-    EndOfPipe(
-        EventWriteEndOfPipePacket {
-            invalidate_writeback_l2: false,
-            event_index: 5,
-            event_type: CACHE_FLUSH_TS,
-            address: 553061990912,
-            immediate: 0,
-        },
-    ),
-    EndOfPipe(
-        EventWriteEndOfPipePacket {
-            invalidate_writeback_l2: false,
-            event_index: 5,
-            event_type: CACHE_FLUSH_TS,
-            address: 553061990920,
-            immediate: 0,
-        },
-    ),
-    EndOfPipe(
-        EventWriteEndOfPipePacket {
-            invalidate_writeback_l2: false,
-            event_index: 5,
-            event_type: CACHE_FLUSH_TS,
-            address: 553061989664,
-            immediate: 0,
-        },
-    ),
-    EndOfPipe(
-        EventWriteEndOfPipePacket {
-            invalidate_writeback_l2: false,
-            event_index: 5,
-            event_type: CACHE_FLUSH_TS,
-            address: 550804862288,
-            immediate: 1,
-        },
-    ),
-]
+(
+    [
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 553061990912,
+                immediate: 0,
+            },
+        ),
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 553061990920,
+                immediate: 0,
+            },
+        ),
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 553061989664,
+                immediate: 0,
+            },
+        ),
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 550804862288,
+                immediate: 1,
+            },
+        ),
+    ],
+    [
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: CONTEXT_CONTROL,
+                    body: [
+                        2147483648,
+                        2147483648,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: CLEAR_STATE,
+                    body: [
+                        0,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: ACQUIRE_MEM,
+                    body: [
+                        784629696,
+                        4294967295,
+                        0,
+                        0,
+                        0,
+                        10,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                COMPUTE_STATIC_THREAD_MGMT_SE0(
+                                    COMPUTE_STATIC_THREAD_MGMT_SE0 {
+                                        SH0_CU_EN: 65535,
+                                        SH1_CU_EN: 65535,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                COMPUTE_STATIC_THREAD_MGMT_SE1(
+                                    COMPUTE_STATIC_THREAD_MGMT_SE0 {
+                                        SH0_CU_EN: 65535,
+                                        SH1_CU_EN: 65535,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                COMPUTE_RESOURCE_LIMITS(
+                                    COMPUTE_RESOURCE_LIMITS {
+                                        WAVES_PER_SH: 0,
+                                        TG_PER_CU: 0,
+                                        LOCK_THRESHOLD: 0,
+                                        SIMD_DEST_CNTL: false,
+                                        FORCE_SIMD_DIST: false,
+                                        CU_GROUP_COUNT: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_VTX_CNTL(
+                                    PA_SU_VTX_CNTL {
+                                        PIX_CENTER: true,
+                                        ROUND_MODE: X_ROUND_TO_EVEN,
+                                        QUANT_MODE: X_16_8_FIXED_POINT_1_256TH,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_LINE_CNTL(
+                                    PA_SU_LINE_CNTL {
+                                        WIDTH: 8,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_POINT_SIZE(
+                                    PA_SU_POINT_SIZE {
+                                        HEIGHT: 8,
+                                        WIDTH: 8,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_POINT_MINMAX(
+                                    PA_SU_POINT_MINMAX {
+                                        MIN_SIZE: 0,
+                                        MAX_SIZE: 65535,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_CLIP_CNTL(
+                                    PA_CL_CLIP_CNTL {
+                                        UCP_ENA_0: false,
+                                        UCP_ENA_1: false,
+                                        UCP_ENA_2: false,
+                                        UCP_ENA_3: false,
+                                        UCP_ENA_4: false,
+                                        UCP_ENA_5: false,
+                                        PS_UCP_Y_SCALE_NEG: false,
+                                        PS_UCP_MODE: 0,
+                                        CLIP_DISABLE: false,
+                                        UCP_CULL_ONLY_ENA: false,
+                                        BOUNDARY_EDGE_FLAG_ENA: false,
+                                        DX_CLIP_SPACE_DEF: false,
+                                        DIS_CLIP_ERR_DETECT: false,
+                                        VTX_KILL_OR: false,
+                                        DX_RASTERIZATION_KILL: false,
+                                        DX_LINEAR_ATTR_CLIP_ENA: false,
+                                        VTE_VPORT_PROVOKE_DISABLE: false,
+                                        ZCLIP_NEAR_DISABLE: false,
+                                        ZCLIP_FAR_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_CLIPRECT_RULE(
+                                    PA_SC_CLIPRECT_RULE,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_OUT_DEALLOC_CNTL(
+                                    VGT_OUT_DEALLOC_CNTL {
+                                        DEALLOC_DIST: 16,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR_CONTROL(
+                                    CB_COLOR_CONTROL {
+                                        DEGAMMA_ENABLE: false,
+                                        MODE: CB_NORMAL,
+                                        ROP3: ROP3_COPY,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_AA_MASK_X0Y0_X1Y0(
+                                    PA_SC_AA_MASK_X0Y0_X1Y0 {
+                                        AA_MASK_X0Y0: 65535,
+                                        AA_MASK_X1Y0: 65535,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_AA_MASK_X0Y1_X1Y1(
+                                    PA_SC_AA_MASK_X0Y1_X1Y1 {
+                                        AA_MASK_X0Y1: 65535,
+                                        AA_MASK_X1Y1: 65535,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: NUM_INSTANCES,
+                    body: [
+                        1,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_PS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: 511,
+                                        WAVE_LIMIT: 0,
+                                        LOCK_LOW_THRESHOLD: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_VS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: 511,
+                                        WAVE_LIMIT: 0,
+                                        LOCK_LOW_THRESHOLD: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_GS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: 511,
+                                        WAVE_LIMIT: 0,
+                                        LOCK_LOW_THRESHOLD: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_ES(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: 511,
+                                        WAVE_LIMIT: 0,
+                                        LOCK_LOW_THRESHOLD: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_HS(
+                                    SPI_SHADER_PGM_RSRC3_HS {
+                                        WAVE_LIMIT: 0,
+                                        LOCK_LOW_THRESHOLD: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetShaderRegister(
+                    SetShaderRegisterPacket {
+                        values: [
+                            Some(
+                                SPI_SHADER_PGM_RSRC3_LS(
+                                    SPI_SHADER_PGM_RSRC3_PS {
+                                        CU_EN: 511,
+                                        WAVE_LIMIT: 0,
+                                        LOCK_LOW_THRESHOLD: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MIN_VTX_INDX(
+                                    0,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MAX_VTX_INDX(
+                                    4294967295,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MULTI_PRIM_IB_RESET_INDX(
+                                    0,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_OUTPUT_PATH_CNTL(
+                                    VGT_OUTPUT_PATH_CNTL {
+                                        PATH_SELECT: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_MODE(
+                                    VGT_GS_MODE {
+                                        MODE: GS_OFF,
+                                        RESERVED_0: false,
+                                        CUT_MODE: GS_CUT_1024,
+                                        RESERVED_1: 0,
+                                        GS_C_PACK_EN: false,
+                                        RESERVED_2: false,
+                                        ES_PASSTHRU: false,
+                                        COMPUTE_MODE: false,
+                                        FAST_COMPUTE_MODE: false,
+                                        ELEMENT_INFO_EN: false,
+                                        PARTIAL_THD_AT_EOI: false,
+                                        SUPPRESS_CUTS: false,
+                                        ES_WRITE_OPTIMIZE: false,
+                                        GS_WRITE_OPTIMIZE: false,
+                                        ONCHIP: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_VTX_CNT_EN(
+                                    VGT_VTX_CNT_EN {
+                                        VTX_CNT_EN: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_MODE_CNTL_0(
+                                    PA_SC_MODE_CNTL_0 {
+                                        MSAA_ENABLE: false,
+                                        VPORT_SCISSOR_ENABLE: false,
+                                        LINE_STIPPLE_ENABLE: false,
+                                        SEND_UNLIT_STILES_TO_PKR: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_MODE_CNTL_1(
+                                    PA_SC_MODE_CNTL_1 {
+                                        WALK_SIZE: false,
+                                        WALK_ALIGNMENT: false,
+                                        WALK_ALIGN8_PRIM_FITS_ST: false,
+                                        WALK_FENCE_ENABLE: false,
+                                        WALK_FENCE_SIZE: 0,
+                                        SUPERTILE_WALK_ORDER_ENABLE: false,
+                                        TILE_WALK_ORDER_ENABLE: false,
+                                        TILE_COVER_DISABLE: false,
+                                        TILE_COVER_NO_SCISSOR: false,
+                                        ZMM_LINE_EXTENT: false,
+                                        ZMM_LINE_OFFSET: false,
+                                        ZMM_RECT_EXTENT: false,
+                                        KILL_PIX_POST_HI_Z: false,
+                                        KILL_PIX_POST_DETAIL_MASK: false,
+                                        PS_ITER_SAMPLE: false,
+                                        MULTI_SHADER_ENGINE_PRIM_DISCARD_ENABLE: false,
+                                        MULTI_GPU_SUPERTILE_ENABLE: false,
+                                        GPU_ID_OVERRIDE_ENABLE: false,
+                                        GPU_ID_OVERRIDE: 0,
+                                        MULTI_GPU_PRIM_DISCARD_ENABLE: false,
+                                        FORCE_EOV_CNTDWN_ENABLE: true,
+                                        FORCE_EOV_REZ_ENABLE: true,
+                                        OUT_OF_ORDER_PRIMITIVE_ENABLE: false,
+                                        OUT_OF_ORDER_WATER_MARK: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SC_AA_CONFIG(
+                                    PA_SC_AA_CONFIG {
+                                        MSAA_NUM_SAMPLES: 0,
+                                        AA_MASK_CENTROID_DTMN: false,
+                                        MAX_SAMPLE_DIST: 0,
+                                        MSAA_EXPOSED_SAMPLES: 0,
+                                        DETAIL_TO_EXPOSED_MODE: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_SU_POLY_OFFSET_DB_FMT_CNTL(
+                                    PA_SU_POLY_OFFSET_DB_FMT_CNTL {
+                                        POLY_OFFSET_NEG_NUM_DB_BITS: 233,
+                                        POLY_OFFSET_DB_IS_FLOAT_FMT: true,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_PER_ES(
+                                    VGT_GS_PER_ES {
+                                        GS_PER_ES: 256,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_ES_PER_GS(
+                                    VGT_ES_PER_GS {
+                                        ES_PER_GS: 256,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_PER_VS(
+                                    VGT_GS_PER_VS {
+                                        GS_PER_VS: 4,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_PER_ES(
+                                    VGT_GS_PER_ES {
+                                        GS_PER_ES: 256,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_ES_PER_GS(
+                                    VGT_ES_PER_GS {
+                                        ES_PER_GS: 256,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_PER_VS(
+                                    VGT_GS_PER_VS {
+                                        GS_PER_VS: 4,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_PER_ES(
+                                    VGT_GS_PER_ES {
+                                        GS_PER_ES: 256,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_ES_PER_GS(
+                                    VGT_ES_PER_GS {
+                                        ES_PER_GS: 256,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_PER_VS(
+                                    VGT_GS_PER_VS {
+                                        GS_PER_VS: 4,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetUConfigRegister(
+                    SetUConfigRegisterPacket {
+                        values: [
+                            Some(
+                                GRBM_GFX_INDEX(
+                                    GRBM_GFX_INDEX {
+                                        INSTANCE_INDEX: 0,
+                                        SH_INDEX: 0,
+                                        SE_INDEX: 0,
+                                        SH_BROADCAST_WRITES: true,
+                                        INSTANCE_BROADCAST_WRITES: true,
+                                        SE_BROADCAST_WRITES: true,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: WAIT_REG_MEM,
+                    body: [
+                        19,
+                        719338224,
+                        32757,
+                        0,
+                        4294967295,
+                        10,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_SHADER_STAGES_EN(
+                                    VGT_SHADER_STAGES_EN {
+                                        HS_EN: HS_STAGE_OFF,
+                                        DYNAMIC_HS: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                TA_BC_BASE_ADDR(
+                                    2152706625,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_ESGS_RING_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 128,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 16,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_1(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_2(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_3(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 16,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_1(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_2(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_3(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 16,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_1(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_2(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_3(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 16,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_1(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_2(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GS_VERT_ITEMSIZE_3(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GSVS_RING_OFFSET_1(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GSVS_RING_OFFSET_2(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GSVS_RING_OFFSET_3(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GSVS_RING_OFFSET_1(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GSVS_RING_OFFSET_2(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GSVS_RING_OFFSET_3(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GSVS_RING_OFFSET_1(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GSVS_RING_OFFSET_2(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                VGT_GSVS_RING_OFFSET_3(
+                                    VGT_GSVS_RING_OFFSET_1 {
+                                        OFFSET: 1024,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GS_MAX_VERT_OUT(
+                                    VGT_GS_MAX_VERT_OUT {
+                                        MAX_VERT_OUT: 64,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_GSVS_RING_ITEMSIZE(
+                                    VGT_ESGS_RING_ITEMSIZE {
+                                        ITEMSIZE: 1024,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR1_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR2_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR3_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR4_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR5_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR6_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_COLOR7_INFO(
+                                    CB_COLOR0_INFO {
+                                        ENDIAN: ENDIAN_NONE,
+                                        FORMAT: COLOR_INVALID,
+                                        LINEAR_GENERAL: false,
+                                        NUMBER_TYPE: NUMBER_UNORM,
+                                        COMP_SWAP: SWAP_STD,
+                                        FAST_CLEAR: false,
+                                        COMPRESSION: false,
+                                        BLEND_CLAMP: false,
+                                        BLEND_BYPASS: false,
+                                        SIMPLE_FLOAT: false,
+                                        ROUND_MODE: false,
+                                        CMASK_IS_LINEAR: false,
+                                        BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                        BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                        FMASK_COMPRESSION_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MULTI_PRIM_IB_RESET_EN(
+                                    VGT_MULTI_PRIM_IB_RESET_EN {
+                                        RESET_EN: true,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_MULTI_PRIM_IB_RESET_INDX(
+                                    65535,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCIL_CONTROL(
+                                    DB_STENCIL_CONTROL {
+                                        STENCILFAIL: STENCIL_KEEP,
+                                        STENCILZPASS: STENCIL_KEEP,
+                                        STENCILZFAIL: STENCIL_KEEP,
+                                        STENCILFAIL_BF: STENCIL_KEEP,
+                                        STENCILZPASS_BF: STENCIL_KEEP,
+                                        STENCILZFAIL_BF: STENCIL_KEEP,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                PA_CL_CLIP_CNTL(
+                                    PA_CL_CLIP_CNTL {
+                                        UCP_ENA_0: false,
+                                        UCP_ENA_1: false,
+                                        UCP_ENA_2: false,
+                                        UCP_ENA_3: false,
+                                        UCP_ENA_4: false,
+                                        UCP_ENA_5: false,
+                                        PS_UCP_Y_SCALE_NEG: false,
+                                        PS_UCP_MODE: 0,
+                                        CLIP_DISABLE: false,
+                                        UCP_CULL_ONLY_ENA: false,
+                                        BOUNDARY_EDGE_FLAG_ENA: false,
+                                        DX_CLIP_SPACE_DEF: false,
+                                        DIS_CLIP_ERR_DETECT: false,
+                                        VTX_KILL_OR: false,
+                                        DX_RASTERIZATION_KILL: false,
+                                        DX_LINEAR_ATTR_CLIP_ENA: false,
+                                        VTE_VPORT_PROVOKE_DISABLE: false,
+                                        ZCLIP_NEAR_DISABLE: false,
+                                        ZCLIP_FAR_DISABLE: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCIL_CLEAR(
+                                    DB_STENCIL_CLEAR {
+                                        CLEAR: 0,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: INDEX_TYPE,
+                    body: [
+                        0,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                VGT_INDX_OFFSET(
+                                    0,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND0_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: true,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND1_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND2_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND3_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND4_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND5_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND6_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND7_CONTROL(
+                                    CB_BLEND0_CONTROL {
+                                        COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                        COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                        ALPHA_SRCBLEND: BLEND_ONE,
+                                        ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                        ALPHA_DESTBLEND: BLEND_ONE,
+                                        SEPARATE_ALPHA_BLEND: true,
+                                        ENABLE: false,
+                                        DISABLE_ROP3: false,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND_RED(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_GREEN(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_BLUE(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_ALPHA(
+                                    1065353216,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND_RED(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_GREEN(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_BLUE(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_ALPHA(
+                                    1065353216,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND_RED(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_GREEN(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_BLUE(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_ALPHA(
+                                    1065353216,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                CB_BLEND_RED(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_GREEN(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_BLUE(
+                                    1065353216,
+                                ),
+                            ),
+                            Some(
+                                CB_BLEND_ALPHA(
+                                    1065353216,
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCILREFMASK(
+                                    DB_STENCILREFMASK {
+                                        STENCILTESTVAL: 0,
+                                        STENCILMASK: 255,
+                                        STENCILWRITEMASK: 255,
+                                        STENCILOPVAL: 1,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                DB_STENCILREFMASK_BF(
+                                    DB_STENCILREFMASK_BF {
+                                        STENCILTESTVAL_BF: 0,
+                                        STENCILMASK_BF: 255,
+                                        STENCILWRITEMASK_BF: 255,
+                                        STENCILOPVAL_BF: 1,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: SetContextRegister(
+                    SetContextRegisterPacket {
+                        values: [
+                            Some(
+                                DB_STENCILREFMASK(
+                                    DB_STENCILREFMASK {
+                                        STENCILTESTVAL: 0,
+                                        STENCILMASK: 255,
+                                        STENCILWRITEMASK: 255,
+                                        STENCILOPVAL: 1,
+                                    },
+                                ),
+                            ),
+                            Some(
+                                DB_STENCILREFMASK_BF(
+                                    DB_STENCILREFMASK_BF {
+                                        STENCILTESTVAL_BF: 0,
+                                        STENCILMASK_BF: 255,
+                                        STENCILWRITEMASK_BF: 255,
+                                        STENCILOPVAL_BF: 1,
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            },
+        ),
+    ],
+)

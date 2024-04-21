@@ -5,6 +5,7 @@ use crate::draw_index_auto::DrawIndexAutoPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
+use crate::op_codes::OpCode;
 use crate::register::{
     SetContextRegisterPacket, SetShaderRegisterPacket, SetUConfigRegisterPacket,
 };
@@ -38,8 +39,9 @@ pub enum Command {
     EndOfShader(EventWriteEndOfShaderPacket),
 }
 
-pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
+pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>), anyhow::Error> {
     let mut result = vec![];
+    let mut ignored_packets = vec![];
 
     let mut graphics_pipeline_builder = <GraphicsPipeline as Build<RegisterEntry>>::Builder::new();
     let mut compute_pipeline_builder = <ComputePipeline as Build<RegisterEntry>>::Builder::new();
@@ -68,7 +70,7 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
                         ShaderType::Compute => compute_pipeline_builder.update(entry),
                     };
                     if let None = accepted {
-                        // todo: log
+                        ignored_packets.push(packet)
                     }
                 }
             }
@@ -120,11 +122,20 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
                 graphics_pipeline_builder = GraphicsPipelineBuilder::new();
                 result.push(Command::EndOfPipe(end_of_pipe.clone()))
             }
-            _ => {}
+            PM4Packet::Type3(Type3Packet {
+                value:
+                    Type3PacketValue::Unknown {
+                        op: OpCode::NOP, ..
+                    },
+                ..
+            }) => {
+                // skip nop packets
+            }
+            packet => ignored_packets.push(packet),
         }
     }
 
-    Ok(result)
+    Ok((result, ignored_packets))
 }
 
 /// A structured intermediate representation of data in pm4 graphics pipeline.
