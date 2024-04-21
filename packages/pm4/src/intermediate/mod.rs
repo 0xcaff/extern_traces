@@ -23,7 +23,6 @@ use crate::{
     VGT_PRIMITIVE_TYPE,
 };
 use pm4_internal_macros::{Build, BuildUserData};
-use std::mem;
 
 #[derive(Debug)]
 pub enum Command {
@@ -81,14 +80,9 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
                     },
                 value: Type3PacketValue::DrawIndexAuto(draw_packet),
             }) => {
-                let finalized_pipeline = mem::replace(
-                    &mut graphics_pipeline_builder,
-                    GraphicsPipelineBuilder::new(),
-                );
-
                 result.push(Command::Draw {
                     draw_packet: draw_packet.clone(),
-                    pipeline: finalized_pipeline.finalize()?,
+                    pipeline: graphics_pipeline_builder.clone().finalize()?,
                 });
             }
             PM4Packet::Type3(Type3Packet {
@@ -99,12 +93,9 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
                     },
                 value: Type3PacketValue::DispatchDirect(dispatch_packet),
             }) => {
-                let finalized_pipeline =
-                    mem::replace(&mut compute_pipeline_builder, ComputePipelineBuilder::new());
-
                 result.push(Command::Dispatch {
                     dispatch_packet: dispatch_packet.clone(),
-                    pipeline: finalized_pipeline.finalize()?,
+                    pipeline: compute_pipeline_builder.clone().finalize()?,
                 });
             }
             PM4Packet::Type3(Type3Packet {
@@ -115,12 +106,20 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
                     },
                 value: Type3PacketValue::EventWriteEndOfShader(packet),
             }) => {
+                compute_pipeline_builder = ComputePipelineBuilder::new();
                 result.push(Command::EndOfShader(packet.clone()));
             }
             PM4Packet::Type3(Type3Packet {
-                header: _,
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Graphics,
+                        ..
+                    },
                 value: Type3PacketValue::EventWriteEndOfPipe(end_of_pipe),
-            }) => result.push(Command::EndOfPipe(end_of_pipe.clone())),
+            }) => {
+                graphics_pipeline_builder = GraphicsPipelineBuilder::new();
+                result.push(Command::EndOfPipe(end_of_pipe.clone()))
+            }
             _ => {}
         }
     }
