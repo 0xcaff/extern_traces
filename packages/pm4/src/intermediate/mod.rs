@@ -168,7 +168,7 @@ pub struct VertexGrouperTesselator {
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
-struct DepthBuffer {
+pub struct DepthBuffer {
     stencil: Stencil,
     depth: Depth,
     pub z: Option<Z>,
@@ -219,7 +219,7 @@ struct Depth {
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
-struct Z {
+pub struct Z {
     #[entry(RegisterEntry::DB_Z_READ_BASE)]
     pub read_base: u32,
 
