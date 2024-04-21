@@ -111,6 +111,7 @@ impl DisplayInstruction for ExpInstruction {
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
 pub enum ExportTarget {
+    /// **M**ultiple **R**ender **T**arget (MRT) render target index
     RenderTarget(u8),
     Z,
     Null,
