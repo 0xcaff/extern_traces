@@ -17,6 +17,7 @@
                     write_base: None,
                     info: None,
                 },
+                z: None,
                 depth: Depth {
                     control: Some(
                         DB_DEPTH_CONTROL {
@@ -38,7 +39,6 @@
                     info: None,
                     view: None,
                 },
-                z: None,
                 render_control: Some(
                     DB_RENDER_CONTROL {
                         DEPTH_CLEAR_ENABLE: false,
@@ -421,6 +421,22 @@
                         },
                     ),
                 },
+                z: Some(
+                    Z {
+                        read_base: 2147516416,
+                        write_base: 2147516416,
+                        info: DB_Z_INFO {
+                            FORMAT: Z_32_FLOAT,
+                            NUM_SAMPLES: 0,
+                            TILE_SPLIT: ADDR_SURF_TILE_SPLIT_128B,
+                            TILE_MODE_INDEX: 1,
+                            ALLOW_EXPCLEAR: false,
+                            READ_SIZE: false,
+                            TILE_SURFACE_ENABLE: false,
+                            ZRANGE_PRECISION: true,
+                        },
+                    },
+                ),
                 depth: Depth {
                     control: Some(
                         DB_DEPTH_CONTROL {
@@ -470,22 +486,6 @@
                         },
                     ),
                 },
-                z: Some(
-                    Z {
-                        read_base: 2147516416,
-                        write_base: 2147516416,
-                        info: DB_Z_INFO {
-                            FORMAT: Z_32_FLOAT,
-                            NUM_SAMPLES: 0,
-                            TILE_SPLIT: ADDR_SURF_TILE_SPLIT_128B,
-                            TILE_MODE_INDEX: 1,
-                            ALLOW_EXPCLEAR: false,
-                            READ_SIZE: false,
-                            TILE_SURFACE_ENABLE: false,
-                            ZRANGE_PRECISION: true,
-                        },
-                    },
-                ),
                 render_control: Some(
                     DB_RENDER_CONTROL {
                         DEPTH_CLEAR_ENABLE: true,
@@ -827,6 +827,22 @@
                         },
                     ),
                 },
+                z: Some(
+                    Z {
+                        read_base: 2147516416,
+                        write_base: 2147516416,
+                        info: DB_Z_INFO {
+                            FORMAT: Z_32_FLOAT,
+                            NUM_SAMPLES: 0,
+                            TILE_SPLIT: ADDR_SURF_TILE_SPLIT_128B,
+                            TILE_MODE_INDEX: 1,
+                            ALLOW_EXPCLEAR: false,
+                            READ_SIZE: false,
+                            TILE_SURFACE_ENABLE: false,
+                            ZRANGE_PRECISION: true,
+                        },
+                    },
+                ),
                 depth: Depth {
                     control: Some(
                         DB_DEPTH_CONTROL {
@@ -874,22 +890,6 @@
                         },
                     ),
                 },
-                z: Some(
-                    Z {
-                        read_base: 2147516416,
-                        write_base: 2147516416,
-                        info: DB_Z_INFO {
-                            FORMAT: Z_32_FLOAT,
-                            NUM_SAMPLES: 0,
-                            TILE_SPLIT: ADDR_SURF_TILE_SPLIT_128B,
-                            TILE_MODE_INDEX: 1,
-                            ALLOW_EXPCLEAR: false,
-                            READ_SIZE: false,
-                            TILE_SURFACE_ENABLE: false,
-                            ZRANGE_PRECISION: true,
-                        },
-                    },
-                ),
                 render_control: Some(
                     DB_RENDER_CONTROL {
                         DEPTH_CLEAR_ENABLE: false,
