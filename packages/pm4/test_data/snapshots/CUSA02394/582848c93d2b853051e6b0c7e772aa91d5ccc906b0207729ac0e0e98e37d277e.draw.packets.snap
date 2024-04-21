@@ -22,12 +22,9 @@
                 shader_type: Graphics,
                 predicate: false,
             },
-            value: Unknown {
-                op: CLEAR_STATE,
-                body: [
-                    0,
-                ],
-            },
+            value: ClearState(
+                ClearStatePacket,
+            ),
         },
     ),
     Type3(

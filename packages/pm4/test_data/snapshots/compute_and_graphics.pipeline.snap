@@ -567,21 +567,6 @@
                     predicate: false,
                 },
                 value: Unknown {
-                    op: CLEAR_STATE,
-                    body: [
-                        0,
-                    ],
-                },
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: Unknown {
                     op: ACQUIRE_MEM,
                     body: [
                         784629696,

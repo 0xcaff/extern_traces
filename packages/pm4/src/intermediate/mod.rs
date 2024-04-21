@@ -105,6 +105,17 @@ pub fn convert(
             }
             PM4Packet::Type3(Type3Packet {
                 header: Type3Header { shader_type, .. },
+                value: Type3PacketValue::ClearState(..),
+            }) => match shader_type {
+                ShaderType::Graphics => {
+                    graphics_pipeline_builder = GraphicsPipelineBuilder::new();
+                }
+                ShaderType::Compute => {
+                    compute_pipeline_builder = ComputePipelineBuilder::new();
+                }
+            },
+            PM4Packet::Type3(Type3Packet {
+                header: Type3Header { shader_type, .. },
                 value: Type3PacketValue::EventWriteEndOfShader(packet),
             }) => {
                 match shader_type {
