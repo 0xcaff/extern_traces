@@ -170,11 +170,12 @@ pub struct VertexGrouperTesselator {
 #[allow(dead_code)]
 pub struct DepthBuffer {
     stencil: Stencil,
-    depth: Depth,
     pub z: Option<Z>,
 
+    pub depth: Depth,
+
     #[entry(RegisterEntry::DB_RENDER_CONTROL)]
-    render_control: Option<DB_RENDER_CONTROL>,
+    pub render_control: Option<DB_RENDER_CONTROL>,
 
     #[entry(RegisterEntry::DB_SHADER_CONTROL)]
     shader_control: Option<DB_SHADER_CONTROL>,
@@ -196,12 +197,12 @@ struct HTile {
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
-struct Depth {
+pub struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
     control: Option<DB_DEPTH_CONTROL>,
 
     #[entry(RegisterEntry::DB_DEPTH_CLEAR)]
-    clear: Option<u32>,
+    pub clear: Option<u32>,
 
     #[entry(RegisterEntry::DB_DEPTH_SIZE)]
     size: Option<DB_DEPTH_SIZE>,
