@@ -1,6 +1,5 @@
 pub mod build;
 
-use std::collections::BTreeMap;
 use crate::dispatch_direct::DispatchDirectPacket;
 use crate::draw_index_auto::DrawIndexAutoPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
@@ -23,6 +22,7 @@ use crate::{
     VGT_PRIMITIVE_TYPE,
 };
 use pm4_internal_macros::{Build, BuildUserData};
+use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub enum Command {
