@@ -252,9 +252,10 @@ pub struct ColorBuffer {
     pub color0: Option<ColorBufferInstance>,
 
     #[entry(RegisterEntry::CB_TARGET_MASK)]
-    target_mask: CB_TARGET_MASK,
+    pub target_mask: CB_TARGET_MASK,
+
     #[entry(RegisterEntry::CB_SHADER_MASK)]
-    shader_mask: CB_SHADER_MASK,
+    pub shader_mask: CB_SHADER_MASK,
 }
 
 #[derive(Build, Debug)]
@@ -264,27 +265,27 @@ pub struct ColorBufferInstance {
     #[entry(RegisterEntry::CB_COLOR0_BASE)]
     pub base: u32,
     #[entry(RegisterEntry::CB_COLOR0_PITCH)]
-    pitch: CB_COLOR0_PITCH,
+    pub pitch: CB_COLOR0_PITCH,
     #[entry(RegisterEntry::CB_COLOR0_SLICE)]
-    slice: CB_COLOR0_SLICE,
+    pub slice: CB_COLOR0_SLICE,
     #[entry(RegisterEntry::CB_COLOR0_VIEW)]
-    view: CB_COLOR0_VIEW,
+    pub view: CB_COLOR0_VIEW,
     #[entry(RegisterEntry::CB_COLOR0_INFO)]
-    info: CB_COLOR0_INFO,
+    pub info: CB_COLOR0_INFO,
     #[entry(RegisterEntry::CB_COLOR0_ATTRIB)]
-    attrib: CB_COLOR0_ATTRIB,
+    pub attrib: CB_COLOR0_ATTRIB,
     #[entry(RegisterEntry::CB_COLOR0_CMASK)]
-    mask: u32,
+    pub mask: u32,
     #[entry(RegisterEntry::CB_COLOR0_CMASK_SLICE)]
-    mask_slice: CB_COLOR0_CMASK_SLICE,
+    pub mask_slice: CB_COLOR0_CMASK_SLICE,
     #[entry(RegisterEntry::CB_COLOR0_FMASK)]
-    fmask: u32,
+    pub fmask: u32,
     #[entry(RegisterEntry::CB_COLOR0_FMASK_SLICE)]
-    fmask_slice: CB_COLOR0_SLICE,
+    pub fmask_slice: CB_COLOR0_SLICE,
     #[entry(RegisterEntry::CB_COLOR0_CLEAR_WORD0)]
-    clear_word_0: Option<u32>,
+    pub clear_word_0: Option<u32>,
     #[entry(RegisterEntry::CB_COLOR0_CLEAR_WORD1)]
-    clear_word_1: Option<u32>,
+    pub clear_word_1: Option<u32>,
 }
 
 #[derive(Build, Debug)]
