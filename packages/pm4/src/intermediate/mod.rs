@@ -39,7 +39,9 @@ pub enum Command {
     EndOfShader(EventWriteEndOfShaderPacket),
 }
 
-pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>, Vec<&RegisterEntry>), anyhow::Error> {
+pub fn convert(
+    commands: &[PM4Packet],
+) -> Result<(Vec<Command>, Vec<&PM4Packet>, Vec<&RegisterEntry>), anyhow::Error> {
     let mut result = vec![];
     let mut ignored_packets = vec![];
     let mut ignored_registers = vec![];
@@ -102,14 +104,17 @@ pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>,
                 });
             }
             PM4Packet::Type3(Type3Packet {
-                header:
-                    Type3Header {
-                        shader_type: ShaderType::Compute,
-                        ..
-                    },
+                header: Type3Header { shader_type, .. },
                 value: Type3PacketValue::EventWriteEndOfShader(packet),
             }) => {
-                compute_pipeline_builder = ComputePipelineBuilder::new();
+                match shader_type {
+                    ShaderType::Graphics => {
+                        graphics_pipeline_builder = GraphicsPipelineBuilder::new();
+                    }
+                    ShaderType::Compute => {
+                        compute_pipeline_builder = ComputePipelineBuilder::new();
+                    }
+                }
                 result.push(Command::EndOfShader(packet.clone()));
             }
             PM4Packet::Type3(Type3Packet {

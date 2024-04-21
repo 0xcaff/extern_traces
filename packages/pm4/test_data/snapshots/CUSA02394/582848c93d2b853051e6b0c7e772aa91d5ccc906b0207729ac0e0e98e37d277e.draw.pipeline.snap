@@ -1336,6 +1336,15 @@
                 immediate: 4294967295,
             },
         ),
+        EndOfShader(
+            EventWriteEndOfShaderPacket {
+                event_type: CS_DONE,
+                address: 549755905132,
+                data: StorePacketData {
+                    data: 1,
+                },
+            },
+        ),
         EndOfPipe(
             EventWriteEndOfPipePacket {
                 invalidate_writeback_l2: false,
@@ -1620,24 +1629,6 @@
                         673185980,
                     ],
                 },
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: EventWriteEndOfShader(
-                    EventWriteEndOfShaderPacket {
-                        event_type: CS_DONE,
-                        address: 549755905132,
-                        data: StorePacketData {
-                            data: 1,
-                        },
-                    },
-                ),
             },
         ),
         Type3(
