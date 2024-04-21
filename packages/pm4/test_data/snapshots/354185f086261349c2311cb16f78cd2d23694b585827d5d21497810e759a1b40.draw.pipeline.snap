@@ -277,7 +277,7 @@
             color_buffer: Some(
                 ColorBuffer {
                     color0: Some(
-                        ColorBufferColorInstance {
+                        ColorBufferInstance {
                             base: 2148532352,
                             pitch: CB_COLOR0_PITCH {
                                 TILE_MAX: 239,

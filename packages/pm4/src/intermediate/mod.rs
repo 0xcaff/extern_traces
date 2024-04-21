@@ -144,7 +144,7 @@ pub fn convert(commands: &[PM4Packet]) -> Result<Vec<Command>, anyhow::Error> {
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
 pub struct GraphicsPipeline {
-    depth_buffer: DepthBuffer,
+    pub depth_buffer: DepthBuffer,
 
     primitive_assembly: Option<PrimitiveAssembly>,
 
@@ -171,7 +171,7 @@ pub struct VertexGrouperTesselator {
 struct DepthBuffer {
     stencil: Stencil,
     depth: Depth,
-    z: Option<Z>,
+    pub z: Option<Z>,
 
     #[entry(RegisterEntry::DB_RENDER_CONTROL)]
     render_control: Option<DB_RENDER_CONTROL>,
@@ -221,13 +221,13 @@ struct Depth {
 #[allow(dead_code)]
 struct Z {
     #[entry(RegisterEntry::DB_Z_READ_BASE)]
-    read_base: u32,
+    pub read_base: u32,
 
     #[entry(RegisterEntry::DB_Z_WRITE_BASE)]
-    write_base: u32,
+    pub write_base: u32,
 
     #[entry(RegisterEntry::DB_Z_INFO)]
-    info: DB_Z_INFO,
+    pub info: DB_Z_INFO,
 }
 
 #[derive(Build, Debug)]
