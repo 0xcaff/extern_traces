@@ -32,10 +32,34 @@ impl DisplayInstruction for SMEMInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
-                // todo: this isn't correct generally
-                self.sdst.display(&Some(OperandInfo::Size(4))),
-                ScalarDestinationOperand::ScalarGPR((self.sbase << 1) as u8)
-                    .display(&Some(OperandInfo::Size(2))),
+                self.sdst.display(&Some(OperandInfo::Size(match self.op {
+                    SMEMOpCode::s_load_dword => 1,
+                    SMEMOpCode::s_load_dwordx2 => 2,
+                    SMEMOpCode::s_load_dwordx4 => 4,
+                    SMEMOpCode::s_load_dwordx8 => 8,
+                    SMEMOpCode::s_load_dwordx16 => 16,
+                    SMEMOpCode::s_buffer_load_dword => 1,
+                    SMEMOpCode::s_buffer_load_dwordx2 => 2,
+                    SMEMOpCode::s_buffer_load_dwordx4 => 4,
+                    SMEMOpCode::s_buffer_load_dwordx8 => 8,
+                    SMEMOpCode::s_buffer_load_dwordx16 => 16,
+                    _ => unimplemented!(),
+                }))),
+                ScalarDestinationOperand::ScalarGPR((self.sbase << 1) as u8).display(&Some(
+                    OperandInfo::Size(match self.op {
+                        SMEMOpCode::s_load_dword
+                        | SMEMOpCode::s_load_dwordx2
+                        | SMEMOpCode::s_load_dwordx4
+                        | SMEMOpCode::s_load_dwordx8
+                        | SMEMOpCode::s_load_dwordx16 => 2,
+                        SMEMOpCode::s_buffer_load_dword
+                        | SMEMOpCode::s_buffer_load_dwordx2
+                        | SMEMOpCode::s_buffer_load_dwordx4
+                        | SMEMOpCode::s_buffer_load_dwordx8
+                        | SMEMOpCode::s_buffer_load_dwordx16 => 4,
+                        _ => unimplemented!(),
+                    }),
+                )),
                 format!("0x{:x}", self.offset),
             ],
         }

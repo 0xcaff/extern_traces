@@ -1,6 +1,6 @@
 0x0000: s_load_dwordx4 s[0:3], s[0:1], 0x0
 0x0004: s_waitcnt 0xc07f
-0x0008: s_buffer_load_dwordx4 s[0:3], s[0:1], 0x0
+0x0008: s_buffer_load_dwordx4 s[0:3], s[0:3], 0x0
 0x000c: s_waitcnt 0xc07f
 0x0010: v_mov_b32 v0, s1
 0x0014: v_mov_b32 v1, s3
