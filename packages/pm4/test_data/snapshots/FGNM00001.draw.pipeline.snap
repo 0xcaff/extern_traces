@@ -1344,114 +1344,6 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: SetShaderRegister(
-                    SetShaderRegisterPacket {
-                        values: [
-                            Some(
-                                SPI_SHADER_PGM_LO_VS(
-                                    266338545,
-                                ),
-                            ),
-                            Some(
-                                SPI_SHADER_PGM_HI_VS(
-                                    SPI_SHADER_TBA_HI_PS {
-                                        MEM_BASE: 0,
-                                    },
-                                ),
-                            ),
-                        ],
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: SetShaderRegister(
-                    SetShaderRegisterPacket {
-                        values: [
-                            Some(
-                                SPI_SHADER_PGM_LO_PS(
-                                    2147483648,
-                                ),
-                            ),
-                            Some(
-                                SPI_SHADER_PGM_HI_PS(
-                                    SPI_SHADER_TBA_HI_PS {
-                                        MEM_BASE: 0,
-                                    },
-                                ),
-                            ),
-                        ],
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: SetShaderRegister(
-                    SetShaderRegisterPacket {
-                        values: [
-                            Some(
-                                SPI_SHADER_PGM_LO_VS(
-                                    266338545,
-                                ),
-                            ),
-                            Some(
-                                SPI_SHADER_PGM_HI_VS(
-                                    SPI_SHADER_TBA_HI_PS {
-                                        MEM_BASE: 0,
-                                    },
-                                ),
-                            ),
-                        ],
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: SetShaderRegister(
-                    SetShaderRegisterPacket {
-                        values: [
-                            Some(
-                                SPI_SHADER_PGM_LO_PS(
-                                    2147483648,
-                                ),
-                            ),
-                            Some(
-                                SPI_SHADER_PGM_HI_PS(
-                                    SPI_SHADER_TBA_HI_PS {
-                                        MEM_BASE: 0,
-                                    },
-                                ),
-                            ),
-                        ],
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
                 value: Unknown {
                     op: INDEX_TYPE,
                     body: [
@@ -1480,58 +1372,36 @@
                 },
             },
         ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: SetShaderRegister(
-                    SetShaderRegisterPacket {
-                        values: [
-                            Some(
-                                SPI_SHADER_PGM_LO_VS(
-                                    2147567360,
-                                ),
-                            ),
-                            Some(
-                                SPI_SHADER_PGM_HI_VS(
-                                    SPI_SHADER_TBA_HI_PS {
-                                        MEM_BASE: 0,
-                                    },
-                                ),
-                            ),
-                        ],
-                    },
-                ),
+    ],
+    [
+        SPI_SHADER_PGM_HI_VS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
             },
         ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: SetShaderRegister(
-                    SetShaderRegisterPacket {
-                        values: [
-                            Some(
-                                SPI_SHADER_PGM_LO_PS(
-                                    2147567361,
-                                ),
-                            ),
-                            Some(
-                                SPI_SHADER_PGM_HI_PS(
-                                    SPI_SHADER_TBA_HI_PS {
-                                        MEM_BASE: 0,
-                                    },
-                                ),
-                            ),
-                        ],
-                    },
-                ),
+        SPI_SHADER_PGM_HI_PS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_VS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_PS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_VS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_PS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
             },
         ),
     ],

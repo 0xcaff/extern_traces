@@ -39,9 +39,10 @@ pub enum Command {
     EndOfShader(EventWriteEndOfShaderPacket),
 }
 
-pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>), anyhow::Error> {
+pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>, Vec<&RegisterEntry>), anyhow::Error> {
     let mut result = vec![];
     let mut ignored_packets = vec![];
+    let mut ignored_registers = vec![];
 
     let mut graphics_pipeline_builder = <GraphicsPipeline as Build<RegisterEntry>>::Builder::new();
     let mut compute_pipeline_builder = <ComputePipeline as Build<RegisterEntry>>::Builder::new();
@@ -70,7 +71,7 @@ pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>)
                         ShaderType::Compute => compute_pipeline_builder.update(entry),
                     };
                     if let None = accepted {
-                        ignored_packets.push(packet)
+                        ignored_registers.push(entry);
                     }
                 }
             }
@@ -135,7 +136,7 @@ pub fn convert(commands: &[PM4Packet]) -> Result<(Vec<Command>, Vec<&PM4Packet>)
         }
     }
 
-    Ok((result, ignored_packets))
+    Ok((result, ignored_packets, ignored_registers))
 }
 
 /// A structured intermediate representation of data in pm4 graphics pipeline.
