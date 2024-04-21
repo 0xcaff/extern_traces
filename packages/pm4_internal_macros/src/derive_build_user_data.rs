@@ -47,7 +47,7 @@ pub fn derive_build_user_data(derive_input: DeriveInput) -> Result<TokenStream, 
         let ident = Ident::new(&ident_name, Span::call_site());
 
         quote! {
-            RegisterEntry::#ident(value) => self.entries.push(UserDataEntry { value: *value, slot: #it }),
+            RegisterEntry::#ident(value) => { self.entries.insert(#it, *value); },
         }
     });
 
@@ -77,13 +77,13 @@ pub fn derive_build_user_data(derive_input: DeriveInput) -> Result<TokenStream, 
 
         #[derive(Clone)]
         pub struct #builder_ident {
-            entries: Vec<UserDataEntry>,
+            entries: BTreeMap<u8, u32>,
         }
 
         impl crate::intermediate::build::Initialize for #builder_ident {
             fn new() -> Self {
                 Self {
-                    entries: vec![],
+                    entries: BTreeMap::new(),
                 }
             }
         }

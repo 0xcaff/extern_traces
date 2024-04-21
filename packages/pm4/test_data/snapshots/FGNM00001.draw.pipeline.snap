@@ -338,16 +338,10 @@
                 ),
                 input_control: None,
                 user_data: PixelShaderUserData(
-                    [
-                        UserDataEntry {
-                            slot: 0,
-                            value: 17236292,
-                        },
-                        UserDataEntry {
-                            slot: 1,
-                            value: 128,
-                        },
-                    ],
+                    {
+                        0: 17236292,
+                        1: 128,
+                    },
                 ),
             },
             vertex_shader: Some(
@@ -385,7 +379,7 @@
                         },
                     ),
                     user_data: VertexShaderUserData(
-                        [],
+                        {},
                     ),
                 },
             ),
@@ -744,16 +738,10 @@
                 ),
                 input_control: None,
                 user_data: PixelShaderUserData(
-                    [
-                        UserDataEntry {
-                            slot: 0,
-                            value: 17236908,
-                        },
-                        UserDataEntry {
-                            slot: 1,
-                            value: 128,
-                        },
-                    ],
+                    {
+                        0: 17236908,
+                        1: 128,
+                    },
                 ),
             },
             vertex_shader: Some(
@@ -791,7 +779,7 @@
                         },
                     ),
                     user_data: VertexShaderUserData(
-                        [],
+                        {},
                     ),
                 },
             ),
@@ -1227,16 +1215,10 @@
                     },
                 ),
                 user_data: PixelShaderUserData(
-                    [
-                        UserDataEntry {
-                            slot: 0,
-                            value: 21434960,
-                        },
-                        UserDataEntry {
-                            slot: 1,
-                            value: 128,
-                        },
-                    ],
+                    {
+                        0: 21434960,
+                        1: 128,
+                    },
                 ),
             },
             vertex_shader: Some(
@@ -1274,32 +1256,14 @@
                         },
                     ),
                     user_data: VertexShaderUserData(
-                        [
-                            UserDataEntry {
-                                slot: 0,
-                                value: 21436192,
-                            },
-                            UserDataEntry {
-                                slot: 1,
-                                value: 128,
-                            },
-                            UserDataEntry {
-                                slot: 2,
-                                value: 21436160,
-                            },
-                            UserDataEntry {
-                                slot: 3,
-                                value: 128,
-                            },
-                            UserDataEntry {
-                                slot: 6,
-                                value: 21434944,
-                            },
-                            UserDataEntry {
-                                slot: 7,
-                                value: 128,
-                            },
-                        ],
+                        {
+                            0: 21436192,
+                            1: 128,
+                            2: 21436160,
+                            3: 128,
+                            6: 21434944,
+                            7: 128,
+                        },
                     ),
                 },
             ),

@@ -1,5 +1,6 @@
 pub mod build;
 
+use std::collections::BTreeMap;
 use crate::dispatch_direct::DispatchDirectPacket;
 use crate::draw_index_auto::DrawIndexAutoPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
@@ -429,7 +430,7 @@ pub struct PixelShader {
 #[derive(Debug, BuildUserData)]
 #[user_data(SPI_SHADER_USER_DATA_PS_, 0..=15)]
 #[allow(dead_code)]
-pub struct PixelShaderUserData(pub Vec<UserDataEntry>);
+pub struct PixelShaderUserData(pub BTreeMap<u8, u32>);
 
 #[derive(Build, Debug)]
 #[entry(RegisterEntry)]
@@ -452,7 +453,7 @@ pub struct VertexShader {
 
 #[derive(Debug, BuildUserData)]
 #[user_data(SPI_SHADER_USER_DATA_VS_, 0..=15)]
-pub struct VertexShaderUserData(pub Vec<UserDataEntry>);
+pub struct VertexShaderUserData(pub BTreeMap<u8, u32>);
 
 // todo: crash on duplicate value
 
@@ -460,12 +461,6 @@ pub struct VertexShaderUserData(pub Vec<UserDataEntry>);
 // // todo: positional nop entries
 // // how do we handle the positional stuff?
 // // Ignore it i think for now but in the future operate on the array?
-
-#[derive(Debug, Clone)]
-pub struct UserDataEntry {
-    pub slot: u8,
-    pub value: u32,
-}
 
 #[derive(Debug, Build)]
 #[entry(RegisterEntry)]
@@ -496,4 +491,4 @@ pub struct ComputePipeline {
 
 #[derive(Debug, BuildUserData)]
 #[user_data(COMPUTE_USER_DATA_, 0..=15)]
-pub struct ComputeUserData(pub Vec<UserDataEntry>);
+pub struct ComputeUserData(pub BTreeMap<u8, u32>);

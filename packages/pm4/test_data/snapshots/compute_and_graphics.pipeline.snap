@@ -49,56 +49,20 @@
                 NUM_THREAD_PARTIAL: 0,
             },
             user_data: ComputeUserData(
-                [
-                    UserDataEntry {
-                        slot: 0,
-                        value: 8432,
-                    },
-                    UserDataEntry {
-                        slot: 1,
-                        value: 262272,
-                    },
-                    UserDataEntry {
-                        slot: 2,
-                        value: 1,
-                    },
-                    UserDataEntry {
-                        slot: 3,
-                        value: 537018372,
-                    },
-                    UserDataEntry {
-                        slot: 4,
-                        value: 21921792,
-                    },
-                    UserDataEntry {
-                        slot: 5,
-                        value: 290944,
-                    },
-                    UserDataEntry {
-                        slot: 6,
-                        value: 2088960,
-                    },
-                    UserDataEntry {
-                        slot: 7,
-                        value: 402800644,
-                    },
-                    UserDataEntry {
-                        slot: 8,
-                        value: 8556,
-                    },
-                    UserDataEntry {
-                        slot: 9,
-                        value: 1048704,
-                    },
-                    UserDataEntry {
-                        slot: 10,
-                        value: 1,
-                    },
-                    UserDataEntry {
-                        slot: 11,
-                        value: 537362348,
-                    },
-                ],
+                {
+                    0: 8432,
+                    1: 262272,
+                    2: 1,
+                    3: 537018372,
+                    4: 21921792,
+                    5: 290944,
+                    6: 2088960,
+                    7: 402800644,
+                    8: 8556,
+                    9: 1048704,
+                    10: 1,
+                    11: 537362348,
+                },
             ),
         },
     },
@@ -518,24 +482,12 @@
                 ),
                 input_control: None,
                 user_data: PixelShaderUserData(
-                    [
-                        UserDataEntry {
-                            slot: 0,
-                            value: 9136,
-                        },
-                        UserDataEntry {
-                            slot: 1,
-                            value: 1048704,
-                        },
-                        UserDataEntry {
-                            slot: 2,
-                            value: 1,
-                        },
-                        UserDataEntry {
-                            slot: 3,
-                            value: 537362348,
-                        },
-                    ],
+                    {
+                        0: 9136,
+                        1: 1048704,
+                        2: 1,
+                        3: 537362348,
+                    },
                 ),
             },
             vertex_shader: Some(
@@ -573,7 +525,7 @@
                         },
                     ),
                     user_data: VertexShaderUserData(
-                        [],
+                        {},
                     ),
                 },
             ),
