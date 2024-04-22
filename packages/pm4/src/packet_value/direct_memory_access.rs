@@ -1,6 +1,6 @@
-use bits::FromBits;
 use crate::op_codes::OpCode;
-use crate::{COMMAND, DMA_DATA_WORD0_cik, ParseType3Packet};
+use crate::{DMA_DATA_WORD0_cik, ParseType3Packet, COMMAND};
+use bits::FromBits;
 
 #[derive(Debug)]
 pub struct DirectMemoryAccessPacket {

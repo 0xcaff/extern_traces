@@ -1,5 +1,5 @@
-mod regs;
 mod pkt3;
+mod regs;
 
-pub use regs::*;
 pub use pkt3::*;
+pub use regs::*;
