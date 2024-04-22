@@ -43,11 +43,12 @@ impl FromBits<${overrides[name]}> for ${name} {
 % endif
 % endfor
 
+% for (name, fields) in types:
 #[allow(dead_code)]
 #[derive(Debug, Clone, FromBits)]
 #[bits(32)]
-pub struct ${command_register_type[0]} {
-% for field in unique(command_register_type[1].fields, lambda it: it.name):
+pub struct ${name} {
+% for field in unique(fields.fields, lambda it: it.name):
     #[bits(${field.bits[1]}, ${field.bits[0]})]
     pub ${field.name}: ${(
         field.enum_ref if hasattr(field, 'enum_ref') else
@@ -58,6 +59,7 @@ pub struct ${command_register_type[0]} {
     )},
 % endfor
 }
+% endfor
 """
 
 
@@ -72,13 +74,15 @@ def to_rust_name(key: str) -> str:
 if __name__ == '__main__':
     regdb = load(['pkt3.json'])
 
-    command_register_type = next(filter(lambda field: field[0] == 'COMMAND', regdb.register_types()))[1]
-    enum_refs = [field.enum_ref for field in command_register_type.fields if hasattr(field, 'enum_ref')]
+    types = ['DMA_DATA_WORD0_cik', 'COMMAND']
+
+    types = [(name, type) for (name, type) in regdb.register_types() if name in types]
+    enum_refs = [field.enum_ref for (name, type) in types for field in type.fields if hasattr(field, 'enum_ref')]
     enums = filter(lambda field: field[0] in enum_refs, regdb.enums())
 
     rendered = Template(template).render(
         enums=enums,
-        command_register_type=("COMMAND", command_register_type),
+        types=types,
         unique=unique,
         ceil=math.ceil,
         log2=math.log2,

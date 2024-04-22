@@ -7,6 +7,7 @@ use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
 use crate::register::SetUConfigRegisterPacket;
 use pm4_internal_macros::ParsePacketValue;
+use crate::packet_value::direct_memory_access::DirectMemoryAccessPacket;
 
 mod clear_state;
 pub mod dispatch_direct;
@@ -14,6 +15,7 @@ pub mod draw_index_auto;
 pub mod event_write_end_of_pipe;
 pub mod event_write_end_of_shader;
 pub mod register;
+mod direct_memory_access;
 
 #[derive(Debug, ParsePacketValue)]
 pub enum Type3PacketValue {
@@ -25,6 +27,7 @@ pub enum Type3PacketValue {
     DispatchDirect(DispatchDirectPacket),
     EventWriteEndOfShader(EventWriteEndOfShaderPacket),
     ClearState(ClearStatePacket),
+    DirectMemoryAccess(DirectMemoryAccessPacket),
     // todo: index_type
     // todo: acquire memory
     Unknown { op: OpCode, body: Vec<u32> },
