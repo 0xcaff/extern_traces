@@ -7,7 +7,7 @@
 0x001c: s_and_saveexec_b64 s[2:3], vcc_lo
 0x0020: v_and_b32 v1, s1, v0
 0x0024: s_cbranch_execz 0x7
-0x0028: buffer_load_format_x SKIPPED
+0x0028: buffer_load_format_x v1, v1, s[4:7], idxen, offset=0x0, soffset=0x80
 0x0030: v_cmp_gt_u32 s10, v0
 0x0034: s_and_saveexec_b64 s[0:1], vcc_lo
 0x0038: s_waitcnt 0xf70

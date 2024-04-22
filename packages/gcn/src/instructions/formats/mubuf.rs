@@ -1,5 +1,6 @@
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::generated::MUBUFOpCode;
+use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::{Bits, FromBits};
@@ -66,10 +67,61 @@ impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
 
 impl DisplayInstruction for MUBUFInstruction {
     fn display(&self, _: Option<u32>) -> DisplayableInstruction {
+        let size = match self.op {
+            MUBUFOpCode::buffer_load_format_x => 1,
+            MUBUFOpCode::buffer_load_format_xy => 2,
+            MUBUFOpCode::buffer_load_format_xyz => 3,
+            MUBUFOpCode::buffer_load_format_xyzw => 4,
+            _ => {
+                return DisplayableInstruction {
+                    op: self.op.as_ref().to_string(),
+                    args: vec!["SKIPPED".to_string()],
+                }
+            }
+        };
+
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
-            // todo: figure out sizes
-            args: vec!["SKIPPED".to_string()],
+            args: {
+                let mut args = vec![
+                    self.vdata.display(&Some(OperandInfo::Size(size))),
+                    self.vaddr.display(&None),
+                    self.srsrc.display(),
+                ];
+
+                if self.offen {
+                    args.push("offen".to_string());
+                }
+
+                if self.idxen {
+                    args.push("idxen".to_string());
+                }
+
+                if self.glc {
+                    args.push("glc".to_string());
+                }
+
+                if self.addr64 {
+                    args.push("addr64".to_string());
+                }
+
+                if self.lds {
+                    args.push("lds".to_string());
+                }
+
+                if self.slc {
+                    args.push("slc".to_string());
+                }
+
+                if self.tfe {
+                    args.push("tfe".to_string());
+                }
+
+                args.push(format!("offset=0x{:x}", self.offset.0));
+                args.push(format!("soffset=0x{:x}", self.soffset));
+
+                args
+            },
         }
     }
 }

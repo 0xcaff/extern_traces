@@ -1,8 +1,8 @@
 0x0000: s_load_dwordx4 s[12:15], s[2:3], 0x0
 0x0004: s_load_dwordx4 s[16:19], s[2:3], 0x4
 0x0008: s_waitcnt 0x7f
-0x000c: buffer_load_format_xyzw SKIPPED
-0x0014: buffer_load_format_xyzw SKIPPED
+0x000c: buffer_load_format_xyzw v[4:7], v0, s[12:15], idxen, offset=0x0, soffset=0x80
+0x0014: buffer_load_format_xyzw v[8:11], v0, s[16:19], idxen, offset=0x0, soffset=0x80
 0x001c: s_waitcnt 0x0
 0x0020: s_load_dwordx4 s[0:3], s[6:7], 0x0
 0x0024: s_waitcnt 0xc07f
