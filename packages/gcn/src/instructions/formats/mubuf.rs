@@ -67,28 +67,21 @@ impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
 
 impl DisplayInstruction for MUBUFInstruction {
     fn display(&self, _: Option<u32>) -> DisplayableInstruction {
-        let size = match self.op {
-            MUBUFOpCode::buffer_load_format_x => 1,
-            MUBUFOpCode::buffer_load_format_xy => 2,
-            MUBUFOpCode::buffer_load_format_xyz => 3,
-            MUBUFOpCode::buffer_load_format_xyzw => 4,
-            MUBUFOpCode::buffer_store_format_x => 1,
-            MUBUFOpCode::buffer_store_format_xy => 2,
-            MUBUFOpCode::buffer_store_format_xyz => 3,
-            MUBUFOpCode::buffer_store_format_xyzw => 4,
-            _ => {
-                return DisplayableInstruction {
-                    op: self.op.as_ref().to_string(),
-                    args: vec!["SKIPPED".to_string()],
-                }
-            }
-        };
-
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: {
                 let mut args = vec![
-                    self.vdata.display(&Some(OperandInfo::Size(size))),
+                    self.vdata.display(&Some(OperandInfo::Size(match self.op {
+                        MUBUFOpCode::buffer_load_format_x => 1,
+                        MUBUFOpCode::buffer_load_format_xy => 2,
+                        MUBUFOpCode::buffer_load_format_xyz => 3,
+                        MUBUFOpCode::buffer_load_format_xyzw => 4,
+                        MUBUFOpCode::buffer_store_format_x => 1,
+                        MUBUFOpCode::buffer_store_format_xy => 2,
+                        MUBUFOpCode::buffer_store_format_xyz => 3,
+                        MUBUFOpCode::buffer_store_format_xyzw => 4,
+                        _ => unimplemented!(),
+                    }))),
                     self.vaddr.display(&None),
                     self.srsrc.display(),
                 ];
