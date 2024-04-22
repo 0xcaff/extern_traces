@@ -72,6 +72,10 @@ impl DisplayInstruction for MUBUFInstruction {
             MUBUFOpCode::buffer_load_format_xy => 2,
             MUBUFOpCode::buffer_load_format_xyz => 3,
             MUBUFOpCode::buffer_load_format_xyzw => 4,
+            MUBUFOpCode::buffer_store_format_x => 1,
+            MUBUFOpCode::buffer_store_format_xy => 2,
+            MUBUFOpCode::buffer_store_format_xyz => 3,
+            MUBUFOpCode::buffer_store_format_xyzw => 4,
             _ => {
                 return DisplayableInstruction {
                     op: self.op.as_ref().to_string(),
