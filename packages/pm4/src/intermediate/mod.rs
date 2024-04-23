@@ -176,7 +176,7 @@ pub struct GraphicsPipeline {
 
     primitive_assembly: Option<PrimitiveAssembly>,
 
-    pub color_buffer: Option<ColorBuffer>,
+    pub color_buffer: ColorBuffer,
 
     pub vertex_grouper_tesselator: VertexGrouperTesselator,
 
