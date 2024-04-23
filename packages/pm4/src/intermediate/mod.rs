@@ -174,15 +174,15 @@ pub fn convert(
 pub struct GraphicsPipeline {
     pub depth_buffer: DepthBuffer,
 
-    primitive_assembly: Option<PrimitiveAssembly>,
+    primitive_assembly: PrimitiveAssembly,
 
     pub color_buffer: ColorBuffer,
 
     pub vertex_grouper_tesselator: VertexGrouperTesselator,
 
-    shader: Option<Shader>,
+    shader: Shader,
     pub pixel_shader: PixelShader,
-    pub vertex_shader: Option<VertexShader>,
+    pub vertex_shader: VertexShader,
 }
 
 #[derive(Build, Debug)]
@@ -206,7 +206,7 @@ pub struct DepthBuffer {
     pub render_control: Option<DB_RENDER_CONTROL>,
 
     #[entry(RegisterEntry::DB_SHADER_CONTROL)]
-    shader_control: Option<DB_SHADER_CONTROL>,
+    shader_control: DB_SHADER_CONTROL,
 
     htile: Option<HTile>,
 }
