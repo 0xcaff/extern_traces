@@ -227,7 +227,7 @@ struct HTile {
 #[allow(dead_code)]
 pub struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
-    pub control: Option<DB_DEPTH_CONTROL>,
+    pub control: DB_DEPTH_CONTROL,
 
     #[entry(RegisterEntry::DB_DEPTH_CLEAR)]
     pub clear: Option<u32>,

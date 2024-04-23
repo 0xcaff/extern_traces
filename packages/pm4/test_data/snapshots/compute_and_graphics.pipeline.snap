@@ -123,20 +123,18 @@
                         },
                     ),
                     depth: Depth {
-                        control: Some(
-                            DB_DEPTH_CONTROL {
-                                STENCIL_ENABLE: false,
-                                Z_ENABLE: true,
-                                Z_WRITE_ENABLE: true,
-                                DEPTH_BOUNDS_ENABLE: false,
-                                ZFUNC: FRAG_ALWAYS,
-                                BACKFACE_ENABLE: false,
-                                STENCILFUNC: FRAG_NEVER,
-                                STENCILFUNC_BF: FRAG_NEVER,
-                                ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
-                                DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
-                            },
-                        ),
+                        control: DB_DEPTH_CONTROL {
+                            STENCIL_ENABLE: false,
+                            Z_ENABLE: true,
+                            Z_WRITE_ENABLE: true,
+                            DEPTH_BOUNDS_ENABLE: false,
+                            ZFUNC: FRAG_ALWAYS,
+                            BACKFACE_ENABLE: false,
+                            STENCILFUNC: FRAG_NEVER,
+                            STENCILFUNC_BF: FRAG_NEVER,
+                            ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
+                            DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
+                        },
                         clear: Some(
                             1065353216,
                         ),
