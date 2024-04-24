@@ -1,6 +1,6 @@
 0x0000: s_mov_b32 vcc_hi, 0x10
-0x0008: s_mov_b64 s[0:1], exec_lo
-0x000c: s_wqm_b64 exec_lo, exec_lo
+0x0008: s_mov_b64 s[0:1], exec
+0x000c: s_wqm_b64 exec, exec
 0x0010: s_mov_b32 m0, s16
 0x0014: v_interp_p1_f32 v2, v0, attr1.x
 0x0018: v_interp_p2_f32 v2, v1, attr1.x
@@ -20,7 +20,7 @@
 0x0054: v_mul_f32 v2, v3, v7
 0x0058: v_mul_f32 v3, v4, v8
 0x005c: v_mul_f32 v0, v5, v0
-0x0060: s_mov_b64 exec_lo, s[0:1]
+0x0060: s_mov_b64 exec, s[0:1]
 0x0064: v_cvt_pkrtz_f16_f32 v1, v1, v2
 0x0068: v_cvt_pkrtz_f16_f32 v0, v3, v0
 0x006c: exp mrt_color0, v1, v0, off, off, compress, done, vm
