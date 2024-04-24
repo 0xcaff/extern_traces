@@ -48,17 +48,20 @@ impl ScalarDestinationOperand {
                     format!("s[{}:{}]", *idx, *idx + size - 1)
                 }
             }
-            ScalarDestinationOperand::VccLo => "vcc_lo".to_string(),
+            ScalarDestinationOperand::VccLo => match operand_info {
+                Some(OperandInfo::Size(1)) | None => "vcc_lo",
+                Some(OperandInfo::Size(2)) => "vcc",
+                _ => unimplemented!(),
+            }
+            .to_string(),
             ScalarDestinationOperand::VccHi => "vcc_hi".to_string(),
             ScalarDestinationOperand::M0 => "m0".to_string(),
-            ScalarDestinationOperand::ExecLo => {
-                match operand_info {
-                    Some(OperandInfo::Size(1)) | None => "exec_lo",
-                    Some(OperandInfo::Size(2)) => "exec",
-                    _ => unimplemented!(),
-                }
-                    .to_string()
-            },
+            ScalarDestinationOperand::ExecLo => match operand_info {
+                Some(OperandInfo::Size(1)) | None => "exec_lo",
+                Some(OperandInfo::Size(2)) => "exec",
+                _ => unimplemented!(),
+            }
+            .to_string(),
             ScalarDestinationOperand::ExecHi => "exec_hi".to_string(),
         }
     }
