@@ -1,4 +1,4 @@
-use crate::{BufferChannelType, DestinationChannelSelect};
+use crate::resources::{BufferChannelType, DestinationChannelSelect};
 use bits_macros::FromBits;
 
 #[derive(FromBits)]

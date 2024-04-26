@@ -1,8 +1,9 @@
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
-use crate::instructions::generated::MUBUFOpCode;
 use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::MUBUFOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 

@@ -1,8 +1,9 @@
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::mubuf::Offset;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
-use crate::instructions::generated::MTBUFOpCode;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::MTBUFOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 

@@ -1,8 +1,11 @@
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
-use crate::instructions::generated::MIMGOpCode;
 use crate::instructions::instruction_info::OperandInfo;
-use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
-use crate::{DisplayInstruction, DisplayableInstruction, ScalarDestinationOperand};
+use crate::instructions::operands::{
+    ScalarDestinationOperand, ScalarGeneralPurposeRegisterGroup, VectorGPR,
+};
+use crate::instructions::ops::MIMGOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
 use std::fmt;

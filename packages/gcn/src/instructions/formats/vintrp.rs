@@ -1,6 +1,7 @@
-use crate::instructions::generated::VINTRPOpCode;
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::VectorGPR;
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::VINTRPOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::{AsRefStr, FromRepr};

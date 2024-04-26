@@ -1,6 +1,7 @@
-use crate::instructions::generated::SOP2OpCode;
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::SOP2OpCode;
+use crate::instructions::DisplayableInstruction;
 use bits_macros::FromBits;
 
 /// Scalar Format Two Inputs, One Output

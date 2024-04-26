@@ -1,19 +1,18 @@
 pub mod control_flow;
 pub mod display;
 pub mod formats;
-mod generated;
+
 mod instruction_info;
 pub mod operands;
+#[path = "generated/mod.rs"]
+pub mod ops;
 
 use std::io::Read;
 
 use crate::reader::Reader;
 
-pub use control_flow::*;
-pub use display::*;
-pub use formats::*;
-pub use generated::*;
-pub use operands::*;
+use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::formats::{FormattedInstruction, ParseInstruction};
 
 #[derive(Debug)]
 pub struct Instruction {

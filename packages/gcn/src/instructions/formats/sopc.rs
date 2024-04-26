@@ -1,6 +1,6 @@
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
-use crate::instructions::generated::SOPCOpCode;
 use crate::instructions::operands::ScalarSourceOperand;
+use crate::instructions::ops::SOPCOpCode;
 use bits_macros::FromBits;
 
 /// Scalar Instruction Two Inputs, One Comparison

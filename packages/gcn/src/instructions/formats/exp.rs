@@ -1,6 +1,7 @@
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::operands::VectorGPR;
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::DisplayableInstruction;
 use bits::{bit, bitrange, Bits, FromBits};
 use bits_macros::FromBits;
 

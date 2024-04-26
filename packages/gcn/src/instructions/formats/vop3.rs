@@ -1,9 +1,11 @@
-use crate::instructions::formats::{combine, ParseInstruction, Reader};
-use crate::instructions::generated::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
+use crate::instructions::display::DisplayInstruction;
+use crate::instructions::formats::{combine, ParseInstruction, Reader, VOP2Instruction};
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
-use crate::instructions::operands::{SourceOperand, VectorGPR};
-use crate::ScalarDestinationOperand::ScalarGPR;
-use crate::{DisplayInstruction, DisplayableInstruction, ScalarSourceOperand, VOP2Instruction};
+use crate::instructions::operands::{
+    ScalarDestinationOperand, ScalarSourceOperand, SourceOperand, VectorGPR,
+};
+use crate::instructions::ops::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
+use crate::instructions::DisplayableInstruction;
 use anyhow::format_err;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
@@ -223,7 +225,9 @@ impl From<VOP2Instruction> for VOP3Instruction {
                 neg: false,
             },
             src2: TransformedOperand {
-                operand: SourceOperand::Scalar(ScalarSourceOperand::Destination(ScalarGPR(0))),
+                operand: SourceOperand::Scalar(ScalarSourceOperand::Destination(
+                    ScalarDestinationOperand::ScalarGPR(0),
+                )),
                 abs: false,
                 neg: false,
             },

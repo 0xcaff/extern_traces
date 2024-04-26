@@ -1,6 +1,7 @@
-use crate::instructions::generated::SOPKOpCode;
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::ScalarDestinationOperand;
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::SOPKOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits_macros::FromBits;
 
 /// Scalar Instruction One Inline Constant Input, One Output

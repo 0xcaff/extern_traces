@@ -1,7 +1,8 @@
-use crate::instructions::generated::SMEMOpCode;
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::ScalarDestinationOperand;
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::SMEMOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits_macros::FromBits;
 
 /// Scalar Instruction Memory Access

@@ -1,8 +1,9 @@
-use crate::instructions::operands::ScalarSourceOperand;
-use crate::{
-    FormattedInstruction, Instruction, SOP1Instruction, SOP1OpCode, SOP2Instruction, SOP2OpCode,
-    SOPKInstruction, SOPKOpCode, SOPPInstruction, SOPPOpCode,
+use crate::instructions::formats::{
+    SOP1Instruction, SOP2Instruction, SOPKInstruction, SOPPInstruction,
 };
+use crate::instructions::operands::ScalarSourceOperand;
+use crate::instructions::ops::{SOP1OpCode, SOP2OpCode, SOPKOpCode, SOPPOpCode};
+use crate::instructions::{FormattedInstruction, Instruction};
 
 #[derive(Debug)]
 pub struct ControlFlowInformation {

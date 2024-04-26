@@ -1,4 +1,4 @@
-use crate::Instruction;
+use crate::instructions::Instruction;
 use std::io::Cursor;
 
 pub struct GCNInstructionStream {

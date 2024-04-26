@@ -1,5 +1,6 @@
-use crate::instructions::generated::SOPPOpCode;
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::display::DisplayInstruction;
+use crate::instructions::ops::SOPPOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits_macros::FromBits;
 
 /// Scalar Instruction One Input, One Special Operation

@@ -1,6 +1,6 @@
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
-use crate::instructions::generated::VOP2OpCode;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
+use crate::instructions::ops::VOP2OpCode;
 use bits_macros::FromBits;
 
 /// Vector Instruction Two Inputs, One Output

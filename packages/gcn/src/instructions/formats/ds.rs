@@ -1,8 +1,9 @@
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction};
-use crate::instructions::generated::DSOpCode;
 use crate::instructions::operands::VectorGPR;
+use crate::instructions::ops::DSOpCode;
+use crate::instructions::DisplayableInstruction;
 use crate::reader::Reader;
-use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
 

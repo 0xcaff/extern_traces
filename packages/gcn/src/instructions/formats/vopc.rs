@@ -1,6 +1,7 @@
-use crate::instructions::generated::VOPCOpCode;
+use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
-use crate::{DisplayInstruction, DisplayableInstruction};
+use crate::instructions::ops::VOPCOpCode;
+use crate::instructions::DisplayableInstruction;
 use bits_macros::FromBits;
 
 #[derive(Debug, FromBits)]
