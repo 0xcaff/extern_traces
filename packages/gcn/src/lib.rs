@@ -1,8 +1,8 @@
 #![feature(cursor_remaining)]
 
-mod instructions;
+pub mod instructions;
 mod reader;
-mod resources;
+pub mod resources;
 pub mod test_utils;
 
 pub use instructions::*;

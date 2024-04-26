@@ -6,6 +6,9 @@ use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 
+/// Typed Memory Buffer Operation
+///
+/// Typed memory buffer operation. Two words
 #[derive(Debug, FromBits)]
 #[bits(64)]
 pub struct MTBufInstruction {

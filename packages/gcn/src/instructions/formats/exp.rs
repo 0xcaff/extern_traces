@@ -4,6 +4,10 @@ use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::{bit, bitrange, Bits, FromBits};
 use bits_macros::FromBits;
 
+/// Export
+///
+/// Export (output) pixel color, pixel depth, vertex position, or vertex
+/// parameter data. Two words.
 #[derive(Debug, FromBits)]
 #[bits(64)]
 pub struct ExpInstruction {

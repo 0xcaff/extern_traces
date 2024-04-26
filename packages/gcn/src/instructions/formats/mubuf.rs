@@ -6,6 +6,9 @@ use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 
+/// Untyped Vector Memory Buffer Operation
+///
+/// Untyped memory buffer operation. First word with LDS, second word non-LDS.
 #[derive(Debug, FromBits)]
 #[bits(64)]
 pub struct MUBUFInstruction {

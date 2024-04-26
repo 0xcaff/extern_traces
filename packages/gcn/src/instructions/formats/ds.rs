@@ -6,6 +6,7 @@ use crate::{DisplayInstruction, DisplayableInstruction};
 use bits::FromBits;
 use bits_macros::FromBits;
 
+/// Data Share Instruction
 #[derive(Debug, FromBits)]
 #[bits(64)]
 pub struct DSInstruction {

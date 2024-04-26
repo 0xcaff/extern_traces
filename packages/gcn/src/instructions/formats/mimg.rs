@@ -7,6 +7,9 @@ use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
 use std::fmt;
 
+/// Image Memory Buffer Operations
+///
+/// Image memory buffer operations. Two words.
 #[derive(Debug, FromBits)]
 #[bits(64)]
 pub struct MIMGInstruction {

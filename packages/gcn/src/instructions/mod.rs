@@ -1,9 +1,9 @@
-mod control_flow;
-mod display;
-mod formats;
+pub mod control_flow;
+pub mod display;
+pub mod formats;
 mod generated;
 mod instruction_info;
-mod operands;
+pub mod operands;
 
 use std::io::Read;
 

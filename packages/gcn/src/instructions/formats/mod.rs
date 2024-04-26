@@ -20,22 +20,22 @@ use bits::FromBits;
 use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
 use std::io;
 
-mod ds;
-mod exp;
-mod mimg;
-mod mtbuf;
-mod mubuf;
-mod smem;
-mod sop1;
-mod sop2;
-mod sopc;
-mod sopk;
-mod sopp;
-mod vintrp;
-mod vop1;
-mod vop2;
-mod vop3;
-mod vopc;
+pub mod ds;
+pub mod exp;
+pub mod mimg;
+pub mod mtbuf;
+pub mod mubuf;
+pub mod smem;
+pub mod sop1;
+pub mod sop2;
+pub mod sopc;
+pub mod sopk;
+pub mod sopp;
+pub mod vintrp;
+pub mod vop1;
+pub mod vop2;
+pub mod vop3;
+pub mod vopc;
 
 #[derive(Debug, ParseInstruction, DisplayInstruction)]
 pub enum FormattedInstruction {
@@ -148,7 +148,7 @@ impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
     }
 }
 
-pub fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, io::Error> {
+fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, io::Error> {
     let second_token = reader.read_u32()?;
     let token = (first_token as u64) | ((second_token as u64) << 32);
 
