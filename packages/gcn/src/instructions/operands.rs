@@ -17,6 +17,21 @@ pub enum ScalarDestinationOperand {
     ExecHi,
 }
 
+const SGPR_SIZE: u8 = 103;
+
+impl ScalarDestinationOperand {
+    pub fn next(&self) -> ScalarDestinationOperand {
+        match self {
+            ScalarDestinationOperand::ScalarGPR(idx) if *idx <= SGPR_SIZE - 1 => {
+                ScalarDestinationOperand::ScalarGPR(*idx + 1)
+            }
+            ScalarDestinationOperand::VccLo => ScalarDestinationOperand::VccHi,
+            ScalarDestinationOperand::ExecLo => ScalarDestinationOperand::ExecHi,
+            _ => unimplemented!(),
+        }
+    }
+}
+
 impl FromBits<7> for ScalarDestinationOperand {
     fn from_bits(value: impl Bits) -> Self {
         let value = value.full() as u8;
