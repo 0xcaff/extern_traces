@@ -132,6 +132,62 @@ impl FormattedInstruction {
             })
         )
     }
+
+    /// Whether this instruction is disabled if the thread's exec bit is 0. Instructions like
+    /// v_cmp_gt_u32 which are modified by the exec mask but not disabled by it will not be
+    /// included.
+    pub fn exec_mask_disables(&self) -> bool {
+        fn vop3(vop3: &vop3::OpCode) -> bool {
+            match vop3 {
+                vop3::OpCode::VOP3(_) => {
+                    unimplemented!()
+                }
+                vop3::OpCode::VOPC(..) => false,
+                vop3::OpCode::VOP2(op) => match op {
+                    VOP2OpCode::v_readlane_b32 | VOP2OpCode::v_writelane_b32 => false,
+                    _ => true,
+                },
+                vop3::OpCode::VOP1(op) => match op {
+                    VOP1OpCode::v_readfirstlane_b32 => false,
+                    _ => true,
+                },
+            }
+        }
+
+        match self {
+            // Vector ALU
+            FormattedInstruction::VOP2(VOP2Instruction { op, .. }) => {
+                vop3(&vop3::OpCode::VOP2(*op))
+            }
+            FormattedInstruction::VOP1(VOP1Instruction { op, .. }) => {
+                vop3(&vop3::OpCode::VOP1(*op))
+            }
+            FormattedInstruction::VOP3(VOP3Instruction { op, .. }) => vop3(op),
+            FormattedInstruction::VINTRP(..) => true,
+
+            // Vector Memory
+            FormattedInstruction::MUBUF(..)
+            | FormattedInstruction::MTBUF(..)
+            | FormattedInstruction::MIMG(..) => true,
+
+            // Local and Global Data Share
+            FormattedInstruction::DS(..) => true,
+
+            // Export
+            FormattedInstruction::EXP(..) => true,
+
+            // Scalar Operations (starting with s_)
+            FormattedInstruction::SMEM(..)
+            | FormattedInstruction::SOP1(..)
+            | FormattedInstruction::SOP2(..)
+            | FormattedInstruction::SOPC(..)
+            | FormattedInstruction::SOPK(..)
+            | FormattedInstruction::SOPP(..) => false,
+
+            // VOPC is handled at instruction level
+            FormattedInstruction::VOPC(..) => false,
+        }
+    }
 }
 
 pub trait ParseInstruction<R: Reader> {
