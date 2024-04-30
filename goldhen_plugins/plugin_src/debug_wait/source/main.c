@@ -11,8 +11,8 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
 
-    while(1) {
-    }
+    pid_t pid = getpid();
+    final_printf("[GoldHEN] PID: %d", pid);
 
     return 0;
 }
