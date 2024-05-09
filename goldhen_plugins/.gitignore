@@ -1,3 +1,0 @@
-common/git_ver.h
-target
-*.{oelf,elf,prx,o}
