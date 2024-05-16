@@ -1,7 +1,7 @@
 use crate::resources::{BufferChannelType, DestinationChannelSelect};
 use bits_macros::FromBits;
 
-#[derive(FromBits)]
+#[derive(FromBits, Debug, Hash, Eq, PartialEq)]
 #[bits(128)]
 pub struct VertexBufferResource {
     #[bits(43, 0)]
@@ -13,6 +13,7 @@ pub struct VertexBufferResource {
     #[bits(47, 46)]
     pub mtype_l2: u64,
 
+    // todo: use tighter storage sizes
     #[bits(61, 48)]
     pub stride: u64,
 
