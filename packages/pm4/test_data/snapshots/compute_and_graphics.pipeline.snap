@@ -342,6 +342,7 @@
                             clear_word_1: Some(
                                 0,
                             ),
+                            blend: None,
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
@@ -1106,19 +1107,6 @@
         SPI_SHADER_PGM_HI_VS(
             SPI_SHADER_TBA_HI_PS {
                 MEM_BASE: 0,
-            },
-        ),
-        CB_BLEND0_CONTROL(
-            CB_BLEND0_CONTROL {
-                COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                ALPHA_SRCBLEND: BLEND_ZERO,
-                ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                ALPHA_DESTBLEND: BLEND_ZERO,
-                SEPARATE_ALPHA_BLEND: false,
-                ENABLE: false,
-                DISABLE_ROP3: false,
             },
         ),
         VGT_SHADER_STAGES_EN(

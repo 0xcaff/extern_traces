@@ -618,19 +618,6 @@
         VGT_INDX_OFFSET(
             0,
         ),
-        CB_BLEND0_CONTROL(
-            CB_BLEND0_CONTROL {
-                COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                ALPHA_SRCBLEND: BLEND_ONE,
-                ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                ALPHA_DESTBLEND: BLEND_ONE,
-                SEPARATE_ALPHA_BLEND: true,
-                ENABLE: true,
-                DISABLE_ROP3: false,
-            },
-        ),
         CB_BLEND1_CONTROL(
             CB_BLEND0_CONTROL {
                 COLOR_SRCBLEND: BLEND_SRC_ALPHA,

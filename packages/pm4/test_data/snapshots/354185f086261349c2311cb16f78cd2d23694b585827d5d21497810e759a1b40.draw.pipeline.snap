@@ -283,6 +283,19 @@
                             },
                             clear_word_0: None,
                             clear_word_1: None,
+                            blend: Some(
+                                CB_BLEND0_CONTROL {
+                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                    ALPHA_SRCBLEND: BLEND_ZERO,
+                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    ALPHA_DESTBLEND: BLEND_ZERO,
+                                    SEPARATE_ALPHA_BLEND: false,
+                                    ENABLE: true,
+                                    DISABLE_ROP3: false,
+                                },
+                            ),
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
@@ -685,6 +698,19 @@
                             },
                             clear_word_0: None,
                             clear_word_1: None,
+                            blend: Some(
+                                CB_BLEND0_CONTROL {
+                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                    ALPHA_SRCBLEND: BLEND_ZERO,
+                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    ALPHA_DESTBLEND: BLEND_ZERO,
+                                    SEPARATE_ALPHA_BLEND: false,
+                                    ENABLE: true,
+                                    DISABLE_ROP3: false,
+                                },
+                            ),
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
@@ -1087,6 +1113,19 @@
                             },
                             clear_word_0: None,
                             clear_word_1: None,
+                            blend: Some(
+                                CB_BLEND0_CONTROL {
+                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                    ALPHA_SRCBLEND: BLEND_ZERO,
+                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    ALPHA_DESTBLEND: BLEND_ZERO,
+                                    SEPARATE_ALPHA_BLEND: false,
+                                    ENABLE: true,
+                                    DISABLE_ROP3: false,
+                                },
+                            ),
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
@@ -1962,19 +2001,6 @@
                 DYNAMIC_HS: false,
             },
         ),
-        CB_BLEND0_CONTROL(
-            CB_BLEND0_CONTROL {
-                COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                ALPHA_SRCBLEND: BLEND_ZERO,
-                ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                ALPHA_DESTBLEND: BLEND_ZERO,
-                SEPARATE_ALPHA_BLEND: false,
-                ENABLE: true,
-                DISABLE_ROP3: false,
-            },
-        ),
         PA_SU_LINE_CNTL(
             PA_SU_LINE_CNTL {
                 WIDTH: 16,
@@ -2000,19 +2026,6 @@
                 DUP: false,
             },
         ),
-        CB_BLEND0_CONTROL(
-            CB_BLEND0_CONTROL {
-                COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                ALPHA_SRCBLEND: BLEND_ZERO,
-                ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                ALPHA_DESTBLEND: BLEND_ZERO,
-                SEPARATE_ALPHA_BLEND: false,
-                ENABLE: true,
-                DISABLE_ROP3: false,
-            },
-        ),
         PA_SU_LINE_CNTL(
             PA_SU_LINE_CNTL {
                 WIDTH: 16,
@@ -2036,19 +2049,6 @@
                 CYL_WRAP: 0,
                 PT_SPRITE_TEX: false,
                 DUP: false,
-            },
-        ),
-        CB_BLEND0_CONTROL(
-            CB_BLEND0_CONTROL {
-                COLOR_SRCBLEND: BLEND_SRC_ALPHA,
-                COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
-                COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
-                ALPHA_SRCBLEND: BLEND_ZERO,
-                ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
-                ALPHA_DESTBLEND: BLEND_ZERO,
-                SEPARATE_ALPHA_BLEND: false,
-                ENABLE: true,
-                DISABLE_ROP3: false,
             },
         ),
         PA_SU_LINE_CNTL(

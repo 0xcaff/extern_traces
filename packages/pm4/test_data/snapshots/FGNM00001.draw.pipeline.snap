@@ -198,6 +198,7 @@
                             clear_word_1: Some(
                                 0,
                             ),
+                            blend: None,
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
@@ -640,6 +641,7 @@
                             clear_word_1: Some(
                                 0,
                             ),
+                            blend: None,
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
@@ -1098,6 +1100,7 @@
                             clear_word_1: Some(
                                 0,
                             ),
+                            blend: None,
                         },
                     ),
                     target_mask: CB_TARGET_MASK {
