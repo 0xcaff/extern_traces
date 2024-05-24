@@ -1,4 +1,5 @@
 use crate::op_codes::OpCode;
+use crate::packet_value::acquire_memory::AcquireMemoryPacket;
 use crate::packet_value::clear_state::ClearStatePacket;
 use crate::packet_value::direct_memory_access::DirectMemoryAccessPacket;
 use crate::packet_value::dispatch_direct::DispatchDirectPacket;
@@ -9,6 +10,7 @@ use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterP
 use crate::register::SetUConfigRegisterPacket;
 use pm4_internal_macros::ParsePacketValue;
 
+mod acquire_memory;
 mod clear_state;
 mod direct_memory_access;
 pub mod dispatch_direct;
@@ -28,8 +30,8 @@ pub enum Type3PacketValue {
     EventWriteEndOfShader(EventWriteEndOfShaderPacket),
     ClearState(ClearStatePacket),
     DirectMemoryAccess(DirectMemoryAccessPacket),
+    AcquireMemory(AcquireMemoryPacket),
     // todo: index_type
-    // todo: acquire memory
     Unknown { op: OpCode, body: Vec<u32> },
 }
 
