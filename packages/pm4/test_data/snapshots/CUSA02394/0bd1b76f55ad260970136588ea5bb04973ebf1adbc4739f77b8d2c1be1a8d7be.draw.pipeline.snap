@@ -325,19 +325,23 @@
                     },
                 },
                 shader: Shader {
-                    z_format: SPI_SHADER_Z_FORMAT {
-                        Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
-                    col_format: SPI_SHADER_COL_FORMAT {
-                        COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
-                        COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
                     pos_format: Some(
                         SPI_SHADER_POS_FORMAT {
                             POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
@@ -346,38 +350,44 @@
                             POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
                         },
                     ),
-                    barycentric_control: SPI_BARYC_CNTL {
-                        PERSP_CENTER_CNTL: false,
-                        PERSP_CENTROID_CNTL: false,
-                        LINEAR_CENTER_CNTL: false,
-                        LINEAR_CENTROID_CNTL: false,
-                        POS_FLOAT_LOCATION: 0,
-                        POS_FLOAT_ULC: false,
-                        FRONT_FACE_ALL_BITS: false,
-                    },
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
                 },
                 pixel_shader: PixelShader {
                     address: 2148773073,
-                    resource1: SPI_SHADER_PGM_RSRC1_PS {
-                        VGPRS: 2,
-                        SGPRS: 2,
-                        PRIORITY: 0,
-                        FLOAT_MODE: FP_16_64_DENORMS,
-                        PRIV: false,
-                        DX10_CLAMP: false,
-                        DEBUG_MODE: false,
-                        IEEE_MODE: false,
-                        CU_GROUP_DISABLE: false,
-                        CACHE_CTL: 0,
-                        CDBG_USER: false,
-                    },
-                    resource2: SPI_SHADER_PGM_RSRC2_PS {
-                        SCRATCH_EN: false,
-                        USER_SGPR: 16,
-                        TRAP_PRESENT: false,
-                        WAVE_CNT_EN: false,
-                        EXTRA_LDS_SIZE: 0,
-                    },
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
                     input: Some(
                         SPI_PS_INPUT_ENA {
                             PERSP_SAMPLE_ENA: false,
@@ -740,19 +750,23 @@
                     },
                 },
                 shader: Shader {
-                    z_format: SPI_SHADER_Z_FORMAT {
-                        Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
-                    col_format: SPI_SHADER_COL_FORMAT {
-                        COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
-                        COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
                     pos_format: Some(
                         SPI_SHADER_POS_FORMAT {
                             POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
@@ -761,38 +775,44 @@
                             POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
                         },
                     ),
-                    barycentric_control: SPI_BARYC_CNTL {
-                        PERSP_CENTER_CNTL: false,
-                        PERSP_CENTROID_CNTL: false,
-                        LINEAR_CENTER_CNTL: false,
-                        LINEAR_CENTROID_CNTL: false,
-                        POS_FLOAT_LOCATION: 0,
-                        POS_FLOAT_ULC: false,
-                        FRONT_FACE_ALL_BITS: false,
-                    },
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
                 },
                 pixel_shader: PixelShader {
                     address: 2148773073,
-                    resource1: SPI_SHADER_PGM_RSRC1_PS {
-                        VGPRS: 2,
-                        SGPRS: 2,
-                        PRIORITY: 0,
-                        FLOAT_MODE: FP_16_64_DENORMS,
-                        PRIV: false,
-                        DX10_CLAMP: false,
-                        DEBUG_MODE: false,
-                        IEEE_MODE: false,
-                        CU_GROUP_DISABLE: false,
-                        CACHE_CTL: 0,
-                        CDBG_USER: false,
-                    },
-                    resource2: SPI_SHADER_PGM_RSRC2_PS {
-                        SCRATCH_EN: false,
-                        USER_SGPR: 16,
-                        TRAP_PRESENT: false,
-                        WAVE_CNT_EN: false,
-                        EXTRA_LDS_SIZE: 0,
-                    },
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
                     input: Some(
                         SPI_PS_INPUT_ENA {
                             PERSP_SAMPLE_ENA: false,
@@ -1155,19 +1175,23 @@
                     },
                 },
                 shader: Shader {
-                    z_format: SPI_SHADER_Z_FORMAT {
-                        Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
-                    col_format: SPI_SHADER_COL_FORMAT {
-                        COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
-                        COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
                     pos_format: Some(
                         SPI_SHADER_POS_FORMAT {
                             POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
@@ -1176,38 +1200,44 @@
                             POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
                         },
                     ),
-                    barycentric_control: SPI_BARYC_CNTL {
-                        PERSP_CENTER_CNTL: false,
-                        PERSP_CENTROID_CNTL: false,
-                        LINEAR_CENTER_CNTL: false,
-                        LINEAR_CENTROID_CNTL: false,
-                        POS_FLOAT_LOCATION: 0,
-                        POS_FLOAT_ULC: false,
-                        FRONT_FACE_ALL_BITS: false,
-                    },
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
                 },
                 pixel_shader: PixelShader {
                     address: 2148773073,
-                    resource1: SPI_SHADER_PGM_RSRC1_PS {
-                        VGPRS: 2,
-                        SGPRS: 2,
-                        PRIORITY: 0,
-                        FLOAT_MODE: FP_16_64_DENORMS,
-                        PRIV: false,
-                        DX10_CLAMP: false,
-                        DEBUG_MODE: false,
-                        IEEE_MODE: false,
-                        CU_GROUP_DISABLE: false,
-                        CACHE_CTL: 0,
-                        CDBG_USER: false,
-                    },
-                    resource2: SPI_SHADER_PGM_RSRC2_PS {
-                        SCRATCH_EN: false,
-                        USER_SGPR: 16,
-                        TRAP_PRESENT: false,
-                        WAVE_CNT_EN: false,
-                        EXTRA_LDS_SIZE: 0,
-                    },
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
                     input: Some(
                         SPI_PS_INPUT_ENA {
                             PERSP_SAMPLE_ENA: false,
@@ -1570,19 +1600,23 @@
                     },
                 },
                 shader: Shader {
-                    z_format: SPI_SHADER_Z_FORMAT {
-                        Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
-                    col_format: SPI_SHADER_COL_FORMAT {
-                        COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
-                        COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
                     pos_format: Some(
                         SPI_SHADER_POS_FORMAT {
                             POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
@@ -1591,38 +1625,44 @@
                             POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
                         },
                     ),
-                    barycentric_control: SPI_BARYC_CNTL {
-                        PERSP_CENTER_CNTL: false,
-                        PERSP_CENTROID_CNTL: false,
-                        LINEAR_CENTER_CNTL: false,
-                        LINEAR_CENTROID_CNTL: false,
-                        POS_FLOAT_LOCATION: 0,
-                        POS_FLOAT_ULC: false,
-                        FRONT_FACE_ALL_BITS: false,
-                    },
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
                 },
                 pixel_shader: PixelShader {
                     address: 2148773074,
-                    resource1: SPI_SHADER_PGM_RSRC1_PS {
-                        VGPRS: 1,
-                        SGPRS: 2,
-                        PRIORITY: 0,
-                        FLOAT_MODE: FP_16_64_DENORMS,
-                        PRIV: false,
-                        DX10_CLAMP: false,
-                        DEBUG_MODE: false,
-                        IEEE_MODE: false,
-                        CU_GROUP_DISABLE: false,
-                        CACHE_CTL: 0,
-                        CDBG_USER: false,
-                    },
-                    resource2: SPI_SHADER_PGM_RSRC2_PS {
-                        SCRATCH_EN: false,
-                        USER_SGPR: 16,
-                        TRAP_PRESENT: false,
-                        WAVE_CNT_EN: false,
-                        EXTRA_LDS_SIZE: 0,
-                    },
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 1,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
                     input: Some(
                         SPI_PS_INPUT_ENA {
                             PERSP_SAMPLE_ENA: false,
@@ -1985,19 +2025,23 @@
                     },
                 },
                 shader: Shader {
-                    z_format: SPI_SHADER_Z_FORMAT {
-                        Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
-                    col_format: SPI_SHADER_COL_FORMAT {
-                        COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
-                        COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                        COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
-                    },
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
                     pos_format: Some(
                         SPI_SHADER_POS_FORMAT {
                             POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
@@ -2006,38 +2050,44 @@
                             POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
                         },
                     ),
-                    barycentric_control: SPI_BARYC_CNTL {
-                        PERSP_CENTER_CNTL: false,
-                        PERSP_CENTROID_CNTL: false,
-                        LINEAR_CENTER_CNTL: false,
-                        LINEAR_CENTROID_CNTL: false,
-                        POS_FLOAT_LOCATION: 0,
-                        POS_FLOAT_ULC: false,
-                        FRONT_FACE_ALL_BITS: false,
-                    },
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
                 },
                 pixel_shader: PixelShader {
                     address: 2148773073,
-                    resource1: SPI_SHADER_PGM_RSRC1_PS {
-                        VGPRS: 2,
-                        SGPRS: 2,
-                        PRIORITY: 0,
-                        FLOAT_MODE: FP_16_64_DENORMS,
-                        PRIV: false,
-                        DX10_CLAMP: false,
-                        DEBUG_MODE: false,
-                        IEEE_MODE: false,
-                        CU_GROUP_DISABLE: false,
-                        CACHE_CTL: 0,
-                        CDBG_USER: false,
-                    },
-                    resource2: SPI_SHADER_PGM_RSRC2_PS {
-                        SCRATCH_EN: false,
-                        USER_SGPR: 16,
-                        TRAP_PRESENT: false,
-                        WAVE_CNT_EN: false,
-                        EXTRA_LDS_SIZE: 0,
-                    },
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
                     input: Some(
                         SPI_PS_INPUT_ENA {
                             PERSP_SAMPLE_ENA: false,

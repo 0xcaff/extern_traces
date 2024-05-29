@@ -416,16 +416,16 @@ struct GuardBand {
 #[allow(dead_code)]
 struct Shader {
     #[entry(RegisterEntry::SPI_SHADER_Z_FORMAT)]
-    z_format: SPI_SHADER_Z_FORMAT,
+    z_format: Option<SPI_SHADER_Z_FORMAT>,
 
     #[entry(RegisterEntry::SPI_SHADER_COL_FORMAT)]
-    col_format: SPI_SHADER_COL_FORMAT,
+    col_format: Option<SPI_SHADER_COL_FORMAT>,
 
     #[entry(RegisterEntry::SPI_SHADER_POS_FORMAT)]
     pos_format: Option<SPI_SHADER_POS_FORMAT>,
 
     #[entry(RegisterEntry::SPI_BARYC_CNTL)]
-    barycentric_control: SPI_BARYC_CNTL,
+    barycentric_control: Option<SPI_BARYC_CNTL>,
 }
 
 #[derive(Build, Debug)]
@@ -436,10 +436,10 @@ pub struct PixelShader {
     pub address: u32,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_PS)]
-    resource1: SPI_SHADER_PGM_RSRC1_PS,
+    resource1: Option<SPI_SHADER_PGM_RSRC1_PS>,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC2_PS)]
-    resource2: SPI_SHADER_PGM_RSRC2_PS,
+    resource2: Option<SPI_SHADER_PGM_RSRC2_PS>,
 
     #[entry(RegisterEntry::SPI_PS_INPUT_ENA)]
     input: Option<SPI_PS_INPUT_ENA>,
