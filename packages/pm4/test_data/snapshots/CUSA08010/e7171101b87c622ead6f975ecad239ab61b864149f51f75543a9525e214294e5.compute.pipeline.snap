@@ -1,0 +1,22 @@
+(
+    [],
+    [
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Compute,
+                    predicate: false,
+                },
+                value: IndirectBuffer(
+                    IndirectBufferPacket {
+                        virtual_address: 1061414912,
+                        vmid: 1,
+                        command_buffer_size_dwords: 309,
+                    },
+                ),
+            },
+        ),
+    ],
+    [],
+)
