@@ -1,9 +1,9 @@
-use strum::FromRepr;
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::RELEASE_MEM_OP;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
+use strum::FromRepr;
 
 #[derive(Debug)]
 pub struct ReleaseMemoryPacket {
@@ -15,8 +15,7 @@ pub struct ReleaseMemoryPacket {
 
 // From Mesa
 // https://gitlab.freedesktop.org/mesa/mesa/blob/d09ad16fd4a0596fb6c97cffaf0fdf031053b5a4/src/amd/common/sid.h#L178-L189
-#[derive(Debug, Clone)]
-#[derive(FromBits)]
+#[derive(Debug, Clone, FromBits)]
 #[bits(32)]
 pub struct Selectors {
     #[bits(17, 16)]
@@ -32,7 +31,7 @@ pub struct Selectors {
 #[allow(non_camel_case_types)]
 #[repr(u8)]
 #[derive(Debug, Clone, FromRepr)]
-enum DestinationSelection {
+pub enum DestinationSelection {
     MEM = 0,
     TC_L2 = 1,
 }
@@ -46,7 +45,7 @@ impl FromBits<2> for DestinationSelection {
 #[allow(non_camel_case_types)]
 #[repr(u8)]
 #[derive(Debug, Clone, FromRepr)]
-enum InterruptSelection {
+pub enum InterruptSelection {
     NONE = 0,
     UNKNOWN_1 = 2,
     SEND_DATA_AFTER_WR_CONFIRM = 3,
@@ -54,7 +53,6 @@ enum InterruptSelection {
 
 impl FromBits<2> for InterruptSelection {
     fn from_bits(value: impl Bits) -> Self {
-        println!("{}", value.full());
         Self::from_repr(value.full() as _).unwrap()
     }
 }
@@ -62,7 +60,7 @@ impl FromBits<2> for InterruptSelection {
 #[allow(non_camel_case_types)]
 #[repr(u8)]
 #[derive(Debug, Clone, FromRepr)]
-enum DataSelection {
+pub enum DataSelection {
     DISCARD = 0,
     VALUE_32BIT = 1,
     VALUE_64BIT = 2,
@@ -73,7 +71,6 @@ enum DataSelection {
 
 impl FromBits<3> for DataSelection {
     fn from_bits(value: impl Bits) -> Self {
-        println!("{}", value.full());
         Self::from_repr(value.full() as _).unwrap()
     }
 }

@@ -83,17 +83,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: WAIT_REG_MEM,
-                    body: [
-                        19,
-                        923462408,
-                        0,
-                        1,
-                        4294967295,
-                        10,
-                    ],
-                },
+                value: WaitRegisterMemory(
+                    WaitRegisterMemoryPacket {
+                        fields: Fields {
+                            engine: Memory,
+                            memory_space: Memory,
+                            function: Equal,
+                        },
+                        poll_address_lo: 0x370aeb08,
+                        poll_address_hi: 0x0,
+                        reference: 1,
+                        mask: 0xffffffff,
+                        poll_interval: 10,
+                    },
+                ),
             },
         ),
         Type3(

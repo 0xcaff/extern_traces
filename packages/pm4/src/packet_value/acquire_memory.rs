@@ -5,10 +5,10 @@ use crate::{ParseType3Packet, CP_COHER_CNTL};
 
 #[derive(Debug)]
 pub struct AcquireMemoryPacket {
-    command_processor_cache_coherence_control: CP_COHER_CNTL,
-    command_processor_cache_coherence_size: u64,
-    command_processor_cache_coherence_base: u64,
-    poll_interval: u32,
+    pub command_processor_cache_coherence_control: CP_COHER_CNTL,
+    pub command_processor_cache_coherence_size: u64,
+    pub command_processor_cache_coherence_base: u64,
+    pub poll_interval: u32,
 }
 
 impl ParseType3Packet for AcquireMemoryPacket {

@@ -4,10 +4,10 @@ use bits::FromBits;
 
 #[derive(Debug)]
 pub struct DirectMemoryAccessPacket {
-    fields: DMA_DATA_WORD0_cik,
-    src_address: u64,
-    dst_address: u64,
-    command: COMMAND,
+    pub fields: DMA_DATA_WORD0_cik,
+    pub src_address: u64,
+    pub dst_address: u64,
+    pub command: COMMAND,
 }
 
 impl ParseType3Packet for DirectMemoryAccessPacket {

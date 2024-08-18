@@ -498,7 +498,7 @@ pub struct ComputePipeline {
     pub address_lo: u32,
 
     #[entry(RegisterEntry::COMPUTE_PGM_HI)]
-    address_hi: COMPUTE_PGM_HI,
+    pub address_hi: COMPUTE_PGM_HI,
 
     #[entry(RegisterEntry::COMPUTE_PGM_RSRC1)]
     pub resource1: COMPUTE_PGM_RSRC1,

@@ -11,10 +11,11 @@ use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterP
 use crate::packet_value::release_memory::ReleaseMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use pm4_internal_macros::ParsePacketValue;
+use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 
-mod acquire_memory;
-mod clear_state;
-mod direct_memory_access;
+pub mod acquire_memory;
+pub mod clear_state;
+pub mod direct_memory_access;
 pub mod dispatch_direct;
 pub mod draw_index_auto;
 pub mod event_write_end_of_pipe;
@@ -22,6 +23,7 @@ pub mod event_write_end_of_shader;
 pub mod indirect_buffer;
 pub mod register;
 pub mod release_memory;
+pub mod wait_register_memory;
 
 #[derive(Debug, ParsePacketValue)]
 pub enum Type3PacketValue {
@@ -37,6 +39,7 @@ pub enum Type3PacketValue {
     AcquireMemory(AcquireMemoryPacket),
     IndirectBuffer(IndirectBufferPacket),
     ReleaseMemory(ReleaseMemoryPacket),
+    WaitRegisterMemory(WaitRegisterMemoryPacket),
     // todo: index_type
     Unknown { op: OpCode, body: Vec<u32> },
 }

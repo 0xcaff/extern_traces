@@ -2327,17 +2327,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: WAIT_REG_MEM,
-                    body: [
-                        19,
-                        2870436816,
-                        32544,
-                        0,
-                        4294967295,
-                        10,
-                    ],
-                },
+                value: WaitRegisterMemory(
+                    WaitRegisterMemoryPacket {
+                        fields: Fields {
+                            engine: Memory,
+                            memory_space: Memory,
+                            function: Equal,
+                        },
+                        poll_address_lo: 0xab1763d0,
+                        poll_address_hi: 0x7f20,
+                        reference: 0,
+                        mask: 0xffffffff,
+                        poll_interval: 10,
+                    },
+                ),
             },
         ),
         Type3(
@@ -2381,17 +2384,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: WAIT_REG_MEM,
-                    body: [
-                        19,
-                        180264,
-                        128,
-                        1,
-                        4294967295,
-                        10,
-                    ],
-                },
+                value: WaitRegisterMemory(
+                    WaitRegisterMemoryPacket {
+                        fields: Fields {
+                            engine: Memory,
+                            memory_space: Memory,
+                            function: Equal,
+                        },
+                        poll_address_lo: 0x2c028,
+                        poll_address_hi: 0x80,
+                        reference: 1,
+                        mask: 0xffffffff,
+                        poll_interval: 10,
+                    },
+                ),
             },
         ),
         Type3(
@@ -2782,17 +2788,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: WAIT_REG_MEM,
-                    body: [
-                        19,
-                        183728,
-                        128,
-                        1,
-                        4294967295,
-                        10,
-                    ],
-                },
+                value: WaitRegisterMemory(
+                    WaitRegisterMemoryPacket {
+                        fields: Fields {
+                            engine: Memory,
+                            memory_space: Memory,
+                            function: Equal,
+                        },
+                        poll_address_lo: 0x2cdb0,
+                        poll_address_hi: 0x80,
+                        reference: 1,
+                        mask: 0xffffffff,
+                        poll_interval: 10,
+                    },
+                ),
             },
         ),
     ],
