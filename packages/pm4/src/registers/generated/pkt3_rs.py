@@ -74,7 +74,7 @@ def to_rust_name(key: str) -> str:
 if __name__ == '__main__':
     regdb = load(['pkt3.json'])
 
-    types = ['DMA_DATA_WORD0_cik', 'COMMAND']
+    types = ['DMA_DATA_WORD0_cik', 'COMMAND', 'RELEASE_MEM_OP']
 
     types = [(name, type) for (name, type) in regdb.register_types() if name in types]
     enum_refs = [field.enum_ref for (name, type) in types for field in type.fields if hasattr(field, 'enum_ref')]
