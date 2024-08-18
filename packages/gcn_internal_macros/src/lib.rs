@@ -1,3 +1,4 @@
+#![deny(warnings)]
 mod bitstring;
 mod derive_display_instruction;
 mod derive_parse_instruction;

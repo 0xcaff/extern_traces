@@ -1,3 +1,5 @@
+#![deny(warnings)]
+
 mod derive_build;
 mod derive_build_user_data;
 mod derive_parse_packet_value;

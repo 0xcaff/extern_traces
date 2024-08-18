@@ -1,4 +1,5 @@
 #![feature(cursor_remaining)]
+#![deny(warnings)]
 
 mod intermediate;
 mod op_codes;

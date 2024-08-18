@@ -12,28 +12,28 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct DSInstruction {
     #[bits(25, 18)]
-    op: DSOpCode,
+    pub op: DSOpCode,
 
     #[bits(7, 0)]
-    offset0: u8,
+    pub offset0: u8,
 
     #[bits(15, 8)]
-    offset1: u8,
+    pub offset1: u8,
 
     #[bits(17, 17)]
-    gds: bool,
+    pub gds: bool,
 
     #[bits(39, 32)]
-    addr: VectorGPR,
+    pub addr: VectorGPR,
 
     #[bits(47, 40)]
-    data0: VectorGPR,
+    pub data0: VectorGPR,
 
     #[bits(55, 48)]
-    data1: VectorGPR,
+    pub data1: VectorGPR,
 
     #[bits(63, 56)]
-    vdst: VectorGPR,
+    pub vdst: VectorGPR,
 }
 
 impl<R: Reader> ParseInstruction<R> for DSInstruction {

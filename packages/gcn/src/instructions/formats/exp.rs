@@ -2,7 +2,7 @@ use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::operands::VectorGPR;
 use crate::instructions::DisplayableInstruction;
-use bits::{bit, bitrange, Bits, FromBits};
+use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
 
 /// Export

@@ -1,4 +1,5 @@
 #![feature(cursor_remaining)]
+#![deny(warnings)]
 
 pub mod instructions;
 mod reader;

@@ -14,46 +14,46 @@ use bits_macros::FromBits;
 #[bits(64)]
 pub struct MTBufInstruction {
     #[bits(18, 16)]
-    op: MTBUFOpCode,
+    pub op: MTBUFOpCode,
 
     #[bits(11, 0)]
-    offset: Offset,
+    pub offset: Offset,
 
     #[bits(12, 12)]
-    offen: bool,
+    pub offen: bool,
 
     #[bits(13, 13)]
-    idxen: bool,
+    pub idxen: bool,
 
     #[bits(14, 14)]
-    glc: bool,
+    pub glc: bool,
 
     #[bits(15, 15)]
-    addr64: bool,
+    pub addr64: bool,
 
     #[bits(22, 19)]
-    dfmt: DataFormat,
+    pub dfmt: DataFormat,
 
     #[bits(25, 23)]
-    nfmt: NumberFormat,
+    pub nfmt: NumberFormat,
 
     #[bits(39, 32)]
-    vaddr: u8,
+    pub vaddr: u8,
 
     #[bits(47, 40)]
-    vdata: VectorGPR,
+    pub vdata: VectorGPR,
 
     #[bits(52, 48)]
-    srsrc: ScalarGeneralPurposeRegisterGroup,
+    pub srsrc: ScalarGeneralPurposeRegisterGroup,
 
     #[bits(54, 54)]
-    slc: bool,
+    pub slc: bool,
 
     #[bits(55, 55)]
-    tfe: bool,
+    pub tfe: bool,
 
     #[bits(63, 56)]
-    soffset: u8,
+    pub soffset: u8,
 }
 
 // enum DataFormat {
@@ -72,7 +72,7 @@ pub struct MTBufInstruction {
 // }
 
 #[derive(Debug)]
-struct NumberFormat(u8);
+pub struct NumberFormat(pub u8);
 
 impl FromBits<3> for NumberFormat {
     fn from_bits(value: impl Bits) -> Self {
@@ -81,7 +81,7 @@ impl FromBits<3> for NumberFormat {
 }
 
 #[derive(Debug)]
-struct DataFormat(u8);
+pub struct DataFormat(pub u8);
 
 impl FromBits<4> for DataFormat {
     fn from_bits(value: impl Bits) -> Self {
