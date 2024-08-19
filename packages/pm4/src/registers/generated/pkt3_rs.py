@@ -8,6 +8,10 @@ overrides = {
     'CONTROL__DST_SEL': 4,
 }
 
+type_overrides = {
+    'RELEASE_MEM_OP:EVENT_TYPE': 'crate::VGT_EVENT_TYPE'
+}
+
 template = """
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -50,13 +54,13 @@ impl FromBits<${overrides[name]}> for ${name} {
 pub struct ${name} {
 % for field in unique(fields.fields, lambda it: it.name):
     #[bits(${field.bits[1]}, ${field.bits[0]})]
-    pub ${field.name}: ${(
+    pub ${field.name}: ${type_overrides.get(name + ':' + field.name, (
         field.enum_ref if hasattr(field, 'enum_ref') else
         "bool" if ((field.bits[1] - field.bits[0]) + 1 == 1) else
         "u16" if ((field.bits[1] - field.bits[0]) + 1 == 16) else
         "u32" if ((field.bits[1] - field.bits[0]) + 1 == 32) else
         "u64"
-    )},
+    ))},
 % endfor
 }
 % endfor
@@ -87,7 +91,8 @@ if __name__ == '__main__':
         ceil=math.ceil,
         log2=math.log2,
         overrides=overrides,
-        to_rust_name=to_rust_name
+        to_rust_name=to_rust_name,
+        type_overrides=type_overrides,
     )
 
     with open('pkt3.rs', 'w') as file:

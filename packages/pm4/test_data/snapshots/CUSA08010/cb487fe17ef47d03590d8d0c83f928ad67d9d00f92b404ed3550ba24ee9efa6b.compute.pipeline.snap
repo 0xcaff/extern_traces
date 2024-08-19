@@ -52,7 +52,7 @@
                 value: ReleaseMemory(
                     ReleaseMemoryPacket {
                         op: RELEASE_MEM_OP {
-                            EVENT_TYPE: 47,
+                            EVENT_TYPE: CS_DONE,
                             EVENT_INDEX: 6,
                             GLM_WB: false,
                             GLM_INV: false,
@@ -191,7 +191,7 @@
                 value: ReleaseMemory(
                     ReleaseMemoryPacket {
                         op: RELEASE_MEM_OP {
-                            EVENT_TYPE: 47,
+                            EVENT_TYPE: CS_DONE,
                             EVENT_INDEX: 6,
                             GLM_WB: false,
                             GLM_INV: false,
@@ -225,7 +225,7 @@
                 value: ReleaseMemory(
                     ReleaseMemoryPacket {
                         op: RELEASE_MEM_OP {
-                            EVENT_TYPE: 47,
+                            EVENT_TYPE: CS_DONE,
                             EVENT_INDEX: 6,
                             GLM_WB: false,
                             GLM_INV: false,
