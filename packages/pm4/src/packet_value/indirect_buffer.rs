@@ -1,9 +1,11 @@
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use bits::bitrange;
+use custom_debug::Debug;
 
 #[derive(Debug, Clone)]
 pub struct IndirectBufferPacket {
+    #[debug(format = "0x{:x}")]
     pub virtual_address: u64,
     pub vmid: u32,
     pub command_buffer_size_dwords: u32,

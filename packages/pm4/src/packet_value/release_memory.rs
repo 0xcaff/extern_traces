@@ -4,11 +4,13 @@ use crate::RELEASE_MEM_OP;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::FromRepr;
+use custom_debug::Debug;
 
 #[derive(Debug)]
 pub struct ReleaseMemoryPacket {
     pub op: RELEASE_MEM_OP,
     pub selector: Selectors,
+    #[debug(format = "0x{:x}")]
     pub virtual_address: u64,
     pub immediate_data: u64,
 }

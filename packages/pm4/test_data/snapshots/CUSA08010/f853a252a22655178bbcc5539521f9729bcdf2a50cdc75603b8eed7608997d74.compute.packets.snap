@@ -8,7 +8,7 @@
             },
             value: IndirectBuffer(
                 IndirectBufferPacket {
-                    virtual_address: 923461376,
+                    virtual_address: 0x370ae700,
                     vmid: 1,
                     command_buffer_size_dwords: 309,
                 },
