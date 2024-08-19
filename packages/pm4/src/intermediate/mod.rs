@@ -4,6 +4,7 @@ use crate::dispatch_direct::DispatchDirectPacket;
 use crate::draw_index_auto::DrawIndexAutoPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::event_write_end_of_shader::EventWriteEndOfShaderPacket;
+use crate::indirect_buffer::IndirectBufferPacket;
 use crate::intermediate::build::{Build, Builder, Finalize, Initialize};
 use crate::op_codes::OpCode;
 use crate::register::{
@@ -37,6 +38,7 @@ pub enum Command {
     },
     EndOfPipe(EventWriteEndOfPipePacket),
     EndOfShader(EventWriteEndOfShaderPacket),
+    IndirectBuffer(IndirectBufferPacket),
 }
 
 pub fn convert(
@@ -139,6 +141,10 @@ pub fn convert(
                 graphics_pipeline_builder = GraphicsPipelineBuilder::new();
                 result.push(Command::EndOfPipe(end_of_pipe.clone()))
             }
+            PM4Packet::Type3(Type3Packet {
+                value: Type3PacketValue::IndirectBuffer(packet),
+                ..
+            }) => result.push(Command::IndirectBuffer(packet.clone())),
             PM4Packet::Type3(Type3Packet {
                 value:
                     Type3PacketValue::Unknown {

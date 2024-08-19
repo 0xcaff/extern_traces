@@ -2,8 +2,8 @@ use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
-use strum::FromRepr;
 use custom_debug::Debug;
+use strum::FromRepr;
 
 #[derive(Debug)]
 pub struct WaitRegisterMemoryPacket {

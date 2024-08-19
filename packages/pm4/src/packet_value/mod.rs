@@ -9,9 +9,9 @@ use crate::packet_value::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
 use crate::packet_value::release_memory::ReleaseMemoryPacket;
+use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use pm4_internal_macros::ParsePacketValue;
-use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 
 pub mod acquire_memory;
 pub mod clear_state;
