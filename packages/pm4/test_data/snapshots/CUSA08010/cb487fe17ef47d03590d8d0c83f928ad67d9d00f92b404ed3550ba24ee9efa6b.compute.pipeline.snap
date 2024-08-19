@@ -1,5 +1,30 @@
 (
     [
+        ReleaseMemory(
+            ReleaseMemoryPacket {
+                op: RELEASE_MEM_OP {
+                    EVENT_TYPE: CS_DONE,
+                    EVENT_INDEX: 6,
+                    GLM_WB: false,
+                    GLM_INV: false,
+                    GLV_INV: false,
+                    GL1_INV: false,
+                    GL2_US: false,
+                    GL2_RANGE: GL2_ALL,
+                    GL2_DISCARD: false,
+                    GL2_INV: false,
+                    GL2_WB: false,
+                    SEQ: SEQ_PARALLEL,
+                },
+                selector: Selectors {
+                    destination_selection: MEM,
+                    interrupt_selection: SEND_DATA_AFTER_WR_CONFIRM,
+                    data_selection: VALUE_64BIT,
+                },
+                virtual_address: 0x370aeb08,
+                immediate_data: 1,
+            },
+        ),
         WaitRegisterMemory(
             WaitRegisterMemoryPacket {
                 fields: Fields {
@@ -12,6 +37,56 @@
                 reference: 1,
                 mask: 0xffffffff,
                 poll_interval: 10,
+            },
+        ),
+        ReleaseMemory(
+            ReleaseMemoryPacket {
+                op: RELEASE_MEM_OP {
+                    EVENT_TYPE: CS_DONE,
+                    EVENT_INDEX: 6,
+                    GLM_WB: false,
+                    GLM_INV: false,
+                    GLV_INV: false,
+                    GL1_INV: false,
+                    GL2_US: false,
+                    GL2_RANGE: GL2_ALL,
+                    GL2_DISCARD: false,
+                    GL2_INV: false,
+                    GL2_WB: false,
+                    SEQ: SEQ_PARALLEL,
+                },
+                selector: Selectors {
+                    destination_selection: MEM,
+                    interrupt_selection: SEND_DATA_AFTER_WR_CONFIRM,
+                    data_selection: UNKNOWN_1,
+                },
+                virtual_address: 0x2ec87300,
+                immediate_data: 0,
+            },
+        ),
+        ReleaseMemory(
+            ReleaseMemoryPacket {
+                op: RELEASE_MEM_OP {
+                    EVENT_TYPE: CS_DONE,
+                    EVENT_INDEX: 6,
+                    GLM_WB: false,
+                    GLM_INV: false,
+                    GLV_INV: false,
+                    GL1_INV: false,
+                    GL2_US: false,
+                    GL2_RANGE: GL2_ALL,
+                    GL2_DISCARD: false,
+                    GL2_INV: false,
+                    GL2_WB: false,
+                    SEQ: SEQ_PARALLEL,
+                },
+                selector: Selectors {
+                    destination_selection: MEM,
+                    interrupt_selection: UNKNOWN_1,
+                    data_selection: VALUE_32BIT,
+                },
+                virtual_address: 0x2e9ffff8,
+                immediate_data: 1,
             },
         ),
     ],
@@ -53,40 +128,6 @@
                         command_processor_cache_coherence_size: 0,
                         command_processor_cache_coherence_base: 0,
                         poll_interval: 10,
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Compute,
-                    predicate: false,
-                },
-                value: ReleaseMemory(
-                    ReleaseMemoryPacket {
-                        op: RELEASE_MEM_OP {
-                            EVENT_TYPE: CS_DONE,
-                            EVENT_INDEX: 6,
-                            GLM_WB: false,
-                            GLM_INV: false,
-                            GLV_INV: false,
-                            GL1_INV: false,
-                            GL2_US: false,
-                            GL2_RANGE: GL2_ALL,
-                            GL2_DISCARD: false,
-                            GL2_INV: false,
-                            GL2_WB: false,
-                            SEQ: SEQ_PARALLEL,
-                        },
-                        selector: Selectors {
-                            destination_selection: MEM,
-                            interrupt_selection: SEND_DATA_AFTER_WR_CONFIRM,
-                            data_selection: VALUE_64BIT,
-                        },
-                        virtual_address: 0x370aeb08,
-                        immediate_data: 1,
                     },
                 ),
             },
@@ -169,74 +210,6 @@
                         command_processor_cache_coherence_size: 0,
                         command_processor_cache_coherence_base: 0,
                         poll_interval: 10,
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Compute,
-                    predicate: false,
-                },
-                value: ReleaseMemory(
-                    ReleaseMemoryPacket {
-                        op: RELEASE_MEM_OP {
-                            EVENT_TYPE: CS_DONE,
-                            EVENT_INDEX: 6,
-                            GLM_WB: false,
-                            GLM_INV: false,
-                            GLV_INV: false,
-                            GL1_INV: false,
-                            GL2_US: false,
-                            GL2_RANGE: GL2_ALL,
-                            GL2_DISCARD: false,
-                            GL2_INV: false,
-                            GL2_WB: false,
-                            SEQ: SEQ_PARALLEL,
-                        },
-                        selector: Selectors {
-                            destination_selection: MEM,
-                            interrupt_selection: SEND_DATA_AFTER_WR_CONFIRM,
-                            data_selection: UNKNOWN_1,
-                        },
-                        virtual_address: 0x2ec87300,
-                        immediate_data: 0,
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Compute,
-                    predicate: false,
-                },
-                value: ReleaseMemory(
-                    ReleaseMemoryPacket {
-                        op: RELEASE_MEM_OP {
-                            EVENT_TYPE: CS_DONE,
-                            EVENT_INDEX: 6,
-                            GLM_WB: false,
-                            GLM_INV: false,
-                            GLV_INV: false,
-                            GL1_INV: false,
-                            GL2_US: false,
-                            GL2_RANGE: GL2_ALL,
-                            GL2_DISCARD: false,
-                            GL2_INV: false,
-                            GL2_WB: false,
-                            SEQ: SEQ_PARALLEL,
-                        },
-                        selector: Selectors {
-                            destination_selection: MEM,
-                            interrupt_selection: UNKNOWN_1,
-                            data_selection: VALUE_32BIT,
-                        },
-                        virtual_address: 0x2e9ffff8,
-                        immediate_data: 1,
                     },
                 ),
             },

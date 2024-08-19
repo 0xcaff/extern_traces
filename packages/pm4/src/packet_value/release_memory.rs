@@ -6,7 +6,7 @@ use bits_macros::FromBits;
 use custom_debug::Debug;
 use strum::FromRepr;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ReleaseMemoryPacket {
     pub op: RELEASE_MEM_OP,
     pub selector: Selectors,

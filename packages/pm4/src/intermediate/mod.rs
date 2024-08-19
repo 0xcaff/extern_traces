@@ -10,6 +10,7 @@ use crate::op_codes::OpCode;
 use crate::register::{
     SetContextRegisterPacket, SetShaderRegisterPacket, SetUConfigRegisterPacket,
 };
+use crate::release_memory::ReleaseMemoryPacket;
 use crate::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::{
     PM4Packet, RegisterEntry, ShaderType, Type3Header, Type3Packet, Type3PacketValue,
@@ -41,6 +42,7 @@ pub enum Command {
     EndOfShader(EventWriteEndOfShaderPacket),
     IndirectBuffer(IndirectBufferPacket),
     WaitRegisterMemory(WaitRegisterMemoryPacket),
+    ReleaseMemory(ReleaseMemoryPacket),
 }
 
 pub fn convert(
@@ -151,6 +153,10 @@ pub fn convert(
                 value: Type3PacketValue::WaitRegisterMemory(packet),
                 ..
             }) => result.push(Command::WaitRegisterMemory(packet.clone())),
+            PM4Packet::Type3(Type3Packet {
+                value: Type3PacketValue::ReleaseMemory(packet),
+                ..
+            }) => result.push(Command::ReleaseMemory(packet.clone())),
             PM4Packet::Type3(Type3Packet {
                 value:
                     Type3PacketValue::Unknown {

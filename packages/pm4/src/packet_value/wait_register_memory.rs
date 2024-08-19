@@ -50,7 +50,7 @@ pub struct Fields {
     pub function: Function,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum MemorySpace {
     Register,
     Memory,
