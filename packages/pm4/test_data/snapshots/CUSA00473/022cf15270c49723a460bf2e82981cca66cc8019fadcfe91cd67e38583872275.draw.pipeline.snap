@@ -1,5 +1,19 @@
 (
     [
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0xae750c50,
+                poll_address_hi: 0x7f5b,
+                reference: 0,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
         EndOfPipe(
             EventWriteEndOfPipePacket {
                 invalidate_writeback_l2: false,
@@ -108,29 +122,6 @@
                         1,
                     ],
                 },
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: WaitRegisterMemory(
-                    WaitRegisterMemoryPacket {
-                        fields: Fields {
-                            engine: Memory,
-                            memory_space: Memory,
-                            function: Equal,
-                        },
-                        poll_address_lo: 0xae750c50,
-                        poll_address_hi: 0x7f5b,
-                        reference: 0,
-                        mask: 0xffffffff,
-                        poll_interval: 10,
-                    },
-                ),
             },
         ),
         Type3(

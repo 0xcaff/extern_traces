@@ -1,5 +1,19 @@
 (
     [
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0xdac52e60,
+                poll_address_hi: 0x7fed,
+                reference: 0,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
         Dispatch {
             dispatch_packet: DispatchDirectPacket {
                 dim_x: 32640,
@@ -74,6 +88,20 @@
                 data: StorePacketData {
                     data: 1,
                 },
+            },
+        ),
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0x2220,
+                poll_address_hi: 0x80,
+                reference: 1,
+                mask: 0xffffffff,
+                poll_interval: 10,
             },
         ),
         Draw {
@@ -621,29 +649,6 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: WaitRegisterMemory(
-                    WaitRegisterMemoryPacket {
-                        fields: Fields {
-                            engine: Memory,
-                            memory_space: Memory,
-                            function: Equal,
-                        },
-                        poll_address_lo: 0xdac52e60,
-                        poll_address_hi: 0x7fed,
-                        reference: 0,
-                        mask: 0xffffffff,
-                        poll_interval: 10,
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
                 value: DirectMemoryAccess(
                     DirectMemoryAccessPacket {
                         fields: DMA_DATA_WORD0_cik {
@@ -667,29 +672,6 @@
                             DAIC: NO_INCREMENT,
                             RAW_WAIT: false,
                         },
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: WaitRegisterMemory(
-                    WaitRegisterMemoryPacket {
-                        fields: Fields {
-                            engine: Memory,
-                            memory_space: Memory,
-                            function: Equal,
-                        },
-                        poll_address_lo: 0x2220,
-                        poll_address_hi: 0x80,
-                        reference: 1,
-                        mask: 0xffffffff,
-                        poll_interval: 10,
                     },
                 ),
             },

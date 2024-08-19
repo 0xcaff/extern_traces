@@ -1,5 +1,19 @@
 (
     [
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0x5a94f3c0,
+                poll_address_hi: 0x7f3a,
+                reference: 0,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
         Draw {
             draw_packet: DrawIndexAutoPacket {
                 index_count: 4,
@@ -866,29 +880,6 @@
                         },
                         command_processor_cache_coherence_size: 1,
                         command_processor_cache_coherence_base: 0,
-                        poll_interval: 10,
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: WaitRegisterMemory(
-                    WaitRegisterMemoryPacket {
-                        fields: Fields {
-                            engine: Memory,
-                            memory_space: Memory,
-                            function: Equal,
-                        },
-                        poll_address_lo: 0x5a94f3c0,
-                        poll_address_hi: 0x7f3a,
-                        reference: 0,
-                        mask: 0xffffffff,
                         poll_interval: 10,
                     },
                 ),

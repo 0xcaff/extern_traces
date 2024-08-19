@@ -5,7 +5,7 @@ use bits_macros::FromBits;
 use custom_debug::Debug;
 use strum::FromRepr;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WaitRegisterMemoryPacket {
     pub fields: Fields,
 
@@ -21,7 +21,7 @@ pub struct WaitRegisterMemoryPacket {
     pub poll_interval: u32,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Engine {
     Memory,
     PrefetchParser,
@@ -37,7 +37,7 @@ impl FromBits<1> for Engine {
     }
 }
 
-#[derive(Debug, FromBits)]
+#[derive(Debug, FromBits, Clone)]
 #[bits(32)]
 pub struct Fields {
     #[bits(8, 8)]
@@ -50,7 +50,7 @@ pub struct Fields {
     pub function: Function,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemorySpace {
     Register,
     Memory,
@@ -66,7 +66,7 @@ impl FromBits<1> for MemorySpace {
     }
 }
 
-#[derive(Debug, FromRepr)]
+#[derive(Debug, FromRepr, Clone)]
 #[repr(usize)]
 pub enum Function {
     Always = 0b000,
@@ -77,6 +77,21 @@ pub enum Function {
     GreaterThanEqual = 0b101,
     GreaterThan = 0b110,
     Reserved = 0b111,
+}
+
+impl Function {
+    pub fn compare(&self, value: u32, reference: u32) -> bool {
+        match self {
+            Function::Always => true,
+            Function::LessThan => value < reference,
+            Function::LessThanEqual => value <= reference,
+            Function::Equal => value == reference,
+            Function::NotEqual => value != reference,
+            Function::GreaterThanEqual => value >= reference,
+            Function::GreaterThan => value > reference,
+            Function::Reserved => unimplemented!(),
+        }
+    }
 }
 
 impl FromBits<3> for Function {

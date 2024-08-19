@@ -1,5 +1,20 @@
 (
-    [],
+    [
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0x370aeb08,
+                poll_address_hi: 0x0,
+                reference: 1,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
+    ],
     [
         Type3(
             Type3Packet {
@@ -72,29 +87,6 @@
                         },
                         virtual_address: 0x370aeb08,
                         immediate_data: 1,
-                    },
-                ),
-            },
-        ),
-        Type3(
-            Type3Packet {
-                header: Type3Header {
-                    reserved: 0,
-                    shader_type: Graphics,
-                    predicate: false,
-                },
-                value: WaitRegisterMemory(
-                    WaitRegisterMemoryPacket {
-                        fields: Fields {
-                            engine: Memory,
-                            memory_space: Memory,
-                            function: Equal,
-                        },
-                        poll_address_lo: 0x370aeb08,
-                        poll_address_hi: 0x0,
-                        reference: 1,
-                        mask: 0xffffffff,
-                        poll_interval: 10,
                     },
                 ),
             },
