@@ -387,6 +387,7 @@ SOPK = {
    (  -1,   -1,   -1,   -1, 0x1a, 0x1b, "s_waitcnt_lgkmcnt", dst(), src(1), InstrClass.Waitcnt),
    (  -1,   -1,   -1,   -1, 0x1b, 0x16, "s_subvector_loop_begin", dst(), src(), InstrClass.Branch),
    (  -1,   -1,   -1,   -1, 0x1c, 0x17, "s_subvector_loop_end", dst(), src(), InstrClass.Branch),
+   (  -1, 0x1e,   -1,   -1,   -1,   -1, "unknown_1", dst(), src())
 }
 for (gfx6, gfx7, gfx8, gfx9, gfx10, gfx11, name, defs, ops, cls) in default_class(SOPK, InstrClass.Salu):
    opcode(name, gfx7, gfx9, gfx10, gfx11, Format.SOPK, cls, definitions = defs, operands = ops)
