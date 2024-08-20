@@ -722,6 +722,10 @@ VOP2 = {
    (  -1,   -1,   -1,   -1, 0x38, 0x38, "v_fmaak_f16", False, False, dst(1), src(1, 1, 1)),
    (  -1,   -1,   -1,   -1, 0x3c, 0x3c, "v_pk_fmac_f16", False, False, dst(1), src(1, 1, 1)),
    (  -1,   -1,   -1, 0x37, 0x02, 0x02, "v_dot2c_f32_f16", False, False, dst(1), src(1, 1, 1)), #v_dot2acc_f32_f16 in GFX11
+
+   # from llvm
+   # https://github.com/llvm/llvm-project/blob/52bfb2611f8d30fae3306c652af7ba5c7e88c147/llvm/lib/Target/AMDGPU/VOP2Instructions.td#L2180
+   (  -1, 0x2e,   -1,   -1,   -1,   -1, "v_cvt_pknorm_u16_f32", False, True, dst(1), src(1, 1)),
 }
 for (gfx6, gfx7, gfx8, gfx9, gfx10, gfx11, name, in_mod, out_mod, defs, ops) in VOP2:
    opcode(name, gfx7, gfx9, gfx10, gfx11, Format.VOP2, InstrClass.Valu32, in_mod, out_mod, definitions = defs, operands = ops)
@@ -1089,7 +1093,7 @@ VOP3 = {
    (   -1,    -1, 0x291, 0x291, 0x301, 0x33e, "v_ashrrev_i64", False, False, dst(2), src(1, 2), InstrClass.Valu64),
    (0x11e, 0x11e, 0x293, 0x293, 0x363, 0x31d, "v_bfm_b32", False, False, dst(1), src(1, 1)),
    (0x12d, 0x12d, 0x294, 0x294, 0x368, 0x321, "v_cvt_pknorm_i16_f32", True, False, dst(1), src(1, 1)),
-   (0x12e, 0x12e, 0x295, 0x295, 0x369, 0x322, "v_cvt_pknorm_u16_f32", True, False, dst(1), src(1, 1)),
+   # (0x12e, 0x12e, 0x295, 0x295, 0x369, 0x322, "v_cvt_pknorm_u16_f32", True, False, dst(1), src(1, 1)),
    (   -1,    -1, 0x296, 0x296,    -1,    -1, "v_cvt_pkrtz_f16_f32_e64", True, False, dst(1), src(1, 1)),
    (0x130, 0x130, 0x297, 0x297, 0x36a, 0x323, "v_cvt_pk_u16_u32", False, False, dst(1), src(1, 1)),
    (0x131, 0x131, 0x298, 0x298, 0x36b, 0x324, "v_cvt_pk_i16_i32", False, False, dst(1), src(1, 1)),
