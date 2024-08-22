@@ -27,7 +27,7 @@ impl Instruction {
         match &self.inner {
             FormattedInstruction::SOPP(SOPPInstruction { op, simm16 }) => {
                 let branch_target = Some(BranchTarget::Direct(
-                    self.program_counter + (*simm16 as u64 * 4),
+                    self.program_counter + (*simm16 as u64 * 4) + 4,
                 ));
 
                 match op {
