@@ -37,7 +37,7 @@ pub struct DSInstruction {
 }
 
 impl<R: Reader> ParseInstruction<R> for DSInstruction {
-    fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
+    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
 
         Ok(DSInstruction::from_bits(token))

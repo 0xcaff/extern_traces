@@ -95,7 +95,7 @@ impl fmt::Debug for DMask {
 }
 
 impl<R: Reader> ParseInstruction<R> for MIMGInstruction {
-    fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
+    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MIMGInstruction::from_bits(token))
     }

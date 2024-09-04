@@ -63,7 +63,7 @@ impl OutputModifier {
 }
 
 impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
-    fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error> {
+    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(VOP3Instruction::from_bits(token))
     }

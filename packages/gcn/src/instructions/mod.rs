@@ -7,8 +7,6 @@ pub mod operands;
 #[path = "generated/mod.rs"]
 pub mod ops;
 
-use std::io::Read;
-
 use crate::reader::Reader;
 
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
@@ -27,12 +25,11 @@ impl Instruction {
     }
 
     pub fn parse(
-        mut reader: impl Read,
+        reader: &mut impl Reader,
         program_counter: u64,
     ) -> Result<Instruction, anyhow::Error> {
         let token = reader.read_u32()?;
-
-        let inner = FormattedInstruction::parse(token, &mut reader)?;
+        let inner = FormattedInstruction::parse(token, reader)?;
 
         let literal_constant = if inner.has_literal_constant() {
             Some(reader.read_u32()?)

@@ -191,13 +191,13 @@ impl FormattedInstruction {
 }
 
 pub trait ParseInstruction<R: Reader> {
-    fn parse(token: u32, reader: R) -> Result<Self, anyhow::Error>
+    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error>
     where
         Self: Sized;
 }
 
 impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
-    fn parse(token: u32, _reader: R) -> Result<Self, anyhow::Error>
+    fn parse(token: u32, _reader: &mut R) -> Result<Self, anyhow::Error>
     where
         Self: Sized,
     {
@@ -205,7 +205,7 @@ impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
     }
 }
 
-fn combine<R: Reader>(first_token: u32, mut reader: R) -> Result<u64, io::Error> {
+fn combine<R: Reader>(first_token: u32, reader: &mut R) -> Result<u64, io::Error> {
     let second_token = reader.read_u32()?;
     let token = (first_token as u64) | ((second_token as u64) << 32);
 
