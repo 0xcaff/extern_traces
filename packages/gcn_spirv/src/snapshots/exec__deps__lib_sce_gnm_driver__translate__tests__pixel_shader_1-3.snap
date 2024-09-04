@@ -1,0 +1,391 @@
+---
+source: packages/exec/src/deps/lib_sce_gnm_driver/translate/mod.rs
+expression: module.disassemble()
+---
+; SPIR-V
+; Version: 1.4
+; Generator: rspirv
+; Bound: 256
+OpCapability Int64
+OpCapability Shader
+OpExtension "SPV_KHR_non_semantic_info"
+%40 = OpExtInstImport "GLSL.std.450"
+%68 = OpExtInstImport "NonSemantic.DebugPrintf"
+OpMemoryModel Logical GLSL450
+OpEntryPoint Fragment %28 "main" %6 %7 %22 %25 %11 %14
+OpExecutionMode %28 OriginUpperLeft
+%69 = OpString "fragment_shader.sb"
+%70 = OpString "s_mov_b32 vcc_hi, 0xf"
+%72 = OpString "SOP1(\n    SOP1Instruction {\n        op: s_mov_b32,\n        ssrc0: LiteralConstant,\n        sdst: VccHi,\n    },\n)"
+%74 = OpString "s_mov_b64 s[0:1], exec_lo"
+%76 = OpString "SOP1(\n    SOP1Instruction {\n        op: s_mov_b64,\n        ssrc0: Destination(\n            ExecLo,\n        ),\n        sdst: ScalarGPR(\n            0,\n        ),\n    },\n)"
+%78 = OpString "s_wqm_b64 exec_lo, exec_lo"
+%80 = OpString "SOP1(\n    SOP1Instruction {\n        op: s_wqm_b64,\n        ssrc0: Destination(\n            ExecLo,\n        ),\n        sdst: ExecLo,\n    },\n)"
+%82 = OpString "s_mov_b32 m0, s16"
+%84 = OpString "SOP1(\n    SOP1Instruction {\n        op: s_mov_b32,\n        ssrc0: Destination(\n            ScalarGPR(\n                16,\n            ),\n        ),\n        sdst: M0,\n    },\n)"
+%86 = OpString "v_interp_p1_f32 v2, v0, attr1.x"
+%88 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p1_f32,\n        vsrc: VectorGPR {\n            register_idx: 0,\n        },\n        attribute_channel: X,\n        attr: Attr(\n            1,\n        ),\n        vdst: VectorGPR {\n            register_idx: 2,\n        },\n    },\n)"
+%90 = OpString "v_interp_p2_f32 v2, v1, attr1.x"
+%92 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p2_f32,\n        vsrc: VectorGPR {\n            register_idx: 1,\n        },\n        attribute_channel: X,\n        attr: Attr(\n            1,\n        ),\n        vdst: VectorGPR {\n            register_idx: 2,\n        },\n    },\n)"
+%99 = OpString "v_interp_p1_f32 v3, v0, attr1.y"
+%101 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p1_f32,\n        vsrc: VectorGPR {\n            register_idx: 0,\n        },\n        attribute_channel: Y,\n        attr: Attr(\n            1,\n        ),\n        vdst: VectorGPR {\n            register_idx: 3,\n        },\n    },\n)"
+%103 = OpString "v_interp_p2_f32 v3, v1, attr1.y"
+%105 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p2_f32,\n        vsrc: VectorGPR {\n            register_idx: 1,\n        },\n        attribute_channel: Y,\n        attr: Attr(\n            1,\n        ),\n        vdst: VectorGPR {\n            register_idx: 3,\n        },\n    },\n)"
+%112 = OpString "image_sample v2, v[2:3], s[4:11], s[12:15], dmask(a)"
+%114 = OpString "MIMG(\n    MIMGInstruction {\n        op: image_sample,\n        dmask: dmask(a),\n        unorm: false,\n        glc: false,\n        da: false,\n        r128: false,\n        tfe: false,\n        lwe: false,\n        slc: false,\n        vaddr: VectorGPR {\n            register_idx: 2,\n        },\n        vdata: VectorGPR {\n            register_idx: 2,\n        },\n        srsrc: ScalarGeneralPurposeRegisterGroup {\n            value: 1,\n        },\n        ssamp: ScalarGeneralPurposeRegisterGroup {\n            value: 3,\n        },\n    },\n)"
+%131 = OpString "v_interp_p1_f32 v3, v0, attr0.w"
+%133 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p1_f32,\n        vsrc: VectorGPR {\n            register_idx: 0,\n        },\n        attribute_channel: W,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 3,\n        },\n    },\n)"
+%135 = OpString "v_interp_p2_f32 v3, v1, attr0.w"
+%137 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p2_f32,\n        vsrc: VectorGPR {\n            register_idx: 1,\n        },\n        attribute_channel: W,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 3,\n        },\n    },\n)"
+%144 = OpString "s_waitcnt 0xf70"
+%146 = OpString "SOPP(\n    SOPPInstruction {\n        op: s_waitcnt,\n        simm16: 3952,\n    },\n)"
+%148 = OpString "v_mul_f32 v2, v2, v3"
+%150 = OpString "VOP2(\n    VOP2Instruction {\n        op: v_mul_f32,\n        src0: VectorGPR(\n            VectorGPR {\n                register_idx: 2,\n            },\n        ),\n        vsrc1: VectorGPR {\n            register_idx: 3,\n        },\n        vdst: VectorGPR {\n            register_idx: 2,\n        },\n    },\n)"
+%164 = OpString "v_interp_p1_f32 v3, v0, attr0.x"
+%166 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p1_f32,\n        vsrc: VectorGPR {\n            register_idx: 0,\n        },\n        attribute_channel: X,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 3,\n        },\n    },\n)"
+%168 = OpString "v_interp_p2_f32 v3, v1, attr0.x"
+%170 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p2_f32,\n        vsrc: VectorGPR {\n            register_idx: 1,\n        },\n        attribute_channel: X,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 3,\n        },\n    },\n)"
+%177 = OpString "v_interp_p1_f32 v4, v0, attr0.y"
+%179 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p1_f32,\n        vsrc: VectorGPR {\n            register_idx: 0,\n        },\n        attribute_channel: Y,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 4,\n        },\n    },\n)"
+%181 = OpString "v_interp_p2_f32 v4, v1, attr0.y"
+%183 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p2_f32,\n        vsrc: VectorGPR {\n            register_idx: 1,\n        },\n        attribute_channel: Y,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 4,\n        },\n    },\n)"
+%190 = OpString "v_interp_p1_f32 v0, v0, attr0.z"
+%192 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p1_f32,\n        vsrc: VectorGPR {\n            register_idx: 0,\n        },\n        attribute_channel: Z,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 0,\n        },\n    },\n)"
+%194 = OpString "v_interp_p2_f32 v0, v1, attr0.z"
+%196 = OpString "VINTRP(\n    VINTRPInstruction {\n        op: v_interp_p2_f32,\n        vsrc: VectorGPR {\n            register_idx: 1,\n        },\n        attribute_channel: Z,\n        attr: Attr(\n            0,\n        ),\n        vdst: VectorGPR {\n            register_idx: 0,\n        },\n    },\n)"
+%203 = OpString "s_mov_b64 exec_lo, s[0:1]"
+%205 = OpString "SOP1(\n    SOP1Instruction {\n        op: s_mov_b64,\n        ssrc0: Destination(\n            ScalarGPR(\n                0,\n            ),\n        ),\n        sdst: ExecLo,\n    },\n)"
+%207 = OpString "v_cvt_pkrtz_f16_f32 v1, v3, v4"
+%209 = OpString "VOP2(\n    VOP2Instruction {\n        op: v_cvt_pkrtz_f16_f32,\n        src0: VectorGPR(\n            VectorGPR {\n                register_idx: 3,\n            },\n        ),\n        vsrc1: VectorGPR {\n            register_idx: 4,\n        },\n        vdst: VectorGPR {\n            register_idx: 1,\n        },\n    },\n)"
+%223 = OpString "v_cvt_pkrtz_f16_f32 v0, v0, v2"
+%225 = OpString "VOP2(\n    VOP2Instruction {\n        op: v_cvt_pkrtz_f16_f32,\n        src0: VectorGPR(\n            VectorGPR {\n                register_idx: 0,\n            },\n        ),\n        vsrc1: VectorGPR {\n            register_idx: 2,\n        },\n        vdst: VectorGPR {\n            register_idx: 0,\n        },\n    },\n)"
+%239 = OpString "exp mrt_color0, v1, v0, off, off, compress, done, vm"
+%241 = OpString "EXP(\n    ExpInstruction {\n        target: RenderTarget(\n            0,\n        ),\n        compress: true,\n        done: true,\n        valid_mask: true,\n        vsrc0: Some(\n            VectorGPR {\n                register_idx: 1,\n            },\n        ),\n        vsrc1: Some(\n            VectorGPR {\n                register_idx: 0,\n            },\n        ),\n        vsrc2: None,\n        vsrc3: None,\n    },\n)"
+%252 = OpString "s_endpgm 0x0"
+%254 = OpString "SOPP(\n    SOPPInstruction {\n        op: s_endpgm,\n        simm16: 0,\n    },\n)"
+OpName %1 "u32"
+OpName %2 "u64"
+OpName %3 "f32"
+OpName %16 "u32[253]"
+OpName %18 "u32[104]"
+OpName %19 "u32[]"
+OpName %20 "MemoryInput"
+OpMemberName %20 0 "memory_offset"
+OpMemberName %20 1 "memory"
+OpName %22 "memory_input"
+OpName %23 "UniformInput"
+OpMemberName %23 0 "sgpr"
+OpName %25 "uniform_input"
+OpName %33 "bool"
+OpName %35 "vgpr"
+OpName %36 "vgpr_idx"
+OpName %38 "sgpr"
+OpName %39 "sgpr_idx"
+OpName %41 "loop_header"
+OpName %42 "merge_block"
+OpName %43 "continue_target"
+OpName %51 "input.sgpr"
+OpName %39 "idx"
+OpName %52 "loop_header"
+OpName %53 "merge_block"
+OpName %54 "continue_target"
+OpName %65 "base_address"
+OpName %67 "memory"
+OpName %98 "vgpr[2]"
+OpName %111 "vgpr[3]"
+OpName %118 "vgpr[2]"
+OpName %122 "vgpr[3]"
+OpName %130 "vgpr[2]"
+OpName %143 "vgpr[3]"
+OpName %153 "vgpr[2]"
+OpName %156 "vgpr[3]"
+OpName %159 "vgpr[2]"
+OpName %176 "vgpr[3]"
+OpName %189 "vgpr[4]"
+OpName %202 "vgpr[0]"
+OpName %212 "vgpr[3]"
+OpName %215 "vgpr[4]"
+OpName %218 "vgpr[1]"
+OpName %228 "vgpr[0]"
+OpName %231 "vgpr[2]"
+OpName %234 "vgpr[0]"
+OpName %244 "vgpr[1]"
+OpName %248 "vgpr[0]"
+OpDecorate %6 Location 0
+OpDecorate %7 Location 1
+OpDecorate %11 DescriptorSet 2
+OpDecorate %11 Binding 1
+OpDecorate %14 Location 0
+OpDecorate %18 ArrayStride 4
+OpDecorate %19 ArrayStride 4
+OpDecorate %20 Block
+OpMemberDecorate %20 0 NonWritable
+OpMemberDecorate %20 0 Offset 0
+OpMemberDecorate %20 1 NonWritable
+OpMemberDecorate %20 1 Offset 8
+OpDecorate %22 DescriptorSet 0
+OpDecorate %22 Binding 0
+OpDecorate %23 Block
+OpMemberDecorate %23 0 NonWritable
+OpMemberDecorate %23 0 Offset 0
+OpDecorate %25 DescriptorSet 2
+OpDecorate %25 Binding 0
+%1 = OpTypeInt 32 0
+%2 = OpTypeInt 64 0
+%3 = OpTypeFloat 32
+%4 = OpTypeVector %3 4
+%5 = OpTypePointer Input %4
+%6 = OpVariable  %5  Input
+%7 = OpVariable  %5  Input
+%8 = OpTypeImage %3 2D 0 0 0 1 Unknown
+%9 = OpTypeSampledImage %8
+%10 = OpTypePointer UniformConstant %9
+%11 = OpVariable  %10  UniformConstant
+%12 = OpTypeVector %3 2
+%13 = OpTypePointer Output %12
+%14 = OpVariable  %13  Output
+%15 = OpConstant  %1  253
+%16 = OpTypeArray %1 %15
+%17 = OpConstant  %1  104
+%18 = OpTypeArray %1 %17
+%19 = OpTypeRuntimeArray %1
+%20 = OpTypeStruct %2 %19
+%21 = OpTypePointer StorageBuffer %20
+%22 = OpVariable  %21  StorageBuffer
+%23 = OpTypeStruct %18
+%24 = OpTypePointer Uniform %23
+%25 = OpVariable  %24  Uniform
+%26 = OpTypeVoid
+%27 = OpTypeFunction %26
+%30 = OpTypePointer Function %1
+%31 = OpConstant  %1  0
+%32 = OpConstant  %1  1
+%33 = OpTypeBool
+%34 = OpTypePointer Function %16
+%37 = OpTypePointer Function %18
+%50 = OpTypePointer Uniform %18
+%59 = OpTypePointer Uniform %1
+%64 = OpTypePointer StorageBuffer %2
+%66 = OpTypePointer StorageBuffer %19
+%97 = OpConstant  %1  2
+%110 = OpConstant  %1  3
+%117 = OpConstant  %1  2
+%121 = OpConstant  %1  3
+%129 = OpConstant  %1  2
+%142 = OpConstant  %1  3
+%152 = OpConstant  %1  2
+%155 = OpConstant  %1  3
+%158 = OpConstant  %1  2
+%175 = OpConstant  %1  3
+%188 = OpConstant  %1  4
+%201 = OpConstant  %1  0
+%211 = OpConstant  %1  3
+%214 = OpConstant  %1  4
+%217 = OpConstant  %1  1
+%227 = OpConstant  %1  0
+%230 = OpConstant  %1  2
+%233 = OpConstant  %1  0
+%243 = OpConstant  %1  1
+%247 = OpConstant  %1  0
+%28 = OpFunction  %26  None %27
+%29 = OpLabel
+%35 = OpVariable  %34  Function
+%36 = OpVariable  %30  Function
+%38 = OpVariable  %37  Function
+%39 = OpVariable  %30  Function
+OpStore %36 %31
+OpBranch %41
+%41 = OpLabel
+OpLoopMerge %42 %43 None
+OpBranch %44
+%44 = OpLabel
+%45 = OpLoad  %1  %36
+%46 = OpULessThan  %33  %45 %15
+OpBranchConditional %46 %47 %42
+%47 = OpLabel
+%48 = OpAccessChain  %30  %35 %45
+OpStore %48 %31
+OpBranch %43
+%43 = OpLabel
+%49 = OpIAdd  %1  %45 %32
+OpStore %36 %49
+OpBranch %41
+%42 = OpLabel
+OpStore %39 %31
+%51 = OpAccessChain  %50  %25 %31
+OpBranch %52
+%52 = OpLabel
+OpLoopMerge %53 %54 None
+OpBranch %55
+%55 = OpLabel
+%56 = OpLoad  %1  %39
+%57 = OpULessThan  %33  %56 %17
+OpBranchConditional %57 %58 %53
+%58 = OpLabel
+%60 = OpAccessChain  %59  %51 %56
+%61 = OpLoad  %1  %60
+%62 = OpAccessChain  %30  %38 %56
+OpStore %62 %61
+OpBranch %54
+%54 = OpLabel
+%63 = OpIAdd  %1  %56 %32
+OpStore %39 %63
+OpBranch %52
+%53 = OpLabel
+%65 = OpAccessChain  %64  %22 %31
+%67 = OpAccessChain  %66  %22 %32
+OpLine %69 0 0
+%71 = OpExtInst  %26  %68 32 %70
+%73 = OpExtInst  %26  %68 32 %72
+OpLine %69 1 0
+%75 = OpExtInst  %26  %68 32 %74
+%77 = OpExtInst  %26  %68 32 %76
+OpLine %69 2 0
+%79 = OpExtInst  %26  %68 32 %78
+%81 = OpExtInst  %26  %68 32 %80
+OpLine %69 3 0
+%83 = OpExtInst  %26  %68 32 %82
+%85 = OpExtInst  %26  %68 32 %84
+OpLine %69 4 0
+%87 = OpExtInst  %26  %68 32 %86
+%89 = OpExtInst  %26  %68 32 %88
+OpLine %69 5 0
+%91 = OpExtInst  %26  %68 32 %90
+%93 = OpExtInst  %26  %68 32 %92
+%94 = OpLoad  %4  %7
+%95 = OpCompositeExtract  %3  %94 0
+%96 = OpBitcast  %1  %95
+%98 = OpAccessChain  %30  %35 %97
+OpStore %98 %96
+OpLine %69 6 0
+%100 = OpExtInst  %26  %68 32 %99
+%102 = OpExtInst  %26  %68 32 %101
+OpLine %69 7 0
+%104 = OpExtInst  %26  %68 32 %103
+%106 = OpExtInst  %26  %68 32 %105
+%107 = OpLoad  %4  %7
+%108 = OpCompositeExtract  %3  %107 1
+%109 = OpBitcast  %1  %108
+%111 = OpAccessChain  %30  %35 %110
+OpStore %111 %109
+OpLine %69 8 0
+%113 = OpExtInst  %26  %68 32 %112
+%115 = OpExtInst  %26  %68 32 %114
+%116 = OpLoad  %9  %11
+%118 = OpAccessChain  %30  %35 %117
+%119 = OpLoad  %1  %118
+%120 = OpBitcast  %3  %119
+%122 = OpAccessChain  %30  %35 %121
+%123 = OpLoad  %1  %122
+%124 = OpBitcast  %3  %123
+%125 = OpCompositeConstruct  %12  %120 %124
+%126 = OpImageSampleImplicitLod  %4  %116 %125
+%127 = OpCompositeExtract  %3  %126 3
+%128 = OpBitcast  %1  %127
+%130 = OpAccessChain  %30  %35 %129
+OpStore %130 %128
+OpLine %69 9 0
+%132 = OpExtInst  %26  %68 32 %131
+%134 = OpExtInst  %26  %68 32 %133
+OpLine %69 10 0
+%136 = OpExtInst  %26  %68 32 %135
+%138 = OpExtInst  %26  %68 32 %137
+%139 = OpLoad  %4  %6
+%140 = OpCompositeExtract  %3  %139 3
+%141 = OpBitcast  %1  %140
+%143 = OpAccessChain  %30  %35 %142
+OpStore %143 %141
+OpLine %69 11 0
+%145 = OpExtInst  %26  %68 32 %144
+%147 = OpExtInst  %26  %68 32 %146
+OpLine %69 12 0
+%149 = OpExtInst  %26  %68 32 %148
+%151 = OpExtInst  %26  %68 32 %150
+%153 = OpAccessChain  %30  %35 %152
+%154 = OpLoad  %1  %153
+%156 = OpAccessChain  %30  %35 %155
+%157 = OpLoad  %1  %156
+%159 = OpAccessChain  %30  %35 %158
+%160 = OpBitcast  %3  %154
+%161 = OpBitcast  %3  %157
+%162 = OpFMul  %3  %160 %161
+%163 = OpBitcast  %1  %162
+OpStore %159 %163
+OpLine %69 13 0
+%165 = OpExtInst  %26  %68 32 %164
+%167 = OpExtInst  %26  %68 32 %166
+OpLine %69 14 0
+%169 = OpExtInst  %26  %68 32 %168
+%171 = OpExtInst  %26  %68 32 %170
+%172 = OpLoad  %4  %6
+%173 = OpCompositeExtract  %3  %172 0
+%174 = OpBitcast  %1  %173
+%176 = OpAccessChain  %30  %35 %175
+OpStore %176 %174
+OpLine %69 15 0
+%178 = OpExtInst  %26  %68 32 %177
+%180 = OpExtInst  %26  %68 32 %179
+OpLine %69 16 0
+%182 = OpExtInst  %26  %68 32 %181
+%184 = OpExtInst  %26  %68 32 %183
+%185 = OpLoad  %4  %6
+%186 = OpCompositeExtract  %3  %185 1
+%187 = OpBitcast  %1  %186
+%189 = OpAccessChain  %30  %35 %188
+OpStore %189 %187
+OpLine %69 17 0
+%191 = OpExtInst  %26  %68 32 %190
+%193 = OpExtInst  %26  %68 32 %192
+OpLine %69 18 0
+%195 = OpExtInst  %26  %68 32 %194
+%197 = OpExtInst  %26  %68 32 %196
+%198 = OpLoad  %4  %6
+%199 = OpCompositeExtract  %3  %198 2
+%200 = OpBitcast  %1  %199
+%202 = OpAccessChain  %30  %35 %201
+OpStore %202 %200
+OpLine %69 19 0
+%204 = OpExtInst  %26  %68 32 %203
+%206 = OpExtInst  %26  %68 32 %205
+OpLine %69 20 0
+%208 = OpExtInst  %26  %68 32 %207
+%210 = OpExtInst  %26  %68 32 %209
+%212 = OpAccessChain  %30  %35 %211
+%213 = OpLoad  %1  %212
+%215 = OpAccessChain  %30  %35 %214
+%216 = OpLoad  %1  %215
+%218 = OpAccessChain  %30  %35 %217
+%219 = OpBitcast  %3  %213
+%220 = OpBitcast  %3  %216
+%221 = OpCompositeConstruct  %12  %219 %220
+%222 = OpExtInst  %1  %40 PackHalf2x16 %221
+OpStore %218 %222
+OpLine %69 21 0
+%224 = OpExtInst  %26  %68 32 %223
+%226 = OpExtInst  %26  %68 32 %225
+%228 = OpAccessChain  %30  %35 %227
+%229 = OpLoad  %1  %228
+%231 = OpAccessChain  %30  %35 %230
+%232 = OpLoad  %1  %231
+%234 = OpAccessChain  %30  %35 %233
+%235 = OpBitcast  %3  %229
+%236 = OpBitcast  %3  %232
+%237 = OpCompositeConstruct  %12  %235 %236
+%238 = OpExtInst  %1  %40 PackHalf2x16 %237
+OpStore %234 %238
+OpLine %69 22 0
+%240 = OpExtInst  %26  %68 32 %239
+%242 = OpExtInst  %26  %68 32 %241
+%244 = OpAccessChain  %30  %35 %243
+%245 = OpLoad  %1  %244
+%246 = OpBitcast  %3  %245
+%248 = OpAccessChain  %30  %35 %247
+%249 = OpLoad  %1  %248
+%250 = OpBitcast  %3  %249
+%251 = OpCompositeConstruct  %12  %246 %250
+OpStore %14 %251
+OpLine %69 23 0
+%253 = OpExtInst  %26  %68 32 %252
+%255 = OpExtInst  %26  %68 32 %254
+OpReturn
+OpFunctionEnd

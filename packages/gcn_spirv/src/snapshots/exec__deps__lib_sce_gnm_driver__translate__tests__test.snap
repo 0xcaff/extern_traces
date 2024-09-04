@@ -1,0 +1,12 @@
+---
+source: packages/exec/src/deps/lib_sce_gnm_driver/translate/mod.rs
+expression: shader.displayed()
+---
+0x0000: s_load_dwordx4 s[4:7], s[2:3], 0x0
+0x0004: s_waitcnt 0x7f
+0x0008: buffer_load_format_xyz v[4:6], v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0010: s_load_dwordx4 s[4:7], s[2:3], 0x4
+0x0014: s_waitcnt 0x7f
+0x0018: buffer_load_format_xy v[8:9], v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0020: s_waitcnt 0x0
+0x0024: s_setpc_b64 s0, s[0:1]
