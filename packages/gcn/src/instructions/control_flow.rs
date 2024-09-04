@@ -26,9 +26,13 @@ impl Instruction {
     pub fn control_flow_information(&self) -> ControlFlowInformation {
         match &self.inner {
             FormattedInstruction::SOPP(SOPPInstruction { op, simm16 }) => {
-                let branch_target = Some(BranchTarget::Direct(
-                    self.program_counter + (*simm16 as u64 * 4) + 4,
-                ));
+                let branch_target = || {
+                    Some(BranchTarget::Direct(
+                        self.program_counter
+                            .checked_add_signed((*simm16 as i64 * 4) + 4)
+                            .unwrap(),
+                    ))
+                };
 
                 match op {
                     SOPPOpCode::s_endpgm => {
@@ -39,7 +43,7 @@ impl Instruction {
                     }
                     SOPPOpCode::s_branch => {
                         return ControlFlowInformation {
-                            branch_target,
+                            branch_target: branch_target(),
                             has_next_instruction: false,
                         }
                     }
@@ -54,7 +58,7 @@ impl Instruction {
                     | SOPPOpCode::s_cbranch_cdbgsys_and_user
                     | SOPPOpCode::s_cbranch_cdbgsys_or_user => {
                         return ControlFlowInformation {
-                            branch_target,
+                            branch_target: branch_target(),
                             has_next_instruction: true,
                         }
                     }

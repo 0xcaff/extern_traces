@@ -1,0 +1,47 @@
+[
+    ControlFlowBlock {
+        start_instruction_idx: 0,
+        end_instruction_idx: 31,
+        last_instruction_branch: false,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 32,
+        end_instruction_idx: 33,
+        last_instruction_branch: true,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 34,
+        end_instruction_idx: 36,
+        last_instruction_branch: false,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 37,
+        end_instruction_idx: 38,
+        last_instruction_branch: true,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 39,
+        end_instruction_idx: 46,
+        last_instruction_branch: true,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 47,
+        end_instruction_idx: 76,
+        last_instruction_branch: true,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 77,
+        end_instruction_idx: 95,
+        last_instruction_branch: false,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 96,
+        end_instruction_idx: 98,
+        last_instruction_branch: true,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 99,
+        end_instruction_idx: 105,
+        last_instruction_branch: true,
+    },
+]

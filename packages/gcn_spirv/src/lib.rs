@@ -10,7 +10,6 @@ use gcn::instructions::ops::{
     VOP1OpCode, VOP2OpCode, VOPCOpCode,
 };
 use gcn::instructions::Instruction;
-use itertools::Itertools;
 use rspirv::dr::{Builder, Operand};
 use rspirv::spirv;
 use rspirv::spirv::{GLOp, SelectionControl, StorageClass};
@@ -1087,20 +1086,4 @@ mod tests {
 
     //     Ok(())
     // }
-
-    #[test]
-    fn control_flow_blocks() -> Result<(), anyhow::Error> {
-        let data = &include_bytes!(
-            "../../../../../gcn/test_data/captured/CUSA02394/6b46d72505c15fb8537386fa77f1471de5b58ace7a4cb2ba5b59be6166680515.compute.sb"
-        )[..];
-
-        let shader = GCNInstructionStream::new(&data)?;
-
-        let graph =
-            construct_control_flow_graph(shader.instructions.iter().collect::<Vec<_>>().as_ref());
-
-        insta::assert_debug_snapshot!(graph);
-
-        Ok(())
-    }
 }
