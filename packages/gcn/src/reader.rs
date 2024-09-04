@@ -1,6 +1,6 @@
+use byteorder::{LittleEndian, ReadBytesExt};
 use std::io;
 use std::io::Read;
-use byteorder::{LittleEndian, ReadBytesExt};
 
 pub trait Reader {
     fn read_u32(&mut self) -> Result<u32, io::Error>;

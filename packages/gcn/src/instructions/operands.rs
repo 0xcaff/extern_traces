@@ -51,16 +51,19 @@ impl ScalarDestinationOperand {
     pub fn display(&self, operand_info: &Option<OperandInfo>) -> String {
         match self {
             ScalarDestinationOperand::ScalarGPR(idx) => {
-                let size = match operand_info {
-                    Some(OperandInfo::Size(words)) => *words,
-                    Some(_) => unimplemented!("not implemented"),
-                    None => 1,
-                };
-
-                if size == 1 {
-                    format!("s{}", *idx)
-                } else {
-                    format!("s[{}:{}]", *idx, *idx + size - 1)
+                match operand_info {
+                    Some(OperandInfo::Size(words)) => {
+                        let size = *words;
+                        if size == 1 {
+                            format!("s{}", *idx)
+                        } else {
+                            format!("s[{}:{}]", *idx, *idx + size - 1)
+                        }
+                    },
+                    Some(OperandInfo::SCC) => "scc".to_string(),
+                    Some(OperandInfo::Vcc) => "vcc".to_string(),
+                    None => format!("s{}", idx),
+                    _ => unimplemented!()
                 }
             }
             ScalarDestinationOperand::VccLo => match operand_info {

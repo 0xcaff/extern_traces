@@ -1,3 +1,5 @@
+use crate::instructions::formats::{FormattedInstruction, SOPPInstruction};
+use crate::instructions::ops::SOPPOpCode;
 use crate::instructions::Instruction;
 use std::io::Cursor;
 
@@ -17,7 +19,20 @@ impl GCNInstructionStream {
 
             let position = cursor.position();
             let instruction = Instruction::parse(&mut cursor, position)?;
+            let is_end_pgm = if let FormattedInstruction::SOPP(SOPPInstruction {
+                op: SOPPOpCode::s_endpgm,
+                ..
+            }) = instruction.inner
+            {
+                true
+            } else {
+                false
+            };
+
             instructions.push(instruction);
+            if is_end_pgm {
+                break;
+            }
         }
 
         Ok(GCNInstructionStream { instructions })
