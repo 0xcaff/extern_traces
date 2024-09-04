@@ -997,7 +997,7 @@
         inner: SOPP(
             SOPPInstruction {
                 op: s_branch,
-                simm16: 65525,
+                simm16: -11,
             },
         ),
         literal_constant: None,
@@ -2196,7 +2196,7 @@
         inner: SOPP(
             SOPPInstruction {
                 op: s_branch,
-                simm16: 65455,
+                simm16: -81,
             },
         ),
         literal_constant: None,

@@ -7,7 +7,7 @@
 0x0018: v_interp_p1_f32 v0, v0, attr0.y
 0x001c: v_interp_p2_f32 v0, v1, attr0.y
 0x0020: v_mov_b32 v3, v0
-0x0024: s_waitcnt 0xc07f
+0x0024: s_waitcnt -0x3f81
 0x0028: image_sample v[0:2], v[2:3], s[8:15], s[0:3], dmask(rgb)
 0x0030: s_waitcnt 0x3f70
 0x0034: v_cvt_pkrtz_f16_f32 v0, v0, v1

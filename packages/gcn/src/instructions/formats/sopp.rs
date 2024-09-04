@@ -14,14 +14,18 @@ pub struct SOPPInstruction {
     pub op: SOPPOpCode,
 
     #[bits(15, 0)]
-    pub simm16: u16,
+    pub simm16: i16,
 }
 
 impl DisplayInstruction for SOPPInstruction {
     fn display(&self, _: Option<u32>) -> DisplayableInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
-            args: vec![format!("0x{:x}", self.simm16)],
+            args: vec![if self.simm16 < 0 {
+                format!("-0x{:x}", self.simm16.abs())
+            } else {
+                format!("0x{:x}", self.simm16)
+            }],
         }
     }
 }

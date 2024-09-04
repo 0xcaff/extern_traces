@@ -44,7 +44,7 @@
 0x00d0: v_cndmask_b32 v11, v11, v12, vcc
 0x00d8: s_xor_b32 vcc_hi, vcc_hi, vcc_lo
 0x00dc: s_lshr_b32 s5, s5, 1
-0x00e0: s_branch 0xfff5
+0x00e0: s_branch -0xb
 0x00e4: v_lshrrev_b32 v11, 9, v11
 0x00e8: v_or_b32 v11, 1.f, v11
 0x00ec: v_add_f32 v11, -1.f, v11
@@ -96,7 +96,7 @@
 0x01d0: v_mac_f32 v10, v12, -v11, s0
 0x01d8: s_mov_b64 exec, vcc
 0x01dc: s_add_i32 s6, s6, 1
-0x01e0: s_branch 0xffaf
+0x01e0: s_branch -0x51
 0x01e4: v_mul_f32 v2, 0x3a800000, v10
 0x01ec: v_mul_f32 v3, 0x3a800000, v7
 0x01f4: s_load_dwordx8 s[0:7], s[0:1], 0x0

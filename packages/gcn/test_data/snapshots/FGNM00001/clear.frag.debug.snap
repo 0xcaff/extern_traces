@@ -18,7 +18,7 @@
         inner: SOPP(
             SOPPInstruction {
                 op: s_waitcnt,
-                simm16: 49279,
+                simm16: -16257,
             },
         ),
         literal_constant: None,
@@ -43,7 +43,7 @@
         inner: SOPP(
             SOPPInstruction {
                 op: s_waitcnt,
-                simm16: 49279,
+                simm16: -16257,
             },
         ),
         literal_constant: None,

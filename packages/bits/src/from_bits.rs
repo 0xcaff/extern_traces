@@ -10,6 +10,12 @@ impl FromBits<16> for u16 {
     }
 }
 
+impl FromBits<16> for i16 {
+    fn from_bits(value: impl Bits) -> Self {
+        value.full() as _
+    }
+}
+
 impl FromBits<8> for u8 {
     fn from_bits(value: impl Bits) -> Self {
         value.full() as _
