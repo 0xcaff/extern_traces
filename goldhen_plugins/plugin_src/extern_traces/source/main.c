@@ -256,6 +256,7 @@ void init_thread_local_state()
         }
     }
 
+    final_printf("no space for state\n");
     write_tls_value((uint64_t)state);
 }
 
