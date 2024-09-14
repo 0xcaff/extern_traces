@@ -1,13 +1,13 @@
+#include <arpa/inet.h>
 #include <pthread.h>
 #include <stdalign.h>
+#include <stdatomic.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdatomic.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 
 #include "plugin_common.h"
@@ -15,6 +15,7 @@
 
 #define TARGET_IP "192.168.1.100"
 #define TARGET_PORT 12345
+#define BUFFER_SIZE (1024 * 1024)
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "collects traces for external calls";
@@ -25,11 +26,12 @@ struct ThreadLoggingState
 {
     uint64_t thread_id;
     uint64_t write_idx;
+    uint64_t read_idx;
     bool is_finished;
-    uint8_t buffer[1024 * 1024];
+    uint8_t buffer[BUFFER_SIZE];
 };
 
-static _Atomic (struct ThreadLoggingState *) global_states[256];
+static _Atomic(struct ThreadLoggingState *) global_states[256];
 
 struct ThreadLoggingState *unsafe_read_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_ptr)
 {
@@ -43,7 +45,8 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
-ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock) {
+ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
+{
     // Stream buffer data to the TCP socket
     ssize_t bytes_sent = send(sock, state->buffer, sizeof(state->buffer), 0);
     return bytes_sent;
@@ -52,7 +55,8 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock) {
 void *flush_thread(void *arg)
 {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
+    if (sock < 0)
+    {
         final_printf("socket creation failed\n");
         return NULL;
     }
@@ -61,13 +65,15 @@ void *flush_thread(void *arg)
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(TARGET_PORT);
 
-    if (inet_pton(AF_INET, TARGET_IP, &server_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, TARGET_IP, &server_addr.sin_addr) <= 0)
+    {
         final_printf("invalid address\n");
         close(sock);
         return NULL;
     }
 
-    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    {
         final_printf("connection failed\n");
         close(sock);
         return NULL;
@@ -86,13 +92,15 @@ void *flush_thread(void *arg)
 
             ssize_t bytes_sent = flush_logging_entries(state, sock);
 
-            if (bytes_sent < 0) {
+            if (bytes_sent < 0)
+            {
                 final_printf("send failed\n");
                 close(sock);
                 return NULL;
             }
 
-            if (state->is_finished) {
+            if (state->is_finished)
+            {
                 free(state);
                 unsafe_write_atomic(&global_states[i], NULL);
                 continue;
@@ -134,6 +142,7 @@ void init_thread_local_state()
     state->is_finished = false;
     state->thread_id = thread_id;
     state->write_idx = 0;
+    state->read_idx = 0;
 
     for (size_t i = 0; i < 256; ++i)
     {
@@ -209,4 +218,39 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     UNHOOK(scePthreadCreate);
 
     return 0;
+}
+
+bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length)
+{
+    size_t free_space;
+
+    if (state->write_idx >= state->read_idx)
+    {
+        free_space = BUFFER_SIZE - (state->write_idx - state->read_idx);
+    }
+    else
+    {
+        free_space = state->read_idx - state->write_idx;
+    }
+
+    if (free_space <= length)
+    {
+        return false;
+    }
+
+    size_t end_pos = (state->write_idx + length) % BUFFER_SIZE;
+    state->write_idx = end_pos;
+
+    if (end_pos < state->write_idx)
+    {
+        size_t first_chunk = BUFFER_SIZE - state->write_idx;
+        memcpy(&state->buffer[state->write_idx], data, first_chunk);
+        memcpy(state->buffer, data + first_chunk, end_pos);
+    }
+    else
+    {
+        memcpy(&state->buffer[state->write_idx], data, length);
+    }
+
+    return true;
 }
