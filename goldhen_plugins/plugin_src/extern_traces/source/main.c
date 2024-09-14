@@ -76,6 +76,8 @@ bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size
         memcpy(&state->buffer[state->write_idx], data, length);
     }
 
+    // this operation must occur after writing to buffer completes as updating
+    // write_idx marks allows the region to be read
     state->write_idx = end_pos;
 
     return true;
@@ -102,14 +104,15 @@ ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
 ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
 {
     uint64_t write_idx = state->write_idx;
-    if (write_idx >= state->read_idx)
+    if (write_idx == state->read_idx)
+    {
+        return 0;
+    }
+
+    if (write_idx > state->read_idx)
     {
         // no wrapping case
         size_t bytes_to_send = write_idx - state->read_idx;
-        if (bytes_to_send == 0)
-        {
-            return 0;
-        }
 
         ssize_t bytes_sent = send_all(sock, &state->buffer[state->read_idx], bytes_to_send);
         if (bytes_sent < 0)
@@ -117,38 +120,44 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
             return bytes_sent;
         }
 
-        state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+        state->read_idx = write_idx;
         return bytes_sent;
     }
     else
     {
         // wrapping case (write_idx < read_idx)
         ssize_t total_bytes_sent = 0;
-        size_t bytes_to_send_first = BUFFER_SIZE - state->read_idx;
-        if (bytes_to_send_first > 0)
-        {
-            ssize_t bytes_sent = send_all(sock, &state->buffer[state->read_idx], bytes_to_send_first);
-            if (bytes_sent < 0)
-            {
-                return bytes_sent;
-            }
 
-            total_bytes_sent += bytes_sent;
-            state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+        {
+            // read first half (from read index to end of buffer)
+            size_t bytes_to_send_first = BUFFER_SIZE - state->read_idx;
+            if (bytes_to_send_first > 0)
+            {
+                ssize_t bytes_sent = send_all(sock, &state->buffer[state->read_idx], bytes_to_send_first);
+                if (bytes_sent < 0)
+                {
+                    return bytes_sent;
+                }
+
+                total_bytes_sent += bytes_sent;
+                state->read_idx = 0;
+            }
         }
 
-        size_t bytes_to_send_second = write_idx;
-        if (bytes_to_send_second > 0)
         {
-            ssize_t bytes_sent = send_all(sock, &state->buffer[0], bytes_to_send_second);
-
-            if (bytes_sent < 0)
+            // read second half (start of buffer to write idx)
+            size_t bytes_to_send_second = write_idx;
+            if (bytes_to_send_second > 0)
             {
-                return bytes_sent;
-            }
+                ssize_t bytes_sent = send_all(sock, &state->buffer[0], bytes_to_send_second);
+                if (bytes_sent < 0)
+                {
+                    return bytes_sent;
+                }
 
-            total_bytes_sent += bytes_sent;
-            state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+                total_bytes_sent += bytes_sent;
+                state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+            }
         }
 
         return total_bytes_sent;
