@@ -1,8 +1,10 @@
+#include <pthread.h>
 #include <stdalign.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "plugin_common.h"
 #include "thread_local_storage.h"
@@ -25,47 +27,61 @@ struct CustomThreadArgs
     void *(*init)(void *);
 };
 
-void *thread_init_inner(void *rawArgs)
+struct ThreadLoggingState
 {
-    struct CustomThreadArgs *args = rawArgs;
-
-    init_thread_local_state();
-
-    void* result = args->init(args->innerArgs);
-
-    fini_thread_local_state();
-
-    return result;
-}
-
-struct ThreadLoggingState {
     uint64_t thread_id;
     uint64_t write_idx;
     bool is_finished;
     uint8_t buffer[1024 * 1024];
 };
 
-void init_thread_local_state() {
+void fini_thread_local_state()
+{
+    struct ThreadLoggingState *state = (struct ThreadLoggingState*)read_tls_value();
+    state->is_finished = true;
+}
+
+static struct ThreadLoggingState *global_states[256];
+static size_t global_state_count = 0;
+static pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void init_thread_local_state()
+{
     OrbisPthread thread = scePthreadSelf();
-    uint64_t thread_id = thread;
+    uint64_t thread_id = (uint64_t)thread;
 
-    struct ThreadLoggingState* state = (struct ThreadLoggingState*) malloc(sizeof(struct ThreadLoggingState));
-
-    if (state == NULL) {
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)malloc(sizeof(struct ThreadLoggingState));
+    if (state == NULL)
+    {
         return;
     }
 
-    OrbisPthread thread = scePthreadSelf();
     state->is_finished = false;
-    state->thread_id = (uint64_t)thread;
+    state->thread_id = thread_id;
     state->write_idx = 0;
+
+    // Protect global state access
+    pthread_mutex_lock(&state_mutex);
+    if (global_state_count < 256)
+    { // Ensure we don't exceed the array limit
+        global_states[global_state_count++] = state;
+    }
+    pthread_mutex_unlock(&state_mutex);
 
     write_tls_value((uint64_t)state);
 }
 
-void fini_thread_local_state() {
-    struct ThreadLoggingState* state = read_tls_value();
-    state->is_finished = true;
+void *thread_init_inner(void *rawArgs)
+{
+    struct CustomThreadArgs *args = rawArgs;
+
+    init_thread_local_state();
+
+    void *result = args->init(args->innerArgs);
+
+    fini_thread_local_state();
+
+    return result;
 }
 
 int32_t scePthreadCreate_hook(
