@@ -1,19 +1,35 @@
 #include <stdalign.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
 
-#include "thread_local_storage.h"
 #include "plugin_common.h"
+#include "thread_local_storage.h"
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
-void* flush_thread(void* arg) {
+void *flush_thread(void *arg)
+{
     return NULL;
+}
+
+HOOK_INIT(scePthreadCreate);
+
+int32_t scePthreadCreate_hook(
+    OrbisPthread *thread,
+    const OrbisPthreadAttr *attr,
+    void *(*init)(void *),
+    void *args,
+    const char *name)
+{
+    return HOOK_CONTINUE(
+        scePthreadCreate,
+        int32_t(*)(OrbisPthread *, const OrbisPthreadAttr *, void *(*)(void *), void *, const char *),
+        thread, attr, init, args, name);
 }
 
 s32 attr_module_hidden module_start(s64 argc, const void *args)
@@ -29,6 +45,8 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         final_printf("[extern_traces] scePthreadCreate failed %x\n", ret);
     }
 
+    HOOK32(scePthreadCreate);
+
     return 0;
 }
 
@@ -36,6 +54,8 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
 {
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
+
+    UNHOOK(scePthreadCreate);
 
     return 0;
 }
