@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdatomic.h>
 
 #include "plugin_common.h"
 #include "thread_local_storage.h"
@@ -37,13 +38,11 @@ struct ThreadLoggingState
 
 void fini_thread_local_state()
 {
-    struct ThreadLoggingState *state = (struct ThreadLoggingState*)read_tls_value();
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
     state->is_finished = true;
 }
 
-static struct ThreadLoggingState *global_states[256];
-static size_t global_state_count = 0;
-static pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
+static _Atomic (struct ThreadLoggingState *) global_states[256];
 
 void init_thread_local_state()
 {
@@ -60,13 +59,15 @@ void init_thread_local_state()
     state->thread_id = thread_id;
     state->write_idx = 0;
 
-    // Protect global state access
-    pthread_mutex_lock(&state_mutex);
-    if (global_state_count < 256)
-    { // Ensure we don't exceed the array limit
-        global_states[global_state_count++] = state;
+    for (size_t i = 0; i < 256; ++i)
+    {
+        struct ThreadLoggingState *expected = NULL;
+        if (atomic_compare_exchange_strong(&global_states[i], &expected, state))
+        {
+            write_tls_value((uint64_t)state);
+            return;
+        }
     }
-    pthread_mutex_unlock(&state_mutex);
 
     write_tls_value((uint64_t)state);
 }
