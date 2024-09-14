@@ -13,9 +13,9 @@
 #include "plugin_common.h"
 #include "thread_local_storage.h"
 
-#define TARGET_IP "192.168.1.100"
-#define TARGET_PORT 12345
-#define BUFFER_SIZE (1024 * 1024)
+#define TARGET_IP "192.168.1.104"
+#define TARGET_PORT 9090
+#define BUFFER_SIZE (1024 * 1024 * 10)
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "collects traces for external calls";
@@ -218,7 +218,8 @@ void *flush_thread(void *arg)
             }
         }
 
-        scePthreadYield();
+        sceKernelSleep(1);
+        // scePthreadYield();
     }
 
     close(sock);
@@ -269,37 +270,6 @@ void init_thread_local_state()
     write_tls_value((uint64_t)state);
 }
 
-void *thread_init_inner(void *rawArgs)
-{
-    struct CustomThreadArgs *args = rawArgs;
-
-    init_thread_local_state();
-
-    void *result = args->init(args->innerArgs);
-
-    fini_thread_local_state();
-
-    return result;
-}
-
-int32_t scePthreadCreate_hook(
-    OrbisPthread *thread,
-    const OrbisPthreadAttr *attr,
-    void *(*init)(void *),
-    void *args,
-    const char *name)
-{
-    struct CustomThreadArgs wrappedArgs = {
-        .innerArgs = args,
-        .init = init,
-    };
-
-    return HOOK_CONTINUE(
-        scePthreadCreate,
-        int32_t(*)(OrbisPthread *, const OrbisPthreadAttr *, void *(*)(void *), void *, const char *),
-        thread, attr, thread_init_inner, &wrappedArgs, name);
-}
-
 struct Span
 {
     uint64_t thread_id;
@@ -312,6 +282,19 @@ static inline uint64_t get_current_time_rdtscp()
 {
     unsigned int aux;
     return __builtin_ia32_rdtscp(&aux);
+}
+
+struct ThreadLoggingState* lazy_read_value() {
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
+    if (state != NULL) {
+        return state;
+    }
+
+    init_thread_local_state();
+
+    // todo: handle teardown
+
+    return state;
 }
 
 bool emit_span(uint64_t start_time, uint64_t end_time, uint64_t label_id)
@@ -328,18 +311,18 @@ bool emit_span(uint64_t start_time, uint64_t end_time, uint64_t label_id)
     return write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
 }
 
-extern int sceSysmoduleLoadModule(uint16_t id);
+extern int32_t sceAudioOutInit(void);
 
-HOOK_INIT(sceSysmoduleLoadModule);
+HOOK_INIT(sceAudioOutInit);
 
-int sceSysmoduleLoadModule_hook(uint16_t id)
+int sceAudioOutInit_hook(void)
 {
+    final_printf("extern load\n");
     uint64_t start_time = get_current_time_rdtscp();
 
     int result = HOOK_CONTINUE(
-        sceSysmoduleLoadModule,
-        int (*)(uint16_t),
-        id);
+        sceAudioOutInit,
+        int (*)(void));
 
     uint64_t end_time = get_current_time_rdtscp();
 
@@ -363,8 +346,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         final_printf("thread create failed %x\n", ret);
     }
 
-    HOOK32(scePthreadCreate);
-    HOOK32(sceSysmoduleLoadModule);
+    HOOK(sceAudioOutInit);
 
     return 0;
 }
@@ -375,8 +357,7 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
 
     fini_thread_local_state();
-
-    UNHOOK(scePthreadCreate);
+    UNHOOK(sceAudioOutInit);
 
     return 0;
 }

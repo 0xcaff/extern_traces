@@ -30,7 +30,7 @@ def handle_client_connection(client_socket):
         client_socket.close()
 
 
-def start_server(host='0.0.0.0', port=9999):
+def start_server(host='0.0.0.0', port=9090):
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
