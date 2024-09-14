@@ -15,8 +15,57 @@ attr_public const char *g_pluginDesc = "collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
+struct ThreadLoggingState
+{
+    uint64_t thread_id;
+    uint64_t write_idx;
+    bool is_finished;
+    uint8_t buffer[1024 * 1024];
+};
+
+static _Atomic (struct ThreadLoggingState *) global_states[256];
+
+struct ThreadLoggingState *unsafe_read_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_ptr)
+{
+    struct ThreadLoggingState **regular_ptr = (struct ThreadLoggingState **)atomic_ptr;
+    return *regular_ptr;
+}
+
+void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_ptr, struct ThreadLoggingState *new_value)
+{
+    struct ThreadLoggingState **regular_ptr = (struct ThreadLoggingState **)atomic_ptr;
+    *regular_ptr = new_value;
+}
+
+void flush_logging_entries(struct ThreadLoggingState *state) {
+}
+
+
 void *flush_thread(void *arg)
 {
+    while (true)
+    {
+        for (size_t i = 0; i < 256; ++i)
+        {
+            struct ThreadLoggingState *state = unsafe_read_atomic(&global_states[i]);
+
+            if (state == NULL)
+            {
+                continue;
+            }
+
+            flush_logging_entries(state);
+
+            if (state->is_finished) {
+                free(state);
+                unsafe_write_atomic(&global_states[i], NULL);
+                continue;
+            }
+        }
+
+        scePthreadYield();
+    }
+
     return NULL;
 }
 
@@ -28,21 +77,11 @@ struct CustomThreadArgs
     void *(*init)(void *);
 };
 
-struct ThreadLoggingState
-{
-    uint64_t thread_id;
-    uint64_t write_idx;
-    bool is_finished;
-    uint8_t buffer[1024 * 1024];
-};
-
 void fini_thread_local_state()
 {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
     state->is_finished = true;
 }
-
-static _Atomic (struct ThreadLoggingState *) global_states[256];
 
 void init_thread_local_state()
 {
