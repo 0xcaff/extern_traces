@@ -6,9 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdatomic.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 #include "plugin_common.h"
 #include "thread_local_storage.h"
+
+#define TARGET_IP "192.168.1.100"
+#define TARGET_PORT 12345
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "collects traces for external calls";
@@ -37,12 +43,36 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
-void flush_logging_entries(struct ThreadLoggingState *state) {
+ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock) {
+    // Stream buffer data to the TCP socket
+    ssize_t bytes_sent = send(sock, state->buffer, sizeof(state->buffer), 0);
+    return bytes_sent;
 }
-
 
 void *flush_thread(void *arg)
 {
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0) {
+        final_printf("socket creation failed\n");
+        return NULL;
+    }
+
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(TARGET_PORT);
+
+    if (inet_pton(AF_INET, TARGET_IP, &server_addr.sin_addr) <= 0) {
+        final_printf("invalid address\n");
+        close(sock);
+        return NULL;
+    }
+
+    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        final_printf("connection failed\n");
+        close(sock);
+        return NULL;
+    }
+
     while (true)
     {
         for (size_t i = 0; i < 256; ++i)
@@ -54,7 +84,13 @@ void *flush_thread(void *arg)
                 continue;
             }
 
-            flush_logging_entries(state);
+            ssize_t bytes_sent = flush_logging_entries(state, sock);
+
+            if (bytes_sent < 0) {
+                final_printf("send failed\n");
+                close(sock);
+                return NULL;
+            }
 
             if (state->is_finished) {
                 free(state);
@@ -66,6 +102,7 @@ void *flush_thread(void *arg)
         scePthreadYield();
     }
 
+    close(sock);
     return NULL;
 }
 
@@ -154,7 +191,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     int ret = scePthreadCreate(&thread, NULL, flush_thread, NULL, STRINGIFY(flush_thread_start_routine));
     if (ret)
     {
-        final_printf("[extern_traces] scePthreadCreate failed %x\n", ret);
+        final_printf("thread create failed %x\n", ret);
     }
 
     HOOK32(scePthreadCreate);
