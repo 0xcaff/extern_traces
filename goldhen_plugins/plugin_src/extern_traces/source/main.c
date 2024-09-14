@@ -45,6 +45,42 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
+bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length)
+{
+    size_t free_space;
+    uint64_t read_idx = state->read_idx;
+
+    if (state->write_idx >= read_idx)
+    {
+        free_space = BUFFER_SIZE - (state->write_idx - read_idx);
+    }
+    else
+    {
+        free_space = read_idx - state->write_idx;
+    }
+
+    if (free_space <= length)
+    {
+        return false;
+    }
+
+    size_t end_pos = (state->write_idx + length) % BUFFER_SIZE;
+    if (end_pos < state->write_idx)
+    {
+        size_t first_chunk = BUFFER_SIZE - state->write_idx;
+        memcpy(&state->buffer[state->write_idx], data, first_chunk);
+        memcpy(state->buffer, data + first_chunk, end_pos);
+    }
+    else
+    {
+        memcpy(&state->buffer[state->write_idx], data, length);
+    }
+
+    state->write_idx = end_pos;
+
+    return true;
+}
+
 ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
 {
     size_t total_bytes_sent = 0;
@@ -254,6 +290,54 @@ int32_t scePthreadCreate_hook(
         thread, attr, thread_init_inner, &wrappedArgs, name);
 }
 
+struct Span
+{
+    uint64_t thread_id;
+    uint64_t start_time;
+    uint64_t end_time;
+    uint64_t label_id;
+};
+
+static inline uint64_t get_current_time_rdtscp()
+{
+    unsigned int aux;
+    return __builtin_ia32_rdtscp(&aux);
+}
+
+bool emit_span(uint64_t start_time, uint64_t end_time, uint64_t label_id)
+{
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
+
+    struct Span span = {
+        .thread_id = state->thread_id,
+        .start_time = start_time,
+        .end_time = end_time,
+        .label_id = label_id,
+    };
+
+    return write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
+}
+
+extern int sceSysmoduleLoadModule(uint16_t id);
+
+HOOK_INIT(sceSysmoduleLoadModule);
+
+int sceSysmoduleLoadModule_hook(uint16_t id)
+{
+    uint64_t start_time = get_current_time_rdtscp();
+
+    int result = HOOK_CONTINUE(
+        sceSysmoduleLoadModule,
+        int (*)(uint16_t),
+        id);
+
+    uint64_t end_time = get_current_time_rdtscp();
+
+    emit_span(start_time, end_time, 1);
+
+    return result;
+}
+
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
     final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
@@ -270,6 +354,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     }
 
     HOOK32(scePthreadCreate);
+    HOOK32(sceSysmoduleLoadModule);
 
     return 0;
 }
@@ -284,40 +369,4 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     UNHOOK(scePthreadCreate);
 
     return 0;
-}
-
-bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length)
-{
-    size_t free_space;
-    uint64_t read_idx = state->read_idx;
-
-    if (state->write_idx >= read_idx)
-    {
-        free_space = BUFFER_SIZE - (state->write_idx - read_idx);
-    }
-    else
-    {
-        free_space = read_idx - state->write_idx;
-    }
-
-    if (free_space <= length)
-    {
-        return false;
-    }
-
-    size_t end_pos = (state->write_idx + length) % BUFFER_SIZE;
-    if (end_pos < state->write_idx)
-    {
-        size_t first_chunk = BUFFER_SIZE - state->write_idx;
-        memcpy(&state->buffer[state->write_idx], data, first_chunk);
-        memcpy(state->buffer, data + first_chunk, end_pos);
-    }
-    else
-    {
-        memcpy(&state->buffer[state->write_idx], data, length);
-    }
-
-    state->write_idx = end_pos;
-
-    return true;
 }
