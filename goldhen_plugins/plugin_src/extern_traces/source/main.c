@@ -45,11 +45,78 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
+ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
+{
+    size_t total_bytes_sent = 0;
+    while (total_bytes_sent < length)
+    {
+        ssize_t bytes_sent = send(sock, buffer + total_bytes_sent, length - total_bytes_sent, 0);
+
+        if (bytes_sent < 0)
+        {
+            return bytes_sent;
+        }
+
+        total_bytes_sent += bytes_sent;
+    }
+
+    return total_bytes_sent;
+}
+
 ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
 {
-    // Stream buffer data to the TCP socket
-    ssize_t bytes_sent = send(sock, state->buffer, sizeof(state->buffer), 0);
-    return bytes_sent;
+    uint64_t write_idx = state->write_idx;
+    if (write_idx >= state->read_idx)
+    {
+        // no wrapping case
+        size_t bytes_to_send = write_idx - state->read_idx;
+        if (bytes_to_send == 0)
+        {
+            return 0;
+        }
+
+        ssize_t bytes_sent = send_all(sock, &state->buffer[state->read_idx], bytes_to_send);
+        if (bytes_sent < 0)
+        {
+            return bytes_sent;
+        }
+
+        state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+        return bytes_sent;
+    }
+    else
+    {
+        // wrapping case (write_idx < read_idx)
+        ssize_t total_bytes_sent = 0;
+        size_t bytes_to_send_first = BUFFER_SIZE - state->read_idx;
+        if (bytes_to_send_first > 0)
+        {
+            ssize_t bytes_sent = send_all(sock, &state->buffer[state->read_idx], bytes_to_send_first);
+            if (bytes_sent < 0)
+            {
+                return bytes_sent;
+            }
+
+            total_bytes_sent += bytes_sent;
+            state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+        }
+
+        size_t bytes_to_send_second = write_idx;
+        if (bytes_to_send_second > 0)
+        {
+            ssize_t bytes_sent = send_all(sock, &state->buffer[0], bytes_to_send_second);
+
+            if (bytes_sent < 0)
+            {
+                return bytes_sent;
+            }
+
+            total_bytes_sent += bytes_sent;
+            state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+        }
+
+        return total_bytes_sent;
+    }
 }
 
 void *flush_thread(void *arg)
@@ -91,7 +158,6 @@ void *flush_thread(void *arg)
             }
 
             ssize_t bytes_sent = flush_logging_entries(state, sock);
-
             if (bytes_sent < 0)
             {
                 final_printf("send failed\n");
@@ -223,14 +289,15 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
 bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length)
 {
     size_t free_space;
+    uint64_t read_idx = state->read_idx;
 
-    if (state->write_idx >= state->read_idx)
+    if (state->write_idx >= read_idx)
     {
-        free_space = BUFFER_SIZE - (state->write_idx - state->read_idx);
+        free_space = BUFFER_SIZE - (state->write_idx - read_idx);
     }
     else
     {
-        free_space = state->read_idx - state->write_idx;
+        free_space = read_idx - state->write_idx;
     }
 
     if (free_space <= length)
@@ -239,8 +306,6 @@ bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size
     }
 
     size_t end_pos = (state->write_idx + length) % BUFFER_SIZE;
-    state->write_idx = end_pos;
-
     if (end_pos < state->write_idx)
     {
         size_t first_chunk = BUFFER_SIZE - state->write_idx;
@@ -251,6 +316,8 @@ bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size
     {
         memcpy(&state->buffer[state->write_idx], data, length);
     }
+
+    state->write_idx = end_pos;
 
     return true;
 }
