@@ -19,6 +19,19 @@ void *flush_thread(void *arg)
 
 HOOK_INIT(scePthreadCreate);
 
+struct CustomThreadArgs
+{
+    void *innerArgs;
+    void *(*init)(void *);
+};
+
+void *thread_init_inner(void *rawArgs)
+{
+    struct CustomThreadArgs *args = rawArgs;
+
+    return args->init(args->innerArgs);
+}
+
 int32_t scePthreadCreate_hook(
     OrbisPthread *thread,
     const OrbisPthreadAttr *attr,
@@ -26,10 +39,15 @@ int32_t scePthreadCreate_hook(
     void *args,
     const char *name)
 {
+    struct CustomThreadArgs wrappedArgs = {
+        .innerArgs = args,
+        .init = init,
+    };
+
     return HOOK_CONTINUE(
         scePthreadCreate,
         int32_t(*)(OrbisPthread *, const OrbisPthreadAttr *, void *(*)(void *), void *, const char *),
-        thread, attr, init, args, name);
+        thread, attr, thread_init_inner, &wrappedArgs, name);
 }
 
 s32 attr_module_hidden module_start(s64 argc, const void *args)
