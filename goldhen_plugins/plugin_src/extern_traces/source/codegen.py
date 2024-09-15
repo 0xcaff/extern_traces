@@ -527,7 +527,7 @@ void register_hooks()
 {
 % for (name, address) in imports:
     {
-        uint64_t *function_ptr = (uint64_t *)${address};
+        uint64_t *function_ptr = (uint64_t *)(${address} + 0x0000000000400000);
         sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
         original_${name} = (void *)*function_ptr;
         *function_ptr = (uint64_t)${name}_hook;
