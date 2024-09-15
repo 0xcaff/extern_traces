@@ -468,9 +468,45 @@ __attribute__((naked)) void *${name}_hook()
     RESTORE_ARGS_STATE();
 
     asm volatile(
+        // r10 is a caller saved register and not an argument register use it
+        // to hold the return address.
+        "pop %%r10\n\t"
+
+        // use continue label as the return address
+        "lea ${name}_continue_label(%%rip), %%rax\n\t"
+        "push %%rax\n\t"
+        :
+        :
+        : "r10", "rax"
+    );
+
+    
+    asm volatile(
+        // execute original function
         "mov %0, %%rax\n\t"
         "jmp *%%rax\n\t"
         : : "m"(Detour_${name}.StubPtr)
+    );
+
+    asm volatile(
+        "${name}_continue_label:\n\t"
+
+        // restore return address
+        "push %%r10\n\t"
+
+        // backup rax (also happens to align stack for call)
+        "push %%rax\n\t"
+
+        // call end logger
+        "call ${name}_end_logger\n\t"
+
+        // restore rax (ignore the return value of end logger)
+        "pop %%rax\n\t"
+
+        "ret\n\t"
+        :
+        :
+        : "r10", "rax"
     );
 }
 % endfor
