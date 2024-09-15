@@ -451,12 +451,12 @@ extern void *${name}();
 % endif
 void ${name}_start_logger()
 {
-    // emit_span_start(${label_id});
+    emit_span_start(${label_id});
 }
 
 void ${name}_end_logger()
 {
-    // emit_span_end();
+    emit_span_end();
 }
 
 __attribute__((naked)) void *${name}_hook()

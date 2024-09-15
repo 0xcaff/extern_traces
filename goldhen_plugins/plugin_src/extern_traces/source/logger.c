@@ -268,11 +268,11 @@ struct ThreadLoggingState *lazy_read_value()
 
     // attach destructor
     state = init_thread_local_state();
-    int ret = scePthreadSetspecific(key, state);
-    if (ret != 0)
-    {
-        final_printf("scePthreadSetspecific failed %d\n", ret);
-    }
+    // int ret = scePthreadSetspecific(key, state);
+    // if (ret != 0)
+    // {
+    //     final_printf("scePthreadSetspecific failed %d\n", ret);
+    // }
 
     return state;
 }
