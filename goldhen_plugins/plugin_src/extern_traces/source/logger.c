@@ -9,7 +9,7 @@
 
 #include "plugin_common.h"
 
-#define TARGET_IP "192.168.1.104"
+#define TARGET_IP "192.168.1.133"
 #define TARGET_PORT 9090
 
 static _Atomic(struct ThreadLoggingState *) global_states[256];

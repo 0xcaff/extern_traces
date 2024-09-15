@@ -468,31 +468,36 @@ __attribute__((naked)) void *${name}_hook()
     RESTORE_ARGS_STATE();
 
     asm volatile(
-        // r12 is a callee saved register and not an argument register use it
-        // to hold the return address.
-        "pop %%r12\n\t"
-
-        // use continue label as the return address
-        "lea ${name}_continue_label(%%rip), %%rax\n\t"
-        "push %%rax\n\t"
+        // backup return address
+        // use r10 as a scratch register. it is a caller saved register and not
+        // an argument register.
+        "pop %%r10\n\t"
+        
+        // store the value in thread local storage slot. there are no registers
+        // which we can use in this context which will both
+        // 1. not need to be backed up
+        // 2. saved across call boundary
+        // callee saved registers are saved across the call boundary but we
+        // need to backup for our caller.
+        // caller saved registers will not be saved across the call boundary
+        // but do not need to be backed up prior to usage
+        "movq %%r10, %%fs:-16\n\t"
         :
         :
-        : "r12", "rax"
+        :
     );
-
     
     asm volatile(
         // execute original function
         "mov %0, %%rax\n\t"
-        "jmp *%%rax\n\t"
+        "call *%%rax\n\t"
         : : "m"(Detour_${name}.StubPtr)
     );
 
     asm volatile(
-        "${name}_continue_label:\n\t"
-
         // restore return address
-        "push %%r12\n\t"
+        "movq %%fs:-16, %%r10\n\t"
+        "push %%r10\n\t"
 
         // backup rax (also happens to align stack for call)
         "push %%rax\n\t"
