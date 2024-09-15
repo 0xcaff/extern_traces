@@ -2,28 +2,57 @@ import socket
 import struct
 import logging
 
-# Define the struct format for Span (4 uint64_t = 4 * 8 bytes = 32 bytes)
-SPAN_FORMAT = 'QQQQ'  # Q stands for uint64_t (8 bytes)
-
+# Define the struct format for SpanStart and SpanEnd
+SPAN_START_FORMAT = 'QQQQ'  # 4 * uint64_t (message_tag, thread_id, time, label_id)
+SPAN_END_FORMAT = 'QQ'      # 2 * uint64_t (message_tag, time)
 
 def handle_client_connection(client_socket):
     try:
         while True:
-            # Read 32 bytes from the client
-            data = client_socket.recv(32)
-            if not data:
+            # Read 8 bytes to determine the message type
+            message_tag_data = client_socket.recv(8)
+            if not message_tag_data:
                 break
 
-            # Unpack the data according to the Span struct
-            thread_id, start_time, end_time, label_id = struct.unpack(SPAN_FORMAT, data)
+            # Unpack the message tag
+            (message_tag,) = struct.unpack('Q', message_tag_data)
 
-            # Log the received span across multiple lines
-            logging.info(f"span:\n"
-                         f"  thread id: {thread_id}\n"
-                         f"  start: {start_time}\n"
-                         f"  end: {end_time}\n"
-                         f"  label: {label_id}\n"
-                         f"{'-' * 40}")  # Separator line for readability
+            # Process based on the message tag
+            if message_tag == 0:  # SpanStart
+                # Read the rest of SpanStart (24 more bytes)
+                span_start_data = client_socket.recv(24)
+                if not span_start_data:
+                    break
+
+                # Unpack the SpanStart data
+                thread_id, time, label_id = struct.unpack('QQQ', span_start_data)
+
+                # Log the SpanStart message
+                logging.info(f"SpanStart:\n"
+                             f"  message_tag: {message_tag}\n"
+                             f"  thread id: {thread_id}\n"
+                             f"  time: {time}\n"
+                             f"  label: {label_id}\n"
+                             f"{'-' * 40}")
+
+            elif message_tag == 1:  # SpanEnd
+                # Read the rest of SpanEnd (8 more bytes)
+                span_end_data = client_socket.recv(8)
+                if not span_end_data:
+                    break
+
+                # Unpack the SpanEnd data
+                (time,) = struct.unpack('Q', span_end_data)
+
+                # Log the SpanEnd message
+                logging.info(f"SpanEnd:\n"
+                             f"  message_tag: {message_tag}\n"
+                             f"  time: {time}\n"
+                             f"{'-' * 40}")
+
+            else:
+                logging.error(f"unknown message tag: {message_tag}")
+
     except Exception as e:
         logging.error(f"Error handling client: {e}")
     finally:

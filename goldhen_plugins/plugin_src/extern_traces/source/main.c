@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 
 #include "logger.h"
+#include "tracing.h"
 #include "plugin_common.h"
 
 attr_public const char *g_pluginName = "extern_traces";
@@ -16,49 +17,19 @@ attr_public const char *g_pluginDesc = "collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
-struct Span
-{
-    uint64_t thread_id;
-    uint64_t start_time;
-    uint64_t end_time;
-    uint64_t label_id;
-};
-
-static inline uint64_t get_current_time_rdtscp()
-{
-    unsigned int aux;
-    return __builtin_ia32_rdtscp(&aux);
-}
-
-bool emit_span(uint64_t start_time, uint64_t end_time, uint64_t label_id)
-{
-    struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value();
-
-    struct Span span = {
-        .thread_id = state->thread_id,
-        .start_time = start_time,
-        .end_time = end_time,
-        .label_id = label_id,
-    };
-
-    return write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
-}
-
 extern int32_t sceAudioOutInit(void);
 
 HOOK_INIT(sceAudioOutInit);
 
 int sceAudioOutInit_hook(void)
 {
-    uint64_t start_time = get_current_time_rdtscp();
+    emit_span_start(1);
 
     int result = HOOK_CONTINUE(
         sceAudioOutInit,
         int (*)(void));
 
-    uint64_t end_time = get_current_time_rdtscp();
-
-    emit_span(start_time, end_time, 1);
+    emit_span_end();
 
     return result;
 }

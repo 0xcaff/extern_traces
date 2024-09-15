@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 #define BUFFER_SIZE (1024 * 1024 * 10)
 
