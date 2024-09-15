@@ -240,7 +240,7 @@ void fini_thread_local_state()
     state->is_finished = true;
 }
 
-void init_thread_local_state()
+struct ThreadLoggingState *init_thread_local_state()
 {
     OrbisPthread thread = scePthreadSelf();
     uint64_t thread_id = (uint64_t)thread;
@@ -248,7 +248,7 @@ void init_thread_local_state()
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)malloc(sizeof(struct ThreadLoggingState));
     if (state == NULL)
     {
-        return;
+        return NULL;
     }
 
     state->is_finished = false;
@@ -262,12 +262,13 @@ void init_thread_local_state()
         if (atomic_compare_exchange_strong(&global_states[i], &expected, state))
         {
             write_tls_value((uint64_t)state);
-            return;
+            return state;
         }
     }
 
     final_printf("no space for state\n");
     write_tls_value((uint64_t)state);
+    return state;
 }
 
 struct Span
@@ -284,15 +285,23 @@ static inline uint64_t get_current_time_rdtscp()
     return __builtin_ia32_rdtscp(&aux);
 }
 
-struct ThreadLoggingState* lazy_read_value() {
+static OrbisPthreadKey key;
+
+struct ThreadLoggingState *lazy_read_value()
+{
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
-    if (state != NULL) {
+    if (state != NULL)
+    {
         return state;
     }
 
-    init_thread_local_state();
-
-    // todo: handle teardown
+    // attach destructor
+    state = init_thread_local_state();
+    int ret = scePthreadSetspecific(key, state);
+    if (ret != 0)
+    {
+        final_printf("scePthreadSetspecific failed %d\n", ret);
+    }
 
     return state;
 }
@@ -331,6 +340,12 @@ int sceAudioOutInit_hook(void)
     return result;
 }
 
+void destructor_function(void *ptr)
+{
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)ptr;
+    state->is_finished = true;
+}
+
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
     final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
@@ -339,8 +354,14 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     init_thread_local_state();
 
+    int ret = scePthreadKeyCreate(&key, destructor_function);
+    if (ret != 0)
+    {
+        final_printf("scePthreadKeyCreate failed %d\n", ret);
+    }
+
     OrbisPthread thread;
-    int ret = scePthreadCreate(&thread, NULL, flush_thread, NULL, STRINGIFY(flush_thread_start_routine));
+    ret = scePthreadCreate(&thread, NULL, flush_thread, NULL, STRINGIFY(flush_thread_start_routine));
     if (ret)
     {
         final_printf("thread create failed %x\n", ret);
