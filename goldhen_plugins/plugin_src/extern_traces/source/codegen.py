@@ -10,10 +10,10 @@ imports = [
     # ("sceAppContentGetAddcontInfoList", False),
     # ("sceAudioInOpen", False),
     # # ("sceAudioInInput", False),
-    ("sceAudioOutInit", False),
-    ("sceAudioOutOutput", False),
-    ("sceAudioOutOpen", False),
-    ("sceAudioOutClose", False),
+    ("sceAudioOutInit", 0x1c56d88),
+    ("sceAudioOutOutput", 0x1c56e08),
+    ("sceAudioOutOpen", 0x1c56e10),
+    ("sceAudioOutClose", 0x1c56de8),
     # ("sceAvPlayerPause", False),
     # ("sceAvPlayerStart", False),
     # ("sceAvPlayerGetVideoDataEx", False),
@@ -442,14 +442,20 @@ imports = [
 template = r"""
 #include "args.h"
 
+#define VM_PROT_NONE ((vm_prot_t)0x00)
+#define VM_PROT_READ ((vm_prot_t)0x01)
+#define VM_PROT_WRITE ((vm_prot_t)0x02)
+#define VM_PROT_EXECUTE ((vm_prot_t)0x04)
+#define VM_PROT_COPY ((vm_prot_t)0x08) /* copy-on-read */
+
+#define VM_PROT_ALL (VM_PROT_READ | VM_PROT_WRITE | VM_PROT_EXECUTE)
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-% for (label_id, (name, def_exists)) in enumerate(imports):
-HOOK_INIT(${name});
-% if not def_exists:
-extern void *${name}();
-% endif
+% for (label_id, (name, address)) in enumerate(imports):
+void *original_${name} = 0x0;
+
 void ${name}_start_logger()
 {
     emit_span_start(${label_id});
@@ -490,7 +496,7 @@ __attribute__((naked)) void *${name}_hook()
         // execute original function
         "mov %0, %%rax\n\t"
         "call *%%rax\n\t"
-        : : "m"(Detour_${name}.StubPtr)
+        : : "m"(original_${name})
     );
 
     asm volatile(
@@ -519,9 +525,13 @@ __attribute__((naked)) void *${name}_hook()
 
 void register_hooks()
 {
-// HOOK32 must be used as HOOK seems to cause segfaults.
-% for (name, _) in imports:
-    HOOK32(${name});
+% for (name, address) in imports:
+    {
+        uint64_t *function_ptr = (uint64_t *)${address};
+        sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
+        original_${name} = (void *)*function_ptr;
+        *function_ptr = (uint64_t)${name}_hook;
+    }
 % endfor
 }
 """
