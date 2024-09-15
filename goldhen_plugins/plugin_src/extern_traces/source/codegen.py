@@ -12,7 +12,6 @@ imports = [
     # # ("sceAudioInInput", False),
     ("sceAudioOutInit", False),
     ("sceAudioOutOutput", False),
-    ("sceAudioOutSetVolume", False),
     ("sceAudioOutOpen", False),
     ("sceAudioOutClose", False),
     # ("sceAvPlayerPause", False),
