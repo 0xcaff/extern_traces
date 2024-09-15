@@ -11,10 +11,10 @@ imports = [
     # ("sceAudioInOpen", False),
     # # ("sceAudioInInput", False),
     ("sceAudioOutInit", False),
-    # # ("sceAudioOutOutput", False),
-    # ("sceAudioOutSetVolume", False),
-    # ("sceAudioOutOpen", False),
-    # ("sceAudioOutClose", False),
+    ("sceAudioOutOutput", False),
+    ("sceAudioOutSetVolume", False),
+    ("sceAudioOutOpen", False),
+    ("sceAudioOutClose", False),
     # ("sceAvPlayerPause", False),
     # ("sceAvPlayerStart", False),
     # ("sceAvPlayerGetVideoDataEx", False),
@@ -451,7 +451,7 @@ extern void *${name}();
 % endif
 void ${name}_start_logger()
 {
-    // emit_span_start(${label_id});
+    // emit_span_end();
 }
 
 void ${name}_end_logger()
