@@ -11,28 +11,12 @@
 #include "logger.h"
 #include "tracing.h"
 #include "plugin_common.h"
+#include "trampolines.h"
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
-
-extern int32_t sceAudioOutInit(void);
-
-HOOK_INIT(sceAudioOutInit);
-
-int sceAudioOutInit_hook(void)
-{
-    emit_span_start(1);
-
-    int result = HOOK_CONTINUE(
-        sceAudioOutInit,
-        int (*)(void));
-
-    emit_span_end();
-
-    return result;
-}
 
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
@@ -54,7 +38,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         final_printf("thread create failed %x\n", ret);
     }
 
-    HOOK(sceAudioOutInit);
+    register_hooks();
 
     return 0;
 }
@@ -65,7 +49,6 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
 
     fini_thread_local_state();
-    UNHOOK(sceAudioOutInit);
 
     return 0;
 }
