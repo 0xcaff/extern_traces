@@ -468,16 +468,16 @@ __attribute__((naked)) void *${name}_hook()
     RESTORE_ARGS_STATE();
 
     asm volatile(
-        // r10 is a caller saved register and not an argument register use it
+        // r12 is a callee saved register and not an argument register use it
         // to hold the return address.
-        "pop %%r10\n\t"
+        "pop %%r12\n\t"
 
         // use continue label as the return address
         "lea ${name}_continue_label(%%rip), %%rax\n\t"
         "push %%rax\n\t"
         :
         :
-        : "r10", "rax"
+        : "r12", "rax"
     );
 
     
@@ -492,7 +492,7 @@ __attribute__((naked)) void *${name}_hook()
         "${name}_continue_label:\n\t"
 
         // restore return address
-        "push %%r10\n\t"
+        "push %%r12\n\t"
 
         // backup rax (also happens to align stack for call)
         "push %%rax\n\t"
@@ -506,7 +506,7 @@ __attribute__((naked)) void *${name}_hook()
         "ret\n\t"
         :
         :
-        : "r10", "rax"
+        : "r12", "rax"
     );
 }
 % endfor
@@ -515,8 +515,9 @@ __attribute__((naked)) void *${name}_hook()
 
 void register_hooks()
 {
+// HOOK32 must be used as HOOK seems to cause segfaults.
 % for (name, _) in imports:
-    HOOK(${name});
+    HOOK32(${name});
 % endfor
 }
 """
