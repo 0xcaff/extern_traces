@@ -451,22 +451,68 @@ extern void *${name}();
 % endif
 void ${name}_start_logger()
 {
-    emit_span_start(${label_id});
+    // emit_span_start(${label_id});
 }
 
 void ${name}_end_logger()
 {
-    emit_span_end();
+    // emit_span_end();
 }
 
 __attribute__((naked)) void *${name}_hook()
 {
     asm volatile(
+        // Save argument state
+        "push %%rdi\n\t"
+        "push %%rsi\n\t"
+        "push %%rdx\n\t"
+        "push %%rcx\n\t"
+        "push %%r8\n\t"
+        "push %%r9\n\t"
+        "movdqu %%xmm0, -0x10(%%rsp)\n\t"
+        "movdqu %%xmm1, -0x20(%%rsp)\n\t"
+        "movdqu %%xmm2, -0x30(%%rsp)\n\t"
+        "movdqu %%xmm3, -0x40(%%rsp)\n\t"
+        "movdqu %%xmm4, -0x50(%%rsp)\n\t"
+        "movdqu %%xmm5, -0x60(%%rsp)\n\t"
+        "movdqu %%xmm6, -0x70(%%rsp)\n\t"
+        "movdqu %%xmm7, -0x80(%%rsp)\n\t"
+        "sub $0x80, %%rsp\n\t"
+
+        // Call the start logger
+        "call ${name}_start_logger\n\t"
+
+        // Restore argument state
+        "add $0x80, %%rsp\n\t"
+        "movdqu -0x10(%%rsp), %%xmm0\n\t"
+        "movdqu -0x20(%%rsp), %%xmm1\n\t"
+        "movdqu -0x30(%%rsp), %%xmm2\n\t"
+        "movdqu -0x40(%%rsp), %%xmm3\n\t"
+        "movdqu -0x50(%%rsp), %%xmm4\n\t"
+        "movdqu -0x60(%%rsp), %%xmm5\n\t"
+        "movdqu -0x70(%%rsp), %%xmm6\n\t"
+        "movdqu -0x80(%%rsp), %%xmm7\n\t"
+        "pop %%r9\n\t"
+        "pop %%r8\n\t"
+        "pop %%rcx\n\t"
+        "pop %%rdx\n\t"
+        "pop %%rsi\n\t"
+        "pop %%rdi\n\t"
+        
+        // Call the detoured function
         "mov %0, %%rax\n\t"
-        "jmp *%%rax\n\t"
+        "call *%%rax\n\t"
+        // Push return value
+        "push %%rax\n\t"
+        // Call the end logger
+        "call ${name}_end_logger\n\t"
+        // Pop return value and return
+        "pop %%rax\n\t"
+        "ret\n\t"
 
         :
         : "m"(Detour_${name}.StubPtr)
+        :
     );
 }
 % endfor
