@@ -226,14 +226,6 @@ void *flush_thread(void *arg)
     return NULL;
 }
 
-HOOK_INIT(scePthreadCreate);
-
-struct CustomThreadArgs
-{
-    void *innerArgs;
-    void *(*init)(void *);
-};
-
 void fini_thread_local_state()
 {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
@@ -326,7 +318,6 @@ HOOK_INIT(sceAudioOutInit);
 
 int sceAudioOutInit_hook(void)
 {
-    final_printf("extern load\n");
     uint64_t start_time = get_current_time_rdtscp();
 
     int result = HOOK_CONTINUE(
