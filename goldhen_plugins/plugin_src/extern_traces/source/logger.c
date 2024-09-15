@@ -235,7 +235,7 @@ struct ThreadLoggingState *init_thread_local_state()
         if (atomic_compare_exchange_strong(&global_states[i], &expected, state))
         {
             write_tls_value((uint64_t)state);
-            final_printf("written into slot %d\n", i);
+            final_printf("written into slot %zu\n", i);
             return state;
         }
     }
