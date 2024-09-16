@@ -22,10 +22,6 @@ static inline uint64_t get_current_time_rdtscp()
 
 void emit_span_start(uint64_t label_id) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value();
-    if (state == NULL) {
-        return;
-    }
-
     uint64_t time = get_current_time_rdtscp();
 
     struct SpanStart span = {
@@ -40,10 +36,6 @@ void emit_span_start(uint64_t label_id) {
 
 void emit_span_end() {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value();
-    if (state == NULL) {
-        return;
-    }
-
     uint64_t time = get_current_time_rdtscp();
 
     struct SpanEnd span = {

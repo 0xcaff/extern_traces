@@ -199,7 +199,8 @@ void *flush_thread(void *arg)
             }
         }
 
-        sceKernelSleep(1);
+        // once every 100ms
+        sceKernelUSleep(100000);
         // scePthreadYield();
     }
 
