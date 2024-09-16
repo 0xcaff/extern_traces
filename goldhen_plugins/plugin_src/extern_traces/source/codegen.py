@@ -635,7 +635,7 @@ void ${name}_start_logger()
 
 void ${name}_end_logger()
 {
-    // emit_span_end();
+    emit_span_end();
 }
 
 __attribute__((naked)) void *${name}_hook()
@@ -644,52 +644,52 @@ __attribute__((naked)) void *${name}_hook()
     asm volatile("call ${name}_start_logger\n\t");
     RESTORE_ARGS_STATE();
 
-    // asm volatile(
-    //     // backup return address
-    //     // use r10 as a scratch register. it is a caller saved register and not
-    //     // an argument register.
-    //     "pop %%r10\n\t"
-    //     
-    //     // store the value in thread local storage slot. there are no registers
-    //     // which we can use in this context which will both
-    //     // 1. not need to be backed up
-    //     // 2. saved across call boundary
-    //     // callee saved registers are saved across the call boundary but we
-    //     // need to backup for our caller.
-    //     // caller saved registers will not be saved across the call boundary
-    //     // but do not need to be backed up prior to usage
-    //     "movq %%r10, %%fs:-16\n\t"
-    //     :
-    //     :
-    //     :
-    // );
-    // 
+    asm volatile(
+        // backup return address
+        // use r10 as a scratch register. it is a caller saved register and not
+        // an argument register.
+        "pop %%r10\n\t"
+        
+        // store the value in thread local storage slot. there are no registers
+        // which we can use in this context which will both
+        // 1. not need to be backed up
+        // 2. saved across call boundary
+        // callee saved registers are saved across the call boundary but we
+        // need to backup for our caller.
+        // caller saved registers will not be saved across the call boundary
+        // but do not need to be backed up prior to usage
+        "movq %%r10, %%fs:-16\n\t"
+        :
+        :
+        :
+    );
+    
     asm volatile(
         // execute original function
         "mov %0, %%rax\n\t"
-        "jmp *%%rax\n\t"
+        "call *%%rax\n\t"
         : : "m"(original_${name})
     );
 
-    // asm volatile(
-    //     // restore return address
-    //     "movq %%fs:-16, %%r10\n\t"
-    //     "push %%r10\n\t"
+    asm volatile(
+        // restore return address
+        "movq %%fs:-16, %%r10\n\t"
+        "push %%r10\n\t"
 
-    //     // backup rax (also happens to align stack for call)
-    //     "push %%rax\n\t"
+        // backup rax (also happens to align stack for call)
+        "push %%rax\n\t"
 
-    //     // call end logger
-    //     "call ${name}_end_logger\n\t"
+        // call end logger
+        "call ${name}_end_logger\n\t"
 
-    //     // restore rax (ignore the return value of end logger)
-    //     "pop %%rax\n\t"
+        // restore rax (ignore the return value of end logger)
+        "pop %%rax\n\t"
 
-    //     "ret\n\t"
-    //     :
-    //     :
-    //     : "r12", "rax"
-    // );
+        "ret\n\t"
+        :
+        :
+        : "r12", "rax"
+    );
 }
 % endfor
 
