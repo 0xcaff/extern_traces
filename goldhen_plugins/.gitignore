@@ -1,2 +1,3 @@
 common/git_ver.h
 *.{oelf,elf,prx,o}
+plugin_src/extern_traces/source/trampolines.h
