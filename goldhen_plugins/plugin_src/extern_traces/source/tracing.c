@@ -11,6 +11,7 @@ struct SpanStart
 struct SpanEnd
 {
     uint64_t message_tag;
+    uint64_t thread_id;
     uint64_t time;
 };
 
@@ -40,6 +41,7 @@ void emit_span_end() {
 
     struct SpanEnd span = {
         .message_tag = 1,
+        .thread_id = state->thread_id,
         .time = time,
     };
 

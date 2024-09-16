@@ -2,9 +2,8 @@ import socket
 import struct
 import logging
 
-# Define the struct format for SpanStart and SpanEnd
-SPAN_START_FORMAT = "QQQQ"  # 4 * uint64_t (message_tag, thread_id, time, label_id)
-SPAN_END_FORMAT = "QQ"  # 2 * uint64_t (message_tag, time)
+SPAN_START_FORMAT = "QQQ"  # 4 * uint64_t (thread_id, time, label_id)
+SPAN_END_FORMAT = "QQ"  # 2 * uint64_t (thread_id, time)
 
 
 def recv_exactly(client_socket, num_bytes):
@@ -37,14 +36,13 @@ def handle_client_connection(client_socket):
                     break
 
                 # Unpack the SpanStart data
-                message_tag, thread_id, time, label_id = struct.unpack(
-                    SPAN_START_FORMAT, message_tag_data + span_start_data
+                thread_id, time, label_id = struct.unpack(
+                    SPAN_START_FORMAT, span_start_data
                 )
 
                 # Log the SpanStart message
                 logging.info(
                     f"SpanStart:\n"
-                    f"  message_tag: {message_tag}\n"
                     f"  thread id: {thread_id}\n"
                     f"  time: {time}\n"
                     f"  label: {label_id}\n"
@@ -53,19 +51,19 @@ def handle_client_connection(client_socket):
 
             elif message_tag == 1:  # SpanEnd
                 # Read the rest of SpanEnd (8 more bytes)
-                span_end_data = recv_exactly(client_socket, 8)
+                span_end_data = recv_exactly(client_socket, 16)
                 if not span_end_data:
                     break
 
                 # Unpack the SpanEnd data
-                message_tag, time = struct.unpack(
-                    SPAN_END_FORMAT, message_tag_data + span_end_data
+                thread_id, time = struct.unpack(
+                    SPAN_END_FORMAT, span_end_data
                 )
 
                 # Log the SpanEnd message
                 logging.info(
                     f"SpanEnd:\n"
-                    f"  message_tag: {message_tag}\n"
+                    f"  thread id: {thread_id}\n"
                     f"  time: {time}\n"
                     f"{'-' * 40}"
                 )
@@ -95,7 +93,6 @@ def start_server(host="0.0.0.0", port=9090):
             client_sock, address = server_socket.accept()
             logging.info(f"accepted connection from {address}")
 
-            # Handle the client connection
             handle_client_connection(client_sock)
 
             logging.info("closed")
