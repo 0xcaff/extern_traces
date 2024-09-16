@@ -219,8 +219,10 @@ struct ThreadLoggingState *init_thread_local_state()
     uint64_t thread_id = (uint64_t)thread;
 
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)malloc(sizeof(struct ThreadLoggingState));
+    final_printf("init_thread_local_state\n");
     if (state == NULL)
     {
+        final_printf("allocation failed\n");
         return NULL;
     }
 
