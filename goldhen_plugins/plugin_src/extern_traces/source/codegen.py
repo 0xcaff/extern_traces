@@ -630,7 +630,7 @@ void *original_${name} = 0x0;
 
 void ${name}_start_logger()
 {
-    // emit_span_start(${label_id});
+    emit_span_start(${label_id});
 }
 
 void ${name}_end_logger()
@@ -640,9 +640,9 @@ void ${name}_end_logger()
 
 __attribute__((naked)) void *${name}_hook()
 {
-    // SAVE_ARGS_STATE();
-    // asm volatile("call ${name}_start_logger\n\t");
-    // RESTORE_ARGS_STATE();
+    SAVE_ARGS_STATE();
+    asm volatile("call ${name}_start_logger\n\t");
+    RESTORE_ARGS_STATE();
 
     // asm volatile(
     //     // backup return address
