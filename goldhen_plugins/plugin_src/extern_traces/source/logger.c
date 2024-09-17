@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "logger.h"
+#include "time.h"
 #include "thread_local_storage.h"
 
 #include "plugin_common.h"
@@ -145,6 +146,18 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
     }
 }
 
+struct InitialMessage {
+    /// The number of timestamp steps in a second.
+    uint64_t tsc_frequency;
+
+    /// Timestamp in epoch timestamp of the anchor.
+    int64_t anchor_seconds;
+    int64_t anchor_nanoseconds;
+
+    /// Timestamp from CPU clock of anchor.
+    uint64_t anchor_timestamp;
+};
+
 void *flush_thread(void *arg)
 {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -171,6 +184,30 @@ void *flush_thread(void *arg)
         close(sock);
         return NULL;
     }
+
+    struct InitialMessage initial_message = {
+        .tsc_frequency = sceKernelGetTscFrequency(),
+        .anchor_timestamp = get_current_time_rdtscp(),
+    };
+
+    {
+        struct localTimespec {
+            int64_t tv_sec;
+            int64_t tv_nsec;
+        };
+
+        typedef int (*sceKernelClockGettime_func)(int32_t, struct localTimespec*);
+        sceKernelClockGettime_func sceKernelClockGettime_impl = (sceKernelClockGettime_func)sceKernelClockGettime;
+
+        struct localTimespec t;
+
+        sceKernelClockGettime_impl(0, &t);
+
+        initial_message.anchor_seconds = t.tv_sec;
+        initial_message.anchor_nanoseconds = t.tv_nsec;
+    }
+
+    send_all(sock, (uint8_t *)&initial_message, sizeof(struct InitialMessage));
 
     while (true)
     {

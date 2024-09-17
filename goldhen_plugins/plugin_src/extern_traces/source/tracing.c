@@ -1,4 +1,5 @@
 #include "logger.h"
+#include "time.h"
 
 struct SpanStart
 {
@@ -14,12 +15,6 @@ struct SpanEnd
     uint64_t thread_id;
     uint64_t time;
 };
-
-static inline uint64_t get_current_time_rdtscp()
-{
-    unsigned int aux;
-    return __builtin_ia32_rdtscp(&aux);
-}
 
 void emit_span_start(uint64_t label_id) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value();
