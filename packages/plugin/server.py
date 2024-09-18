@@ -4,6 +4,7 @@ import logging
 
 SPAN_START_FORMAT = "QQQ"  # 4 * uint64_t (thread_id, time, label_id)
 SPAN_END_FORMAT = "QQ"  # 2 * uint64_t (thread_id, time)
+INITIAL_MESSAGE_FORMAT = "QqqQ"  # InitialMessage format
 
 
 def recv_exactly(client_socket, num_bytes):
@@ -21,6 +22,25 @@ def recv_exactly(client_socket, num_bytes):
 
 def handle_client_connection(client_socket):
     try:
+        initial_message_data = recv_exactly(client_socket, 40)
+        if not initial_message_data:
+            logging.error("Failed to read InitialMessage")
+            return
+
+        tsc_frequency, anchor_seconds, anchor_nanoseconds, anchor_timestamp = struct.unpack(
+            INITIAL_MESSAGE_FORMAT, initial_message_data
+        )
+
+        # Log the InitialMessage details
+        logging.info(
+            f"InitialMessage:\n"
+            f"  tsc_frequency: {tsc_frequency}\n"
+            f"  anchor_seconds: {anchor_seconds}\n"
+            f"  anchor_nanoseconds: {anchor_nanoseconds}\n"
+            f"  anchor_timestamp: {anchor_timestamp}\n"
+            f"{'-' * 40}"
+        )
+
         while True:
             message_tag_data = recv_exactly(client_socket, 8)
             if not message_tag_data:
