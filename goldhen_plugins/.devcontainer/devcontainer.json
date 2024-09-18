@@ -1,5 +1,5 @@
 {
-  "image": "goldhen",
+  "image": "ghcr.io/0xcaff/ps4-sdk-images/goldhen:edge",
   "customizations": {
     "vscode": {
       "extensions": [
