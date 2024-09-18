@@ -47,7 +47,11 @@ impl eframe::App for SpanViewer {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.label(format!("spans: {}", self.state.total_spans()));
             ui.label(format!("threads: {}", self.state.threads.len()));
-            ui.label(format!("time: {:?}", self.start_time.elapsed()));
+
+            if let Some(initial_message) = &self.state.initial_message {
+                let elapsed = initial_message.anchor().elapsed().unwrap();
+                ui.label(format!("time: {:?}", elapsed));
+            }
         });
 
         ctx.request_repaint();

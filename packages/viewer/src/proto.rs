@@ -1,5 +1,6 @@
 use std::io;
 use std::io::{ErrorKind, Read};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 pub enum TraceEvent {
     Start(InitialMessage),
@@ -12,6 +13,17 @@ pub struct InitialMessage {
     pub anchor_seconds: i64,
     pub anchor_nanoseconds: i64,
     pub anchor_timestamp: u64,
+}
+
+impl InitialMessage {
+    pub fn anchor(&self) -> SystemTime {
+        let duration_since_epoch = Duration::new(
+            self.anchor_seconds as u64,
+            self.anchor_nanoseconds as u32,
+        );
+
+        UNIX_EPOCH + duration_since_epoch
+    }
 }
 
 #[derive(Debug, Clone)]
