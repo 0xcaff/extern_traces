@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "packages/extern_traces_viewer"
+    "packages/viewer"
 ]
 resolver = "2"
