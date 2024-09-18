@@ -1,37 +1,14 @@
+mod proto;
+
+use crate::proto::SpanStart;
+use crate::proto::{InitialMessage, SpanEvent};
 use eframe::egui;
-use std::net::{TcpListener, TcpStream};
-use std::io::Read;
-use std::sync::mpsc::{channel, Receiver, Sender};
-use std::thread;
 use std::collections::HashMap;
+use std::io::Read;
+use std::net::{TcpListener, TcpStream};
+use std::sync::mpsc::{channel, Receiver, Sender};
 use std::time::Instant;
-
-#[derive(Debug, Clone)]
-struct SpanStart {
-    thread_id: u64,
-    time: u64,
-    label_id: u64,
-}
-
-#[derive(Debug, Clone)]
-struct SpanEnd {
-    thread_id: u64,
-    time: u64,
-}
-
-#[derive(Debug, Clone)]
-struct InitialMessage {
-    tsc_frequency: u64,
-    anchor_seconds: i64,
-    anchor_nanoseconds: i64,
-    anchor_timestamp: u64,
-}
-
-#[derive(Debug, Clone)]
-enum SpanEvent {
-    Start(SpanStart),
-    End(SpanEnd),
-}
+use std::{io, thread};
 
 #[derive(Debug, Clone)]
 struct Span {
@@ -42,7 +19,7 @@ struct Span {
 
 struct SpanViewer {
     events: Vec<SpanEvent>,
-    spans: HashMap<u64, Vec<Span>>,  // Key is thread_id
+    spans: HashMap<u64, Vec<Span>>, // Key is thread_id
     receiver: Receiver<SpanEvent>,
     active_spans: HashMap<u64, SpanStart>,
     start_time: Instant,
@@ -82,7 +59,7 @@ impl SpanViewer {
                         self.thread_order.push(start.thread_id);
                     }
                     self.active_spans.insert(start.thread_id, start);
-                },
+                }
                 SpanEvent::End(end) => {
                     if let Some(start) = self.active_spans.remove(&end.thread_id) {
                         let span = Span {
@@ -90,9 +67,12 @@ impl SpanViewer {
                             end_time: end.time,
                             label_id: start.label_id,
                         };
-                        self.spans.entry(start.thread_id).or_insert_with(Vec::new).push(span);
+                        self.spans
+                            .entry(start.thread_id)
+                            .or_insert_with(Vec::new)
+                            .push(span);
                     }
-                },
+                }
             }
         }
     }
@@ -107,7 +87,10 @@ impl SpanViewer {
         };
 
         // Debug information
-        ui.label(format!("View start: {}, View end: {}", self.view_start, self.view_end));
+        ui.label(format!(
+            "View start: {}, View end: {}",
+            self.view_start, self.view_end
+        ));
         ui.label(format!("Total spans: {}", self.total_spans()));
 
         for (i, &thread_id) in self.thread_order.iter().enumerate() {
@@ -150,12 +133,17 @@ impl SpanViewer {
             }
 
             // Debug information for each thread
-            ui.label(format!("Thread {} spans: {}", thread_id, self.spans.get(&thread_id).map_or(0, |spans| spans.len())));
+            ui.label(format!(
+                "Thread {} spans: {}",
+                thread_id,
+                self.spans.get(&thread_id).map_or(0, |spans| spans.len())
+            ));
         }
 
         if response.dragged() {
             let delta = response.drag_delta().x;
-            let time_delta = ((self.view_end - self.view_start) as f32 * delta / rect.width()) as u64;
+            let time_delta =
+                ((self.view_end - self.view_start) as f32 * delta / rect.width()) as u64;
             self.view_start = self.view_start.saturating_sub(time_delta);
             self.view_end = self.view_end.saturating_sub(time_delta);
         }
@@ -183,48 +171,15 @@ impl eframe::App for SpanViewer {
     }
 }
 
-fn handle_client(mut stream: TcpStream, sender: Sender<SpanEvent>) -> std::io::Result<()> {
+fn handle_client(mut stream: TcpStream, sender: Sender<SpanEvent>) -> io::Result<()> {
     println!("New client connected");
 
-    let mut initial_message_buf = [0u8; 40];
-    stream.read_exact(&mut initial_message_buf)?;
-    let tsc_frequency = u64::from_le_bytes(initial_message_buf[0..8].try_into().unwrap());
-    let anchor_seconds = i64::from_le_bytes(initial_message_buf[8..16].try_into().unwrap());
-    let anchor_nanoseconds = i64::from_le_bytes(initial_message_buf[16..24].try_into().unwrap());
-    let anchor_timestamp = u64::from_le_bytes(initial_message_buf[24..32].try_into().unwrap());
-
-    let initial_message = InitialMessage {
-        tsc_frequency,
-        anchor_seconds,
-        anchor_nanoseconds,
-        anchor_timestamp,
-    };
+    let initial_message = InitialMessage::read(&mut stream)?;
 
     println!("Received InitialMessage: {:?}", initial_message);
 
     loop {
-        let mut message_tag = [0u8; 8];
-        stream.read_exact(&mut message_tag)?;
-        let message_tag = u64::from_le_bytes(message_tag);
-
-        match message_tag {
-            0 => { // SpanStart
-                let mut data = [0u8; 24];
-                stream.read_exact(&mut data)?;
-                let thread_id = u64::from_le_bytes(data[0..8].try_into().unwrap());
-                let time = u64::from_le_bytes(data[8..16].try_into().unwrap());
-                let label_id = u64::from_le_bytes(data[16..24].try_into().unwrap());
-                sender.send(SpanEvent::Start(SpanStart { thread_id, time, label_id })).unwrap();
-            },
-            1 => { // SpanEnd
-                let mut data = [0u8; 16];
-                stream.read_exact(&mut data)?;
-                let thread_id = u64::from_le_bytes(data[0..8].try_into().unwrap());
-                let time = u64::from_le_bytes(data[8..16].try_into().unwrap());
-                sender.send(SpanEvent::End(SpanEnd { thread_id, time })).unwrap();
-            },
-            _ => eprintln!("Unknown message tag: {}", message_tag),
-        }
+        sender.send(SpanEvent::read(&mut stream)?).unwrap();
     }
 }
 
