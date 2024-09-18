@@ -20,6 +20,14 @@ struct SpanEnd {
 }
 
 #[derive(Debug, Clone)]
+struct InitialMessage {
+    tsc_frequency: u64,
+    anchor_seconds: i64,
+    anchor_nanoseconds: i64,
+    anchor_timestamp: u64,
+}
+
+#[derive(Debug, Clone)]
 enum SpanEvent {
     Start(SpanStart),
     End(SpanEnd),
@@ -177,6 +185,23 @@ impl eframe::App for SpanViewer {
 
 fn handle_client(mut stream: TcpStream, sender: Sender<SpanEvent>) -> std::io::Result<()> {
     println!("New client connected");
+
+    let mut initial_message_buf = [0u8; 40];
+    stream.read_exact(&mut initial_message_buf)?;
+    let tsc_frequency = u64::from_le_bytes(initial_message_buf[0..8].try_into().unwrap());
+    let anchor_seconds = i64::from_le_bytes(initial_message_buf[8..16].try_into().unwrap());
+    let anchor_nanoseconds = i64::from_le_bytes(initial_message_buf[16..24].try_into().unwrap());
+    let anchor_timestamp = u64::from_le_bytes(initial_message_buf[24..32].try_into().unwrap());
+
+    let initial_message = InitialMessage {
+        tsc_frequency,
+        anchor_seconds,
+        anchor_nanoseconds,
+        anchor_timestamp,
+    };
+
+    println!("Received InitialMessage: {:?}", initial_message);
+
     loop {
         let mut message_tag = [0u8; 8];
         stream.read_exact(&mut message_tag)?;
