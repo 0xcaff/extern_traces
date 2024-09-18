@@ -1,6 +1,11 @@
 use std::io;
 use std::io::{ErrorKind, Read};
 
+pub enum TraceEvent {
+    Start(InitialMessage),
+    Span(SpanEvent),
+}
+
 #[derive(Debug, Clone)]
 pub struct InitialMessage {
     pub tsc_frequency: u64,
@@ -56,12 +61,11 @@ impl SpanEvent {
                 let time = u64::from_le_bytes(data[8..16].try_into().unwrap());
                 Ok(SpanEvent::End(SpanEnd { thread_id, time }))
             }
-            _ => {
-                Err(ErrorKind::InvalidData.into())
-            },
+            _ => Err(ErrorKind::InvalidData.into()),
         }
     }
 }
+
 impl InitialMessage {
     pub fn read(mut stream: impl Read) -> io::Result<InitialMessage> {
         let mut initial_message_buf = [0u8; 40];
