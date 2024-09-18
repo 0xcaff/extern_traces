@@ -1,3 +1,4 @@
+import os
 from mako.template import Template
 
 imports = [
@@ -709,7 +710,10 @@ void register_hooks()
 """
 
 if __name__ == '__main__':
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, 'trampolines.h')
+
     generated = Template(template).render(imports=imports)
 
-    with open('trampolines.h', 'w') as file:
+    with open(file_path, 'w') as file:
         file.write(generated)

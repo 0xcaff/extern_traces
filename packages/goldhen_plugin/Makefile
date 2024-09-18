@@ -1,5 +1,3 @@
-# Library metadata.
-
 DEBUG_FLAGS = -D__FINAL__=1
 LOG_TYPE = -D__USE_PRINTF__
 BUILD_TYPE = _final
@@ -11,8 +9,8 @@ endif
 
 TYPE         := $(BUILD_TYPE)
 FINAL        := $(DEBUG_FLAGS)
-BUILD_FOLDER := $(shell pwd)/../../target
-OUTPUT_PRX   := $(shell basename $(CURDIR))
+BUILD_FOLDER := $(shell pwd)/target
+OUTPUT_PRX   := extern_traces
 TARGET       := $(BUILD_FOLDER)/prx$(TYPE)/$(OUTPUT_PRX)
 TARGET_ELF   := $(BUILD_FOLDER)/elf$(TYPE)/$(OUTPUT_PRX)
 TARGETSTUB   := $(OUTPUT_PRX).so
@@ -27,10 +25,10 @@ EXTRAFLAGS := $(DEBUG_FLAGS) $(LOG_TYPE) -fcolor-diagnostics -Wall
 # Root vars
 TOOLCHAIN     := $(OO_PS4_TOOLCHAIN)
 GH_SDK        := $(GOLDHEN_SDK)
-PROJDIR       := ../$(shell basename $(CURDIR))/source
-INTDIR        := ../$(shell basename $(CURDIR))/build
-INCLUDEDIR    := ../$(shell basename $(CURDIR))/include
-COMMON_DIR    := ../../common
+PROJDIR       := $(shell pwd)/source
+INTDIR        := $(shell pwd)/build
+INCLUDEDIR    := $(shell pwd)/include
+COMMON_DIR    := ./common
 
 # Define objects to build
 CFILES      := $(wildcard $(PROJDIR)/*.c)
@@ -94,7 +92,13 @@ build-info:
 .PHONY: clean
 .DEFAULT_GOAL := all
 
-all: build-info plugin_common $(TARGET)
+trampolines.h:
+	pipenv run python source/trampolines_h.py
+
+all: build-info trampolines.h plugin_common $(TARGET)
+
+deploy: all
+	curl -T target/prx_final/extern_traces.prx ftp://192.168.1.123:2121/data/GoldHEN/plugins/extern_traces.prx
 
 clean:
 	rm -rf $(TARGET) $(TARGETSTUB) $(INTDIR) $(OBJS)

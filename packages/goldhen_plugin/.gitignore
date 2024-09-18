@@ -1,0 +1,3 @@
+common/git_ver.h
+*.{oelf,elf,prx,o}
+source/trampolines.h
