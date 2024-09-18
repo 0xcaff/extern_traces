@@ -68,7 +68,7 @@ impl SpanEvent {
 
 impl InitialMessage {
     pub fn read(mut stream: impl Read) -> io::Result<InitialMessage> {
-        let mut initial_message_buf = [0u8; 40];
+        let mut initial_message_buf = [0u8; 8 * 4];
         stream.read_exact(&mut initial_message_buf)?;
         let tsc_frequency = u64::from_le_bytes(initial_message_buf[0..8].try_into().unwrap());
         let anchor_seconds = i64::from_le_bytes(initial_message_buf[8..16].try_into().unwrap());

@@ -62,8 +62,9 @@ impl State {
             }
             SpanEvent::End(end) => {
                 let state = self.threads.get_mut(&end.thread_id).unwrap();
-                let start = state.currently_started.take().unwrap();
-                state.spans.push(ThreadSpan::from_events(start, end));
+                if let Some(start) = state.currently_started.take() {
+                    state.spans.push(ThreadSpan::from_events(start, end));
+                };
             }
         }
     }
