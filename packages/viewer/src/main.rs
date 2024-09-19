@@ -3,7 +3,7 @@ mod view_state;
 
 use crate::proto::{InitialMessage, SpanEvent, TraceEvent};
 use crate::view_state::ViewState;
-use eframe::egui::{Color32, Rounding};
+use eframe::egui::{Color32, Rounding, Stroke};
 use eframe::emath::Rect;
 use eframe::{egui, emath};
 use std::net::{TcpListener, TcpStream};
@@ -61,6 +61,8 @@ impl eframe::App for SpanViewer {
             let (response, painter) =
                 ui.allocate_painter(ui.available_size(), egui::Sense::focusable_noninteractive());
 
+            let hover_position = ctx.input(|it| it.pointer.hover_pos());
+
             for (thread_idx, (_thread_id, thread_state)) in self.state.threads.iter().enumerate() {
                 let visible_spans = thread_state
                     .spans
@@ -77,14 +79,35 @@ impl eframe::App for SpanViewer {
                     let span_max =
                         emath::remap(span.end_time as f32, low_f..=hi_f, 0f32..=available_size.x);
 
-                    painter.rect_filled(
-                        Rect {
-                            min: egui::pos2(span_min, thread_idx as f32 * 10.0f32),
-                            max: egui::pos2(span_max, thread_idx as f32 * 10.0f32 + 8.0f32),
-                        },
-                        Rounding::default(),
-                        Color32::GREEN,
-                    );
+                    let rect = Rect {
+                        min: egui::pos2(span_min, thread_idx as f32 * 10.0f32),
+                        max: egui::pos2(span_max, thread_idx as f32 * 10.0f32 + 8.0f32),
+                    };
+
+                    let should_highlight = if let Some(hover_position) = hover_position {
+                        if rect.contains(hover_position) {
+                            true
+                        } else {
+                            false
+                        }
+                    } else {
+                        false
+                    };
+
+                    if !should_highlight {
+                        painter.rect_filled(
+                            rect,
+                            Rounding::default(),
+                            Color32::GREEN,
+                        );
+                    } else {
+                        painter.rect_stroke(
+                            rect,
+                            Rounding::default(),
+                            Stroke::new(1.0f32, Color32::BLACK),
+                        );
+                    }
+
                 }
             }
 
@@ -99,7 +122,7 @@ impl eframe::App for SpanViewer {
 
             // Zooming
             {
-                let Some(hover_position) = ctx.input(|it| it.pointer.hover_pos()) else {
+                let Some(hover_position) = hover_position else {
                     return;
                 };
 
