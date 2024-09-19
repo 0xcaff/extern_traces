@@ -107,12 +107,19 @@ impl ViewState {
     }
 
     pub fn translate_x(&mut self, value: i64) {
-        let (min, max) = self.range();
+        if value == 0 {
+            return;
+        }
 
+        let (min, max) = self.range();
         self.view_range = ViewRange::Slice((combine(min, value), combine(max, value)));
     }
 
     pub fn zoom_anchored(&mut self, multiplier: f32, anchor: f32) {
+        if multiplier == 1.0f32 {
+            return;
+        }
+
         let (min, max) = self.range();
 
         let original_size = max - min;

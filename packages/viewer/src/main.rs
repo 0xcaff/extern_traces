@@ -102,6 +102,7 @@ impl eframe::App for SpanViewer {
                 let Some(hover_position) = ctx.input(|it| it.pointer.hover_pos()) else {
                     return;
                 };
+
                 let zoom_delta = ctx.input(|it| it.zoom_delta());
                 let anchor_position = hover_position.x / available_size.x;
 
