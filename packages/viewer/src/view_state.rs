@@ -1,5 +1,5 @@
 use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart, TraceEvent};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 pub struct ThreadSpan {
     pub start_time: u64,
@@ -29,7 +29,7 @@ pub enum ViewRange {
 
 pub struct ViewState {
     pub initial_message: Option<InitialMessage>,
-    pub threads: HashMap<u64, ThreadState>,
+    pub threads: BTreeMap<u64, ThreadState>,
     pub timestamp_range: TimestampRange,
     pub view_range: ViewRange,
     pub is_live: bool,
@@ -39,7 +39,7 @@ impl ViewState {
     pub fn new() -> ViewState {
         ViewState {
             initial_message: None,
-            threads: HashMap::new(),
+            threads: BTreeMap::new(),
             timestamp_range: TimestampRange { values: None },
             view_range: ViewRange::Full,
             is_live: false,
@@ -117,7 +117,7 @@ impl ViewState {
 
         let original_size = max - min;
         let new_size = original_size as f32 * multiplier;
-        let original_anchor = ((anchor * original_size as f32) as u64) + min;
+        let original_anchor = ((anchor * original_size as f32) as u64).saturating_add(min);
 
         let new_min = original_anchor.saturating_sub((anchor * new_size) as _);
         let new_max = original_anchor.saturating_add(((1.0 - anchor) * new_size) as _);

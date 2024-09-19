@@ -3,7 +3,9 @@ mod view_state;
 
 use crate::proto::{InitialMessage, SpanEvent, TraceEvent};
 use crate::view_state::ViewState;
-use eframe::egui;
+use eframe::egui::{Color32, Rounding};
+use eframe::emath::Rect;
+use eframe::{egui, emath};
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::time::Instant;
@@ -52,6 +54,39 @@ impl eframe::App for SpanViewer {
             let available_size = ui.available_size();
             let (low, hi) = self.state.range();
             let range = hi - low;
+
+            let low_f = low as f32;
+            let hi_f = hi as f32;
+
+            let (response, painter) =
+                ui.allocate_painter(ui.available_size(), egui::Sense::focusable_noninteractive());
+
+            for (thread_idx, (_thread_id, thread_state)) in self.state.threads.iter().enumerate() {
+                let visible_spans = thread_state
+                    .spans
+                    .iter()
+                    .filter(|it| it.end_time >= low && it.start_time < hi)
+                    .collect::<Vec<_>>();
+
+                for span in visible_spans {
+                    let span_min = emath::remap(
+                        span.start_time as f32,
+                        low_f..=hi_f,
+                        0f32..=available_size.x,
+                    );
+                    let span_max =
+                        emath::remap(span.end_time as f32, low_f..=hi_f, 0f32..=available_size.x);
+
+                    painter.rect_filled(
+                        Rect {
+                            min: egui::pos2(span_min, thread_idx as f32 * 10.0f32),
+                            max: egui::pos2(span_max, thread_idx as f32 * 10.0f32 + 8.0f32),
+                        },
+                        Rounding::default(),
+                        Color32::GREEN,
+                    );
+                }
+            }
 
             // Panning
             {
