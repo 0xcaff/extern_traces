@@ -2,7 +2,7 @@ mod proto;
 mod view_state;
 
 use crate::proto::{InitialMessage, SpanEvent, TraceEvent};
-use crate::view_state::ViewState;
+use crate::view_state::{fold_spans, ViewState};
 use eframe::egui::{Color32, Frame, Rounding, Stroke};
 use eframe::emath::Rect;
 use eframe::{egui, emath};
@@ -63,6 +63,7 @@ impl eframe::App for SpanViewer {
                 let low_f = low as f32;
                 let hi_f = hi as f32;
 
+                let cycles_per_pixel = (hi_f - low_f) / available_size.x;
                 let (response, painter) = ui
                     .allocate_painter(ui.available_size(), egui::Sense::focusable_noninteractive());
 
@@ -77,14 +78,19 @@ impl eframe::App for SpanViewer {
                         .filter(|it| it.end_time >= low && it.start_time < hi)
                         .collect::<Vec<_>>();
 
-                    for span in visible_spans {
+                    let view_spans = fold_spans(&visible_spans, cycles_per_pixel as u64);
+                    for (start_idx, end_idx) in view_spans {
+                        let start_span = visible_spans[start_idx];
+                        let end_span = visible_spans[end_idx - 1];
+                        let folded = start_idx != end_idx - 1;
+
                         let span_min = emath::remap(
-                            span.start_time as f32,
+                            start_span.start_time as f32,
                             low_f..=hi_f,
                             0f32..=available_size.x,
                         );
                         let span_max = emath::remap(
-                            span.end_time as f32,
+                            end_span.end_time as f32,
                             low_f..=hi_f,
                             0f32..=available_size.x,
                         );
@@ -105,7 +111,15 @@ impl eframe::App for SpanViewer {
                         };
 
                         if !should_highlight {
-                            painter.rect_filled(rect, Rounding::default(), Color32::GREEN);
+                            painter.rect_filled(
+                                rect,
+                                Rounding::default(),
+                                if folded {
+                                    Color32::LIGHT_YELLOW
+                                } else {
+                                    Color32::GREEN
+                                },
+                            );
                         } else {
                             painter.rect_stroke(
                                 rect,

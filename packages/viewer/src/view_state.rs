@@ -22,6 +22,34 @@ pub struct ThreadState {
     pub currently_started: Option<SpanStart>,
 }
 
+pub fn fold_spans(thread_spans: &[&ThreadSpan], cycles_per_pixel: u64) -> Vec<(usize, usize)> {
+    let mut spans = Vec::new();
+
+    let mut idx = 0;
+    while idx < thread_spans.len() {
+        let span = &thread_spans[idx];
+
+        let mut next_idx = idx + 1;
+        loop {
+            if next_idx >= thread_spans.len() {
+                break;
+            };
+
+            let next_span = &thread_spans[next_idx];
+            if (next_span.end_time - span.start_time) >= cycles_per_pixel {
+                break;
+            }
+
+            next_idx = next_idx + 1;
+        }
+
+        spans.push(((idx, next_idx)));
+        idx = next_idx;
+    }
+
+    spans
+}
+
 pub enum ViewRange {
     Full,
     Slice((u64, u64)),
