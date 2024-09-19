@@ -4,7 +4,7 @@ mod view_state;
 use crate::proto::{InitialMessage, SpanEvent, TraceEvent};
 use crate::view_state::{fold_spans, ViewState};
 use eframe::egui::{Color32, Frame, Rounding, Stroke};
-use eframe::emath::Rect;
+use eframe::emath::{Rangef, Rect};
 use eframe::{egui, emath};
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -60,12 +60,60 @@ impl eframe::App for SpanViewer {
                 let (low, hi) = self.state.range();
                 let range = hi - low;
 
+                let (ticks, interval) = {
+                    let magnitude = range.ilog10();
+                    let base_interval = 10u64.pow(magnitude);
+
+                    let interval = {
+                        let segments = range / base_interval;
+                        if segments < 5 {
+                            base_interval / 10
+                        } else {
+                            base_interval
+                        }
+                    };
+
+                    let ticks = (range / interval) + 1;
+
+                    (ticks, interval)
+                };
+
+                ui.label(format!(
+                    "range: {:#?}",
+                    range as f32
+                        / self
+                            .state
+                            .initial_message
+                            .as_ref()
+                            .map(|it| it.tsc_frequency)
+                            .unwrap_or(1) as f32
+                ));
+
+                ui.label(format!("ticks: {:#?}", ticks,));
+
                 let low_f = low as f32;
                 let hi_f = hi as f32;
 
                 let cycles_per_pixel = (hi_f - low_f) / available_size.x;
                 let (response, painter) = ui
                     .allocate_painter(ui.available_size(), egui::Sense::focusable_noninteractive());
+
+                {
+                    let base = (low_f / interval as f32).floor() * interval as f32;
+                    for idx in 0..ticks {
+                        let position = emath::remap(
+                            base + idx as f32 * interval as f32,
+                            low_f..=hi_f,
+                            0f32..=available_size.x,
+                        );
+
+                        painter.vline(
+                            position,
+                            Rangef::new(0.0, available_size.y),
+                            Stroke::new(1.0f32, Color32::BLACK),
+                        );
+                    }
+                }
 
                 let hover_position = ctx.input(|it| it.pointer.hover_pos());
 
