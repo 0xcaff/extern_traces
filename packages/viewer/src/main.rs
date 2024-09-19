@@ -1,8 +1,8 @@
 mod proto;
-mod state;
+mod view_state;
 
 use crate::proto::{InitialMessage, SpanEvent, TraceEvent};
-use crate::state::State;
+use crate::view_state::ViewState;
 use eframe::egui;
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -10,7 +10,7 @@ use std::time::Instant;
 use std::{io, thread};
 
 struct SpanViewer {
-    state: State,
+    state: ViewState,
     receiver: Receiver<TraceEvent>,
 
     start_time: Instant,
@@ -27,7 +27,7 @@ impl SpanViewer {
         });
 
         Self {
-            state: State::new(),
+            state: ViewState::new(),
             receiver,
             start_time: Instant::now(),
         }
@@ -47,10 +47,31 @@ impl eframe::App for SpanViewer {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.label(format!("spans: {}", self.state.total_spans()));
             ui.label(format!("threads: {}", self.state.threads.len()));
+            ui.label(format!("range: {:#?}", self.state.range()));
 
-            if let Some(initial_message) = &self.state.initial_message {
-                let elapsed = initial_message.anchor().elapsed().unwrap();
-                ui.label(format!("time: {:?}", elapsed));
+            let available_size = ui.available_size();
+            let (low, hi) = self.state.range();
+            let range = hi - low;
+
+            // Panning
+            {
+                let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
+                let percentage = scroll_delta.x / available_size.x;
+                let diff = -((percentage * (range as f32)) as i64);
+
+                self.state.translate_x(diff);
+            }
+
+            // Zooming
+            {
+                let Some(hover_position) = ctx.input(|it| it.pointer.hover_pos()) else {
+                    return;
+                };
+                let zoom_delta = ctx.input(|it| it.zoom_delta());
+                let anchor_position = hover_position.x / available_size.x;
+
+                self.state
+                    .zoom_anchored(1.0f32 / zoom_delta, anchor_position);
             }
         });
 
