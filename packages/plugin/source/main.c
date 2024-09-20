@@ -18,11 +18,34 @@ attr_public const char *g_pluginDesc = "collects traces for external calls";
 attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
+#define N_BYTES 256
+
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
     final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
+
+    {
+        int file_descriptor = sceKernelOpen("/app0/eboot.bin", 0x0, 0);
+        if (file_descriptor < 0) {
+            final_printf("failed to open file: 0x%x\n", file_descriptor);
+            return 1;
+        }
+
+        char buffer[N_BYTES];
+
+        ssize_t bytes_read = sceKernelRead(file_descriptor, buffer, N_BYTES);
+        if (bytes_read < 0) {
+            final_printf("failed to read file: 0x%lx\n", bytes_read);
+            sceKernelClose(file_descriptor);
+            return 1;
+        }
+
+        hex_dump(buffer, bytes_read);
+
+        sceKernelClose(file_descriptor);
+    }
 
     init_thread_local_state();
     bool ok = init_lazy_destructor();
