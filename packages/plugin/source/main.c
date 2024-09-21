@@ -21,69 +21,6 @@ attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 #define N_BYTES 256
 #define PT_SCE_DYNLIBDATA 0x61000000
 
-s32 attr_module_hidden module_start(s64 argc, const void *args)
-{
-    final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
-    final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
-    final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
-
-    {
-        SELFParserState* parser = initialize_self_parser("/app0/eboot.bin");
-
-        size_t dynamic_segment_size;
-        void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
-        if (!dynamic_segment) {
-            teardown_self_parser(parser);
-            return 1;
-        }
-
-        size_t dynlib_segment_size;
-        void* dynlib_segment = load_segment(parser, PT_SCE_DYNLIBDATA, &dynlib_segment_size);
-        if (!dynlib_segment) {
-            teardown_self_parser(parser);
-            free(dynamic_segment);
-            return 1;
-        }
-
-        teardown_self_parser(parser);
-
-        DynamicInfo info = parse_dynamic_section(dynamic_segment, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
-        print_relocations(&info);
-        cleanup_dynamic_info(&info);
-
-        free(dynamic_segment);
-        free(dynlib_segment);
-    }
-
-    init_thread_local_state();
-    bool ok = init_lazy_destructor();
-    if (!ok)
-    {
-        final_printf("init lazy destructor failed\n");
-    }
-
-    // OrbisPthread thread;
-    // int ret = scePthreadCreate(&thread, NULL, flush_thread, NULL, STRINGIFY(flush_thread_start_routine));
-    // if (ret)
-    // {
-    //     final_printf("thread create failed %x\n", ret);
-    // }
-
-    // register_hooks();
-
-    return 0;
-}
-
-s32 attr_module_hidden module_stop(s64 argc, const void *args)
-{
-    final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
-    final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
-
-    fini_thread_local_state();
-
-    return 0;
-}
-
 uint64_t read_call_label()
 {
     uint64_t old_value;
@@ -179,4 +116,129 @@ __attribute__((naked)) void hook()
 
         "ret\n\t"
     );
+}
+
+#define PAGE_SIZE 4096
+
+void register_hooks(JumpSlotRelocationList* relocs) {
+    unsigned char template_code[] = {
+        // mov dword ptr fs:-32, <immediate_value>
+        0x64, 0xC7, 0x04, 0x25, 0xE0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+
+        // mov rdx, qword ptr [rip + 0xF]
+        0x48, 0x8B, 0x15, 0x0F, 0x00, 0x00, 0x00,
+
+        // mov qword ptr fs:-24, rdx
+        0x64, 0x48, 0x89, 0x14, 0x25, 0xE8, 0xFF, 0xFF, 0xFF,
+
+        // jmp [rip + 0x8]
+        0xFF, 0x25, 0x08, 0x00, 0x00, 0x00,
+
+        // <placeholder for address_value> (mov instruction)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+
+        // <placeholder for target_function address> (jump instruction)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    };
+
+    size_t bytes_needed = sizeof(template_code) * relocs->count;
+    size_t pages_needed = (bytes_needed + PAGE_SIZE - 1) / PAGE_SIZE;
+    size_t total_size = pages_needed * PAGE_SIZE;
+
+    void* mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE | PROT_EXEC, 
+                     MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    
+    if (mem == MAP_FAILED) {
+        final_printf("failed to map memory\n");
+        return;
+    }
+
+    final_printf("jump relocation trampolines block: 0x%lx\n", (uint64_t)mem);
+
+    for (unsigned int label_idx = 0; label_idx < relocs->count; label_idx++) {
+        JumpSlotRelocation* reloc = &relocs->items[label_idx];
+
+        void* func_mem = (char*)mem + label_idx * sizeof(template_code);
+        memcpy(func_mem, template_code, sizeof(template_code));
+
+        void** function_ptr = (void**)(reloc->relocation_offset + 0x0000000000400000);
+        sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
+
+        *(uint32_t*)((char*)func_mem + 8) = label_idx;
+        *(void**)((char*)func_mem + 34) = *function_ptr;
+        *(void**)((char*)func_mem + 42) = (void*)hook;
+
+        *function_ptr = (void*)func_mem;
+    }
+
+    sceKernelMprotect((void *)mem, total_size, VM_PROT_EXECUTE);
+}
+
+s32 attr_module_hidden module_start(s64 argc, const void *args)
+{
+    final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
+    final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
+    final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
+
+    {
+        SELFParserState* parser = initialize_self_parser("/app0/eboot.bin");
+
+        size_t dynamic_segment_size;
+        void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
+        if (!dynamic_segment) {
+            teardown_self_parser(parser);
+            return 1;
+        }
+
+        size_t dynlib_segment_size;
+        void* dynlib_segment = load_segment(parser, PT_SCE_DYNLIBDATA, &dynlib_segment_size);
+        if (!dynlib_segment) {
+            teardown_self_parser(parser);
+            free(dynamic_segment);
+            return 1;
+        }
+
+        teardown_self_parser(parser);
+
+        DynamicInfo info = parse_dynamic_section(dynamic_segment, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
+
+        JumpSlotRelocationList jump_slot_relocations;
+        find_jump_slot_relocations(&info, &jump_slot_relocations);
+
+        register_hooks(&jump_slot_relocations);
+
+        cleanup_jump_slot_relocation_list(&jump_slot_relocations);
+        cleanup_dynamic_info(&info);
+
+        free(dynamic_segment);
+        free(dynlib_segment);
+    }
+
+    init_thread_local_state();
+    bool ok = init_lazy_destructor();
+    if (!ok)
+    {
+        final_printf("init lazy destructor failed\n");
+    }
+
+    // OrbisPthread thread;
+    // int ret = scePthreadCreate(&thread, NULL, flush_thread, NULL, STRINGIFY(flush_thread_start_routine));
+    // if (ret)
+    // {
+    //     final_printf("thread create failed %x\n", ret);
+    // }
+
+    // register_hooks();
+
+    return 0;
+}
+
+s32 attr_module_hidden module_stop(s64 argc, const void *args)
+{
+    final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
+    final_printf("[GoldHEN] %s Plugin Ended.\n", g_pluginName);
+
+    fini_thread_local_state();
+
+    return 0;
 }

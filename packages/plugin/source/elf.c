@@ -400,43 +400,61 @@ const char* get_symbol_type_name(unsigned char st_info) {
     }
 }
 
-void print_relocations_inner(const Elf64_Rela* relas, size_t rela_count, const DynamicInfo* info) {
-    final_printf("Relocations: (%zu)\n", rela_count);
-    for (size_t i = 0; i < rela_count; i++) {
-        const Elf64_Rela* rela = &relas[i];
-        uint32_t sym_index = ELF64_R_SYM(rela->r_info);
-        uint32_t rela_type = ELF64_R_TYPE(rela->r_info);
-        if (rela_type == R_X86_64_RELATIVE) {
-            continue;
+void init_jump_slot_relocation_list(JumpSlotRelocationList* list, size_t initial_capacity) {
+    list->items = malloc(initial_capacity * sizeof(JumpSlotRelocation));
+    list->count = 0;
+    list->capacity = initial_capacity;
+}
+
+void add_jump_slot_relocation(JumpSlotRelocationList* list, const SymbolInfo* symbol_info, uint64_t offset) {
+    if (list->count == list->capacity) {
+        list->capacity *= 2;
+        list->items = realloc(list->items, list->capacity * sizeof(JumpSlotRelocation));
+    }
+    list->items[list->count].symbol_info = symbol_info;
+    list->items[list->count].relocation_offset = offset;
+    list->count++;
+}
+
+void find_jump_slot_relocations(const DynamicInfo* info, JumpSlotRelocationList* result) {
+    init_jump_slot_relocation_list(result, 100);
+
+    const Elf64_Rela* relas[] = {info->rela_entries, info->plt_rela_entries};
+    size_t rela_counts[] = {info->rela_count, info->plt_rela_count};
+
+    for (int section = 0; section < 2; section++) {
+        const Elf64_Rela* current_relas = relas[section];
+        size_t current_count = rela_counts[section];
+
+        for (size_t i = 0; i < current_count; i++) {
+            const Elf64_Rela* rela = &current_relas[i];
+            uint32_t sym_index = ELF64_R_SYM(rela->r_info);
+            uint32_t rela_type = ELF64_R_TYPE(rela->r_info);
+
+            if (rela_type != R_X86_64_JUMP_SLOT) {
+                continue;
+            }
+
+            const SymbolInfo* sym = &info->symbols[sym_index];
+            const Elf64_Sym* elf_sym = &info->symtab[sym_index];
+            if (rela->r_addend != 0) {
+                final_printf("JUMP_SLOT relocation with non-zero addend @ %d, %zu %ld\n", section, i, rela->r_addend);
+                continue;
+            }
+
+            if (sym->type == SYMBOL_RAW) {
+                final_printf("raw symbol encountered @ %d %d %s", section, i, sym->data.raw);
+                continue;
+            }
+
+            add_jump_slot_relocation(result, sym, rela->r_offset);
         }
-
-        const SymbolInfo* sym = &info->symbols[sym_index];
-        const Elf64_Sym* elf_sym = &info->symtab[sym_index];
-
-        const char* library_name = "N/A";
-        const char* module_name = "N/A";
-        const char* symbol_name = "N/A";
-
-        if (sym->type == SYMBOL_PARSED) {
-            library_name = find_library_name(info, sym->data.parsed.library_id);
-            module_name = find_module_name(info, sym->data.parsed.module_id);
-            symbol_name = sym->data.parsed.name;
-        } else {
-            symbol_name = sym->data.raw;
-        }
-
-        final_printf("Relocation %zu:\n", i);
-        final_printf("  Offset: 0x%lx\n", rela->r_offset);
-        final_printf("  Symbol: %s\n", symbol_name);
-        final_printf("  Symbol Type: %s\n", get_symbol_type_name(elf_sym->st_info));
-        final_printf("  Library: %s\n", library_name);
-        final_printf("  Module: %s\n", module_name);
-        final_printf("  Addend: %ld\n", rela->r_addend);
-        final_printf("  Relocation Type: %u\n\n", rela_type);
     }
 }
 
-void print_relocations(const DynamicInfo* info) {
-    print_relocations_inner(info->rela_entries, info->rela_count, info);
-    print_relocations_inner(info->plt_rela_entries, info->plt_rela_count, info);
+void cleanup_jump_slot_relocation_list(JumpSlotRelocationList* list) {
+    free(list->items);
+    list->items = NULL;
+    list->count = 0;
+    list->capacity = 0;
 }

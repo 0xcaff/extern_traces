@@ -114,4 +114,17 @@ void teardown_self_parser(SELFParserState* state);
 
 void cleanup_dynamic_info(DynamicInfo* info);
 DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size, const uint8_t* dynlib_segment, size_t dynlib_segment_size);
-void print_relocations(const DynamicInfo* info);
+
+typedef struct {
+    const SymbolInfo* symbol_info;
+    uint64_t relocation_offset;
+} JumpSlotRelocation;
+
+typedef struct {
+    JumpSlotRelocation* items;
+    size_t count;
+    size_t capacity;
+} JumpSlotRelocationList;
+
+void find_jump_slot_relocations(const DynamicInfo* info, JumpSlotRelocationList* result);
+void cleanup_jump_slot_relocation_list(JumpSlotRelocationList* list);
