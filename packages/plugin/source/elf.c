@@ -3,128 +3,124 @@
 
 const unsigned char SELF_MAGIC[8] = { 0x4F, 0x15, 0x3D, 0x1D, 0x00, 0x01, 0x01, 0x12 };
 
-typedef struct {
-    uint8_t magic[8];
-    uint8_t category;
-    uint8_t program_type;
-    uint16_t padding;
-    uint16_t header_size;
-    uint16_t signature_size;
-    uint32_t file_size;
-    uint32_t padding2;
-    uint16_t segments_count;
-    uint16_t padding3[3];
-} SELFHeader;
-
-typedef struct {
-    uint64_t flags;
-    uint64_t offset;
-    uint64_t encrypted_compressed_size;
-    uint64_t decrypted_decompressed_size;
-} SELFSegment;
-
 #define BLOCK_SEGMENT 0x800
 
-void* parse_pt_dynamic(const char* filename, size_t* size) {
-    int fd = open(filename, O_RDONLY);
-    if (fd == -1) {
-        final_printf("Failed to open file: %s\n", filename);
+SELFParserState* initialize_self_parser(const char* filename) {
+    SELFParserState* state = malloc(sizeof(SELFParserState));
+    if (!state) {
+        final_printf("failed to allocate memory for parser state\n");
         return NULL;
     }
 
-    SELFHeader self_header;
-    if (read(fd, &self_header, sizeof(SELFHeader)) != sizeof(SELFHeader)) {
-        final_printf("Failed to read SELF header\n");
-        close(fd);
+    state->fd = open(filename, O_RDONLY);
+    if (state->fd == -1) {
+        final_printf("failed to open file: %s\n", filename);
+        free(state);
         return NULL;
     }
 
-    if (memcmp(self_header.magic, SELF_MAGIC, 8) != 0) {
-        final_printf("Invalid SELF magic\n");
-        close(fd);
+    if (read(state->fd, &state->self_header, sizeof(SELFHeader)) != sizeof(SELFHeader)) {
+        final_printf("failed to read SELF header\n");
+        close(state->fd);
+        free(state);
         return NULL;
     }
 
-    SELFSegment* self_segments = malloc(self_header.segments_count * sizeof(SELFSegment));
-    if (!self_segments) {
-        final_printf("Failed to allocate memory for SELF segments\n");
-        close(fd);
+    if (memcmp(state->self_header.magic, SELF_MAGIC, 8) != 0) {
+        final_printf("invalid SELF magic\n");
+        close(state->fd);
+        free(state);
         return NULL;
     }
 
-    if (read(fd, self_segments, self_header.segments_count * sizeof(SELFSegment)) != self_header.segments_count * sizeof(SELFSegment)) {
-        final_printf("Failed to read SELF segments\n");
-        free(self_segments);
-        close(fd);
+    state->self_segments = malloc(state->self_header.segments_count * sizeof(SELFSegment));
+    if (!state->self_segments) {
+        final_printf("failed to allocate memory for SELF segments\n");
+        close(state->fd);
+        free(state);
         return NULL;
     }
 
-    off_t elf_start_offset = lseek(fd, 0, SEEK_CUR);
-
-    Elf64_Ehdr elf_header;
-    if (read(fd, &elf_header, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
-        final_printf("Failed to read ELF header\n");
-        free(self_segments);
-        close(fd);
+    if (read(state->fd, state->self_segments, state->self_header.segments_count * sizeof(SELFSegment)) 
+        != state->self_header.segments_count * sizeof(SELFSegment)) {
+        final_printf("failed to read SELF segments\n");
+        free(state->self_segments);
+        close(state->fd);
+        free(state);
         return NULL;
     }
 
-    Elf64_Phdr* phdrs = malloc(elf_header.e_phnum * sizeof(Elf64_Phdr));
-    if (!phdrs) {
-        final_printf("Failed to allocate memory for program headers\n");
-        free(self_segments);
-        close(fd);
+    off_t elf_start_offset = lseek(state->fd, 0, SEEK_CUR);
+
+    if (read(state->fd, &state->elf_header, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
+        final_printf("failed to read ELF header\n");
+        free(state->self_segments);
+        close(state->fd);
+        free(state);
         return NULL;
     }
 
-    if (lseek(fd, elf_start_offset + elf_header.e_phoff, SEEK_SET) == -1 ||
-        read(fd, phdrs, elf_header.e_phnum * sizeof(Elf64_Phdr)) != elf_header.e_phnum * sizeof(Elf64_Phdr)) {
+    state->phdrs = malloc(state->elf_header.e_phnum * sizeof(Elf64_Phdr));
+    if (!state->phdrs) {
+        final_printf("failed to allocate memory for program headers\n");
+        free(state->self_segments);
+        close(state->fd);
+        free(state);
+        return NULL;
+    }
+
+    if (lseek(state->fd, elf_start_offset + state->elf_header.e_phoff, SEEK_SET) == -1 ||
+        read(state->fd, state->phdrs, state->elf_header.e_phnum * sizeof(Elf64_Phdr)) 
+        != state->elf_header.e_phnum * sizeof(Elf64_Phdr)) {
         final_printf("Failed to read program headers\n");
-        free(phdrs);
-        free(self_segments);
-        close(fd);
+        free(state->phdrs);
+        free(state->self_segments);
+        close(state->fd);
+        free(state);
         return NULL;
     }
 
+    return state;
+}
+
+SELFSegment* find_matching_segment(const SELFParserState* state, int phdr_idx) {
+    for (int i = 0; i < state->self_header.segments_count; i++) {
+        SELFSegment* segment = &state->self_segments[i];
+        if (!(segment->flags & BLOCK_SEGMENT)) {
+            continue;
+        }
+        uint32_t program_header_id = (segment->flags >> 20) & 0xFFF;
+        if (program_header_id != phdr_idx) {
+            continue;
+        }
+        return segment;
+    }
+
+    return NULL;
+}
+
+void* load_segment(const SELFParserState* state, Elf32_Word p_type, size_t* size) {
     Elf64_Phdr* dynamic_phdr = NULL;
-    SELFSegment* matching_segment = NULL;
     int phdr_idx = -1;
     unsigned int matching_segment_offset = 0;
 
-    for (int i = 0; i < elf_header.e_phnum; i++) {
-        if (phdrs[i].p_type == PT_DYNAMIC) {
-            dynamic_phdr = &phdrs[i];
+    for (int i = 0; i < state->elf_header.e_phnum; i++) {
+        if (state->phdrs[i].p_type == p_type) {
+            dynamic_phdr = &state->phdrs[i];
             phdr_idx = i;
             break;
         }
     }
 
     if (!dynamic_phdr) {
-        final_printf("missing PT_DYNAMIC segment\n");
-        free(phdrs);
-        free(self_segments);
-        close(fd);
+        final_printf("segment not found\n");
         return NULL;
     }
 
-    for (int i = 0; i < self_header.segments_count; i++) {
-        SELFSegment* segment = &self_segments[i];
-        if (!(segment->flags & BLOCK_SEGMENT)) {
-            continue;
-        }
-
-        uint32_t program_header_id = (segment->flags >> 20) & 0xFFF;
-        if (program_header_id != phdr_idx) {
-            continue;
-        }
-
-        matching_segment = segment;
-        break;
-    }
-
+    SELFSegment* matching_segment = find_matching_segment(state, phdr_idx);
     if (!matching_segment) {
-        for (int i = 0; i < elf_header.e_phnum; i++) {
-            Elf64_Phdr* phdr = &phdrs[i];
+        for (int i = 0; i < state->elf_header.e_phnum; i++) {
+            Elf64_Phdr* phdr = &state->phdrs[i];
                     
             if (!(phdr->p_vaddr <= dynamic_phdr->p_vaddr)) {
                 continue;
@@ -135,23 +131,7 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
                 continue;
             }
 
-            int phdr_idx = i;
-            // found an overlapping segment, try to find its bytes
-            for (int i = 0; i < self_header.segments_count; i++) {
-                SELFSegment* segment = &self_segments[i];
-                if (!(segment->flags & BLOCK_SEGMENT)) {
-                    continue;
-                }
-
-                uint32_t program_header_id = (segment->flags >> 20) & 0xFFF;
-                if (program_header_id != phdr_idx) {
-                    continue;
-                }
-
-                matching_segment = segment;
-                break;
-            }
-
+            matching_segment = find_matching_segment(state, i);
             if (!matching_segment) {
                 continue;
             }
@@ -161,9 +141,6 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
 
         if (!matching_segment) {
             final_printf("failed to find matching overlapping segment\n");
-            free(phdrs);
-            free(self_segments);
-            close(fd);
             return NULL;
         }
     }
@@ -171,27 +148,30 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
     void* segment_data = malloc(dynamic_phdr->p_filesz);
     if (!segment_data) {
         final_printf("failed to allocate memory for segment data\n");
-        free(phdrs);
-        free(self_segments);
-        close(fd);
         return NULL;
     }
 
-    if (lseek(fd, matching_segment->offset + matching_segment_offset, SEEK_SET) == -1 ||
-        read(fd, segment_data, dynamic_phdr->p_filesz) != dynamic_phdr->p_filesz) {
+    if (lseek(state->fd, matching_segment->offset + matching_segment_offset, SEEK_SET) == -1 ||
+        read(state->fd, segment_data, dynamic_phdr->p_filesz) != dynamic_phdr->p_filesz) {
         final_printf("failed to read segment data\n");
-        free(phdrs);
-        free(self_segments);
-        close(fd);
+        free(segment_data);
         return NULL;
     }
 
     *size = dynamic_phdr->p_filesz;
-    free(phdrs);
-    free(self_segments);
-    close(fd);
-
     return segment_data;
+}
+
+void teardown_self_parser(SELFParserState* state) {
+    if (state) {
+        if (state->fd != -1) {
+            close(state->fd);
+        }
+
+        free(state->self_segments);
+        free(state->phdrs);
+        free(state);
+    }
 }
 
 const uint8_t INDEX_ENCODING_TABLE[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
@@ -268,7 +248,7 @@ SymbolInfo parse_symbol_name(const char* name) {
     return info;
 }
 
-DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size) {
+DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size, const uint8_t* dynlib_segment, size_t dynlib_segment_size) {
     DynamicInfo info = {
         .rela_ent = sizeof(Elf64_Rela),
         .sym_ent = sizeof(Elf64_Sym),
@@ -339,16 +319,16 @@ DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size) {
     }
 
     // Set up relocations
-    info.rela_entries = (const Elf64_Rela*)(data + info.rela_offset);
+    info.rela_entries = (const Elf64_Rela*)(dynlib_segment + info.rela_offset);
     info.rela_count = info.rela_size / info.rela_ent;
 
     // Set up string table
-    info.strtab = (const char*)(data + info.strtab_offset);
+    info.strtab = (const char*)(dynlib_segment + info.strtab_offset);
 
     // Parse symbols
     info.symbol_count = info.symtab_size / info.sym_ent;
     SymbolInfo* symbols = malloc(info.symbol_count * sizeof(SymbolInfo));
-    const Elf64_Sym* symtab = (const Elf64_Sym*)(data + info.symtab_offset);
+    const Elf64_Sym* symtab = (const Elf64_Sym*)(dynlib_segment + info.symtab_offset);
 
     for (size_t i = 0; i < info.symbol_count; i++) {
         const char* name = info.strtab + symtab[i].st_name;
@@ -401,8 +381,8 @@ const char* get_symbol_type_name(unsigned char st_info) {
     }
 }
 
-void print_relocations(uint8_t* dynamic_data, size_t dynamic_size, const DynamicInfo* info) {
-    const Elf64_Sym* symtab = (const Elf64_Sym*)(dynamic_data + info->symtab_offset);
+void print_relocations(uint8_t* dynlib_segment, size_t dynlib_segment_size, const DynamicInfo* info) {
+    const Elf64_Sym* symtab = (const Elf64_Sym*)(dynlib_segment + info->symtab_offset);
 
     final_printf("Relocations:\n");
     for (size_t i = 0; i < info->rela_count; i++) {

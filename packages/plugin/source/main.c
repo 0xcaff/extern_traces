@@ -20,6 +20,7 @@ attr_public const char *g_pluginAuth = "0xcaff";
 attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 
 #define N_BYTES 256
+#define PT_SCE_DYNLIBDATA 0x61000000
 
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
@@ -28,18 +29,31 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
 
     {
-        size_t dynamic_size;
-        void* dynamic_segment = parse_pt_dynamic("/app0/eboot.bin", &dynamic_size);
+        SELFParserState* parser = initialize_self_parser("/app0/eboot.bin");
+
+        size_t dynamic_segment_size;
+        void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
         if (!dynamic_segment) {
+            teardown_self_parser(parser);
             return 1;
         }
 
-        DynamicInfo info = parse_dynamic_section(dynamic_segment, dynamic_size);
-        print_relocations(dynamic_segment, dynamic_size, &info);
+        size_t dynlib_segment_size;
+        void* dynlib_segment = load_segment(parser, PT_SCE_DYNLIBDATA, &dynlib_segment_size);
+        if (!dynlib_segment) {
+            teardown_self_parser(parser);
+            free(dynamic_segment);
+            return 1;
+        }
 
+        teardown_self_parser(parser);
+
+        DynamicInfo info = parse_dynamic_section(dynamic_segment, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
+        print_relocations(dynlib_segment, dynlib_segment_size, &info);
         cleanup_dynamic_info(&info);
 
         free(dynamic_segment);
+        free(dynlib_segment);
     }
 
     init_thread_local_state();

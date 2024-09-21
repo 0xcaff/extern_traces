@@ -79,9 +79,38 @@ typedef struct {
     const char* strtab;
 } DynamicInfo;
 
+typedef struct {
+    uint8_t magic[8];
+    uint8_t category;
+    uint8_t program_type;
+    uint16_t padding;
+    uint16_t header_size;
+    uint16_t signature_size;
+    uint32_t file_size;
+    uint32_t padding2;
+    uint16_t segments_count;
+    uint16_t padding3[3];
+} SELFHeader;
 
-void* parse_pt_dynamic(const char* filename, size_t* size);
+typedef struct {
+    uint64_t flags;
+    uint64_t offset;
+    uint64_t encrypted_compressed_size;
+    uint64_t decrypted_decompressed_size;
+} SELFSegment;
+
+typedef struct {
+    int fd;
+    SELFHeader self_header;
+    SELFSegment* self_segments;
+    Elf64_Ehdr elf_header;
+    Elf64_Phdr* phdrs;
+} SELFParserState;
+
+SELFParserState* initialize_self_parser(const char* filename);
+void* load_segment(const SELFParserState* state, Elf32_Word p_type, size_t* size);
+void teardown_self_parser(SELFParserState* state);
 
 void cleanup_dynamic_info(DynamicInfo* info);
-DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size);
-void print_relocations(uint8_t* dynamic_data, size_t dynamic_size, const DynamicInfo* info);
+DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size, const uint8_t* dynlib_segment, size_t dynlib_segment_size);
+void print_relocations(uint8_t* dynlib_segment, size_t dynlib_segment_size, const DynamicInfo* info);
