@@ -75,57 +75,44 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
 
     if (lseek(fd, elf_header.e_phoff, SEEK_SET) == -1 ||
         read(fd, phdrs, elf_header.e_phnum * sizeof(Elf64_Phdr)) != elf_header.e_phnum * sizeof(Elf64_Phdr)) {
-        fprintf(stderr, "Failed to read program headers\n");
+        final_printf("Failed to read program headers\n");
         free(phdrs);
         free(self_segments);
         close(fd);
         return NULL;
     }
 
+    SELFSegment* dynamic_segment = NULL;
     Elf64_Phdr* dynamic_phdr = NULL;
-    for (int i = 0; i < elf_header.e_phnum; i++) {
-        if (phdrs[i].p_type == PT_DYNAMIC) {
-            dynamic_phdr = &phdrs[i];
-            break;
-        }
-    }
-
-    if (!dynamic_phdr) {
-        fprintf(stderr, "PT_DYNAMIC segment not found\n");
-        free(phdrs);
-        free(self_segments);
-        close(fd);
-        return NULL;
-    }
-
-    SELFSegment* matching_segment = NULL;
     for (int i = 0; i < self_header.segments_count; i++) {
-        if (self_segments[i].decrypted_decompressed_size == dynamic_phdr->p_filesz) {
-            matching_segment = &self_segments[i];
+        uint32_t program_header_id = (self_segments[i].flags >> 20) & 0xFFF;
+        if (program_header_id < elf_header.e_phnum && phdrs[program_header_id].p_type == PT_DYNAMIC) {
+            dynamic_segment = &self_segments[i];
+            dynamic_phdr = &phdrs[program_header_id];
             break;
         }
     }
 
-    if (!matching_segment) {
-        fprintf(stderr, "No matching SELF segment found for PT_DYNAMIC\n");
+    if (!dynamic_segment || !dynamic_phdr) {
+        final_printf("PT_DYNAMIC segment not found\n");
         free(phdrs);
         free(self_segments);
         close(fd);
         return NULL;
     }
 
-    void* segment_data = malloc(matching_segment->decrypted_decompressed_size);
+    void* segment_data = malloc(dynamic_segment->decrypted_decompressed_size);
     if (!segment_data) {
-        fprintf(stderr, "Failed to allocate memory for segment data\n");
+        final_printf("Failed to allocate memory for segment data\n");
         free(phdrs);
         free(self_segments);
         close(fd);
         return NULL;
     }
 
-    if (lseek(fd, matching_segment->offset, SEEK_SET) == -1 ||
-        read(fd, segment_data, matching_segment->decrypted_decompressed_size) != matching_segment->decrypted_decompressed_size) {
-        fprintf(stderr, "Failed to read segment data\n");
+    if (lseek(fd, dynamic_segment->offset, SEEK_SET) == -1 ||
+        read(fd, segment_data, dynamic_segment->decrypted_decompressed_size) != dynamic_segment->decrypted_decompressed_size) {
+        final_printf("Failed to read segment data\n");
         free(segment_data);
         free(phdrs);
         free(self_segments);
@@ -133,7 +120,7 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
         return NULL;
     }
 
-    *size = matching_segment->decrypted_decompressed_size;
+    *size = dynamic_segment->decrypted_decompressed_size;
     free(phdrs);
     free(self_segments);
     close(fd);
