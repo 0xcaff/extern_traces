@@ -92,10 +92,7 @@ build-info:
 .PHONY: clean
 .DEFAULT_GOAL := all
 
-source/trampolines.h:
-	pipenv run python source/trampolines_h.py
-
-all: build-info source/trampolines.h plugin_common $(TARGET)
+all: build-info plugin_common $(TARGET)
 
 deploy: all
 	curl -T target/prx_final/extern_traces.prx ftp://192.168.1.123:2121/data/GoldHEN/plugins/extern_traces.prx

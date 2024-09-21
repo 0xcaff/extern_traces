@@ -11,7 +11,6 @@
 #include "logger.h"
 #include "tracing.h"
 #include "plugin_common.h"
-#include "trampolines.h"
 #include "elf.h"
 
 attr_public const char *g_pluginName = "extern_traces";
@@ -83,4 +82,101 @@ s32 attr_module_hidden module_stop(s64 argc, const void *args)
     fini_thread_local_state();
 
     return 0;
+}
+
+uint64_t read_call_label()
+{
+    uint64_t old_value;
+
+    __asm__ volatile(
+        "movq %%fs:-32, %0;"
+        : "=r"(old_value)
+        :
+        : "memory");
+
+    return old_value;
+}
+
+void start_logger() {
+    emit_span_start(read_call_label());
+}
+
+void end_logger() {
+    emit_span_end();
+}
+
+__attribute__((naked)) void hook()
+{
+    asm volatile(
+        // backup argument registers
+        "push %rdi\n\t"
+        "push %rsi\n\t"
+        "push %rdx\n\t"
+        "push %rcx\n\t"
+        "push %r8\n\t"
+        "push %r9\n\t"
+        "movdqu %xmm0, -0x10(%rsp)\n\t"
+        "movdqu %xmm1, -0x20(%rsp)\n\t"
+        "movdqu %xmm2, -0x30(%rsp)\n\t"
+        "movdqu %xmm3, -0x40(%rsp)\n\t"
+        "movdqu %xmm4, -0x50(%rsp)\n\t"
+        "movdqu %xmm5, -0x60(%rsp)\n\t"
+        "movdqu %xmm6, -0x70(%rsp)\n\t"
+        "movdqu %xmm7, -0x80(%rsp)\n\t"
+        "sub $0x88, %rsp\n\t"
+
+        // call logger
+        "call start_logger\n\t"
+
+        // restore argument registers
+        "add $0x88, %rsp\n\t"
+        "movdqu -0x10(%rsp), %xmm0\n\t"
+        "movdqu -0x20(%rsp), %xmm1\n\t"
+        "movdqu -0x30(%rsp), %xmm2\n\t"
+        "movdqu -0x40(%rsp), %xmm3\n\t"
+        "movdqu -0x50(%rsp), %xmm4\n\t"
+        "movdqu -0x60(%rsp), %xmm5\n\t"
+        "movdqu -0x70(%rsp), %xmm6\n\t"
+        "movdqu -0x80(%rsp), %xmm7\n\t"
+        "pop %r9\n\t"
+        "pop %r8\n\t"
+        "pop %rcx\n\t"
+        "pop %rdx\n\t"
+        "pop %rsi\n\t"
+        "pop %rdi\n\t"
+
+        // backup return address
+        // use r10 as a scratch register. it is a caller saved register and not
+        // an argument register.
+        "pop %r10\n\t"
+
+        // store the value in thread local storage slot. there are no registers
+        // which we can use in this context which will both
+        // 1. not need to be backed up
+        // 2. saved across call boundary
+        // callee saved registers are saved across the call boundary but we
+        // need to backup for our caller.
+        // caller saved registers will not be saved across the call boundary
+        // but do not need to be backed up prior to usage
+        "movq %r10, %fs:-16\n\t"
+
+        // execute original function
+        "movq %fs:-24, %rax\n\t"
+        "call *%rax\n\t"
+
+        // restore return address
+        "movq %fs:-16, %r10\n\t"
+        "push %r10\n\t"
+
+        // backup rax (also happens to align stack for call)
+        "push %rax\n\t"
+
+        // call end logger
+        "call end_logger\n\t"
+
+        // restore rax (ignore the return value of end logger)
+        "pop %rax\n\t"
+
+        "ret\n\t"
+    );
 }

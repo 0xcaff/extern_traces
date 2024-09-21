@@ -1,6 +1,5 @@
 {
   "build": { "dockerfile": "Dockerfile" },
-  "postStartCommand": "pipenv install",
   "customizations": {
     "vscode": {
       "extensions": [
