@@ -1,38 +1,27 @@
 #include "elf.h"
 #include "plugin_common.h"
 
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define SELF_MAGIC "SCE\0\0\0\0\0"
 
-typedef struct self_entry_t {
-    uint32_t props;
-    uint32_t reserved;
-    uint64_t offset;
-    uint64_t filesz;
-    uint64_t memsz;
-} self_entry_t;
-
-typedef struct self_header_t {
-    uint32_t magic;
-    uint8_t version;
-    uint8_t mode;
-    uint8_t endian;
-    uint8_t attr;
-    uint32_t key_type;
+typedef struct {
+    uint8_t magic[8];
+    uint8_t category;
+    uint8_t program_type;
+    uint16_t padding;
     uint16_t header_size;
-    uint16_t meta_size;
-    uint64_t file_size;
-    uint16_t num_entries;
-    uint16_t flags;
-    uint32_t reserved;
-    self_entry_t entries[0];
-} self_header_t;
+    uint16_t signature_size;
+    uint32_t file_size;
+    uint32_t padding2;
+    uint16_t segments_count;
+    uint16_t padding3[3];
+} SELFHeader;
 
-int valid_elf_magic(unsigned char *e_ident) {
-    return (e_ident[EI_MAG0] == ELFMAG0 &&
-            e_ident[EI_MAG1] == ELFMAG1 &&
-            e_ident[EI_MAG2] == ELFMAG2 &&
-            e_ident[EI_MAG3] == ELFMAG3);
-}
+typedef struct {
+    uint64_t flags;
+    uint64_t offset;
+    uint64_t encrypted_compressed_size;
+    uint64_t decrypted_decompressed_size;
+} SELFSegment;
 
 void* parse_pt_dynamic(const char* filename, size_t* size) {
     int fd = open(filename, O_RDONLY);
@@ -41,39 +30,37 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
         return NULL;
     }
 
-    // Read self header
-    self_header_t self_header;
-    if (read(fd, &self_header, sizeof(self_header_t)) != sizeof(self_header_t)) {
-        final_printf("Failed to read self header\n");
+    SELFHeader self_header;
+    if (read(fd, &self_header, sizeof(SELFHeader)) != sizeof(SELFHeader)) {
+        final_printf("Failed to read SELF header\n");
         close(fd);
         return NULL;
     }
 
-    // Skip self entries
-    off_t offset = sizeof(self_header_t) + self_header.num_entries * sizeof(self_entry_t);
-    if (lseek(fd, offset, SEEK_SET) == -1) {
-        final_printf("Failed to seek to ELF header\n");
+    if (memcmp(self_header.magic, SELF_MAGIC, 8) != 0) {
+        final_printf("Invalid SELF magic\n");
         close(fd);
         return NULL;
     }
 
-    // Read ELF header
+    SELFSegment* self_segments = malloc(self_header.segments_count * sizeof(SELFSegment));
+    if (!self_segments) {
+        final_printf("Failed to allocate memory for SELF segments\n");
+        close(fd);
+        return NULL;
+    }
+
+    if (read(fd, self_segments, self_header.segments_count * sizeof(SELFSegment)) != self_header.segments_count * sizeof(SELFSegment)) {
+        final_printf("Failed to read SELF segments\n");
+        free(self_segments);
+        close(fd);
+        return NULL;
+    }
+
     Elf64_Ehdr elf_header;
     if (read(fd, &elf_header, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
         final_printf("Failed to read ELF header\n");
-        close(fd);
-        return NULL;
-    }
-
-    if (!valid_elf_magic(elf_header.e_ident)) {
-        final_printf("Invalid ELF magic\n");
-        close(fd);
-        return NULL;
-    }
-
-    // Read program headers
-    if (lseek(fd, offset + elf_header.e_phoff, SEEK_SET) == -1) {
-        final_printf("Failed to seek to program headers\n");
+        free(self_segments);
         close(fd);
         return NULL;
     }
@@ -81,18 +68,20 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
     Elf64_Phdr* phdrs = malloc(elf_header.e_phnum * sizeof(Elf64_Phdr));
     if (!phdrs) {
         final_printf("Failed to allocate memory for program headers\n");
+        free(self_segments);
         close(fd);
         return NULL;
     }
 
-    if (read(fd, phdrs, elf_header.e_phnum * sizeof(Elf64_Phdr)) != elf_header.e_phnum * sizeof(Elf64_Phdr)) {
-        final_printf("Failed to read program headers\n");
+    if (lseek(fd, elf_header.e_phoff, SEEK_SET) == -1 ||
+        read(fd, phdrs, elf_header.e_phnum * sizeof(Elf64_Phdr)) != elf_header.e_phnum * sizeof(Elf64_Phdr)) {
+        fprintf(stderr, "Failed to read program headers\n");
         free(phdrs);
+        free(self_segments);
         close(fd);
         return NULL;
     }
 
-    // Find PT_DYNAMIC segment
     Elf64_Phdr* dynamic_phdr = NULL;
     for (int i = 0; i < elf_header.e_phnum; i++) {
         if (phdrs[i].p_type == PT_DYNAMIC) {
@@ -102,44 +91,53 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
     }
 
     if (!dynamic_phdr) {
-        final_printf("PT_DYNAMIC segment not found\n");
+        fprintf(stderr, "PT_DYNAMIC segment not found\n");
         free(phdrs);
+        free(self_segments);
         close(fd);
         return NULL;
     }
 
-    // Allocate memory for PT_DYNAMIC segment
-    void* dynamic_segment = malloc(dynamic_phdr->p_filesz);
-    if (!dynamic_segment) {
-        final_printf("Failed to allocate memory for PT_DYNAMIC segment\n");
+    SELFSegment* matching_segment = NULL;
+    for (int i = 0; i < self_header.segments_count; i++) {
+        if (self_segments[i].decrypted_decompressed_size == dynamic_phdr->p_filesz) {
+            matching_segment = &self_segments[i];
+            break;
+        }
+    }
+
+    if (!matching_segment) {
+        fprintf(stderr, "No matching SELF segment found for PT_DYNAMIC\n");
         free(phdrs);
+        free(self_segments);
         close(fd);
         return NULL;
     }
 
-    // Read PT_DYNAMIC segment
-    final_printf("offset: %lu\n", offset + dynamic_phdr->p_offset);
-    if (lseek(fd, offset + dynamic_phdr->p_offset, SEEK_SET) == -1) {
-        final_printf("Failed to seek to PT_DYNAMIC segment\n");
-        free(dynamic_segment);
+    void* segment_data = malloc(matching_segment->decrypted_decompressed_size);
+    if (!segment_data) {
+        fprintf(stderr, "Failed to allocate memory for segment data\n");
         free(phdrs);
+        free(self_segments);
         close(fd);
         return NULL;
     }
 
-    if (read(fd, dynamic_segment, dynamic_phdr->p_filesz) != dynamic_phdr->p_filesz) {
-        final_printf("Failed to read PT_DYNAMIC segment\n");
-        free(dynamic_segment);
+    if (lseek(fd, matching_segment->offset, SEEK_SET) == -1 ||
+        read(fd, segment_data, matching_segment->decrypted_decompressed_size) != matching_segment->decrypted_decompressed_size) {
+        fprintf(stderr, "Failed to read segment data\n");
+        free(segment_data);
         free(phdrs);
+        free(self_segments);
         close(fd);
         return NULL;
     }
 
-    // Clean up and return
-    *size = dynamic_phdr->p_filesz;
+    *size = matching_segment->decrypted_decompressed_size;
     free(phdrs);
+    free(self_segments);
     close(fd);
-    return dynamic_segment;
+    return segment_data;
 }
 
 const uint8_t INDEX_ENCODING_TABLE[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
