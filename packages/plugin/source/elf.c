@@ -23,6 +23,8 @@ typedef struct {
     uint64_t decrypted_decompressed_size;
 } SELFSegment;
 
+#define BLOCK_SEGMENT 0x800
+
 void* parse_pt_dynamic(const char* filename, size_t* size) {
     int fd = open(filename, O_RDONLY);
     if (fd == -1) {
@@ -84,48 +86,111 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
         return NULL;
     }
 
-    SELFSegment* dynamic_segment = NULL;
     Elf64_Phdr* dynamic_phdr = NULL;
-    for (int i = 0; i < self_header.segments_count; i++) {
-        uint32_t program_header_id = (self_segments[i].flags >> 20) & 0xFFF;
-        if (program_header_id < elf_header.e_phnum && phdrs[program_header_id].p_type == PT_DYNAMIC) {
-            dynamic_segment = &self_segments[i];
-            dynamic_phdr = &phdrs[program_header_id];
+    SELFSegment* matching_segment = NULL;
+    int phdr_idx = -1;
+    unsigned int matching_segment_offset = 0;
+
+    for (int i = 0; i < elf_header.e_phnum; i++) {
+        if (phdrs[i].p_type == PT_DYNAMIC) {
+            dynamic_phdr = &phdrs[i];
+            phdr_idx = i;
             break;
         }
     }
 
-    if (!dynamic_segment || !dynamic_phdr) {
-        final_printf("PT_DYNAMIC segment not found\n");
+    if (!dynamic_phdr) {
+        final_printf("missing PT_DYNAMIC segment\n");
         free(phdrs);
         free(self_segments);
         close(fd);
         return NULL;
     }
 
-    void* segment_data = malloc(dynamic_segment->decrypted_decompressed_size);
+    for (int i = 0; i < self_header.segments_count; i++) {
+        SELFSegment* segment = &self_segments[i];
+        if (!(segment->flags & BLOCK_SEGMENT)) {
+            continue;
+        }
+
+        uint32_t program_header_id = (segment->flags >> 20) & 0xFFF;
+        if (program_header_id != phdr_idx) {
+            continue;
+        }
+
+        matching_segment = segment;
+        break;
+    }
+
+    if (!matching_segment) {
+        for (int i = 0; i < elf_header.e_phnum; i++) {
+            Elf64_Phdr* phdr = &phdrs[i];
+                    
+            if (!(phdr->p_vaddr <= dynamic_phdr->p_vaddr)) {
+                continue;
+            }
+
+            int offset = dynamic_phdr->p_vaddr - phdr->p_vaddr;
+            if (!(phdr->p_filesz + offset >= dynamic_phdr->p_filesz)) {
+                continue;
+            }
+
+            int phdr_idx = i;
+            // found an overlapping segment, try to find its bytes
+            for (int i = 0; i < self_header.segments_count; i++) {
+                SELFSegment* segment = &self_segments[i];
+                if (!(segment->flags & BLOCK_SEGMENT)) {
+                    continue;
+                }
+
+                uint32_t program_header_id = (segment->flags >> 20) & 0xFFF;
+                if (program_header_id != phdr_idx) {
+                    continue;
+                }
+
+                matching_segment = segment;
+                break;
+            }
+
+            if (!matching_segment) {
+                continue;
+            }
+
+            matching_segment_offset = dynamic_phdr->p_offset - phdr->p_offset;
+        }
+
+        if (!matching_segment) {
+            final_printf("failed to find matching overlapping segment\n");
+            free(phdrs);
+            free(self_segments);
+            close(fd);
+            return NULL;
+        }
+    }
+
+    void* segment_data = malloc(dynamic_phdr->p_filesz);
     if (!segment_data) {
-        final_printf("Failed to allocate memory for segment data\n");
+        final_printf("failed to allocate memory for segment data\n");
         free(phdrs);
         free(self_segments);
         close(fd);
         return NULL;
     }
 
-    if (lseek(fd, dynamic_segment->offset, SEEK_SET) == -1 ||
-        read(fd, segment_data, dynamic_segment->decrypted_decompressed_size) != dynamic_segment->decrypted_decompressed_size) {
-        final_printf("Failed to read segment data\n");
-        free(segment_data);
+    if (lseek(fd, matching_segment->offset + matching_segment_offset, SEEK_SET) == -1 ||
+        read(fd, segment_data, dynamic_phdr->p_filesz) != dynamic_phdr->p_filesz) {
+        final_printf("failed to read segment data\n");
         free(phdrs);
         free(self_segments);
         close(fd);
         return NULL;
     }
 
-    *size = dynamic_segment->decrypted_decompressed_size;
+    *size = dynamic_phdr->p_filesz;
     free(phdrs);
     free(self_segments);
     close(fd);
+
     return segment_data;
 }
 
@@ -219,10 +284,8 @@ DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size) {
         uint64_t value = dynamic[i * 2 + 1];
 
         if (tag == DT_NULL) {
-            break;  // Stop parsing when we encounter DT_NULL
+            break;
         }
-
-        final_printf("tag: %lx\n", tag);
 
         switch (tag) {
             case DT_SCE_RELA:
