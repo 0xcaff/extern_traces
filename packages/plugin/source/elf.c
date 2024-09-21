@@ -249,15 +249,23 @@ SymbolInfo parse_symbol_name(const char* name) {
 }
 
 DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size, const uint8_t* dynlib_segment, size_t dynlib_segment_size) {
-    DynamicInfo info = {
-        .rela_ent = sizeof(Elf64_Rela),
-        .sym_ent = sizeof(Elf64_Sym),
+    DynamicInfo info = {0};
 
-    };
     uint64_t* dynamic = (uint64_t*)data;
-    
     init_resizable_list(&info.modules, 10);
     init_resizable_list(&info.libraries, 10);
+
+    uint64_t rela_offset;
+    uint64_t rela_size;
+
+    uint64_t plt_rela_offset;
+    uint64_t plt_rela_size;
+
+    uint64_t strtab_offset;
+    uint64_t strtab_size;
+
+    uint64_t symtab_offset;
+    uint64_t symtab_size;
 
     for (size_t i = 0; ; i++) {
         uint64_t tag = dynamic[i * 2];
@@ -269,34 +277,44 @@ DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size, const uint8_
 
         switch (tag) {
             case DT_SCE_RELA:
-                info.rela_offset = value;
+                rela_offset = value;
                 break;
             case DT_SCE_RELASZ:
-                info.rela_size = value;
+                rela_size = value;
                 break;
             case DT_SCE_RELAENT:
-                info.rela_ent = value;
                 if (!(value == sizeof(Elf64_Rela))) {
                     final_printf("SCE_RELAENT invalid: %lu\n", value);
-                };
+                 };
+                break;
+            case DT_SCE_JMPREL:
+                plt_rela_offset = value;
+                break;
+            case DT_SCE_PLTRELSZ:
+                plt_rela_size = value;
+                break;
+            case DT_SCE_PLTREL:
+                if (value != DT_RELA) {
+                    final_printf("SCE_PLTREL is not DT_RELA: %lu\n", value);
+                    break;
+                }
                 break;
             case DT_SCE_STRTAB:
-                info.strtab_offset = value;
+                strtab_offset = value;
                 break;
             case DT_SCE_STRSZ:
-                info.strtab_size = value;
+                strtab_size = value;
                 break;
             case DT_SCE_SYMTAB:
-                info.symtab_offset = value;
+                symtab_offset = value;
                 break;
             case DT_SCE_SYMTABSZ:
-                info.symtab_size = value;
+                symtab_size = value;
                 break;
             case DT_SCE_SYMENT:
-                info.sym_ent = value;
                 if (!(value == sizeof(Elf64_Sym))) {
                     final_printf("SCE_SYMENT invalid: %lu\n", value);
-                };
+                 };
                 break;
             case DT_SCE_IMPORT_MODULE: {
                 SceModuleValues* module = malloc(sizeof(SceModuleValues));
@@ -318,17 +336,18 @@ DynamicInfo parse_dynamic_section(const uint8_t* data, size_t size, const uint8_
         }
     }
 
-    // Set up relocations
-    info.rela_entries = (const Elf64_Rela*)(dynlib_segment + info.rela_offset);
-    info.rela_count = info.rela_size / info.rela_ent;
+    info.rela_entries = (const Elf64_Rela*)(dynlib_segment + rela_offset);
+    info.rela_count = rela_size / sizeof(Elf64_Rela);
 
-    // Set up string table
-    info.strtab = (const char*)(dynlib_segment + info.strtab_offset);
+    info.plt_rela_entries = (const Elf64_Rela*)(dynlib_segment + plt_rela_offset);
+    info.plt_rela_count = plt_rela_size / sizeof(Elf64_Rela);
 
-    // Parse symbols
-    info.symbol_count = info.symtab_size / info.sym_ent;
+    info.strtab = (const char*)(dynlib_segment + strtab_offset);
+    info.symtab = (const Elf64_Sym*)(dynlib_segment + symtab_offset);
+
+    info.symbol_count = symtab_size / sizeof(Elf64_Sym);
     SymbolInfo* symbols = malloc(info.symbol_count * sizeof(SymbolInfo));
-    const Elf64_Sym* symtab = (const Elf64_Sym*)(dynlib_segment + info.symtab_offset);
+    const Elf64_Sym* symtab = (const Elf64_Sym*)(dynlib_segment + symtab_offset);
 
     for (size_t i = 0; i < info.symbol_count; i++) {
         const char* name = info.strtab + symtab[i].st_name;
@@ -381,16 +400,18 @@ const char* get_symbol_type_name(unsigned char st_info) {
     }
 }
 
-void print_relocations(uint8_t* dynlib_segment, size_t dynlib_segment_size, const DynamicInfo* info) {
-    const Elf64_Sym* symtab = (const Elf64_Sym*)(dynlib_segment + info->symtab_offset);
-
-    final_printf("Relocations:\n");
-    for (size_t i = 0; i < info->rela_count; i++) {
-        const Elf64_Rela* rela = &info->rela_entries[i];
+void print_relocations_inner(const Elf64_Rela* relas, size_t rela_count, const DynamicInfo* info) {
+    final_printf("Relocations: (%zu)\n", rela_count);
+    for (size_t i = 0; i < rela_count; i++) {
+        const Elf64_Rela* rela = &relas[i];
         uint32_t sym_index = ELF64_R_SYM(rela->r_info);
         uint32_t rela_type = ELF64_R_TYPE(rela->r_info);
+        if (rela_type == R_X86_64_RELATIVE) {
+            continue;
+        }
+
         const SymbolInfo* sym = &info->symbols[sym_index];
-        const Elf64_Sym* elf_sym = &symtab[sym_index];
+        const Elf64_Sym* elf_sym = &info->symtab[sym_index];
 
         const char* library_name = "N/A";
         const char* module_name = "N/A";
@@ -413,4 +434,9 @@ void print_relocations(uint8_t* dynlib_segment, size_t dynlib_segment_size, cons
         final_printf("  Addend: %ld\n", rela->r_addend);
         final_printf("  Relocation Type: %u\n\n", rela_type);
     }
+}
+
+void print_relocations(const DynamicInfo* info) {
+    print_relocations_inner(info->rela_entries, info->rela_count, info);
+    print_relocations_inner(info->plt_rela_entries, info->plt_rela_count, info);
 }

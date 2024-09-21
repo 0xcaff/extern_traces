@@ -49,7 +49,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         teardown_self_parser(parser);
 
         DynamicInfo info = parse_dynamic_section(dynamic_segment, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
-        print_relocations(dynlib_segment, dynlib_segment_size, &info);
+        print_relocations(&info);
         cleanup_dynamic_info(&info);
 
         free(dynamic_segment);
