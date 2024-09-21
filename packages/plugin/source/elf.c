@@ -1,7 +1,7 @@
 #include "elf.h"
 #include "plugin_common.h"
 
-#define SELF_MAGIC "SCE\0\0\0\0\0"
+const unsigned char SELF_MAGIC[8] = { 0x4F, 0x15, 0x3D, 0x1D, 0x00, 0x01, 0x01, 0x12 };
 
 typedef struct {
     uint8_t magic[8];
@@ -57,6 +57,8 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
         return NULL;
     }
 
+    off_t elf_start_offset = lseek(fd, 0, SEEK_CUR);
+
     Elf64_Ehdr elf_header;
     if (read(fd, &elf_header, sizeof(Elf64_Ehdr)) != sizeof(Elf64_Ehdr)) {
         final_printf("Failed to read ELF header\n");
@@ -73,7 +75,7 @@ void* parse_pt_dynamic(const char* filename, size_t* size) {
         return NULL;
     }
 
-    if (lseek(fd, elf_header.e_phoff, SEEK_SET) == -1 ||
+    if (lseek(fd, elf_start_offset + elf_header.e_phoff, SEEK_SET) == -1 ||
         read(fd, phdrs, elf_header.e_phnum * sizeof(Elf64_Phdr)) != elf_header.e_phnum * sizeof(Elf64_Phdr)) {
         final_printf("Failed to read program headers\n");
         free(phdrs);
