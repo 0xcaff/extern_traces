@@ -5,7 +5,7 @@ import logging
 SPAN_START_FORMAT = "QQQ"  # 4 * uint64_t (thread_id, time, label_id)
 SPAN_END_FORMAT = "QQ"  # 2 * uint64_t (thread_id, time)
 INITIAL_MESSAGE_FORMAT = "QqqQ"  # InitialMessage format
-COUNTERS_UPDATE_FORMAT = "QQQQQ"  # CountersUpdate format
+COUNTERS_UPDATE_FORMAT = "QQQQ"  # CountersUpdate format
 
 
 def recv_exactly(client_socket, num_bytes):
@@ -135,13 +135,13 @@ def handle_client_connection(client_socket):
                 )
 
                 # Log the SpanStart message
-                logging.info(
-                    f"SpanStart:\n"
-                    f"  thread id: {thread_id}\n"
-                    f"  time: {time}\n"
-                    f"  label: {label_id}\n"
-                    f"{'-' * 40}"
-                )
+                # logging.info(
+                #     f"SpanStart:\n"
+                #     f"  thread id: {thread_id}\n"
+                #     f"  time: {time}\n"
+                #     f"  label: {label_id}\n"
+                #     f"{'-' * 40}"
+                # )
 
             elif message_tag == 1:  # SpanEnd
                 span_end_data = recv_exactly(client_socket, 16)
@@ -154,12 +154,12 @@ def handle_client_connection(client_socket):
                 )
 
                 # Log the SpanEnd message
-                logging.info(
-                    f"SpanEnd:\n"
-                    f"  thread id: {thread_id}\n"
-                    f"  time: {time}\n"
-                    f"{'-' * 40}"
-                )
+                # logging.info(
+                #     f"SpanEnd:\n"
+                #     f"  thread id: {thread_id}\n"
+                #     f"  time: {time}\n"
+                #     f"{'-' * 40}"
+                # )
 
             elif message_tag == 2:  # CountersUpdate
                 counters_update_data = recv_exactly(client_socket, 32)

@@ -158,12 +158,13 @@ struct CountersUpdate
 
 ssize_t flush_counters(struct ThreadLoggingState *state, int sock) {
     uint64_t dropped_packets_count = state->dropped_packets_count;
-    uint64_t delta = state->last_dropped_packets_count - dropped_packets_count;
+    uint64_t time = get_current_time_rdtscp();
+
+    uint64_t delta = dropped_packets_count - state->last_dropped_packets_count;
     if (delta == 0) {
+        state->last_counter_flush_time = time;
         return 0;
     }
-
-    uint64_t time = get_current_time_rdtscp();
 
     struct CountersUpdate counters_update_message = {
         .message_tag = 2,
