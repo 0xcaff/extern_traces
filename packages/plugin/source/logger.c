@@ -429,16 +429,15 @@ bool init_lazy_destructor()
     return ret != 0;
 }
 
-struct ThreadLoggingState *lazy_read_value()
+struct ThreadLoggingState *lazy_read_value(struct ThreadLoggingState *initial_state)
 {
-    struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
-    if (state != NULL)
+    if (initial_state != NULL)
     {
-        return state;
+        return initial_state;
     }
 
     // attach destructor
-    state = init_thread_local_state();
+    struct ThreadLoggingState* state = init_thread_local_state();
     int ret = scePthreadSetspecific(key, state);
     if (ret != 0)
     {

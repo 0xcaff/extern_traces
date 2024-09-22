@@ -5,27 +5,6 @@
 #include <stdlib.h>
 #include <orbis/libkernel.h>
 
-uint64_t read_call_label()
-{
-    uint64_t old_value;
-
-    __asm__ volatile(
-        "movq %%fs:-32, %0;"
-        : "=r"(old_value)
-        :
-        : "memory");
-
-    return old_value;
-}
-
-void start_logger() {
-    emit_span_start(read_call_label());
-}
-
-void end_logger() {
-    emit_span_end();
-}
-
 __attribute__((naked)) void hook()
 {
     asm volatile(
@@ -47,7 +26,9 @@ __attribute__((naked)) void hook()
         "sub $0x88, %rsp\n\t"
 
         // call logger
-        "call start_logger\n\t"
+        "movq %fs:-32, %rdi\n\t"
+        "movq %fs:-8, %rsi\n\t"
+        "call emit_span_start\n\t"
 
         // restore argument registers
         "add $0x88, %rsp\n\t"
@@ -93,7 +74,8 @@ __attribute__((naked)) void hook()
         "push %rax\n\t"
 
         // call end logger
-        "call end_logger\n\t"
+        "movq %fs:-8, %rdi\n\t"
+        "call emit_span_end\n\t"
 
         // restore rax (ignore the return value of end logger)
         "pop %rax\n\t"
