@@ -28,7 +28,7 @@ static int64_t thread_logging_computed_offset = -8;
 
 void set_static_tls_base(uint16_t base) {
     thread_logging_base = base;
-    thread_logging_computed_offset = -(base + 8);
+    thread_logging_computed_offset = -(int32_t)base - 8;
 }
 
 uint64_t read_thread_logging_state_slow()

@@ -146,8 +146,8 @@ void register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-    *(int32_t*)((char*)template_code + 4 ) = -((int32_t)static_tls_base + 32);
-    *(int32_t*)((char*)template_code + 24) = -((int32_t)static_tls_base + 24);
+    *(int32_t*)((char*)template_code + 4 ) = -(int32_t)static_tls_base - 32;
+    *(int32_t*)((char*)template_code + 24) = -(int32_t)static_tls_base - 24;
 
     size_t bytes_needed = sizeof(template_code) * relocs->count;
     size_t pages_needed = (bytes_needed + PAGE_SIZE - 1) / PAGE_SIZE;
