@@ -83,6 +83,15 @@ SELFParserState* initialize_self_parser(const char* filename) {
     return state;
 }
 
+int get_phdr_index_by_type(const SELFParserState* state, uint32_t type) {
+    for (int i = 0; i < state->elf_header.e_phnum; i++) {
+        if (state->phdrs[i].p_type == type) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 SELFSegment* find_matching_segment(const SELFParserState* state, int phdr_idx) {
     for (int i = 0; i < state->self_header.segments_count; i++) {
         SELFSegment* segment = &state->self_segments[i];
@@ -100,22 +109,15 @@ SELFSegment* find_matching_segment(const SELFParserState* state, int phdr_idx) {
 }
 
 void* load_segment(const SELFParserState* state, Elf32_Word p_type, size_t* size) {
-    Elf64_Phdr* dynamic_phdr = NULL;
-    int phdr_idx = -1;
     unsigned int matching_segment_offset = 0;
 
-    for (int i = 0; i < state->elf_header.e_phnum; i++) {
-        if (state->phdrs[i].p_type == p_type) {
-            dynamic_phdr = &state->phdrs[i];
-            phdr_idx = i;
-            break;
-        }
-    }
-
-    if (!dynamic_phdr) {
+    int phdr_idx = get_phdr_index_by_type(state, p_type);
+    if (phdr_idx == -1) {
         final_printf("segment not found\n");
         return NULL;
     }
+
+    Elf64_Phdr* dynamic_phdr = &state->phdrs[phdr_idx];
 
     SELFSegment* matching_segment = find_matching_segment(state, phdr_idx);
     if (!matching_segment) {

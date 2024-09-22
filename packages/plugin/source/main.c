@@ -54,6 +54,19 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     SELFParserState* parser = initialize_self_parser("/app0/eboot.bin");
 
+    int tls_phdr_idx = get_phdr_index_by_type(parser, PT_TLS);
+    if (tls_phdr_idx == -1) {
+        final_printf("no tls segment found\n");
+        return 1;
+    }
+
+    Elf64_Phdr* tls_phdr = &parser->phdrs[tls_phdr_idx];
+    uint32_t expected_size = 32 + config.original_tls_size;
+    if (tls_phdr->p_memsz != expected_size) {
+        final_printf("memsz unexpected size, got: %lu, expected: %lu\n", tls_phdr->p_memsz);
+        return 1;
+    }
+
     size_t dynamic_segment_size;
     void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
     if (!dynamic_segment) {
