@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define CONFIG_FILE_PATH "/data/GoldHEN/plugins/extern_traces.ini"
+#define CONFIG_FILE_PATH "/data/extern_traces.ini"
 
 typedef struct {
     char target_address[256];

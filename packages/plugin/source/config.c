@@ -36,8 +36,14 @@ void create_default_config(void) {
     close(fd);
 }
 
+bool file_exists(const char* filename)
+{
+    struct stat buff;
+    return stat(filename, &buff) == 0 ? true : false;
+}
+
 bool load_config(const char* titleid, PluginConfig* config) {
-    if (access(CONFIG_FILE_PATH, F_OK) != 0) {
+    if (!file_exists(CONFIG_FILE_PATH)) {
         create_default_config();
         final_printf("Created default config file: %s\n", CONFIG_FILE_PATH);
         return false;

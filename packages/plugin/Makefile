@@ -89,12 +89,15 @@ build-info:
 	$(shell echo "#define GIT_NUM $(shell git rev-list HEAD --count)" >> $(COMMON_DIR)/git_ver.h)
 	$(shell echo "#define BUILD_DATE \"$(shell date '+%b %d %Y @ %T')\"" >> $(COMMON_DIR)/git_ver.h)
 
-.PHONY: clean
+config:
+	curl -T config.ini ftp://192.168.1.123:2121/data/extern_traces.ini
+
+.PHONY: clean config
 .DEFAULT_GOAL := all
 
 all: build-info plugin_common $(TARGET)
 
-deploy: all
+deploy: all config
 	curl -T target/prx_final/extern_traces.prx ftp://192.168.1.123:2121/data/GoldHEN/plugins/extern_traces.prx
 
 clean:
