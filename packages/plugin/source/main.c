@@ -13,6 +13,7 @@
 #include "plugin_common.h"
 #include "elf.h"
 #include "hook.h"
+#include "config.h"
 
 attr_public const char *g_pluginName = "extern_traces";
 attr_public const char *g_pluginDesc = "collects traces for external calls";
@@ -27,6 +28,29 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
     final_printf("[GoldHEN] <%s\\Ver.0x%08x> %s\n", g_pluginName, g_pluginVersion, __func__);
     final_printf("[GoldHEN] Plugin Author(s): %s\n", g_pluginAuth);
+
+    struct proc_info procInfo;
+    if (sys_sdk_proc_info(&procInfo) != 0) {
+        final_printf("Failed to get process info\n");
+        return 1;
+    }
+
+    PluginConfig config;
+    memset(&config, 0, sizeof(PluginConfig));
+
+    if (!load_config(procInfo.titleid, &config)) {
+        final_printf("Failed to load configuration for %s\n", procInfo.titleid);
+        return 1;
+    }
+
+    if (config.original_tls_size != 0) {
+        final_printf("Non-zero original_tls_size is not yet implemented\n");
+        // TODO: Implement dynamic TLS size handling
+        return 1;
+    }
+
+    final_printf("Configuration loaded: target_address=%s, target_port=%d, original_tls_size=%d\n",
+                 config.target_address, config.target_port, config.original_tls_size);
 
     SELFParserState* parser = initialize_self_parser("/app0/eboot.bin");
 
@@ -63,6 +87,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     struct FlushThreadArgs flush_thread_args = {
         .is_ready = false,
+        .plugin_config = &config,
         .dynamic_info = &info,
         .jump_slot_relocations = &jump_slot_relocations,
     };

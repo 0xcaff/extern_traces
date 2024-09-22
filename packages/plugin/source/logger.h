@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "elf.h"
+#include "config.h"
 
 #define ALLOCATION_SIZE 16 * 1024
 
@@ -25,6 +26,7 @@ struct FlushThreadArgs {
     bool is_ready;
     DynamicInfo* dynamic_info;
     JumpSlotRelocationList* jump_slot_relocations;
+    const PluginConfig* plugin_config;
 };
 
 void *flush_thread(void *arg);

@@ -10,9 +10,6 @@
 
 #include "plugin_common.h"
 
-#define TARGET_IP "192.168.1.133"
-#define TARGET_PORT 9090
-
 static _Atomic(struct ThreadLoggingState *) global_states[256];
 
 struct ThreadLoggingState *unsafe_read_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_ptr)
@@ -209,9 +206,9 @@ void *flush_thread(void *arg)
 
     struct sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(TARGET_PORT);
+    server_addr.sin_port = htons(args->plugin_config->target_port);
 
-    if (inet_pton(AF_INET, TARGET_IP, &server_addr.sin_addr) <= 0)
+    if (inet_pton(AF_INET, args->plugin_config->target_address, &server_addr.sin_addr) <= 0)
     {
         final_printf("invalid address\n");
         close(sock);
