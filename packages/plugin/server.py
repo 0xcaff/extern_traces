@@ -20,9 +20,18 @@ def recv_exactly(client_socket, num_bytes):
     return b"".join(chunks)
 
 
+def recv_string(client_socket):
+    """Receive a length-prefixed string."""
+    length_data = recv_exactly(client_socket, 4)
+    if not length_data:
+        return None
+    length = struct.unpack("I", length_data)[0]
+    return recv_exactly(client_socket, length).decode('utf-8')
+
+
 def handle_client_connection(client_socket):
     try:
-        initial_message_data = recv_exactly(client_socket, 40)
+        initial_message_data = recv_exactly(client_socket, 32)
         if not initial_message_data:
             logging.error("Failed to read InitialMessage")
             return
@@ -40,6 +49,70 @@ def handle_client_connection(client_socket):
             f"  anchor_timestamp: {anchor_timestamp}\n"
             f"{'-' * 40}"
         )
+
+        # Read module metadata
+        module_count_data = recv_exactly(client_socket, 4)
+        if not module_count_data:
+            logging.error("Failed to read module count")
+            return
+        module_count = struct.unpack("I", module_count_data)[0]
+
+        logging.info(f"Module count: {module_count}")
+        for i in range(module_count):
+            module_data = recv_exactly(client_socket,
+                                       4)  # module_id (2 bytes) + version_major (1 byte) + version_minor (1 byte)
+            if not module_data:
+                logging.error(f"Failed to read module data for module {i}")
+                return
+            module_id, version_major, version_minor = struct.unpack("HBB", module_data)
+            module_name = recv_string(client_socket)
+            if module_name is None:
+                logging.error(f"Failed to read module name for module {i}")
+                return
+            logging.info(
+                f"Module {i}:\n  ID: {module_id}\n  Version: {version_major}.{version_minor}\n  Name: {module_name}")
+
+        # Read library metadata
+        library_count_data = recv_exactly(client_socket, 4)
+        if not library_count_data:
+            logging.error("Failed to read library count")
+            return
+        library_count = struct.unpack("I", library_count_data)[0]
+
+        logging.info(f"Library count: {library_count}")
+        for i in range(library_count):
+            library_data = recv_exactly(client_socket, 4)  # library_id (2 bytes) + version (2 bytes)
+            if not library_data:
+                logging.error(f"Failed to read library data for library {i}")
+                return
+            library_id, version = struct.unpack("HH", library_data)
+            library_name = recv_string(client_socket)
+            if library_name is None:
+                logging.error(f"Failed to read library name for library {i}")
+                return
+            logging.info(f"Library {i}:\n  ID: {library_id}\n  Version: {version}\n  Name: {library_name}")
+
+        # Read symbol information
+        symbol_count_data = recv_exactly(client_socket, 4)
+        if not symbol_count_data:
+            logging.error("Failed to read symbol count")
+            return
+        symbol_count = struct.unpack("I", symbol_count_data)[0]
+
+        logging.info(f"Symbol count: {symbol_count}")
+        for i in range(symbol_count):
+            symbol_name = recv_string(client_socket)
+            if symbol_name is None:
+                logging.error(f"Failed to read symbol name for symbol {i}")
+                return
+            symbol_data = recv_exactly(client_socket, 2)  # library_id (1 byte) + module_id (1 byte)
+            if not symbol_data:
+                logging.error(f"Failed to read symbol data for symbol {i}")
+                return
+            library_id, module_id = struct.unpack("BB", symbol_data)
+            logging.info(f"Symbol {i}:\n  Name: {symbol_name}\n  Library ID: {library_id}\n  Module ID: {module_id}")
+
+        logging.info(f"{'-' * 40}")
 
         while True:
             message_tag_data = recv_exactly(client_socket, 8)
@@ -70,7 +143,6 @@ def handle_client_connection(client_socket):
                 )
 
             elif message_tag == 1:  # SpanEnd
-                # Read the rest of SpanEnd (8 more bytes)
                 span_end_data = recv_exactly(client_socket, 16)
                 if not span_end_data:
                     break
@@ -91,8 +163,6 @@ def handle_client_connection(client_socket):
             else:
                 logging.error(f"unknown message tag: {message_tag}")
 
-    except Exception as e:
-        logging.error(f"Error handling client: {e}")
     finally:
         client_socket.close()
 

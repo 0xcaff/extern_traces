@@ -146,7 +146,7 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
     }
 }
 
-struct InitialMessage {
+struct InitialMessageHeader {
     /// The number of timestamp steps in a second.
     uint64_t tsc_frequency;
 
@@ -160,6 +160,7 @@ struct InitialMessage {
 
 void *flush_thread(void *arg)
 {
+    struct FlushThreadArgs* args = arg;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0)
     {
@@ -185,7 +186,7 @@ void *flush_thread(void *arg)
         return NULL;
     }
 
-    struct InitialMessage initial_message = {
+    struct InitialMessageHeader initial_message = {
         .tsc_frequency = sceKernelGetTscFrequency(),
         .anchor_timestamp = get_current_time_rdtscp(),
     };
@@ -207,7 +208,75 @@ void *flush_thread(void *arg)
         initial_message.anchor_nanoseconds = t.tv_nsec;
     }
 
-    send_all(sock, (uint8_t *)&initial_message, sizeof(struct InitialMessage));
+    send_all(sock, (uint8_t *)&initial_message, sizeof(struct InitialMessageHeader));
+
+    final_printf("sent initial message header\n");
+
+    uint32_t module_count = args->dynamic_info->modules.size;
+    send_all(sock, (uint8_t*)&module_count, sizeof(uint32_t));
+
+    final_printf("sending %d modules\n", module_count);
+
+    for (size_t i = 0; i < module_count; i++) {
+        SceModuleValues* module = ((SceModuleValues**)args->dynamic_info->modules.data)[i];
+        const char* module_name = args->dynamic_info->strtab + module->module_name_offset;
+        uint32_t name_length = strlen(module_name);
+
+        // Send module info
+        send_all(sock, (uint8_t*)&module->module_id, sizeof(uint16_t));
+        send_all(sock, (uint8_t*)&module->version_major, sizeof(uint8_t));
+        send_all(sock, (uint8_t*)&module->version_minor, sizeof(uint8_t));
+        send_all(sock, (uint8_t*)&name_length, sizeof(uint32_t));
+        send_all(sock, (uint8_t*)module_name, name_length);
+    }
+
+    final_printf("sent module metadata\n");
+
+    uint32_t library_count = args->dynamic_info->libraries.size;
+    send_all(sock, (uint8_t*)&library_count, sizeof(uint32_t));
+
+    final_printf("sending %d libraries\n", library_count);
+
+    for (size_t i = 0; i < library_count; i++) {
+        SceLibValues* library = ((SceLibValues**)args->dynamic_info->libraries.data)[i];
+        const char* library_name = args->dynamic_info->strtab + library->library_name_offset;
+        uint32_t name_length = strlen(library_name);
+
+        // Send library info
+        send_all(sock, (uint8_t*)&library->library_id, sizeof(uint16_t));
+        send_all(sock, (uint8_t*)&library->version, sizeof(uint16_t));
+        send_all(sock, (uint8_t*)&name_length, sizeof(uint32_t));
+        send_all(sock, (uint8_t*)library_name, name_length);
+    }
+
+    final_printf("sent library metadata\n");
+
+    // Send jump slot relocation info
+    uint32_t symbol_count = args->jump_slot_relocations->count;
+    send_all(sock, (uint8_t*)&symbol_count, sizeof(uint32_t));
+
+    final_printf("sending %d symbols\n", symbol_count);
+
+    for (size_t i = 0; i < symbol_count; i++) {
+        const JumpSlotRelocation* relocation = &args->jump_slot_relocations->items[i];
+        const SymbolInfo* symbol = relocation->symbol_info;
+
+        uint32_t name_length = strlen(symbol->data.parsed.name);
+
+        // Send NID (symbol name)
+        send_all(sock, (uint8_t*)&name_length, sizeof(uint32_t));
+        send_all(sock, (uint8_t*)symbol->data.parsed.name, name_length);
+        
+        // Send library ID
+        send_all(sock, (uint8_t*)&symbol->data.parsed.library_id, sizeof(uint8_t));
+        
+        // Send module ID
+        send_all(sock, (uint8_t*)&symbol->data.parsed.module_id, sizeof(uint8_t));
+    }
+
+    final_printf("sent symbols metadata\n");
+
+    args->is_ready = true;
 
     while (true)
     {

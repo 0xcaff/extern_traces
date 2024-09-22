@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
+#include "elf.h"
 
 #define BUFFER_SIZE 1024
 
@@ -11,6 +12,12 @@ struct ThreadLoggingState
     uint64_t read_idx;
     bool is_finished;
     uint8_t buffer[BUFFER_SIZE];
+};
+
+struct FlushThreadArgs {
+    bool is_ready;
+    DynamicInfo* dynamic_info;
+    JumpSlotRelocationList* jump_slot_relocations;
 };
 
 void *flush_thread(void *arg);

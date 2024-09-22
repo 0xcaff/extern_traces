@@ -210,6 +210,14 @@ void cleanup_resizable_list(ResizableList* list) {
 }
 
 SymbolInfo parse_symbol_name(const char* name) {
+    size_t name_len = strnlen(name, 11);
+    
+    if (name_len < 11) {
+        SymbolInfo info = {.type = SYMBOL_RAW};
+        info.data.raw = name;
+        return info;
+    }
+
     SymbolInfo info = {.type = SYMBOL_PARSED};
     strncpy(info.data.parsed.name, name, 11);
     info.data.parsed.name[11] = '\0';
