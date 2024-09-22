@@ -347,6 +347,7 @@ void *flush_thread(void *arg)
             if (state->is_finished)
             {
                 free(state);
+                sceKernelMunmap(state, ALLOCATION_SIZE);
                 unsafe_write_atomic(&global_states[i], NULL);
                 continue;
             }
@@ -371,9 +372,23 @@ struct ThreadLoggingState *init_thread_local_state()
 {
     OrbisPthread thread = scePthreadSelf();
     uint64_t thread_id = (uint64_t)thread;
+    void *addr = NULL;
 
-    struct ThreadLoggingState *state = (struct ThreadLoggingState *)malloc(sizeof(struct ThreadLoggingState));
     final_printf("init_thread_local_state\n");
+
+    int ret = sceKernelMapFlexibleMemory(
+        &addr,
+        ALLOCATION_SIZE, 
+        0x02,
+        0
+    );
+    if (ret != 0)
+    {
+        final_printf("sceKernelMapFlexibleMemory failed: 0x%x\n", ret);
+        return NULL;
+    }
+
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)addr;
     if (state == NULL)
     {
         final_printf("allocation failed\n");

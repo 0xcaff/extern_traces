@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include "elf.h"
 
-#define BUFFER_SIZE 1024
+#define ALLOCATION_SIZE 16 * 1024
 
 struct ThreadLoggingState
 {
@@ -11,12 +11,15 @@ struct ThreadLoggingState
     uint64_t write_idx;
     uint64_t read_idx;
     bool is_finished;
-    uint8_t buffer[BUFFER_SIZE];
 
     uint64_t dropped_packets_count;
     uint64_t last_dropped_packets_count;
     uint64_t last_counter_flush_time;
+
+    uint8_t buffer[];
 };
+
+#define BUFFER_SIZE (ALLOCATION_SIZE - sizeof(struct ThreadLoggingState))
 
 struct FlushThreadArgs {
     bool is_ready;
