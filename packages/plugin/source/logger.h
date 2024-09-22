@@ -12,6 +12,10 @@ struct ThreadLoggingState
     uint64_t read_idx;
     bool is_finished;
     uint8_t buffer[BUFFER_SIZE];
+
+    uint64_t dropped_packets_count;
+    uint64_t last_dropped_packets_count;
+    uint64_t last_counter_flush_time;
 };
 
 struct FlushThreadArgs {
@@ -25,4 +29,4 @@ void fini_thread_local_state();
 struct ThreadLoggingState *init_thread_local_state();
 bool init_lazy_destructor();
 struct ThreadLoggingState *lazy_read_value();
-bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length);
+bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length, uint64_t packets_count);

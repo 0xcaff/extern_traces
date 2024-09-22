@@ -27,7 +27,7 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
-bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length)
+bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length, uint64_t packets_count)
 {
     size_t free_space;
     uint64_t read_idx = state->read_idx;
@@ -43,6 +43,7 @@ bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size
 
     if (free_space <= length)
     {
+        state->dropped_packets_count += packets_count;
         return false;
     }
 
@@ -144,6 +145,43 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
 
         return total_bytes_sent;
     }
+}
+
+struct CountersUpdate
+{
+    uint64_t message_tag;
+    uint64_t thread_id;
+    uint64_t dropped_packets_delta;
+    uint64_t last_time;
+    uint64_t time;
+};
+
+ssize_t flush_counters(struct ThreadLoggingState *state, int sock) {
+    uint64_t dropped_packets_count = state->dropped_packets_count;
+    uint64_t delta = state->last_dropped_packets_count - dropped_packets_count;
+    if (delta == 0) {
+        return 0;
+    }
+
+    uint64_t time = get_current_time_rdtscp();
+
+    struct CountersUpdate counters_update_message = {
+        .message_tag = 2,
+        .thread_id = state->thread_id,
+        .dropped_packets_delta = delta,
+        .last_time = state->last_counter_flush_time,
+        .time = time,
+    };
+
+    ssize_t bytes_sent = send_all(sock, (const uint8_t *)&counters_update_message, sizeof(struct CountersUpdate));
+    if (bytes_sent < 0) {
+        return bytes_sent;
+    }
+
+    state->last_dropped_packets_count = dropped_packets_count;
+    state->last_counter_flush_time = time;
+
+    return bytes_sent;
 }
 
 struct InitialMessageHeader {
@@ -297,6 +335,14 @@ void *flush_thread(void *arg)
                 return NULL;
             }
 
+            bytes_sent = flush_counters(state, sock);
+            if (bytes_sent < 0)
+            {
+                final_printf("send failed\n");
+                close(sock);
+                return NULL;
+            }
+
             if (state->is_finished)
             {
                 free(state);
@@ -337,6 +383,9 @@ struct ThreadLoggingState *init_thread_local_state()
     state->thread_id = thread_id;
     state->write_idx = 0;
     state->read_idx = 0;
+    state->dropped_packets_count = 0;
+    state->last_dropped_packets_count = 0;
+    state->last_counter_flush_time = 0;
 
     for (size_t i = 0; i < 256; ++i)
     {

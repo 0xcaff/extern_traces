@@ -5,6 +5,7 @@ import logging
 SPAN_START_FORMAT = "QQQ"  # 4 * uint64_t (thread_id, time, label_id)
 SPAN_END_FORMAT = "QQ"  # 2 * uint64_t (thread_id, time)
 INITIAL_MESSAGE_FORMAT = "QqqQ"  # InitialMessage format
+COUNTERS_UPDATE_FORMAT = "QQQQQ"  # CountersUpdate format
 
 
 def recv_exactly(client_socket, num_bytes):
@@ -156,6 +157,26 @@ def handle_client_connection(client_socket):
                 logging.info(
                     f"SpanEnd:\n"
                     f"  thread id: {thread_id}\n"
+                    f"  time: {time}\n"
+                    f"{'-' * 40}"
+                )
+
+            elif message_tag == 2:  # CountersUpdate
+                counters_update_data = recv_exactly(client_socket, 32)
+                if not counters_update_data:
+                    break
+
+                # Unpack the CountersUpdate data
+                thread_id, dropped_packets_delta, last_time, time = struct.unpack(
+                    COUNTERS_UPDATE_FORMAT, counters_update_data
+                )
+
+                # Log the CountersUpdate message
+                logging.info(
+                    f"CountersUpdate:\n"
+                    f"  thread id: {thread_id}\n"
+                    f"  dropped packets delta: {dropped_packets_delta}\n"
+                    f"  last time: {last_time}\n"
                     f"  time: {time}\n"
                     f"{'-' * 40}"
                 )
