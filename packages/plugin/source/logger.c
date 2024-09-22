@@ -6,7 +6,6 @@
 
 #include "logger.h"
 #include "time.h"
-#include "thread_local_storage.h"
 
 #include "plugin_common.h"
 
@@ -22,6 +21,28 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
 {
     struct ThreadLoggingState **regular_ptr = (struct ThreadLoggingState **)atomic_ptr;
     *regular_ptr = new_value;
+}
+
+uint64_t read_thread_logging_state_slow()
+{
+    uint64_t old_value;
+
+    __asm__ volatile(
+        "movq %%fs:-8, %0;"
+        : "=r"(old_value)
+        :
+        : "memory");
+
+    return old_value;
+}
+
+void write_thread_logging_state_slow(uint64_t new_value)
+{
+    __asm__ volatile(
+        "movq %0, %%fs:-8;"
+        :
+        : "r"(new_value)
+        : "memory");
 }
 
 bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length, uint64_t packets_count)
@@ -360,7 +381,7 @@ void *flush_thread(void *arg)
 
 void fini_thread_local_state()
 {
-    struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_tls_value();
+    struct ThreadLoggingState *state = (struct ThreadLoggingState *)read_thread_logging_state_slow();
     state->is_finished = true;
 }
 
@@ -404,14 +425,14 @@ struct ThreadLoggingState *init_thread_local_state()
         struct ThreadLoggingState *expected = NULL;
         if (atomic_compare_exchange_strong(&global_states[i], &expected, state))
         {
-            write_tls_value((uint64_t)state);
+            write_thread_logging_state_slow((uint64_t)state);
             final_printf("written into slot %zu\n", i);
             return state;
         }
     }
 
     final_printf("no space for state\n");
-    write_tls_value((uint64_t)state);
+    write_thread_logging_state_slow((uint64_t)state);
     return state;
 }
 
