@@ -29,6 +29,7 @@ __attribute__((naked)) void hook()
         "movq %fs:-32, %rdi\n\t"
         "movq %fs:-8, %rsi\n\t"
         "call emit_span_start\n\t"
+        "nop\n\t"
 
         // restore argument registers
         "add $0x88, %rsp\n\t"
@@ -77,6 +78,9 @@ __attribute__((naked)) void hook()
         "movq %fs:-8, %rdi\n\t"
         "call emit_span_end\n\t"
 
+        // extra nop instruction to patch call
+        "nop\n\t"
+
         // restore rax (ignore the return value of end logger)
         "pop %rax\n\t"
 
@@ -84,48 +88,86 @@ __attribute__((naked)) void hook()
     );
 }
 
+#define PAGE_SIZE 4096
 #define HOOK_FN_BASE 0x00001a20
-#define HOOK_FN_SIZE (0x00001ae7 - HOOK_FN_BASE)
+#define HOOK_FN_SIZE (0x00001ae7 - HOOK_FN_BASE) + 2
 
-bool patch_hooks_tls_base(uint16_t static_tls_base) {
-    sceKernelMprotect((void *)hook, HOOK_FN_SIZE, VM_PROT_READ | VM_PROT_WRITE);
+void* build_hook_fn(uint16_t static_tls_base) {
+    size_t required_size = HOOK_FN_SIZE + 16;
+
+    size_t total_size = (required_size + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
+    
+    void* new_mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, 
+                         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    
+    if (new_mem == MAP_FAILED) {
+        final_printf("failed to map memory for patched hook function\n");
+        return NULL;
+    }
+
+    final_printf("hook fn block: 0x%lx\n", (uint64_t)new_mem);
+
+    // Copy the original hook function to the new memory
+    memcpy(new_mem, (void*)hook, HOOK_FN_SIZE);
 
     typedef struct {
         uint64_t offset;
         int32_t expected_value;
-    } PatchInfo;
+    } ThreadLocalStoragePatches;
 
-    PatchInfo patches[] = {
+    ThreadLocalStoragePatches patches[] = {
         {0x00001a5f - HOOK_FN_BASE + 5, -32},
         {0x00001a68 - HOOK_FN_BASE + 5, -8},
-        // todo: switch back to -16
-        {0x00001ab7 - HOOK_FN_BASE + 5, -17},
-        {0x00001ac0 - HOOK_FN_BASE + 5, -24},
-        {0x00001acb - HOOK_FN_BASE + 5, -16},
-        {0x00001ad7 - HOOK_FN_BASE + 5, -8},
+        {1+ 0x00001ab7 - HOOK_FN_BASE + 5, -16},
+        {1+ 0x00001ac0 - HOOK_FN_BASE + 5, -24},
+        {1+ 0x00001acb - HOOK_FN_BASE + 5, -16},
+        {1+ 0x00001ad7 - HOOK_FN_BASE + 5, -8},
     };
-    size_t num_patches = sizeof(patches) / sizeof(PatchInfo);
+    size_t num_patches = sizeof(patches) / sizeof(ThreadLocalStoragePatches);
 
     for (size_t i = 0; i < num_patches; i++) {
-        int32_t* target_ptr = (int32_t*)((char*)hook + patches[i].offset);
+        int32_t* target_ptr = (int32_t*)((char*)new_mem + patches[i].offset);
 
         int32_t existing_value = *target_ptr;
         if (existing_value != patches[i].expected_value) {
             final_printf("failed to patch @ idx = %zu, unexpected value, %x, expected: %x\n", i, existing_value, patches[i].expected_value);
-            return false;
+            munmap(new_mem, total_size);
+            return NULL;
         }
 
         *target_ptr = existing_value - (int32_t)static_tls_base;
     }
 
-    sceKernelMprotect((void *)hook, HOOK_FN_SIZE, VM_PROT_READ | VM_PROT_EXECUTE);
+    {
+        unsigned char patch[] = {0xFF, 0x15, 0x72, 0x00, 0x00, 0x00};
+        memcpy(new_mem + 0x51, patch, sizeof(patch));
+    }
 
-    return true;
+    {
+        unsigned char patch[] = {0xFF, 0x15, 0x0A, 0x00, 0x00, 0x00};
+        memcpy(new_mem + 0xC1, patch, sizeof(patch));
+    }
+
+    *(void**)((char*)new_mem + HOOK_FN_SIZE) = emit_span_start;
+    *(void**)((char*)new_mem + HOOK_FN_SIZE + 8) = emit_span_end;
+
+    if (sceKernelMprotect(new_mem, total_size, VM_PROT_READ | VM_PROT_EXECUTE) != 0) {
+        final_printf("failed to set memory protection for patched hook function\n");
+        munmap(new_mem, total_size);
+        return NULL;
+    }
+
+    // hex_dump(new_mem, total_size);
+
+    return new_mem;
 }
 
-#define PAGE_SIZE 4096
+bool register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
+    void* hook = build_hook_fn(static_tls_base);
+    if (!hook) {
+        return false;
+    }
 
-void register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     unsigned char template_code[] = {
         // mov dword ptr fs:-32, <immediate_value>
         0x64, 0xC7, 0x04, 0x25, 0xE0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
@@ -158,7 +200,7 @@ void register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     
     if (mem == MAP_FAILED) {
         final_printf("failed to map memory\n");
-        return;
+        return false;
     }
 
     final_printf("jump relocation trampolines block: 0x%lx\n", (uint64_t)mem);
@@ -176,7 +218,7 @@ void register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
 
         *(uint32_t*)((char*)func_mem + 8) = label_idx;
         *(void**)((char*)func_mem + 34) = *function_ptr;
-        *(void**)((char*)func_mem + 42) = (void*)hook;
+        *(void**)((char*)func_mem + 42) = hook;
 
         *function_ptr = (void*)func_mem;
     }
@@ -184,4 +226,6 @@ void register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     final_printf("trampolines installed\n");
 
     sceKernelMprotect((void *)mem, total_size, VM_PROT_READ | VM_PROT_EXECUTE);
+
+    return true;
 }

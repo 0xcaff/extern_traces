@@ -98,11 +98,14 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     JumpSlotRelocationList jump_slot_relocations;
     find_jump_slot_relocations(&info, &jump_slot_relocations);
 
-    if (!patch_hooks_tls_base(tls_base)) {
+    if (!register_hooks(&jump_slot_relocations, tls_base)) {
+        cleanup_jump_slot_relocation_list(&jump_slot_relocations);
+        cleanup_dynamic_info(&info);
+
+        free(dynamic_segment);
+        free(dynlib_segment);
         return 1;
     }
-
-    register_hooks(&jump_slot_relocations, tls_base);
 
     init_thread_local_state();
     bool ok = init_lazy_destructor();
