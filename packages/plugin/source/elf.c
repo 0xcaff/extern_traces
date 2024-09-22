@@ -436,14 +436,18 @@ void find_jump_slot_relocations(const DynamicInfo* info, JumpSlotRelocationList*
             }
 
             const SymbolInfo* sym = &info->symbols[sym_index];
-            const Elf64_Sym* elf_sym = &info->symtab[sym_index];
             if (rela->r_addend != 0) {
                 final_printf("JUMP_SLOT relocation with non-zero addend @ %d, %zu %ld\n", section, i, rela->r_addend);
                 continue;
             }
 
             if (sym->type == SYMBOL_RAW) {
-                final_printf("raw symbol encountered @ %d %d %s", section, i, sym->data.raw);
+                final_printf("raw symbol encountered @ %d %zu %s", section, i, sym->data.raw);
+                continue;
+            }
+
+            const char* library_name = find_library_name(info, sym->data.parsed.library_id);
+            if (strstr(library_name, "libc") != NULL) {
                 continue;
             }
 
