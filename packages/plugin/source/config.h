@@ -9,7 +9,7 @@
 typedef struct {
     char target_address[256];
     uint16_t target_port;
-    int original_tls_size;
+    uint32_t original_tls_size;
 } PluginConfig;
 
 bool load_config(const char* titleid, PluginConfig* config);

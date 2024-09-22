@@ -84,9 +84,48 @@ __attribute__((naked)) void hook()
     );
 }
 
+#define HOOK_FN_BASE 0x00001a20
+#define HOOK_FN_SIZE (0x00001ae7 - HOOK_FN_BASE)
+
+bool patch_hooks_tls_base(uint16_t static_tls_base) {
+    sceKernelMprotect((void *)hook, HOOK_FN_SIZE, VM_PROT_READ | VM_PROT_WRITE);
+
+    typedef struct {
+        uint64_t offset;
+        int32_t expected_value;
+    } PatchInfo;
+
+    PatchInfo patches[] = {
+        {0x00001a5f - HOOK_FN_BASE + 5, -32},
+        {0x00001a68 - HOOK_FN_BASE + 5, -8},
+        // todo: switch back to -16
+        {0x00001ab7 - HOOK_FN_BASE + 5, -17},
+        {0x00001ac0 - HOOK_FN_BASE + 5, -24},
+        {0x00001acb - HOOK_FN_BASE + 5, -16},
+        {0x00001ad7 - HOOK_FN_BASE + 5, -8},
+    };
+    size_t num_patches = sizeof(patches) / sizeof(PatchInfo);
+
+    for (size_t i = 0; i < num_patches; i++) {
+        int32_t* target_ptr = (int32_t*)((char*)hook + patches[i].offset);
+
+        int32_t existing_value = *target_ptr;
+        if (existing_value != patches[i].expected_value) {
+            final_printf("failed to patch @ idx = %zu, unexpected value, %x, expected: %x\n", i, existing_value, patches[i].expected_value);
+            return false;
+        }
+
+        *target_ptr = existing_value - (int32_t)static_tls_base;
+    }
+
+    sceKernelMprotect((void *)hook, HOOK_FN_SIZE, VM_PROT_READ | VM_PROT_EXECUTE);
+
+    return true;
+}
+
 #define PAGE_SIZE 4096
 
-void register_hooks(JumpSlotRelocationList* relocs) {
+void register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     unsigned char template_code[] = {
         // mov dword ptr fs:-32, <immediate_value>
         0x64, 0xC7, 0x04, 0x25, 0xE0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
@@ -106,6 +145,9 @@ void register_hooks(JumpSlotRelocationList* relocs) {
         // <placeholder for target_function address> (jump instruction)
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
+
+    *(int32_t*)((char*)template_code + 4 ) = -((int32_t)static_tls_base + 32);
+    *(int32_t*)((char*)template_code + 24) = -((int32_t)static_tls_base + 24);
 
     size_t bytes_needed = sizeof(template_code) * relocs->count;
     size_t pages_needed = (bytes_needed + PAGE_SIZE - 1) / PAGE_SIZE;

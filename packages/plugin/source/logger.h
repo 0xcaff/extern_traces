@@ -38,4 +38,4 @@ bool init_lazy_destructor();
 struct ThreadLoggingState *lazy_read_value();
 bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length, uint64_t packets_count);
 
-void set_static_tls_base(uint64_t base);
+void set_static_tls_base(uint16_t base);

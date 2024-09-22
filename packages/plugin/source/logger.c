@@ -26,7 +26,7 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
 static int64_t thread_logging_base = 0;
 static int64_t thread_logging_computed_offset = -8;
 
-void set_static_tls_base(uint64_t base) {
+void set_static_tls_base(uint16_t base) {
     thread_logging_base = base;
     thread_logging_computed_offset = -(base + 8);
 }

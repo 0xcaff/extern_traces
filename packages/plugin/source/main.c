@@ -61,13 +61,20 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     }
 
     Elf64_Phdr* tls_phdr = &parser->phdrs[tls_phdr_idx];
+    if (tls_phdr->p_memsz >= UINT16_MAX) {
+        final_printf("static tls segment too large, not supported: %lu\n", tls_phdr->p_memsz);
+        return 1;
+    }
+
     uint32_t expected_size = 32 + config.original_tls_size;
     if (tls_phdr->p_memsz != expected_size) {
         final_printf("memsz unexpected size, got: %lu, expected: %u\n", tls_phdr->p_memsz, expected_size);
         return 1;
     }
 
-    set_static_tls_base(config.original_tls_size);
+    uint16_t tls_base = config.original_tls_size;
+
+    set_static_tls_base(tls_base);
 
     size_t dynamic_segment_size;
     void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
@@ -91,7 +98,11 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     JumpSlotRelocationList jump_slot_relocations;
     find_jump_slot_relocations(&info, &jump_slot_relocations);
 
-    register_hooks(&jump_slot_relocations);
+    if (!patch_hooks_tls_base(tls_base)) {
+        return 1;
+    }
+
+    register_hooks(&jump_slot_relocations, tls_base);
 
     init_thread_local_state();
     bool ok = init_lazy_destructor();
