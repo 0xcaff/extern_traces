@@ -125,11 +125,11 @@ void register_hooks(JumpSlotRelocationList* relocs) {
         // mov dword ptr fs:-32, <immediate_value>
         0x64, 0xC7, 0x04, 0x25, 0xE0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
 
-        // mov rdx, qword ptr [rip + 0xF]
-        0x48, 0x8B, 0x15, 0x0F, 0x00, 0x00, 0x00,
+        // mov r11, qword ptr [rip + 0xF]
+        0x4C, 0x8B, 0x1D, 0x0F, 0x00, 0x00, 0x00,
 
-        // mov qword ptr fs:-24, rdx
-        0x64, 0x48, 0x89, 0x14, 0x25, 0xE8, 0xFF, 0xFF, 0xFF,
+        // mov qword ptr fs:-24, r11
+        0x64, 0x4C, 0x89, 0x1C, 0x25, 0xE8, 0xFF, 0xFF, 0xFF,
 
         // jmp [rip + 0x8]
         0xFF, 0x25, 0x08, 0x00, 0x00, 0x00,
@@ -164,7 +164,7 @@ void register_hooks(JumpSlotRelocationList* relocs) {
 
         void** function_ptr = (void**)(reloc->relocation_offset + 0x0000000000400000);
         sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
-        final_printf("addr = %lx, symbol = %s\n", (uint64_t)*function_ptr, reloc->symbol_info->data.parsed.name);
+        final_printf("offset = %lx, addr = %lx, symbol = %s\n", reloc->relocation_offset, (uint64_t)*function_ptr, reloc->symbol_info->data.parsed.name);
 
         *(uint32_t*)((char*)func_mem + 8) = label_idx;
         *(void**)((char*)func_mem + 34) = *function_ptr;
