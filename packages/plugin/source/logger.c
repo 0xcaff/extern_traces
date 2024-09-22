@@ -343,7 +343,6 @@ void *flush_thread(void *arg)
 
             if (state->is_finished)
             {
-                free(state);
                 sceKernelMunmap(state, ALLOCATION_SIZE);
                 unsafe_write_atomic(&global_states[i], NULL);
                 continue;
