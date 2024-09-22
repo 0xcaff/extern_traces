@@ -63,7 +63,7 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     Elf64_Phdr* tls_phdr = &parser->phdrs[tls_phdr_idx];
     uint32_t expected_size = 32 + config.original_tls_size;
     if (tls_phdr->p_memsz != expected_size) {
-        final_printf("memsz unexpected size, got: %lu, expected: %lu\n", tls_phdr->p_memsz);
+        final_printf("memsz unexpected size, got: %lu, expected: %u\n", tls_phdr->p_memsz, expected_size);
         return 1;
     }
 
