@@ -67,6 +67,8 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         return 1;
     }
 
+    set_static_tls_base(config.original_tls_size);
+
     size_t dynamic_segment_size;
     void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
     if (!dynamic_segment) {

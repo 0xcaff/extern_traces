@@ -23,25 +23,31 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
+static int64_t thread_logging_base = 0;
+static int64_t thread_logging_computed_offset = -8;
+
+void set_static_tls_base(uint64_t base) {
+    thread_logging_base = base;
+    thread_logging_computed_offset = -(base + 8);
+}
+
 uint64_t read_thread_logging_state_slow()
 {
     uint64_t old_value;
-
-    __asm__ volatile(
-        "movq %%fs:-8, %0;"
+    asm volatile(
+        "movq %%fs:(%1), %0;"
         : "=r"(old_value)
-        :
+        : "r"(thread_logging_computed_offset)
         : "memory");
-
     return old_value;
 }
 
 void write_thread_logging_state_slow(uint64_t new_value)
 {
-    __asm__ volatile(
-        "movq %0, %%fs:-8;"
+    asm volatile(
+        "movq %0, %%fs:(%1);"
         :
-        : "r"(new_value)
+        : "r"(new_value), "r"(thread_logging_computed_offset)
         : "memory");
 }
 
