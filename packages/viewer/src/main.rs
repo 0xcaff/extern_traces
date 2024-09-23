@@ -232,9 +232,7 @@ fn handle_client(mut stream: TcpStream, sender: Sender<TraceEvent>) -> io::Resul
     sender.send(TraceEvent::Start(initial_message)).unwrap();
 
     loop {
-        sender
-            .send(TraceEvent::Span(SpanEvent::read(&mut stream)?))
-            .unwrap();
+        sender.send(TraceEvent::read(&mut stream)?).unwrap();
     }
 }
 

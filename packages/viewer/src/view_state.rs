@@ -100,6 +100,7 @@ impl ViewState {
                 self.initial_message.replace(initial_message);
             }
             TraceEvent::Span(span) => self.update_span(span),
+            _ => {}
         }
     }
 
@@ -116,7 +117,7 @@ impl ViewState {
                         currently_started: None,
                     });
                 if let None = thread.currently_started.replace(start) {
-                    println!("two spans started");
+                    // println!("two spans started");
                 };
             }
             SpanEvent::End(end) => {
