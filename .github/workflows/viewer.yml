@@ -1,11 +1,5 @@
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
-    branches:
-      - main
-      - master
 
 jobs:
   build:
