@@ -6,23 +6,23 @@
 #include "elf.h"
 #include "config.h"
 
-#define ALLOCATION_SIZE 16 * 1024
+#define INITIAL_ALLOCATION_SIZE 16 * 1024
 
-struct ThreadLoggingState
-{
-    uint64_t thread_id;
+struct BufferState {
     uint64_t write_idx;
     uint64_t read_idx;
-    bool is_finished;
-
-    uint64_t dropped_packets_count;
-    uint64_t last_dropped_packets_count;
-    uint64_t last_counter_flush_time;
+    struct BufferState* last_buffer;
+    uint64_t size;
 
     uint8_t buffer[];
 };
 
-#define BUFFER_SIZE (ALLOCATION_SIZE - sizeof(struct ThreadLoggingState))
+struct ThreadLoggingState
+{
+    uint64_t thread_id;
+    bool is_finished;
+    struct BufferState* current_buffer;
+};
 
 struct FlushThreadArgs {
     bool is_ready;
@@ -36,6 +36,6 @@ void fini_thread_local_state();
 struct ThreadLoggingState *init_thread_local_state();
 bool init_lazy_destructor();
 struct ThreadLoggingState *lazy_read_value();
-bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length, uint64_t packets_count);
+bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length);
 
 void set_static_tls_base(uint16_t base);

@@ -23,6 +23,31 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
+struct BufferState* new_buffer_state(uint64_t size) {
+    final_printf("allocating new buffer state @ %lu\n", size);
+
+    void *addr = NULL;
+    int ret = sceKernelMapFlexibleMemory(
+        &addr,
+        size,
+        0x02,
+        0
+    );
+    if (ret != 0)
+    {
+        final_printf("sceKernelMapFlexibleMemory failed: 0x%x\n", ret);
+        return NULL;
+    }
+
+    struct BufferState* buffer_state = (struct BufferState*)addr;
+    buffer_state->write_idx = 0;
+    buffer_state->read_idx = 0;
+    buffer_state->last_buffer = NULL;
+    buffer_state->size = size;
+
+    return buffer_state;
+}
+
 static int64_t thread_logging_base = 0;
 static int64_t thread_logging_computed_offset = -8;
 
@@ -51,14 +76,15 @@ void write_thread_logging_state_slow(uint64_t new_value)
         : "memory");
 }
 
-bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size_t length, uint64_t packets_count)
+bool try_write_to_buffer(struct BufferState *state, const uint8_t *data, size_t length)
 {
-    size_t free_space;
+    uint64_t free_space;
     uint64_t read_idx = state->read_idx;
+    uint64_t size = state->size - sizeof(struct BufferState);
 
     if (state->write_idx >= read_idx)
     {
-        free_space = BUFFER_SIZE - (state->write_idx - read_idx);
+        free_space = size - (state->write_idx - read_idx);
     }
     else
     {
@@ -67,14 +93,13 @@ bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size
 
     if (free_space <= length)
     {
-        state->dropped_packets_count += packets_count;
         return false;
     }
 
-    size_t end_pos = (state->write_idx + length) % BUFFER_SIZE;
+    size_t end_pos = (state->write_idx + length) % size;
     if (end_pos < state->write_idx)
     {
-        size_t first_chunk = BUFFER_SIZE - state->write_idx;
+        size_t first_chunk = size - state->write_idx;
         memcpy(&state->buffer[state->write_idx], data, first_chunk);
         memcpy(state->buffer, data + first_chunk, end_pos);
     }
@@ -87,6 +112,30 @@ bool write_to_buffer(struct ThreadLoggingState *state, const uint8_t *data, size
     // write_idx marks allows the region to be read
     state->write_idx = end_pos;
 
+    return true;
+}
+
+bool write_to_buffer(
+    struct ThreadLoggingState* thread_state,
+    const uint8_t *data,
+    size_t length
+) {
+    struct BufferState* current_buffer = thread_state->current_buffer;
+    bool current_buffer_accepted = try_write_to_buffer(current_buffer, data, length);
+    if (current_buffer_accepted) {
+        return true;
+    }
+
+    struct BufferState* next_buffer = new_buffer_state(current_buffer->size * 2);
+    next_buffer->last_buffer = current_buffer;
+
+    bool next_buffer_accepted = try_write_to_buffer(next_buffer, data, length);
+    if (!next_buffer_accepted) {
+        final_printf("[INVARIANT VIOLATED] failed to write to new buffer\n");
+        return false;
+    }
+
+    thread_state->current_buffer = next_buffer;
     return true;
 }
 
@@ -108,8 +157,7 @@ ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
     return total_bytes_sent;
 }
 
-ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
-{
+ssize_t flush_buffer_contents(struct BufferState *state, int sock) {
     uint64_t write_idx = state->write_idx;
     if (write_idx == state->read_idx)
     {
@@ -134,10 +182,11 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
     {
         // wrapping case (write_idx < read_idx)
         ssize_t total_bytes_sent = 0;
+        uint64_t size = state->size - sizeof(struct BufferState);
 
         {
             // read first half (from read index to end of buffer)
-            size_t bytes_to_send_first = BUFFER_SIZE - state->read_idx;
+            size_t bytes_to_send_first = size - state->read_idx;
             if (bytes_to_send_first > 0)
             {
                 ssize_t bytes_sent = send_all(sock, &state->buffer[state->read_idx], bytes_to_send_first);
@@ -163,7 +212,7 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
                 }
 
                 total_bytes_sent += bytes_sent;
-                state->read_idx = (state->read_idx + bytes_sent) % BUFFER_SIZE;
+                state->read_idx = (state->read_idx + bytes_sent) % size;
             }
         }
 
@@ -171,42 +220,25 @@ ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
     }
 }
 
-struct CountersUpdate
+ssize_t flush_buffer(struct BufferState* state, int sock)
 {
-    uint64_t message_tag;
-    uint64_t thread_id;
-    uint64_t dropped_packets_delta;
-    uint64_t last_time;
-    uint64_t time;
-};
+    struct BufferState* last_buffer = state->last_buffer;
+    if (last_buffer) {
+        ssize_t bytes_sent = flush_buffer(last_buffer, sock);
+        if (bytes_sent < 0) {
+            return bytes_sent;
+        }
 
-ssize_t flush_counters(struct ThreadLoggingState *state, int sock) {
-    uint64_t dropped_packets_count = state->dropped_packets_count;
-    uint64_t time = get_current_time_rdtscp();
-
-    uint64_t delta = dropped_packets_count - state->last_dropped_packets_count;
-    if (delta == 0) {
-        state->last_counter_flush_time = time;
-        return 0;
+        sceKernelMunmap(last_buffer, last_buffer->size);
+        state->last_buffer = NULL;
     }
 
-    struct CountersUpdate counters_update_message = {
-        .message_tag = 2,
-        .thread_id = state->thread_id,
-        .dropped_packets_delta = delta,
-        .last_time = state->last_counter_flush_time,
-        .time = time,
-    };
+    return flush_buffer_contents(state, sock);
+}
 
-    ssize_t bytes_sent = send_all(sock, (const uint8_t *)&counters_update_message, sizeof(struct CountersUpdate));
-    if (bytes_sent < 0) {
-        return bytes_sent;
-    }
-
-    state->last_dropped_packets_count = dropped_packets_count;
-    state->last_counter_flush_time = time;
-
-    return bytes_sent;
+ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
+{
+    return flush_buffer(state->current_buffer, sock);
 }
 
 struct InitialMessageHeader {
@@ -360,17 +392,9 @@ void *flush_thread(void *arg)
                 return NULL;
             }
 
-            bytes_sent = flush_counters(state, sock);
-            if (bytes_sent < 0)
-            {
-                final_printf("send failed\n");
-                close(sock);
-                return NULL;
-            }
-
             if (state->is_finished)
             {
-                sceKernelMunmap(state, ALLOCATION_SIZE);
+                free(state);
                 unsafe_write_atomic(&global_states[i], NULL);
                 continue;
             }
@@ -395,51 +419,40 @@ struct ThreadLoggingState *init_thread_local_state()
 {
     OrbisPthread thread = scePthreadSelf();
     uint64_t thread_id = (uint64_t)thread;
-    void *addr = NULL;
 
     final_printf("init_thread_local_state\n");
 
-    int ret = sceKernelMapFlexibleMemory(
-        &addr,
-        ALLOCATION_SIZE, 
-        0x02,
-        0
-    );
-    if (ret != 0)
-    {
-        final_printf("sceKernelMapFlexibleMemory failed: 0x%x\n", ret);
-        return NULL;
-    }
-
-    struct ThreadLoggingState *state = (struct ThreadLoggingState *)addr;
-    if (state == NULL)
+    struct ThreadLoggingState* thread_logging_state = (struct ThreadLoggingState*)malloc(sizeof(struct ThreadLoggingState));
+    if (thread_logging_state == NULL)
     {
         final_printf("allocation failed\n");
         return NULL;
     }
 
-    state->is_finished = false;
-    state->thread_id = thread_id;
-    state->write_idx = 0;
-    state->read_idx = 0;
-    state->dropped_packets_count = 0;
-    state->last_dropped_packets_count = 0;
-    state->last_counter_flush_time = 0;
+    thread_logging_state->is_finished = false;
+    thread_logging_state->thread_id = thread_id;
+
+    struct BufferState* buffer_state = new_buffer_state(INITIAL_ALLOCATION_SIZE);
+    if (!buffer_state) {
+        return NULL;
+    }
+
+    thread_logging_state->current_buffer = buffer_state;
 
     for (size_t i = 0; i < 256; ++i)
     {
         struct ThreadLoggingState *expected = NULL;
-        if (atomic_compare_exchange_strong(&global_states[i], &expected, state))
+        if (atomic_compare_exchange_strong(&global_states[i], &expected, thread_logging_state))
         {
-            write_thread_logging_state_slow((uint64_t)state);
+            write_thread_logging_state_slow((uint64_t)thread_logging_state);
             final_printf("written into slot %zu\n", i);
-            return state;
+            return thread_logging_state;
         }
     }
 
     final_printf("no space for state\n");
-    write_thread_logging_state_slow((uint64_t)state);
-    return state;
+    write_thread_logging_state_slow((uint64_t)thread_logging_state);
+    return thread_logging_state;
 }
 
 void destructor_function(void *ptr)

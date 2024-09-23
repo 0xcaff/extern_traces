@@ -27,7 +27,7 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
         .label_id = label_id,
     };
 
-    write_to_buffer(state, (const uint8_t *)&span, sizeof(span), 1);
+    write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
 }
 
 void emit_span_end(struct ThreadLoggingState* initial_state) {
@@ -40,5 +40,5 @@ void emit_span_end(struct ThreadLoggingState* initial_state) {
         .time = time,
     };
 
-    write_to_buffer(state, (const uint8_t *)&span, sizeof(span), 1);
+    write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
 }
