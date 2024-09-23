@@ -1,0 +1,38 @@
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    name: build ${{ matrix.platform }} ${{ matrix.target }}
+    strategy:
+      matrix:
+        include:
+          - platform: windows-latest
+            target: x86_64-pc-windows-msvc
+            output: extern_traces_viewer.exe
+          - platform: macos-latest
+            target: aarch64-apple-darwin
+            output: extern_traces_viewer
+          - platform: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            output: extern_traces_viewer
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: cargo build --target ${{ matrix.target }} --release
+
+      - name: save artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.platform }}-${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/${{ matrix.output }}
