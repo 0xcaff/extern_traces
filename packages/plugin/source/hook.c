@@ -89,8 +89,7 @@ __attribute__((naked)) void hook()
 }
 
 #define PAGE_SIZE 4096
-#define HOOK_FN_BASE 0x00001a20
-#define HOOK_FN_SIZE (0x00001ae7 - HOOK_FN_BASE) + 2
+#define HOOK_FN_SIZE 0xc9
 
 void* build_hook_fn(uint16_t static_tls_base) {
     size_t required_size = HOOK_FN_SIZE + 16;
@@ -107,7 +106,6 @@ void* build_hook_fn(uint16_t static_tls_base) {
 
     final_printf("hook fn block: 0x%lx\n", (uint64_t)new_mem);
 
-    // Copy the original hook function to the new memory
     memcpy(new_mem, (void*)hook, HOOK_FN_SIZE);
 
     typedef struct {
@@ -116,12 +114,12 @@ void* build_hook_fn(uint16_t static_tls_base) {
     } ThreadLocalStoragePatches;
 
     ThreadLocalStoragePatches patches[] = {
-        {0x00001a5f - HOOK_FN_BASE + 5, -32},
-        {0x00001a68 - HOOK_FN_BASE + 5, -8},
-        {1+ 0x00001ab7 - HOOK_FN_BASE + 5, -16},
-        {1+ 0x00001ac0 - HOOK_FN_BASE + 5, -24},
-        {1+ 0x00001acb - HOOK_FN_BASE + 5, -16},
-        {1+ 0x00001ad7 - HOOK_FN_BASE + 5, -8},
+        {0x3f + 5, -32},
+        {0x48 + 5, -8},
+        {0x98 + 5, -16},
+        {0xa1 + 5, -24},
+        {0xac + 5, -16},
+        {0xb8 + 5, -8},
     };
     size_t num_patches = sizeof(patches) / sizeof(ThreadLocalStoragePatches);
 
