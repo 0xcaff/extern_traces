@@ -115,7 +115,7 @@ bool try_write_to_buffer(struct BufferState *state, const uint8_t *data, size_t 
     return true;
 }
 
-bool write_to_buffer(
+bool write_to_thread_logger(
     struct ThreadLoggingState* thread_state,
     const uint8_t *data,
     size_t length
@@ -127,6 +127,10 @@ bool write_to_buffer(
     }
 
     struct BufferState* next_buffer = new_buffer_state(current_buffer->size * 2);
+    if (!next_buffer) {
+        return false;
+    }
+
     next_buffer->last_buffer = current_buffer;
 
     bool next_buffer_accepted = try_write_to_buffer(next_buffer, data, length);
@@ -137,6 +141,18 @@ bool write_to_buffer(
 
     thread_state->current_buffer = next_buffer;
     return true;
+}
+
+void write_to_buffer(
+    struct ThreadLoggingState* thread_state,
+    const uint8_t *data,
+    size_t length
+) {
+    if (write_to_thread_logger(thread_state, data, length)) {
+        return;
+    }
+
+    thread_state->dropped_packets_count += 1;
 }
 
 ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
@@ -239,6 +255,44 @@ ssize_t flush_buffer(struct BufferState* state, int sock)
 ssize_t flush_logging_entries(struct ThreadLoggingState *state, int sock)
 {
     return flush_buffer(state->current_buffer, sock);
+}
+
+struct CountersUpdate
+{
+    uint64_t message_tag;
+    uint64_t thread_id;
+    uint64_t dropped_packets_delta;
+    uint64_t last_time;
+    uint64_t time;
+};
+
+ssize_t flush_counters(struct ThreadLoggingState *state, int sock) {
+    uint64_t dropped_packets_count = state->dropped_packets_count;
+    uint64_t time = get_current_time_rdtscp();
+
+    uint64_t delta = dropped_packets_count - state->last_dropped_packets_count;
+    if (delta == 0) {
+        state->last_counter_flush_time = time;
+        return 0;
+    }
+
+    struct CountersUpdate counters_update_message = {
+        .message_tag = 2,
+        .thread_id = state->thread_id,
+        .dropped_packets_delta = delta,
+        .last_time = state->last_counter_flush_time,
+        .time = time,
+    };
+
+    ssize_t bytes_sent = send_all(sock, (const uint8_t *)&counters_update_message, sizeof(struct CountersUpdate));
+    if (bytes_sent < 0) {
+        return bytes_sent;
+    }
+
+    state->last_dropped_packets_count = dropped_packets_count;
+    state->last_counter_flush_time = time;
+
+    return bytes_sent;
 }
 
 struct InitialMessageHeader {
@@ -392,6 +446,14 @@ void *flush_thread(void *arg)
                 return NULL;
             }
 
+            bytes_sent = flush_counters(state, sock);
+            if (bytes_sent < 0)
+            {
+                final_printf("send failed\n");
+                close(sock);
+                return NULL;
+            }
+
             if (state->is_finished)
             {
                 free(state);
@@ -400,8 +462,8 @@ void *flush_thread(void *arg)
             }
         }
 
-        // once every 100ms
-        sceKernelUsleep(100000);
+        // once every 10ms
+        sceKernelUsleep(10000);
         // scePthreadYield();
     }
 
@@ -431,6 +493,9 @@ struct ThreadLoggingState *init_thread_local_state()
 
     thread_logging_state->is_finished = false;
     thread_logging_state->thread_id = thread_id;
+    thread_logging_state->dropped_packets_count = 0;
+    thread_logging_state->last_dropped_packets_count = 0;
+    thread_logging_state->last_counter_flush_time = 0;
 
     struct BufferState* buffer_state = new_buffer_state(INITIAL_ALLOCATION_SIZE);
     if (!buffer_state) {
