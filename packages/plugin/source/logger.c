@@ -27,11 +27,12 @@ struct BufferState* new_buffer_state(uint64_t size) {
     final_printf("allocating new buffer state @ %lu\n", size);
 
     void *addr = NULL;
-    int ret = sceKernelMapFlexibleMemory(
+    int ret = sceKernelMapNamedSystemFlexibleMemory(
         &addr,
         size,
         0x02,
-        0
+        0,
+        "BufferState"
     );
     if (ret != 0)
     {
