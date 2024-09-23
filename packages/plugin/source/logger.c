@@ -24,6 +24,11 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
 }
 
 struct BufferState* new_buffer_state(uint64_t size) {
+    if (size > 67108864) {
+        // fail allocation, drop the remaining messages
+        return NULL;
+    }
+
     final_printf("allocating new buffer state @ %lu\n", size);
 
     void *addr = NULL;
@@ -464,8 +469,8 @@ void *flush_thread(void *arg)
         }
 
         // once every 10ms
-        sceKernelUsleep(10000);
-        // scePthreadYield();
+        // sceKernelUsleep(10000);
+        scePthreadYield();
     }
 
     close(sock);
