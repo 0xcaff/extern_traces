@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run make in Docker
+        uses: docker://ghcr.io/0xcaff/ps4-sdk-images/goldhen:edge
+        with:
+          args: make -C packages/plugin
+
+      - name: save artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages/plugin/target/**/*
