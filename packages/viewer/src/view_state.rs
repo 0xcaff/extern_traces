@@ -123,11 +123,8 @@ impl TimestampRange {
 
 impl ViewState {
     pub fn selected_span_ref(&self) -> Option<(&ThreadState, &ThreadSpan)> {
-        let Some(selected_span) = &self.selected_span else {
-            return None;
-        };
-
-        let thread = self.threads.get(&selected_span.thread_id).unwrap();
+        let selected_span = self.selected_span.as_ref()?;
+        let thread = self.threads.get(&selected_span.thread_id)?;
         let span = &thread.spans[selected_span.span_idx];
 
         Some((thread, span))

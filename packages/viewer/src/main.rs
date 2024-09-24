@@ -172,6 +172,11 @@ impl eframe::App for SpanViewer {
                         for (thread_idx, (thread_id, thread_state)) in
                             view_state.threads.iter().enumerate()
                         {
+                            let same_thread_as_selected = view_state
+                                .selected_span
+                                .as_ref()
+                                .map_or(false, |it| it.thread_id == *thread_id);
+
                             let (visible_span_idx, visible_spans) = thread_state
                                 .spans
                                 .iter()
@@ -227,13 +232,19 @@ impl eframe::App for SpanViewer {
                                 if folded {
                                     painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
                                 } else {
+                                    let is_selected = if same_thread_as_selected {
+                                        view_state.selected_span.as_ref().map_or(false, |it| {
+                                            it.span_idx == visible_span_idx[start_idx]
+                                        })
+                                    } else {
+                                        false
+                                    };
+
                                     let is_same_type_as_selected = view_state
                                         .selected_span_ref()
                                         .map_or(false, |(_, span)| {
                                             visible_spans[start_idx].label_id == span.label_id
                                         });
-
-                                    if is_same_type_as_selected {}
 
                                     if is_hovered && is_clicked {
                                         let selected_span_metadata = SelectedSpanMetadata {
@@ -247,7 +258,9 @@ impl eframe::App for SpanViewer {
                                     painter.rect_filled(
                                         rect,
                                         Rounding::default(),
-                                        if is_same_type_as_selected {
+                                        if is_selected {
+                                            Color32::BLUE
+                                        } else if is_same_type_as_selected {
                                             Color32::LIGHT_BLUE
                                         } else {
                                             Color32::GREEN
