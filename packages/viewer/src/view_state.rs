@@ -93,16 +93,16 @@ impl ViewStateContainer {
 
 #[derive(Debug)]
 pub struct TimestampRange {
-    values: Option<(f64, f64)>,
+    values: Option<(u64, u64)>,
 }
 
 impl TimestampRange {
     pub fn add_value(&mut self, value: u64) {
         let old_values = self.values.take();
         let (low, high) = if let Some((low, high)) = old_values {
-            (f64::min(low, value as _), f64::max(high, value as _))
+            (u64::min(low, value), u64::max(high, value))
         } else {
-            (value as _, value as _)
+            (value, value)
         };
 
         self.values.replace((low, high));
@@ -180,10 +180,14 @@ impl ViewState {
 
     pub fn range(&self) -> (f64, f64) {
         match self.view_range {
-            ViewRange::Full => self
-                .timestamp_range
-                .values
-                .unwrap_or((0., self.initial_message.tsc_frequency as _)),
+            ViewRange::Full => {
+                let (lhs, rhs) = self
+                    .timestamp_range
+                    .values
+                    .unwrap_or((0, self.initial_message.tsc_frequency));
+
+                (lhs as _, rhs as _)
+            }
             ViewRange::Slice(values) => values,
         }
     }
