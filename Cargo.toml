@@ -1,5 +1,6 @@
 [workspace]
 members = [
-    "packages/viewer"
+    "packages/viewer",
+    "packages/ps4libdoc"
 ]
 resolver = "2"

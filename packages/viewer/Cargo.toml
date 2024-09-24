@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 eframe = "0.27.0"
 egui_plot = "0.27.2"
+ps4libdoc = { path = "../ps4libdoc" }

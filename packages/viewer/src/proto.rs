@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::io;
 use std::io::{ErrorKind, Read};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
@@ -14,8 +15,8 @@ pub struct InitialMessage {
     pub anchor_seconds: i64,
     pub anchor_nanoseconds: i64,
     pub anchor_timestamp: u64,
-    pub modules: Vec<ModuleInfo>,
-    pub libraries: Vec<LibraryInfo>,
+    pub modules: BTreeMap<u16, ModuleInfo>,
+    pub libraries: BTreeMap<u16, LibraryInfo>,
     pub symbols: Vec<SymbolInfo>,
 }
 
@@ -36,10 +37,37 @@ impl InitialMessage {
             i64::from_le_bytes(initial_message_buf[16..24].try_into().unwrap());
         let anchor_timestamp = u64::from_le_bytes(initial_message_buf[24..32].try_into().unwrap());
 
-        // Read metadata
-        let modules = read_module_info(&mut stream)?;
-        let libraries = read_library_info(&mut stream)?;
-        let symbols = read_symbol_info(&mut stream)?;
+        let modules = {
+            let module_count = read_u32(&mut stream)?;
+            let mut modules = BTreeMap::new();
+            for _ in 0..module_count {
+                let module_info = ModuleInfo::parse(&mut stream)?;
+                modules.insert(module_info.id, module_info);
+            }
+            modules
+        };
+
+        let libraries = {
+            let library_count = read_u32(&mut stream)?;
+            let mut libraries = BTreeMap::new();
+
+            for _ in 0..library_count {
+                let library_info = LibraryInfo::parse(&mut stream)?;
+                libraries.insert(library_info.id, library_info);
+            }
+
+            libraries
+        };
+
+        let symbols = {
+            let symbol_count = read_u32(&mut stream)?;
+            let mut symbols = Vec::with_capacity(symbol_count as usize);
+            for _ in 0..symbol_count {
+                symbols.push(SymbolInfo::parse(&mut stream)?);
+            }
+
+            symbols
+        };
 
         let initial_message = InitialMessage {
             tsc_frequency,
@@ -199,33 +227,6 @@ impl TraceEvent {
             _ => Err(ErrorKind::InvalidData.into()),
         }
     }
-}
-
-fn read_module_info(stream: &mut impl Read) -> io::Result<Vec<ModuleInfo>> {
-    let module_count = read_u32(stream)?;
-    let mut modules = Vec::with_capacity(module_count as usize);
-    for _ in 0..module_count {
-        modules.push(ModuleInfo::parse(stream)?);
-    }
-    Ok(modules)
-}
-
-fn read_library_info(stream: &mut impl Read) -> io::Result<Vec<LibraryInfo>> {
-    let library_count = read_u32(stream)?;
-    let mut libraries = Vec::with_capacity(library_count as usize);
-    for _ in 0..library_count {
-        libraries.push(LibraryInfo::parse(stream)?);
-    }
-    Ok(libraries)
-}
-
-fn read_symbol_info(stream: &mut impl Read) -> io::Result<Vec<SymbolInfo>> {
-    let symbol_count = read_u32(stream)?;
-    let mut symbols = Vec::with_capacity(symbol_count as usize);
-    for _ in 0..symbol_count {
-        symbols.push(SymbolInfo::parse(stream)?);
-    }
-    Ok(symbols)
 }
 
 fn read_string(stream: &mut impl Read) -> io::Result<String> {

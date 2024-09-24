@@ -55,11 +55,17 @@ pub enum ViewRange {
     Slice((u64, u64)),
 }
 
+pub struct SelectedSpanMetadata {
+    pub thread_id: u64,
+    pub span_idx: usize,
+}
+
 pub struct ViewState {
     pub initial_message: Option<InitialMessage>,
     pub threads: BTreeMap<u64, ThreadState>,
     pub timestamp_range: TimestampRange,
     pub view_range: ViewRange,
+    pub selected_span: Option<SelectedSpanMetadata>,
     pub is_live: bool,
 }
 
@@ -70,6 +76,7 @@ impl ViewState {
             threads: BTreeMap::new(),
             timestamp_range: TimestampRange { values: None },
             view_range: ViewRange::Full,
+            selected_span: None,
             is_live: false,
         }
     }
@@ -94,6 +101,17 @@ impl TimestampRange {
 }
 
 impl ViewState {
+    pub fn selected_span_ref(&self) -> Option<(&ThreadState, &ThreadSpan)> {
+        let Some(selected_span) = &self.selected_span else {
+            return None;
+        };
+
+        let thread = self.threads.get(&selected_span.thread_id).unwrap();
+        let span = &thread.spans[selected_span.span_idx];
+
+        Some((thread, span))
+    }
+
     pub fn update_trace(&mut self, event: TraceEvent) {
         match event {
             TraceEvent::Start(initial_message) => {

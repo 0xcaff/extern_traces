@@ -2,10 +2,11 @@ mod proto;
 mod view_state;
 
 use crate::proto::{InitialMessage, TraceEvent};
-use crate::view_state::{fold_spans, ViewState};
+use crate::view_state::{fold_spans, SelectedSpanMetadata, ViewState};
 use eframe::egui::{Align, CentralPanel, Color32, Frame, Layout, Rounding, SidePanel, Stroke};
 use eframe::emath::{Rangef, Rect};
 use eframe::{egui, emath};
+use ps4libdoc::LoadedDocumentation;
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::time::Instant;
@@ -14,6 +15,7 @@ use std::{io, thread};
 struct SpanViewer {
     state: ViewState,
     receiver: Receiver<TraceEvent>,
+    docs: LoadedDocumentation,
 
     start_time: Instant,
 }
@@ -21,6 +23,8 @@ struct SpanViewer {
 impl SpanViewer {
     fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         let (sender, receiver) = channel();
+
+        let docs = LoadedDocumentation::bundled().unwrap();
 
         thread::spawn(move || {
             if let Err(e) = run_server(sender.clone()) {
@@ -30,6 +34,7 @@ impl SpanViewer {
 
         Self {
             state: ViewState::new(),
+            docs,
             receiver,
             start_time: Instant::now(),
         }
@@ -51,6 +56,30 @@ impl eframe::App for SpanViewer {
                 ui.label(format!("spans: {}", self.state.total_spans()));
                 ui.label(format!("threads: {}", self.state.threads.len()));
                 ui.label(format!("range: {:#?}", self.state.range()));
+
+                if let Some((_thread, span)) = &self.state.selected_span_ref() {
+                    if let Some(initial_message) = &self.state.initial_message {
+                        let symbol = &initial_message.symbols[span.label_id as usize];
+
+                        let library = &initial_message
+                            .libraries
+                            .get(&(symbol.library_id as u16))
+                            .unwrap();
+
+                        let module = &initial_message
+                            .modules
+                            .get(&(symbol.module_id as u16))
+                            .unwrap();
+
+                        ui.label(format!("{}", module.name));
+                        ui.label(format!("{}", library.name));
+                        ui.label(format!("{}", symbol.name));
+
+                        let resolved = self.docs.lookup(&module.name, &library.name, &symbol.name);
+
+                        ui.label(format!("{:#?}", resolved.and_then(|it| it.name.as_ref())));
+                    }
+                }
             });
         });
 
@@ -106,17 +135,19 @@ impl eframe::App for SpanViewer {
                     }
                 }
 
+                let is_clicked = ctx.input(|it| it.pointer.any_click());
+
                 let hover_position = ctx.input(|it| it.pointer.hover_pos());
 
-                for (thread_idx, (_thread_id, thread_state)) in
-                    self.state.threads.iter().enumerate()
+                for (thread_idx, (thread_id, thread_state)) in self.state.threads.iter().enumerate()
                 {
-                    let visible_spans = thread_state
+                    let (visible_span_idx, visible_spans) = thread_state
                         .spans
                         .iter()
-                        .filter(|it| it.end_time >= low && it.start_time < hi)
-                        .collect::<Vec<_>>();
-
+                        .enumerate()
+                        .filter(|(_idx, it)| it.end_time >= low && it.start_time < hi)
+                        .unzip::<_, _, Vec<_>, Vec<_>>();
+                    
                     let view_spans = fold_spans(&visible_spans, cycles_per_pixel as u64);
                     for (start_idx, end_idx) in view_spans {
                         let start_span = visible_spans[start_idx];
@@ -139,7 +170,7 @@ impl eframe::App for SpanViewer {
                             max: egui::pos2(span_max, thread_idx as f32 * 10.0f32 + 8.0f32),
                         };
 
-                        let should_highlight = if let Some(hover_position) = hover_position {
+                        let is_hovered = if let Some(hover_position) = hover_position {
                             if rect.contains(hover_position) {
                                 true
                             } else {
@@ -149,17 +180,37 @@ impl eframe::App for SpanViewer {
                             false
                         };
 
-                        if !should_highlight {
+                        if folded {
+                            painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
+                        } else {
+                            let is_same_type_as_selected =
+                                self.state.selected_span_ref().map_or(false, |(_, span)| {
+                                    visible_spans[start_idx].label_id == span.label_id
+                                });
+
+                            if is_same_type_as_selected {}
+
+                            if is_hovered && is_clicked {
+                                let selected_span_metadata = SelectedSpanMetadata {
+                                    thread_id: *thread_id,
+                                    span_idx: visible_span_idx[start_idx],
+                                };
+
+                                self.state.selected_span.replace(selected_span_metadata);
+                            };
+
                             painter.rect_filled(
                                 rect,
                                 Rounding::default(),
-                                if folded {
-                                    Color32::LIGHT_YELLOW
+                                if is_same_type_as_selected {
+                                    Color32::LIGHT_BLUE
                                 } else {
                                     Color32::GREEN
                                 },
                             );
-                        } else {
+                        }
+
+                        if is_hovered {
                             painter.rect_stroke(
                                 rect,
                                 Rounding::default(),

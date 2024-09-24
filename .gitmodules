@@ -1,0 +1,4 @@
+[submodule "packages/ps4libdoc/defs"]
+	path = packages/ps4libdoc/defs
+	url = git@github.com:idc/ps4libdoc.git
+	branch = 9.00
