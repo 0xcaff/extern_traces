@@ -1,9 +1,9 @@
 mod proto;
 mod view_state;
 
-use crate::proto::{InitialMessage, SpanEvent, TraceEvent};
+use crate::proto::{InitialMessage, TraceEvent};
 use crate::view_state::{fold_spans, ViewState};
-use eframe::egui::{Color32, Frame, Rounding, Stroke};
+use eframe::egui::{Align, CentralPanel, Color32, Frame, Layout, Rounding, SidePanel, Stroke};
 use eframe::emath::{Rangef, Rect};
 use eframe::{egui, emath};
 use std::net::{TcpListener, TcpStream};
@@ -46,16 +46,20 @@ impl eframe::App for SpanViewer {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         self.process_events();
 
-        egui::CentralPanel::default()
+        SidePanel::right("side_panel").show(ctx, |ui| {
+            ui.with_layout(Layout::top_down_justified(Align::Min), |ui| {
+                ui.label(format!("spans: {}", self.state.total_spans()));
+                ui.label(format!("threads: {}", self.state.threads.len()));
+                ui.label(format!("range: {:#?}", self.state.range()));
+            });
+        });
+
+        CentralPanel::default()
             .frame(Frame {
                 fill: ctx.style().visuals.panel_fill,
                 ..Default::default()
             })
             .show(ctx, |ui| {
-                ui.label(format!("spans: {}", self.state.total_spans()));
-                ui.label(format!("threads: {}", self.state.threads.len()));
-                ui.label(format!("range: {:#?}", self.state.range()));
-
                 let available_size = ui.available_size();
                 let (low, hi) = self.state.range();
                 let range = hi - low;
@@ -77,19 +81,6 @@ impl eframe::App for SpanViewer {
 
                     (ticks, interval)
                 };
-
-                ui.label(format!(
-                    "range: {:#?}",
-                    range as f32
-                        / self
-                            .state
-                            .initial_message
-                            .as_ref()
-                            .map(|it| it.tsc_frequency)
-                            .unwrap_or(1) as f32
-                ));
-
-                ui.label(format!("ticks: {:#?}", ticks,));
 
                 let low_f = low as f32;
                 let hi_f = hi as f32;
@@ -200,8 +191,6 @@ impl eframe::App for SpanViewer {
                         .zoom_anchored(1.0f32 / zoom_delta, anchor_position);
                 }
             });
-
-        ctx.request_repaint();
     }
 }
 
