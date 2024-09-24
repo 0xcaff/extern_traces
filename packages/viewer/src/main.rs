@@ -154,45 +154,7 @@ impl eframe::App for SpanViewer {
                         let (low, hi) = view_state.range();
                         let range = hi - low;
 
-                        let (ticks, interval) = {
-                            let magnitude = range.ilog10();
-                            let base_interval = 10u64.pow(magnitude);
-
-                            let interval = {
-                                let segments = range / base_interval;
-                                if segments < 5 {
-                                    base_interval / 10
-                                } else {
-                                    base_interval
-                                }
-                            };
-
-                            let ticks = (range / interval) + 1;
-
-                            (ticks, interval)
-                        };
-
-                        let low_f = low as f32;
-                        let hi_f = hi as f32;
-
-                        let cycles_per_pixel = (hi_f - low_f) / response.rect.width();
-
-                        {
-                            let base = (low_f / interval as f32).floor() * interval as f32;
-                            for idx in 0..ticks {
-                                let position = emath::remap(
-                                    base + idx as f32 * interval as f32,
-                                    low_f..=hi_f,
-                                    response.rect.x_range(),
-                                );
-
-                                painter.vline(
-                                    position,
-                                    response.rect.y_range(),
-                                    Stroke::new(1.0f32, Color32::BLACK),
-                                );
-                            }
-                        }
+                        let cycles_per_pixel = (hi - low) / (response.rect.width() as f64);
 
                         let is_clicked = response.clicked();
 
@@ -205,7 +167,9 @@ impl eframe::App for SpanViewer {
                                 .spans
                                 .iter()
                                 .enumerate()
-                                .filter(|(_idx, it)| it.end_time >= low && it.start_time < hi)
+                                .filter(|(_idx, it)| {
+                                    it.end_time as f64 >= low && (it.start_time as f64) < hi
+                                })
                                 .unzip::<_, _, Vec<_>, Vec<_>>();
 
                             let view_spans = fold_spans(&visible_spans, cycles_per_pixel as u64);
@@ -214,24 +178,29 @@ impl eframe::App for SpanViewer {
                                 let end_span = visible_spans[end_idx - 1];
                                 let folded = start_idx != end_idx - 1;
 
+                                let x_range = {
+                                    let range = response.rect.x_range();
+                                    (range.min as f64)..=(range.max as f64)
+                                };
+
                                 let span_min = emath::remap(
-                                    start_span.start_time as f32,
-                                    low_f..=hi_f,
-                                    response.rect.x_range(),
+                                    start_span.start_time as f64,
+                                    (low)..=(hi),
+                                    x_range.clone(),
                                 );
                                 let span_max = emath::remap(
-                                    end_span.end_time as f32,
-                                    low_f..=hi_f,
-                                    response.rect.x_range(),
+                                    end_span.end_time as f64,
+                                    (low)..=(hi),
+                                    x_range.clone(),
                                 );
 
                                 let rect = Rect {
                                     min: egui::pos2(
-                                        span_min,
+                                        span_min as f32,
                                         response.rect.min.y + thread_idx as f32 * 10.0f32,
                                     ),
                                     max: egui::pos2(
-                                        span_max,
+                                        span_max as f32,
                                         response.rect.min.y + thread_idx as f32 * 10.0f32 + 8.0f32,
                                     ),
                                 };
@@ -291,7 +260,7 @@ impl eframe::App for SpanViewer {
                         {
                             let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
                             let percentage = scroll_delta.x / response.rect.width();
-                            let diff = -((percentage * (range as f32)) as i64);
+                            let diff = -(percentage as f64 * range);
 
                             view_state.translate_x(diff);
                         }
@@ -302,10 +271,10 @@ impl eframe::App for SpanViewer {
                                 return;
                             };
 
-                            let zoom_delta = ctx.input(|it| it.zoom_delta());
-                            let anchor_position = hover_position.x / response.rect.width();
+                            let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
+                            let anchor_position = (hover_position.x / response.rect.width()) as f64;
 
-                            view_state.zoom_anchored(1.0f32 / zoom_delta, anchor_position);
+                            view_state.zoom_anchored(1. / zoom_delta, anchor_position);
                         }
                     });
             });

@@ -52,7 +52,7 @@ pub fn fold_spans(thread_spans: &[&ThreadSpan], cycles_per_pixel: u64) -> Vec<(u
 
 pub enum ViewRange {
     Full,
-    Slice((u64, u64)),
+    Slice((f64, f64)),
 }
 
 pub struct SelectedSpanMetadata {
@@ -93,16 +93,16 @@ impl ViewStateContainer {
 
 #[derive(Debug)]
 pub struct TimestampRange {
-    values: Option<(u64, u64)>,
+    values: Option<(f64, f64)>,
 }
 
 impl TimestampRange {
     pub fn add_value(&mut self, value: u64) {
         let old_values = self.values.take();
         let (low, high) = if let Some((low, high)) = old_values {
-            (u64::min(low, value), u64::max(high, value))
+            (f64::min(low, value as _), f64::max(high, value as _))
         } else {
-            (value, value)
+            (value as _, value as _)
         };
 
         self.values.replace((low, high));
@@ -152,35 +152,38 @@ impl ViewState {
         self.threads.values().map(|v| v.spans.len()).sum()
     }
 
-    pub fn translate_x(&mut self, value: i64) {
-        if value == 0 {
+    pub fn translate_x(&mut self, cycles_delta: f64) {
+        if cycles_delta == 0. {
             return;
         }
 
         let (min, max) = self.range();
-        self.view_range = ViewRange::Slice((combine(min, value), combine(max, value)));
+        self.view_range = ViewRange::Slice((min + cycles_delta, max + cycles_delta));
     }
 
-    pub fn zoom_anchored(&mut self, multiplier: f32, anchor: f32) {
-        if multiplier == 1.0f32 {
+    pub fn zoom_anchored(&mut self, multiplier: f64, anchor: f64) {
+        if multiplier == 1. {
             return;
         }
 
         let (min, max) = self.range();
 
         let original_size = max - min;
-        let new_size = original_size as f32 * multiplier;
-        let original_anchor = ((anchor * original_size as f32) as u64).saturating_add(min);
+        let new_size = original_size * multiplier;
+        let original_anchor = (anchor * original_size) + min;
 
-        let new_min = original_anchor.saturating_sub((anchor * new_size) as _);
-        let new_max = original_anchor.saturating_add(((1.0 - anchor) * new_size) as _);
+        let new_min = original_anchor - (anchor * new_size);
+        let new_max = original_anchor + ((1.0 - anchor) * new_size);
 
         self.view_range = ViewRange::Slice((new_min, new_max));
     }
 
-    pub fn range(&self) -> (u64, u64) {
+    pub fn range(&self) -> (f64, f64) {
         match self.view_range {
-            ViewRange::Full => self.timestamp_range.values.unwrap_or((0, 1_000_000_000)),
+            ViewRange::Full => self
+                .timestamp_range
+                .values
+                .unwrap_or((0., self.initial_message.tsc_frequency as _)),
             ViewRange::Slice(values) => values,
         }
     }
