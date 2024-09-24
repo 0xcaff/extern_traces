@@ -43,12 +43,6 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         return 1;
     }
 
-    if (config.original_tls_size != 0) {
-        final_printf("Non-zero original_tls_size is not yet implemented\n");
-        // TODO: Implement dynamic TLS size handling
-        return 1;
-    }
-
     final_printf("Configuration loaded: target_address=%s, target_port=%d, original_tls_size=%d\n",
                  config.target_address, config.target_port, config.original_tls_size);
 
