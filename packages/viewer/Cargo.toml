@@ -8,3 +8,4 @@ eframe = "0.28.1"
 egui_plot = "0.28.1"
 ps4libdoc = { path = "../ps4libdoc" }
 egui_tiles = "0.9.1"
+itertools = "0.13.0"

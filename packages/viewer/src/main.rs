@@ -1,15 +1,15 @@
 mod proto;
 mod view_state;
 
-use crate::proto::{InitialMessage, TraceEvent};
+use crate::proto::{InitialMessage, SymbolInfo, TraceEvent};
 use crate::view_state::{fold_spans, SelectedSpanMetadata, ViewState, ViewStateContainer};
 use eframe::egui::{
-    vec2, Align, CentralPanel, Color32, Frame, Id, Layout, Rounding, SidePanel, Stroke,
-    TopBottomPanel,
+    vec2, Align, CentralPanel, Color32, Frame, Id, Layout, Rounding, ScrollArea, SidePanel, Stroke,
+    TopBottomPanel, Ui, Widget,
 };
 use eframe::emath::Rect;
 use eframe::{egui, emath};
-use egui_tiles::{Tabs, Tree};
+use egui_tiles::{Tabs, Tile, Tree};
 use ps4libdoc::LoadedDocumentation;
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -23,12 +23,22 @@ struct TreeBehaviorArgs<'a> {
 
 struct TreeBehavior<'a> {
     args: TreeBehaviorArgs<'a>,
+    pane_response: Option<PaneResponse>,
 }
 
+#[derive(Eq, PartialEq)]
 enum Pane {
     CurrentlySelectedSpanDetail(SpanDetailPane),
+    SearchPane(SearchPane),
+    CurrentSymbolDetailsPane(SymbolDetailPane),
 }
 
+enum PaneResponse {
+    OpenPane(Pane),
+    FocusPane(Pane),
+}
+
+#[derive(Eq, PartialEq)]
 struct SpanDetailPane;
 
 impl SpanDetailPane {
@@ -36,76 +46,204 @@ impl SpanDetailPane {
         "span detail".to_string().into()
     }
 
-    pub fn pane_ui(&mut self, args: &TreeBehaviorArgs, ui: &mut egui::Ui) {
+    pub fn pane_ui(
+        &mut self,
+        args: &mut TreeBehaviorArgs,
+        ui: &mut Ui,
+    ) -> Option<PaneResponse> {
         let view_state = &args.view_state;
 
-        let Some((_thread, span)) = &view_state.selected_span_ref() else {
-            return;
-        };
+        let (_thread, span) = &view_state.selected_span_ref()?;
+        let span = (*span).clone();
 
         ui.with_layout(Layout::top_down(Align::Min), |ui| {
             ui.allocate_space(vec2(ui.available_width(), 0.));
 
-            if let Some(symbol) = view_state
+            let Some(symbol) = view_state
                 .initial_message
                 .symbols
                 .get(span.label_id as usize)
-            {
-                let library_name = &view_state
+            else {
+                ui.label("unable to resolve symbol");
+
+                return;
+            };
+
+            render_symbol_info(args, symbol, ui);
+
+            ui.horizontal(|ui| {
+                ui.label("duration");
+                let duration_cycles = span.end_time - span.start_time;
+                let duration_seconds =
+                    duration_cycles as f64 / view_state.initial_message.tsc_frequency as f64;
+                ui.label(format_time(duration_seconds));
+            });
+
+            ui.horizontal(|ui| {
+                ui.label("start");
+                let duration_cycles = span.start_time - view_state.initial_message.anchor_timestamp;
+                let duration_seconds =
+                    duration_cycles as f64 / view_state.initial_message.tsc_frequency as f64;
+                ui.label(format_time(duration_seconds));
+            });
+
+            let button_response = ui.button("zoom");
+            if button_response.clicked() {
+                // args.view_state.pan_to(&span);
+            }
+        });
+
+        None
+    }
+}
+
+fn render_symbol_info(args: &TreeBehaviorArgs, symbol: &SymbolInfo, ui: &mut Ui) {
+    let library_name = &args
+        .view_state
+        .initial_message
+        .libraries
+        .get(&(symbol.library_id as u16))
+        .map(|it| it.name.as_str());
+
+    let module_name = &args
+        .view_state
+        .initial_message
+        .modules
+        .get(&(symbol.module_id as u16))
+        .map(|it| it.name.as_str());
+
+    ui.horizontal(|ui| {
+        ui.label("name");
+        ui.label(
+            (|| Some(((*library_name)?, (*module_name)?)))()
+                .and_then(|(library_name, module_name)| {
+                    args.docs
+                        .lookup(module_name, library_name, symbol.name.as_ref())
+                        .and_then(|it| it.name.clone())
+                })
+                .unwrap_or_else(|| format!("nid: {}", symbol.name.as_str())),
+        );
+    });
+
+    ui.horizontal(|ui| {
+        ui.label("library");
+        ui.label(library_name.unwrap_or("unknown"));
+    });
+
+    ui.horizontal(|ui| {
+        ui.label("module");
+        ui.label(module_name.unwrap_or("unknown"));
+    });
+}
+
+#[derive(Eq, PartialEq)]
+struct SearchPane {
+    current_text: String,
+}
+
+impl SearchPane {
+    pub fn title(&self) -> egui::WidgetText {
+        "search".to_string().into()
+    }
+
+    pub fn pane_ui(&mut self, args: &mut TreeBehaviorArgs, ui: &mut Ui) -> Option<PaneResponse> {
+        let mut pane_response = None;
+
+        ScrollArea::vertical().show(ui, |ui| {
+            ui.allocate_space(vec2(ui.available_width(), 0.));
+
+            ui.add(
+                egui::TextEdit::singleline(&mut self.current_text)
+                    .desired_width(ui.available_width()),
+            );
+
+            for (symbol_idx, symbol) in args.view_state.initial_message.symbols.iter().enumerate() {
+                let library_name = &args
+                    .view_state
                     .initial_message
                     .libraries
                     .get(&(symbol.library_id as u16))
                     .map(|it| it.name.as_str());
 
-                let module_name = &view_state
+                let module_name = &args
+                    .view_state
                     .initial_message
                     .modules
                     .get(&(symbol.module_id as u16))
                     .map(|it| it.name.as_str());
 
-                ui.horizontal(|ui| {
-                    ui.label("name");
-                    ui.label(
-                        (|| Some(((*library_name)?, (*module_name)?)))()
-                            .and_then(|(library_name, module_name)| {
-                                args.docs
-                                    .lookup(module_name, library_name, symbol.name.as_ref())
-                                    .and_then(|it| it.name.clone())
-                            })
-                            .unwrap_or_else(|| format!("nid: {}", symbol.name.as_str())),
-                    );
-                });
+                let symbol_name = (|| Some(((*library_name)?, (*module_name)?)))()
+                    .and_then(|(library_name, module_name)| {
+                        args.docs
+                            .lookup(module_name, library_name, symbol.name.as_ref())
+                            .and_then(|it| it.name.clone())
+                    })
+                    .unwrap_or_else(|| format!("{}", symbol.name.as_str()));
 
-                ui.horizontal(|ui| {
-                    ui.label("library");
-                    ui.label(library_name.unwrap_or("unknown"));
-                });
+                let text = format!(
+                    "{}::{}::{}",
+                    library_name.unwrap_or("unknown"),
+                    module_name.unwrap_or("unknown"),
+                    symbol_name
+                );
 
-                ui.horizontal(|ui| {
-                    ui.label("module");
-                    ui.label(module_name.unwrap_or("unknown"));
-                });
+                if !text.contains(self.current_text.as_str()) {
+                    continue;
+                }
 
-                ui.horizontal(|ui| {
-                    ui.label("duration");
-                    let duration_cycles = span.end_time - span.start_time;
-                    let duration_seconds =
-                        duration_cycles as f64 / view_state.initial_message.tsc_frequency as f64;
-                    ui.label(format_time(duration_seconds));
-                });
+                let link_response = ui.link(text);
 
-                ui.horizontal(|ui| {
-                    ui.label("start");
-                    let duration_cycles =
-                        span.start_time - view_state.initial_message.anchor_timestamp;
-                    let duration_seconds =
-                        duration_cycles as f64 / view_state.initial_message.tsc_frequency as f64;
-                    ui.label(format_time(duration_seconds));
-                });
-            } else {
-                ui.label("unable to resolve symbol");
+                if link_response.clicked() {
+                    args.view_state.current_symbol_detail = Some(symbol_idx);
+
+                    pane_response.replace(PaneResponse::FocusPane(Pane::CurrentSymbolDetailsPane(
+                        SymbolDetailPane,
+                    )));
+                }
             }
         });
+
+        pane_response
+    }
+}
+
+#[derive(Eq, PartialEq)]
+struct SymbolDetailPane;
+
+impl SymbolDetailPane {
+    pub fn title(&self) -> egui::WidgetText {
+        // todo: use symbol
+        "symbol detail".to_string().into()
+    }
+
+    pub fn pane_ui(&mut self, args: &mut TreeBehaviorArgs, ui: &mut Ui) -> Option<PaneResponse> {
+        let symbol_idx = args.view_state.current_symbol_detail?;
+
+        ScrollArea::vertical().show(ui, |ui| {
+            ui.allocate_space(vec2(ui.available_width(), 0.));
+
+            ScrollArea::vertical().show(ui, |ui| {
+                render_symbol_info(
+                    args,
+                    &args.view_state.initial_message.symbols[symbol_idx],
+                    ui,
+                );
+
+                let it = args
+                    .view_state
+                    .threads
+                    .iter()
+                    .flat_map(|(thread_id, spans)| {
+                        spans.spans.iter().map(|span| (*thread_id, span))
+                    })
+                    .filter(|(thread_id, span)| (span.label_id as usize) == symbol_idx);
+                for (idx, (thread_id, span)) in it.enumerate() {
+                    ui.label(format!("{:?}", idx));
+                }
+            });
+        });
+
+        None
     }
 }
 
@@ -116,9 +254,11 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
         _tile_id: egui_tiles::TileId,
         pane: &mut Pane,
     ) -> egui_tiles::UiResponse {
-        match pane {
-            Pane::CurrentlySelectedSpanDetail(pane) => pane.pane_ui(&self.args, ui),
-        }
+        self.pane_response = match pane {
+            Pane::CurrentlySelectedSpanDetail(pane) => pane.pane_ui(&mut self.args, ui),
+            Pane::SearchPane(pane) => pane.pane_ui(&mut self.args, ui),
+            Pane::CurrentSymbolDetailsPane(pane) => pane.pane_ui(&mut self.args, ui),
+        };
 
         egui_tiles::UiResponse::None
     }
@@ -126,6 +266,8 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
     fn tab_title_for_pane(&mut self, pane: &Pane) -> egui::WidgetText {
         match pane {
             Pane::CurrentlySelectedSpanDetail(pane) => pane.title(),
+            Pane::SearchPane(pane) => pane.title(),
+            Pane::CurrentSymbolDetailsPane(pane) => pane.title(),
         }
     }
 }
@@ -160,8 +302,19 @@ impl SpanViewer {
 
                 let currently_selected_span_detail_pane =
                     tiles.insert_pane(Pane::CurrentlySelectedSpanDetail(SpanDetailPane));
-                let root =
-                    tiles.insert_container(Tabs::new(vec![currently_selected_span_detail_pane]));
+
+                let search_pane = tiles.insert_pane(Pane::SearchPane(SearchPane {
+                    current_text: "".to_string(),
+                }));
+
+                let symbol_pane =
+                    tiles.insert_pane(Pane::CurrentSymbolDetailsPane(SymbolDetailPane));
+
+                let root = tiles.insert_container(Tabs::new(vec![
+                    currently_selected_span_detail_pane,
+                    symbol_pane,
+                    search_pane,
+                ]));
 
                 Tree::new("detail_tree", root, tiles)
             },
@@ -197,7 +350,7 @@ impl eframe::App for SpanViewer {
             return;
         };
 
-        let panel = TopBottomPanel::top("test").show(ctx, |ui| {
+        let panel = TopBottomPanel::top("summary_toolbar").show(ctx, |ui| {
             ui.with_layout(Layout::left_to_right(Align::Min), |ui| {
                 ui.label(" ");
             });
@@ -209,8 +362,36 @@ impl eframe::App for SpanViewer {
                     view_state,
                     docs: &self.docs,
                 },
+                pane_response: None,
             };
+
             self.tree.ui(&mut behavior, ui);
+
+            if let Some(pane_response) = behavior.pane_response {
+                match pane_response {
+                    PaneResponse::OpenPane(pane) => {
+                        let pane_id = self.tree.tiles.insert_pane(pane);
+                        let root_id = self.tree.root.unwrap();
+                        let container = self.tree.tiles.get_container(root_id).unwrap();
+
+                        self.tree.move_tile_to_container(
+                            pane_id,
+                            root_id,
+                            container.num_children(),
+                            false,
+                        );
+                    }
+                    PaneResponse::FocusPane(pane) => {
+                        self.tree.make_active(|it, tile| {
+                            let Tile::Pane(needle_pane) = tile else {
+                                return false;
+                            };
+
+                            needle_pane == &pane
+                        });
+                    }
+                }
+            }
         });
 
         let central_panel_response = CentralPanel::default()
@@ -338,7 +519,7 @@ impl eframe::App for SpanViewer {
                 }
 
                 // Panning
-                {
+                if hover_position.is_some() {
                     let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
                     let percentage = scroll_delta.x / response.rect.width();
                     let diff = -(percentage as f64 * range);

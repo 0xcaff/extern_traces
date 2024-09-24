@@ -1,6 +1,7 @@
 use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart};
 use std::collections::BTreeMap;
 
+#[derive(Clone)]
 pub struct ThreadSpan {
     pub start_time: u64,
     pub end_time: u64,
@@ -84,6 +85,7 @@ pub struct ViewState {
     pub view_range: ViewRange,
     pub selected_span: Option<SelectedSpanMetadata>,
     pub is_live: bool,
+    pub current_symbol_detail: Option<usize>,
 }
 
 impl ViewStateContainer {
@@ -99,6 +101,7 @@ impl ViewStateContainer {
             view_range: ViewRange::Full,
             selected_span: None,
             is_live: false,
+            current_symbol_detail: None,
         })
     }
 }
@@ -215,5 +218,16 @@ impl ViewState {
             }
             ViewRange::Slice(position) => position,
         }
+    }
+
+    pub fn pan_to(&mut self, span: &ThreadSpan) {
+        let ViewRange::Slice(position) = self.view_range else {
+            return;
+        };
+
+        self.view_range = ViewRange::Slice(DisplayPosition {
+            offset: span.start_time as f64,
+            cycles_per_pixel: position.cycles_per_pixel,
+        });
     }
 }
