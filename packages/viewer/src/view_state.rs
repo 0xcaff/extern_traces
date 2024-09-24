@@ -1,4 +1,4 @@
-use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart, TraceEvent};
+use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart};
 use std::collections::BTreeMap;
 
 pub struct ThreadSpan {
@@ -50,9 +50,21 @@ pub fn fold_spans(thread_spans: &[&ThreadSpan], cycles_per_pixel: u64) -> Vec<(u
     spans
 }
 
-pub enum ViewRange {
+enum ViewRange {
     Full,
-    Slice((f64, f64)),
+    Slice(DisplayPosition),
+}
+
+#[derive(Clone, Copy)]
+pub struct DisplayPosition {
+    pub offset: f64,
+    pub cycles_per_pixel: f64,
+}
+
+impl DisplayPosition {
+    pub fn range(&self, range: f64) -> (f64, f64) {
+        (self.offset, self.offset + range * self.cycles_per_pixel)
+    }
 }
 
 pub struct SelectedSpanMetadata {
@@ -152,51 +164,59 @@ impl ViewState {
         self.threads.values().map(|v| v.spans.len()).sum()
     }
 
-    pub fn translate_x(&mut self, cycles_delta: f64) {
+    pub fn translate_x(&mut self, cycles_delta: f64, current_position: DisplayPosition) {
         if cycles_delta == 0. {
             return;
         }
 
-        let (min, max) = self.range();
-        self.view_range = ViewRange::Slice((min + cycles_delta, max + cycles_delta));
+        self.view_range = ViewRange::Slice(DisplayPosition {
+            offset: current_position.offset + cycles_delta,
+            cycles_per_pixel: current_position.cycles_per_pixel,
+        });
     }
 
-    pub fn zoom_anchored(&mut self, multiplier: f64, anchor: f64) {
+    pub fn zoom_anchored(
+        &mut self,
+        multiplier: f64,
+        anchor: f64,
+        width: f64,
+        current_position: DisplayPosition,
+    ) {
         if multiplier == 1. {
             return;
         }
 
-        let (min, max) = self.range();
+        let current_width = width;
+        let new_width = width * multiplier;
 
-        let original_size = max - min;
-        let new_size = original_size * multiplier;
-        let original_anchor = (anchor * original_size) + min;
+        let delta = (current_width - new_width) * current_position.cycles_per_pixel;
 
-        let new_min = original_anchor - (anchor * new_size);
-        let new_max = original_anchor + ((1.0 - anchor) * new_size);
-
-        self.view_range = ViewRange::Slice((new_min, new_max));
+        self.view_range = ViewRange::Slice(DisplayPosition {
+            offset: current_position.offset + (anchor * delta),
+            cycles_per_pixel: current_position.cycles_per_pixel * multiplier,
+        });
     }
 
-    pub fn range(&self) -> (f64, f64) {
+    pub fn position(&self, range: f64) -> DisplayPosition {
         match self.view_range {
             ViewRange::Full => {
-                let (lhs, rhs) = self
+                let (min, max) = self
                     .timestamp_range
                     .values
                     .unwrap_or((0, self.initial_message.tsc_frequency));
 
-                (lhs as _, rhs as _)
-            }
-            ViewRange::Slice(values) => values,
-        }
-    }
-}
+                let offset = min as f64;
 
-fn combine(base: u64, signed: i64) -> u64 {
-    if signed > 0 {
-        base.saturating_add(signed as u64)
-    } else {
-        base.saturating_sub(-signed as u64)
+                let delta = max as f64 - min as f64;
+
+                let cycles_per_pixel = delta / range;
+
+                DisplayPosition {
+                    offset,
+                    cycles_per_pixel,
+                }
+            }
+            ViewRange::Slice(position) => position,
+        }
     }
 }

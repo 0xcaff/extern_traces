@@ -75,7 +75,7 @@ impl eframe::App for SpanViewer {
             ui.with_layout(Layout::left_to_right(Align::Min), |ui| {
                 ui.label(format!("spans: {}", view_state.total_spans()));
                 ui.label(format!("threads: {}", view_state.threads.len()));
-                ui.label(format!("range: {:?}", view_state.range()));
+                // todo: calculate range here
             });
         });
 
@@ -151,7 +151,8 @@ impl eframe::App for SpanViewer {
                         let (response, painter) =
                             ui.allocate_painter(ui.available_size(), egui::Sense::click_and_drag());
 
-                        let (low, hi) = view_state.range();
+                        let display_position = view_state.position(response.rect.width() as _);
+                        let (low, hi) = display_position.range(response.rect.width() as _);
                         let range = hi - low;
 
                         let cycles_per_pixel = (hi - low) / (response.rect.width() as f64);
@@ -262,7 +263,7 @@ impl eframe::App for SpanViewer {
                             let percentage = scroll_delta.x / response.rect.width();
                             let diff = -(percentage as f64 * range);
 
-                            view_state.translate_x(diff);
+                            view_state.translate_x(diff, display_position);
                         }
 
                         // Zooming
@@ -274,7 +275,12 @@ impl eframe::App for SpanViewer {
                             let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
                             let anchor_position = (hover_position.x / response.rect.width()) as f64;
 
-                            view_state.zoom_anchored(1. / zoom_delta, anchor_position);
+                            view_state.zoom_anchored(
+                                1. / zoom_delta,
+                                anchor_position,
+                                response.rect.width() as f64,
+                                display_position,
+                            );
                         }
                     });
             });
