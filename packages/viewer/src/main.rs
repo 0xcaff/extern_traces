@@ -4,7 +4,8 @@ mod view_state;
 use crate::proto::{InitialMessage, TraceEvent};
 use crate::view_state::{fold_spans, SelectedSpanMetadata, ViewStateContainer};
 use eframe::egui::{
-    vec2, Align, CentralPanel, Color32, Frame, Layout, Rounding, SidePanel, Stroke, TopBottomPanel,
+    vec2, Align, CentralPanel, Color32, Frame, Id, Layout, Rounding, SidePanel,
+    Stroke, TopBottomPanel,
 };
 use eframe::emath::Rect;
 use eframe::{egui, emath};
@@ -71,239 +72,269 @@ impl eframe::App for SpanViewer {
             return;
         };
 
-        TopBottomPanel::top("test").show(ctx, |ui| {
+        let panel = TopBottomPanel::top("test").show(ctx, |ui| {
             ui.with_layout(Layout::left_to_right(Align::Min), |ui| {
-                ui.label(format!("spans: {}", view_state.total_spans()));
-                ui.label(format!("threads: {}", view_state.threads.len()));
-                // todo: calculate range here
+                ui.label(" ");
             });
         });
 
-        CentralPanel::default()
+        if let Some((_thread, span)) = &view_state.selected_span_ref() {
+            SidePanel::right("side_panel").show(ctx, |ui| {
+                ui.with_layout(Layout::top_down(Align::Min), |ui| {
+                    ui.allocate_space(vec2(ui.available_width(), 0.));
+
+                    if let Some(symbol) = view_state
+                        .initial_message
+                        .symbols
+                        .get(span.label_id as usize)
+                    {
+                        let library_name = &view_state
+                            .initial_message
+                            .libraries
+                            .get(&(symbol.library_id as u16))
+                            .map(|it| it.name.as_str());
+
+                        let module_name = &view_state
+                            .initial_message
+                            .modules
+                            .get(&(symbol.module_id as u16))
+                            .map(|it| it.name.as_str());
+
+                        ui.horizontal(|ui| {
+                            ui.label("name");
+                            ui.label(
+                                (|| Some(((*library_name)?, (*module_name)?)))()
+                                    .and_then(|(library_name, module_name)| {
+                                        self.docs
+                                            .lookup(module_name, library_name, symbol.name.as_ref())
+                                            .and_then(|it| it.name.clone())
+                                    })
+                                    .unwrap_or_else(|| format!("nid: {}", symbol.name.as_str())),
+                            );
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.label("library");
+                            ui.label(library_name.unwrap_or("unknown"));
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.label("module");
+                            ui.label(module_name.unwrap_or("unknown"));
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.label("duration");
+                            let duration_cycles = span.end_time - span.start_time;
+                            let duration_seconds = duration_cycles as f64
+                                / view_state.initial_message.tsc_frequency as f64;
+                            ui.label(format_time(duration_seconds));
+                        });
+
+                        ui.horizontal(|ui| {
+                            ui.label("start");
+                            let duration_cycles =
+                                span.start_time - view_state.initial_message.anchor_timestamp;
+                            let duration_seconds = duration_cycles as f64
+                                / view_state.initial_message.tsc_frequency as f64;
+                            ui.label(format_time(duration_seconds));
+                        });
+                    } else {
+                        ui.label("unable to resolve symbol");
+                    }
+                });
+            });
+        }
+
+        let central_panel_response = CentralPanel::default()
             .frame(Frame {
                 fill: ctx.style().visuals.panel_fill,
                 ..Default::default()
             })
-            .show(ctx, |ui| {
-                if let Some((_thread, span)) = &view_state.selected_span_ref() {
-                    SidePanel::right("side_panel").show(ctx, |ui| {
-                        ui.with_layout(Layout::top_down(Align::Min), |ui| {
-                            ui.allocate_space(vec2(ui.available_width(), 0.));
+            .show(ctx, |ui| -> (f64, f64) {
+                let (response, painter) =
+                    ui.allocate_painter(ui.available_size(), egui::Sense::click_and_drag());
 
-                            if let Some(symbol) = view_state
-                                .initial_message
-                                .symbols
-                                .get(span.label_id as usize)
-                            {
-                                let library_name = &view_state
-                                    .initial_message
-                                    .libraries
-                                    .get(&(symbol.library_id as u16))
-                                    .map(|it| it.name.as_str());
+                let display_position = view_state.position(response.rect.width() as _);
+                let (low, hi) = display_position.range(response.rect.width() as _);
+                let range = hi - low;
 
-                                let module_name = &view_state
-                                    .initial_message
-                                    .modules
-                                    .get(&(symbol.module_id as u16))
-                                    .map(|it| it.name.as_str());
+                let cycles_per_pixel = (hi - low) / (response.rect.width() as f64);
 
-                                ui.horizontal(|ui| {
-                                    ui.label("name");
-                                    ui.label(
-                                        (|| Some(((*library_name)?, (*module_name)?)))()
-                                            .and_then(|(library_name, module_name)| {
-                                                self.docs
-                                                    .lookup(
-                                                        module_name,
-                                                        library_name,
-                                                        symbol.name.as_ref(),
-                                                    )
-                                                    .and_then(|it| it.name.clone())
-                                            })
-                                            .unwrap_or_else(|| {
-                                                format!("nid: {}", symbol.name.as_str())
-                                            }),
-                                    );
-                                });
+                let is_clicked = response.clicked();
 
-                                ui.horizontal(|ui| {
-                                    ui.label("library");
-                                    ui.label(library_name.unwrap_or("unknown"));
-                                });
+                let hover_position = response.hover_pos();
 
-                                ui.horizontal(|ui| {
-                                    ui.label("module");
-                                    ui.label(module_name.unwrap_or("unknown"));
-                                });
+                for (thread_idx, (thread_id, thread_state)) in view_state.threads.iter().enumerate()
+                {
+                    let same_thread_as_selected = view_state
+                        .selected_span
+                        .as_ref()
+                        .map_or(false, |it| it.thread_id == *thread_id);
 
-                                ui.horizontal(|ui| {
-                                    ui.label("duration");
-                                    let duration_cycles = span.end_time - span.start_time;
-                                    let duration_seconds = duration_cycles as f64
-                                        / view_state.initial_message.tsc_frequency as f64;
-                                    ui.label(format_time(duration_seconds));
-                                });
+                    let (visible_span_idx, visible_spans) = thread_state
+                        .spans
+                        .iter()
+                        .enumerate()
+                        .filter(|(_idx, it)| {
+                            it.end_time as f64 >= low && (it.start_time as f64) < hi
+                        })
+                        .unzip::<_, _, Vec<_>, Vec<_>>();
+
+                    let view_spans = fold_spans(&visible_spans, cycles_per_pixel as u64);
+                    for (start_idx, end_idx) in view_spans {
+                        let start_span = visible_spans[start_idx];
+                        let end_span = visible_spans[end_idx - 1];
+                        let folded = start_idx != end_idx - 1;
+
+                        let x_range = {
+                            let range = response.rect.x_range();
+                            (range.min as f64)..=(range.max as f64)
+                        };
+
+                        let span_min = emath::remap(
+                            start_span.start_time as f64,
+                            (low)..=(hi),
+                            x_range.clone(),
+                        );
+                        let span_max =
+                            emath::remap(end_span.end_time as f64, (low)..=(hi), x_range.clone());
+
+                        let rect = Rect {
+                            min: egui::pos2(
+                                span_min as f32,
+                                response.rect.min.y + thread_idx as f32 * 10.0f32,
+                            ),
+                            max: egui::pos2(
+                                span_max as f32,
+                                response.rect.min.y + thread_idx as f32 * 10.0f32 + 8.0f32,
+                            ),
+                        };
+
+                        let is_hovered = if let Some(hover_position) = hover_position {
+                            if rect.contains(hover_position) {
+                                true
                             } else {
-                                ui.label("unable to resolve symbol");
+                                false
                             }
-                        });
-                    });
-                }
+                        } else {
+                            false
+                        };
 
-                CentralPanel::default()
-                    .frame(Frame {
-                        fill: ctx.style().visuals.panel_fill,
-                        ..Default::default()
-                    })
-                    .show(ctx, |ui| {
-                        let (response, painter) =
-                            ui.allocate_painter(ui.available_size(), egui::Sense::click_and_drag());
-
-                        let display_position = view_state.position(response.rect.width() as _);
-                        let (low, hi) = display_position.range(response.rect.width() as _);
-                        let range = hi - low;
-
-                        let cycles_per_pixel = (hi - low) / (response.rect.width() as f64);
-
-                        let is_clicked = response.clicked();
-
-                        let hover_position = response.hover_pos();
-
-                        for (thread_idx, (thread_id, thread_state)) in
-                            view_state.threads.iter().enumerate()
-                        {
-                            let same_thread_as_selected = view_state
-                                .selected_span
-                                .as_ref()
-                                .map_or(false, |it| it.thread_id == *thread_id);
-
-                            let (visible_span_idx, visible_spans) = thread_state
-                                .spans
-                                .iter()
-                                .enumerate()
-                                .filter(|(_idx, it)| {
-                                    it.end_time as f64 >= low && (it.start_time as f64) < hi
-                                })
-                                .unzip::<_, _, Vec<_>, Vec<_>>();
-
-                            let view_spans = fold_spans(&visible_spans, cycles_per_pixel as u64);
-                            for (start_idx, end_idx) in view_spans {
-                                let start_span = visible_spans[start_idx];
-                                let end_span = visible_spans[end_idx - 1];
-                                let folded = start_idx != end_idx - 1;
-
-                                let x_range = {
-                                    let range = response.rect.x_range();
-                                    (range.min as f64)..=(range.max as f64)
-                                };
-
-                                let span_min = emath::remap(
-                                    start_span.start_time as f64,
-                                    (low)..=(hi),
-                                    x_range.clone(),
-                                );
-                                let span_max = emath::remap(
-                                    end_span.end_time as f64,
-                                    (low)..=(hi),
-                                    x_range.clone(),
-                                );
-
-                                let rect = Rect {
-                                    min: egui::pos2(
-                                        span_min as f32,
-                                        response.rect.min.y + thread_idx as f32 * 10.0f32,
-                                    ),
-                                    max: egui::pos2(
-                                        span_max as f32,
-                                        response.rect.min.y + thread_idx as f32 * 10.0f32 + 8.0f32,
-                                    ),
-                                };
-
-                                let is_hovered = if let Some(hover_position) = hover_position {
-                                    if rect.contains(hover_position) {
-                                        true
-                                    } else {
-                                        false
-                                    }
-                                } else {
-                                    false
-                                };
-
-                                if folded {
-                                    painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
-                                } else {
-                                    let is_selected = if same_thread_as_selected {
-                                        view_state.selected_span.as_ref().map_or(false, |it| {
-                                            it.span_idx == visible_span_idx[start_idx]
-                                        })
-                                    } else {
-                                        false
-                                    };
-
-                                    let is_same_type_as_selected = view_state
-                                        .selected_span_ref()
-                                        .map_or(false, |(_, span)| {
-                                            visible_spans[start_idx].label_id == span.label_id
-                                        });
-
-                                    if is_hovered && is_clicked {
-                                        let selected_span_metadata = SelectedSpanMetadata {
-                                            thread_id: *thread_id,
-                                            span_idx: visible_span_idx[start_idx],
-                                        };
-
-                                        view_state.selected_span.replace(selected_span_metadata);
-                                    };
-
-                                    painter.rect_filled(
-                                        rect,
-                                        Rounding::default(),
-                                        if is_selected {
-                                            Color32::BLUE
-                                        } else if is_same_type_as_selected {
-                                            Color32::LIGHT_BLUE
-                                        } else {
-                                            Color32::GREEN
-                                        },
-                                    );
-                                }
-
-                                if is_hovered {
-                                    painter.rect_stroke(
-                                        rect,
-                                        Rounding::default(),
-                                        Stroke::new(1.0f32, Color32::BLACK),
-                                    );
-                                }
-                            }
-                        }
-
-                        // Panning
-                        {
-                            let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
-                            let percentage = scroll_delta.x / response.rect.width();
-                            let diff = -(percentage as f64 * range);
-
-                            view_state.translate_x(diff, display_position);
-                        }
-
-                        // Zooming
-                        {
-                            let Some(hover_position) = hover_position else {
-                                return;
+                        if folded {
+                            painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
+                        } else {
+                            let is_selected = if same_thread_as_selected {
+                                view_state
+                                    .selected_span
+                                    .as_ref()
+                                    .map_or(false, |it| it.span_idx == visible_span_idx[start_idx])
+                            } else {
+                                false
                             };
 
-                            let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
-                            let anchor_position = (hover_position.x / response.rect.width()) as f64;
+                            let is_same_type_as_selected =
+                                view_state.selected_span_ref().map_or(false, |(_, span)| {
+                                    visible_spans[start_idx].label_id == span.label_id
+                                });
 
-                            view_state.zoom_anchored(
-                                1. / zoom_delta,
-                                anchor_position,
-                                response.rect.width() as f64,
-                                display_position,
+                            if is_hovered && is_clicked {
+                                let selected_span_metadata = SelectedSpanMetadata {
+                                    thread_id: *thread_id,
+                                    span_idx: visible_span_idx[start_idx],
+                                };
+
+                                view_state.selected_span.replace(selected_span_metadata);
+                            };
+
+                            painter.rect_filled(
+                                rect,
+                                Rounding::default(),
+                                if is_selected {
+                                    Color32::BLUE
+                                } else if is_same_type_as_selected {
+                                    Color32::LIGHT_BLUE
+                                } else {
+                                    Color32::GREEN
+                                },
                             );
                         }
-                    });
+
+                        if is_hovered {
+                            painter.rect_stroke(
+                                rect,
+                                Rounding::default(),
+                                Stroke::new(1.0f32, Color32::BLACK),
+                            );
+                        }
+                    }
+                }
+
+                // Panning
+                {
+                    let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
+                    let percentage = scroll_delta.x / response.rect.width();
+                    let diff = -(percentage as f64 * range);
+
+                    view_state.translate_x(diff, display_position);
+                }
+
+                // Zooming
+                (|| -> Option<()> {
+                    let hover_position = hover_position?;
+                    let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
+                    let anchor_position = (hover_position.x / response.rect.width()) as f64;
+
+                    view_state.zoom_anchored(
+                        1. / zoom_delta,
+                        anchor_position,
+                        response.rect.width() as f64,
+                        display_position,
+                    );
+
+                    Some(())
+                })();
+
+                (low, hi)
+            });
+
+        egui::Area::new(Id::new("summary_toolbar_contents"))
+            .fixed_pos(panel.response.rect.min)
+            .show(ctx, |ui| {
+                ui.set_max_size(panel.response.rect.size());
+
+                ui.horizontal_centered(|ui| {
+                    ui.add_space(ui.spacing().menu_spacing);
+
+                    ui.label(format!("spans: {}", view_state.total_spans()));
+                    ui.label(format!("threads: {}", view_state.threads.len()));
+
+                    {
+                        let range = central_panel_response.inner;
+                        let (min, max) = range;
+                        let duration =
+                            (max - min) / view_state.initial_message.tsc_frequency as f64;
+                        ui.label(format!("visible: {}", format_time(duration)));
+                    }
+
+                    {
+                        let range = central_panel_response.inner;
+                        let (min, _max) = range;
+                        let duration = (min - view_state.initial_message.anchor_timestamp as f64)
+                            / view_state.initial_message.tsc_frequency as f64;
+                        ui.label(format!("start: {}", format_time(duration)));
+                    }
+
+                    {
+                        let range = central_panel_response.inner;
+                        let (_min, max) = range;
+                        let duration = (max - view_state.initial_message.anchor_timestamp as f64)
+                            / view_state.initial_message.tsc_frequency as f64;
+                        ui.label(format!("end: {}", format_time(duration)));
+                    }
+                });
+
+                ui.add_space(ui.spacing().menu_spacing);
             });
     }
 }
