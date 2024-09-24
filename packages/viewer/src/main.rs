@@ -340,18 +340,22 @@ impl eframe::App for SpanViewer {
 }
 
 fn format_time(seconds: f64) -> String {
-    if seconds < 1e-6 {
-        format!("{:.2} ns", seconds * 1e9)
-    } else if seconds < 1e-3 {
-        format!("{:.2} µs", seconds * 1e6)
-    } else if seconds < 1.0 {
-        format!("{:.2} ms", seconds * 1e3)
-    } else if seconds < 60.0 {
-        format!("{:.2} s", seconds)
+    let abs_seconds = seconds.abs();
+    let sign = if seconds < 0.0 { "-" } else { "" };
+
+    let (value, unit) = if abs_seconds < 1e-6 {
+        (abs_seconds * 1e9, "ns")
+    } else if abs_seconds < 1e-3 {
+        (abs_seconds * 1e6, "µs")
+    } else if abs_seconds < 1.0 {
+        (abs_seconds * 1e3, "ms")
+    } else if abs_seconds < 60.0 {
+        (abs_seconds, "s")
     } else {
-        let minutes = seconds / 60.0;
-        format!("{:.2} m", minutes)
-    }
+        (abs_seconds / 60.0, "m")
+    };
+
+    format!("{}{:.2} {}", sign, value, unit)
 }
 
 fn run_server(sender: Sender<TraceEvent>) -> io::Result<()> {
@@ -393,6 +397,6 @@ fn main() -> Result<(), eframe::Error> {
     eframe::run_native(
         "extern_traces",
         options,
-        Box::new(|cc| Box::new(SpanViewer::new(cc))),
+        Box::new(|cc| Ok(Box::new(SpanViewer::new(cc)))),
     )
 }
