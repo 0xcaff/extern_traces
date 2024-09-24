@@ -120,15 +120,7 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
             Pane::CurrentlySelectedSpanDetail(pane) => pane.pane_ui(&self.args, ui),
         }
 
-        let dragged = ui
-            .allocate_rect(ui.max_rect(), egui::Sense::click_and_drag())
-            .on_hover_cursor(egui::CursorIcon::Grab)
-            .dragged();
-        if dragged {
-            egui_tiles::UiResponse::DragStarted
-        } else {
-            egui_tiles::UiResponse::None
-        }
+        egui_tiles::UiResponse::None
     }
 
     fn tab_title_for_pane(&mut self, pane: &Pane) -> egui::WidgetText {
