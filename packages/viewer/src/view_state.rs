@@ -60,8 +60,13 @@ pub struct SelectedSpanMetadata {
     pub span_idx: usize,
 }
 
+pub enum ViewStateContainer {
+    Empty,
+    Initialized(ViewState),
+}
+
 pub struct ViewState {
-    pub initial_message: Option<InitialMessage>,
+    pub initial_message: InitialMessage,
     pub threads: BTreeMap<u64, ThreadState>,
     pub timestamp_range: TimestampRange,
     pub view_range: ViewRange,
@@ -69,16 +74,20 @@ pub struct ViewState {
     pub is_live: bool,
 }
 
-impl ViewState {
-    pub fn new() -> ViewState {
-        ViewState {
-            initial_message: None,
+impl ViewStateContainer {
+    pub fn new() -> ViewStateContainer {
+        ViewStateContainer::Empty
+    }
+
+    pub fn initialize(&mut self, initial_message: InitialMessage) {
+        *self = ViewStateContainer::Initialized(ViewState {
+            initial_message,
             threads: BTreeMap::new(),
             timestamp_range: TimestampRange { values: None },
             view_range: ViewRange::Full,
             selected_span: None,
             is_live: false,
-        }
+        })
     }
 }
 
@@ -110,16 +119,6 @@ impl ViewState {
         let span = &thread.spans[selected_span.span_idx];
 
         Some((thread, span))
-    }
-
-    pub fn update_trace(&mut self, event: TraceEvent) {
-        match event {
-            TraceEvent::Start(initial_message) => {
-                self.initial_message.replace(initial_message);
-            }
-            TraceEvent::Span(span) => self.update_span(span),
-            _ => {}
-        }
     }
 
     pub fn update_span(&mut self, event: SpanEvent) {
