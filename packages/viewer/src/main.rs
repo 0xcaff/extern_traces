@@ -135,6 +135,14 @@ impl eframe::App for SpanViewer {
                                     ui.label("module");
                                     ui.label(module_name.unwrap_or("unknown"));
                                 });
+
+                                ui.horizontal(|ui| {
+                                    ui.label("duration");
+                                    let duration_cycles = span.end_time - span.start_time;
+                                    let duration_seconds = duration_cycles as f64
+                                        / view_state.initial_message.tsc_frequency as f64;
+                                    ui.label(format_time(duration_seconds));
+                                });
                             } else {
                                 ui.label("unable to resolve symbol");
                             }
@@ -284,6 +292,21 @@ impl eframe::App for SpanViewer {
                         }
                     });
             });
+    }
+}
+
+fn format_time(seconds: f64) -> String {
+    if seconds < 1e-6 {
+        format!("{:.2} ns", seconds * 1e9)
+    } else if seconds < 1e-3 {
+        format!("{:.2} µs", seconds * 1e6)
+    } else if seconds < 1.0 {
+        format!("{:.2} ms", seconds * 1e3)
+    } else if seconds < 60.0 {
+        format!("{:.2} s", seconds)
+    } else {
+        let minutes = seconds / 60.0;
+        format!("{:.2} m", minutes)
     }
 }
 
