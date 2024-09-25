@@ -6,13 +6,14 @@ use crate::proto::{InitialMessage, LibraryInfo, ModuleInfo, SymbolInfo, TraceEve
 use crate::view_state::{SelectedSpanMetadata, ThreadSpan, ViewState, ViewStateContainer};
 use eframe::egui::scroll_area::ScrollBarVisibility;
 use eframe::egui::{
-    pos2, vec2, Align, Align2, CentralPanel, Color32, Context, FontId, Frame, Id, Layout, Painter,
-    Rounding, ScrollArea, SidePanel, Stroke, TopBottomPanel, Ui, Vec2b,
+    pos2, vec2, Align, Align2, CentralPanel, Color32, Context, FontId, Frame, Id, Layout, Margin,
+    Painter, Response, Rounding, ScrollArea, Sense, SidePanel, Stroke, TextStyle, TopBottomPanel,
+    Ui, Vec2b,
 };
 use eframe::emath::Rect;
 use eframe::epaint::FontFamily;
 use eframe::{egui, emath};
-use egui_tiles::{Tabs, Tile, Tree};
+use egui_tiles::{SimplificationOptions, TabState, Tabs, Tile, TileId, Tiles, Tree};
 use ps4libdoc::{LoadedDocumentation, SymbolDocumentation};
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -257,15 +258,19 @@ impl SymbolDetailPane {
 impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
     fn pane_ui(
         &mut self,
-        ui: &mut egui::Ui,
-        _tile_id: egui_tiles::TileId,
+        ui: &mut Ui,
+        _tile_id: TileId,
         pane: &mut Pane,
     ) -> egui_tiles::UiResponse {
-        self.pane_response = match pane {
-            Pane::CurrentlySelectedSpanDetail(pane) => pane.pane_ui(&mut self.args, ui),
-            Pane::SearchPane(pane) => pane.pane_ui(&mut self.args, ui),
-            Pane::CurrentSymbolDetailsPane(pane) => pane.pane_ui(&mut self.args, ui),
-        };
+        let frame = Frame::side_top_panel(ui.style());
+
+        frame.show(ui, |ui| {
+            self.pane_response = match pane {
+                Pane::CurrentlySelectedSpanDetail(pane) => pane.pane_ui(&mut self.args, ui),
+                Pane::SearchPane(pane) => pane.pane_ui(&mut self.args, ui),
+                Pane::CurrentSymbolDetailsPane(pane) => pane.pane_ui(&mut self.args, ui),
+            };
+        });
 
         egui_tiles::UiResponse::None
     }
@@ -275,6 +280,58 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
             Pane::CurrentlySelectedSpanDetail(pane) => pane.title(),
             Pane::SearchPane(pane) => pane.title(),
             Pane::CurrentSymbolDetailsPane(pane) => pane.title(),
+        }
+    }
+
+    fn tab_ui(
+        &mut self,
+        tiles: &mut Tiles<Pane>,
+        ui: &mut Ui,
+        id: Id,
+        tile_id: TileId,
+        state: &TabState,
+    ) -> Response {
+        let text = self.tab_title_for_tile(tiles, tile_id);
+
+        let font_id = TextStyle::Button.resolve(ui.style());
+        let galley = text.into_galley(ui, Some(egui::TextWrapMode::Extend), f32::INFINITY, font_id);
+
+        let x_margin = 8.;
+
+        let button_width = galley.size().x + 2. * x_margin;
+        let (_, tab_rect) = ui.allocate_space(vec2(button_width, ui.available_height()));
+
+        let tab_response = ui
+            .interact(tab_rect, id, Sense::click_and_drag())
+            .on_hover_cursor(egui::CursorIcon::Grab);
+
+        // Show a gap when dragged
+        if ui.is_rect_visible(tab_rect) && !state.is_being_dragged {
+            let bg_color = if state.active {
+                ui.visuals().panel_fill
+            } else {
+                Color32::TRANSPARENT
+            };
+
+            ui.painter().rect(tab_rect, 0.0, bg_color, Stroke::NONE);
+
+            let text_color = self.tab_text_color(ui.visuals(), tiles, tile_id, state);
+            let text_position = Align2::LEFT_CENTER
+                .align_size_within_rect(galley.size(), tab_rect.shrink(x_margin))
+                .min;
+
+            ui.painter().galley(text_position, galley, text_color);
+        }
+
+        tab_response
+    }
+
+    fn simplification_options(&self) -> SimplificationOptions {
+        SimplificationOptions {
+            all_panes_must_have_tabs: true,
+            prune_empty_containers: true,
+            prune_empty_tabs: true,
+            ..Default::default()
         }
     }
 }
@@ -366,44 +423,46 @@ impl eframe::App for SpanViewer {
             });
         });
 
-        SidePanel::right("side_panel").show(ctx, |ui| {
-            let mut behavior = TreeBehavior {
-                args: TreeBehaviorArgs {
-                    last_width: self.last_width,
-                    view_state,
-                    docs: &self.docs,
-                },
-                pane_response: None,
-            };
+        SidePanel::right("side_panel")
+            .frame(Frame::side_top_panel(&ctx.style()).inner_margin(Margin::ZERO))
+            .show(ctx, |ui| {
+                let mut behavior = TreeBehavior {
+                    args: TreeBehaviorArgs {
+                        last_width: self.last_width,
+                        view_state,
+                        docs: &self.docs,
+                    },
+                    pane_response: None,
+                };
 
-            self.tree.ui(&mut behavior, ui);
+                self.tree.ui(&mut behavior, ui);
 
-            if let Some(pane_response) = behavior.pane_response {
-                match pane_response {
-                    PaneResponse::OpenPane(pane) => {
-                        let pane_id = self.tree.tiles.insert_pane(pane);
-                        let root_id = self.tree.root.unwrap();
-                        let container = self.tree.tiles.get_container(root_id).unwrap();
+                if let Some(pane_response) = behavior.pane_response {
+                    match pane_response {
+                        PaneResponse::OpenPane(pane) => {
+                            let pane_id = self.tree.tiles.insert_pane(pane);
+                            let root_id = self.tree.root.unwrap();
+                            let container = self.tree.tiles.get_container(root_id).unwrap();
 
-                        self.tree.move_tile_to_container(
-                            pane_id,
-                            root_id,
-                            container.num_children(),
-                            false,
-                        );
-                    }
-                    PaneResponse::FocusPane(pane) => {
-                        self.tree.make_active(|it, tile| {
-                            let Tile::Pane(needle_pane) = tile else {
-                                return false;
-                            };
+                            self.tree.move_tile_to_container(
+                                pane_id,
+                                root_id,
+                                container.num_children(),
+                                false,
+                            );
+                        }
+                        PaneResponse::FocusPane(pane) => {
+                            self.tree.make_active(|it, tile| {
+                                let Tile::Pane(needle_pane) = tile else {
+                                    return false;
+                                };
 
-                            needle_pane == &pane
-                        });
+                                needle_pane == &pane
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
 
         let central_panel_response = CentralPanel::default()
             .frame(Frame {
