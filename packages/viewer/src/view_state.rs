@@ -86,6 +86,7 @@ impl FoldSpansState {
     }
 }
 
+#[derive(Clone)]
 pub struct SelectedSpanMetadata {
     pub thread_id: u64,
     pub span_idx: usize,

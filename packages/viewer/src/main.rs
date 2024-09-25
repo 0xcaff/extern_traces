@@ -278,17 +278,26 @@ impl SymbolDetailPane {
             ui,
         );
 
+        let mut pane_response = None;
+
         let text_style = TextStyle::Body;
         let row_height = ui.text_style_height(&text_style);
         ScrollArea::vertical().show_rows(ui, row_height, matching.len(), |ui, row_range| {
             ui.allocate_space(vec2(ui.available_width(), 0.));
 
             for idx in row_range {
-                ui.label(format!("{:?}", idx));
+                let link_response = ui.link(format!("{:?}", idx));
+
+                if link_response.clicked() {
+                    args.view_state.selected_span.replace(matching[idx].clone());
+
+                    pane_response
+                        .replace(PaneResponse::FocusPane(PaneKey::CurrentlySelectedSpanDetail));
+                }
             }
         });
 
-        None
+        pane_response
     }
 }
 
