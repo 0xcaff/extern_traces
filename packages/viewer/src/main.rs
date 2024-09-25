@@ -46,11 +46,7 @@ impl SpanDetailPane {
         "span detail".to_string().into()
     }
 
-    pub fn pane_ui(
-        &mut self,
-        args: &mut TreeBehaviorArgs,
-        ui: &mut Ui,
-    ) -> Option<PaneResponse> {
+    pub fn pane_ui(&mut self, args: &mut TreeBehaviorArgs, ui: &mut Ui) -> Option<PaneResponse> {
         let view_state = &args.view_state;
 
         let (_thread, span) = &view_state.selected_span_ref()?;
