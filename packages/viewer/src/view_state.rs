@@ -43,7 +43,7 @@ impl FoldSpansState {
         &mut self,
         range: Range<usize>,
         thread_spans: &[ThreadSpan],
-        cycles_per_pixel: u64,
+        min_cycles: u64,
     ) -> &[(usize, usize)] {
         {
             if self.last_calculated_value.is_some() {
@@ -69,7 +69,7 @@ impl FoldSpansState {
                 }
 
                 let next_span = &thread_spans[next_idx];
-                if (next_span.end_time - span.start_time) >= cycles_per_pixel {
+                if (next_span.end_time - span.start_time) >= min_cycles {
                     break;
                 }
 
@@ -122,14 +122,6 @@ impl ViewStateContainer {
 }
 
 impl ViewState {
-    pub fn selected_span_ref(&self) -> Option<(&ThreadState, &ThreadSpan)> {
-        let selected_span = self.selected_span.as_ref()?;
-        let thread = self.threads.get(&selected_span.thread_id)?;
-        let span = &thread.spans[selected_span.span_idx];
-
-        Some((thread, span))
-    }
-
     pub fn update_span(&mut self, event: SpanEvent) {
         match event {
             SpanEvent::Start(start) => {

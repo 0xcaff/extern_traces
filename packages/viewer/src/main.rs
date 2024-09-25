@@ -3,10 +3,10 @@ mod timeline_position;
 mod view_state;
 
 use crate::proto::{InitialMessage, SymbolInfo, TraceEvent};
-use crate::view_state::{FoldSpansState, SelectedSpanMetadata, ViewState, ViewStateContainer};
+use crate::view_state::{SelectedSpanMetadata, ViewState, ViewStateContainer};
 use eframe::egui::{
     vec2, Align, CentralPanel, Color32, Frame, Id, Layout, Rounding, ScrollArea, SidePanel, Stroke,
-    TopBottomPanel, Ui, Widget,
+    TopBottomPanel, Ui,
 };
 use eframe::emath::Rect;
 use eframe::{egui, emath};
@@ -284,7 +284,6 @@ struct SpanViewer {
     receiver: Receiver<TraceEvent>,
     docs: LoadedDocumentation,
     tree: Tree<Pane>,
-    start_time: Instant,
 }
 
 impl SpanViewer {
@@ -304,7 +303,6 @@ impl SpanViewer {
             state: ViewStateContainer::new(),
             docs,
             receiver,
-            start_time: Instant::now(),
             tree: {
                 let mut tiles = egui_tiles::Tiles::default();
 
@@ -447,7 +445,7 @@ impl eframe::App for SpanViewer {
                     let view_spans = thread_state.folded_spans_state.fold(
                         visible_range,
                         &thread_state.spans,
-                        cycles_per_pixel as _,
+                        cycles_per_pixel as u64 * 4,
                     );
 
                     for (start_idx, end_idx) in view_spans {
