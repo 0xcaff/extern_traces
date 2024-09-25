@@ -350,8 +350,11 @@ impl SpanViewer {
 }
 
 impl eframe::App for SpanViewer {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+    fn update(&mut self, ctx: &Context, _frame: &mut eframe::Frame) {
         self.process_events();
+
+        // todo: update this carefully
+        ctx.request_repaint();
 
         let ViewStateContainer::Initialized(view_state) = &mut self.state else {
             return;
@@ -407,7 +410,7 @@ impl eframe::App for SpanViewer {
                 fill: ctx.style().visuals.panel_fill,
                 ..Default::default()
             })
-            .show(ctx, |ui| -> (f64, f64) {
+            .show(ctx, |ui| {
                 render_central_panel_contents(ui, ctx, view_state, &mut self.last_width, &self.docs)
             });
 
@@ -419,12 +422,22 @@ impl eframe::App for SpanViewer {
                 ui.horizontal_centered(|ui| {
                     ui.add_space(ui.spacing().menu_spacing);
 
-                    ui.label(format!("spans: {}", view_state.total_spans()));
+                    ui.label(format!(
+                        "spans: {}",
+                        human_readable_size(view_state.total_spans())
+                    ));
+
+                    {
+                        let range = central_panel_response.inner;
+                        let (_, _, spans) = range;
+                        ui.label(format!("visible spans: {}", human_readable_size(spans)));
+                    }
+
                     ui.label(format!("threads: {}", view_state.threads.len()));
 
                     {
                         let range = central_panel_response.inner;
-                        let (min, max) = range;
+                        let (min, max, _) = range;
                         let duration =
                             (max - min) / view_state.initial_message.tsc_frequency as f64;
                         ui.label(format!("visible: {}", format_time(duration)));
@@ -432,7 +445,7 @@ impl eframe::App for SpanViewer {
 
                     {
                         let range = central_panel_response.inner;
-                        let (min, _max) = range;
+                        let (min, _max, _) = range;
                         let duration = (min - view_state.initial_message.anchor_timestamp as f64)
                             / view_state.initial_message.tsc_frequency as f64;
                         ui.label(format!("start: {}", format_time(duration)));
@@ -440,7 +453,7 @@ impl eframe::App for SpanViewer {
 
                     {
                         let range = central_panel_response.inner;
-                        let (_min, max) = range;
+                        let (_min, max, _) = range;
                         let duration = (max - view_state.initial_message.anchor_timestamp as f64)
                             / view_state.initial_message.tsc_frequency as f64;
                         ui.label(format!("end: {}", format_time(duration)));
@@ -452,13 +465,37 @@ impl eframe::App for SpanViewer {
     }
 }
 
+fn human_readable_size(value: usize) -> String {
+    let suffixes = ["", "k", "m", "b", "t"]; // k = thousand, m = million, b = billion, t = trillion
+    let mut divisor = 1;
+    let mut suffix_index = 0;
+
+    while value / divisor >= 1000 && suffix_index < suffixes.len() - 1 {
+        divisor *= 1000;
+        suffix_index += 1;
+    }
+
+    let whole_part = value / divisor;
+    let remainder = value % divisor;
+
+    if remainder == 0 {
+        format!("{}{}", whole_part, suffixes[suffix_index])
+    } else {
+        let decimal_part = remainder * 100 / divisor;
+        format!(
+            "{}.{:02}{}",
+            whole_part, decimal_part, suffixes[suffix_index]
+        )
+    }
+}
+
 fn render_central_panel_contents(
     ui: &mut Ui,
     ctx: &Context,
     view_state: &mut ViewState,
     last_width: &mut Option<f32>,
     docs: &LoadedDocumentation,
-) -> (f64, f64) {
+) -> (f64, f64, usize) {
     let available_width = ui.available_width();
     last_width.replace(available_width);
 
@@ -487,6 +524,8 @@ fn render_central_panel_contents(
 
             let hover_position = response.hover_pos();
 
+            let mut total_visible = 0;
+
             for (thread_idx, (thread_id, thread_state)) in view_state.threads.iter_mut().enumerate()
             {
                 let same_thread_as_selected = view_state
@@ -502,6 +541,8 @@ fn render_central_panel_contents(
 
                     i..j
                 };
+
+                total_visible += visible_range.len();
 
                 let view_spans = thread_state.folded_spans_state.fold(
                     visible_range,
@@ -635,7 +676,7 @@ fn render_central_panel_contents(
                 Some(())
             })();
 
-            (low, hi)
+            (low, hi, total_visible)
         });
 
     response.inner
