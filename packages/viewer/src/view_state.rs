@@ -23,6 +23,7 @@ impl ThreadSpan {
 pub struct ThreadState {
     pub spans: Vec<ThreadSpan>,
     pub currently_started: Option<SpanStart>,
+    pub folded_spans_state: FoldSpansState,
 }
 
 pub struct FoldSpansState {
@@ -44,6 +45,17 @@ impl FoldSpansState {
         thread_spans: &[ThreadSpan],
         cycles_per_pixel: u64,
     ) -> &[(usize, usize)] {
+        {
+            if self.last_calculated_value.is_some() {
+                let (last_range, _value) = self.last_calculated_value.as_ref().unwrap();
+
+                if last_range == &range {
+                    let (_last_range, value) = self.last_calculated_value.as_ref().unwrap();
+                    return value;
+                }
+            }
+        }
+
         let mut spans = Vec::new();
 
         let mut idx = range.start;
@@ -54,14 +66,14 @@ impl FoldSpansState {
             loop {
                 if next_idx >= range.end {
                     break;
-                };
+                }
 
                 let next_span = &thread_spans[next_idx];
                 if (next_span.end_time - span.start_time) >= cycles_per_pixel {
                     break;
                 }
 
-                next_idx = next_idx + 1;
+                next_idx += 1;
             }
 
             spans.push((idx, next_idx));
@@ -70,7 +82,7 @@ impl FoldSpansState {
 
         self.last_calculated_value = Some((range, spans));
 
-        (&self.last_calculated_value).as_ref().unwrap().1.as_slice()
+        self.last_calculated_value.as_ref().unwrap().1.as_slice()
     }
 }
 
@@ -129,6 +141,7 @@ impl ViewState {
                     .or_insert_with(|| ThreadState {
                         spans: Vec::new(),
                         currently_started: None,
+                        folded_spans_state: FoldSpansState::new(),
                     });
 
                 if let Some(..) = thread.currently_started.replace(start) {

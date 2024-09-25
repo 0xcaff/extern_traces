@@ -52,8 +52,9 @@ impl SpanDetailPane {
         ui.with_layout(Layout::top_down(Align::Min), |ui| -> Option<()> {
             let view_state = &mut args.view_state;
 
-            let (_thread, span) = &view_state.selected_span_ref()?;
-            let span = (*span).clone();
+            let selected_span = view_state.selected_span.as_ref()?;
+            let thread = view_state.threads.get(&selected_span.thread_id)?;
+            let span = &thread.spans[selected_span.span_idx];
 
             ui.allocate_space(vec2(ui.available_width(), 0.));
 
@@ -426,7 +427,8 @@ impl eframe::App for SpanViewer {
 
                 let hover_position = response.hover_pos();
 
-                for (thread_idx, (thread_id, thread_state)) in view_state.threads.iter().enumerate()
+                for (thread_idx, (thread_id, thread_state)) in
+                    view_state.threads.iter_mut().enumerate()
                 {
                     let same_thread_as_selected = view_state
                         .selected_span
@@ -442,9 +444,7 @@ impl eframe::App for SpanViewer {
                         i..j
                     };
 
-                    let mut fold_spans_state = FoldSpansState::new();
-
-                    let view_spans = fold_spans_state.fold(
+                    let view_spans = thread_state.folded_spans_state.fold(
                         visible_range,
                         &thread_state.spans,
                         cycles_per_pixel as _,
@@ -502,8 +502,8 @@ impl eframe::App for SpanViewer {
                             };
 
                             let is_same_type_as_selected =
-                                view_state.selected_span_ref().map_or(false, |(_, span)| {
-                                    thread_state.spans[*start_idx].label_id == span.label_id
+                                view_state.current_symbol_detail.map_or(false, |it| {
+                                    it == (thread_state.spans[*start_idx].label_id as usize)
                                 });
 
                             if is_hovered && is_clicked {
@@ -513,6 +513,9 @@ impl eframe::App for SpanViewer {
                                 };
 
                                 view_state.selected_span.replace(selected_span_metadata);
+                                view_state
+                                    .current_symbol_detail
+                                    .replace(thread_state.spans[*start_idx].label_id as _);
                             };
 
                             painter.rect_filled(
