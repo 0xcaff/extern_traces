@@ -1,5 +1,6 @@
 use crate::proto::InitialMessage;
 use std::time::SystemTime;
+use crate::view_state::ThreadSpan;
 
 pub struct TimelinePositionState {
     tsc_frequency: u64,
@@ -58,6 +59,15 @@ impl TimelinePositionState {
         });
     }
 
+    pub fn pan_to(&mut self, thread_span: &ThreadSpan, width: f64) {
+        self.view_range = ViewRange::Slice(
+            DisplayPosition {
+                offset: thread_span.start_time as f64,
+                cycles_per_pixel: (thread_span.end_time - thread_span.start_time) as f64 / width,
+            }
+        )
+    }
+
     pub fn position(&self, range: f64) -> DisplayPosition {
         if let ViewRange::Slice(position) = self.view_range {
             return position;
@@ -68,7 +78,7 @@ impl TimelinePositionState {
         let offset = min as f64;
         let max = if self.is_live {
             let duration = self.anchor_time.elapsed().ok().unwrap();
-            duration.as_secs_f64() * self.tsc_frequency as f64
+            duration.as_secs_f64() * self.tsc_frequency as f64 + self.anchor_timestamp as f64
         } else {
             max as f64
         };

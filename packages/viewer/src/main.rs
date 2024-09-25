@@ -20,6 +20,7 @@ use std::{io, thread};
 struct TreeBehaviorArgs<'a> {
     view_state: &'a mut ViewState,
     docs: &'a LoadedDocumentation,
+    last_width: Option<f32>,
 }
 
 struct TreeBehavior<'a> {
@@ -48,12 +49,12 @@ impl SpanDetailPane {
     }
 
     pub fn pane_ui(&mut self, args: &mut TreeBehaviorArgs, ui: &mut Ui) -> Option<PaneResponse> {
-        let view_state = &args.view_state;
+        ui.with_layout(Layout::top_down(Align::Min), |ui| -> Option<()> {
+            let view_state = &mut args.view_state;
 
-        let (_thread, span) = &view_state.selected_span_ref()?;
-        let span = (*span).clone();
+            let (_thread, span) = &view_state.selected_span_ref()?;
+            let span = (*span).clone();
 
-        ui.with_layout(Layout::top_down(Align::Min), |ui| {
             ui.allocate_space(vec2(ui.available_width(), 0.));
 
             let Some(symbol) = view_state
@@ -63,10 +64,10 @@ impl SpanDetailPane {
             else {
                 ui.label("unable to resolve symbol");
 
-                return;
+                return None;
             };
 
-            render_symbol_info(args, symbol, ui);
+            render_symbol_info(&view_state.initial_message, args.docs, symbol, ui);
 
             ui.horizontal(|ui| {
                 ui.label("duration");
@@ -86,25 +87,25 @@ impl SpanDetailPane {
 
             let button_response = ui.button("zoom");
             if button_response.clicked() {
-                // args.view_state.pan_to(&span);
+                if let Some(last_width) = args.last_width {
+                    view_state.timeline_position_state.pan_to(&span, last_width as _);
+                }
             }
+
+            Some(())
         });
 
         None
     }
 }
 
-fn render_symbol_info(args: &TreeBehaviorArgs, symbol: &SymbolInfo, ui: &mut Ui) {
+fn render_symbol_info(args: &InitialMessage, docs: &LoadedDocumentation, symbol: &SymbolInfo, ui: &mut Ui) {
     let library_name = &args
-        .view_state
-        .initial_message
         .libraries
         .get(&(symbol.library_id as u16))
         .map(|it| it.name.as_str());
 
     let module_name = &args
-        .view_state
-        .initial_message
         .modules
         .get(&(symbol.module_id as u16))
         .map(|it| it.name.as_str());
@@ -114,7 +115,7 @@ fn render_symbol_info(args: &TreeBehaviorArgs, symbol: &SymbolInfo, ui: &mut Ui)
         ui.label(
             (|| Some(((*library_name)?, (*module_name)?)))()
                 .and_then(|(library_name, module_name)| {
-                    args.docs
+                    docs
                         .lookup(module_name, library_name, symbol.name.as_ref())
                         .and_then(|it| it.name.clone())
                 })
@@ -221,7 +222,8 @@ impl SymbolDetailPane {
 
             ScrollArea::vertical().show(ui, |ui| {
                 render_symbol_info(
-                    args,
+                    &args.view_state.initial_message,
+                    args.docs,
                     &args.view_state.initial_message.symbols[symbol_idx],
                     ui,
                 );
@@ -270,6 +272,7 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
 }
 
 struct SpanViewer {
+    last_width: Option<f32>,
     state: ViewStateContainer,
     receiver: Receiver<TraceEvent>,
     docs: LoadedDocumentation,
@@ -290,6 +293,7 @@ impl SpanViewer {
         });
 
         Self {
+            last_width: None,
             state: ViewStateContainer::new(),
             docs,
             receiver,
@@ -356,6 +360,7 @@ impl eframe::App for SpanViewer {
         SidePanel::right("side_panel").show(ctx, |ui| {
             let mut behavior = TreeBehavior {
                 args: TreeBehaviorArgs {
+                    last_width: self.last_width,
                     view_state,
                     docs: &self.docs,
                 },
@@ -399,6 +404,8 @@ impl eframe::App for SpanViewer {
             .show(ctx, |ui| -> (f64, f64) {
                 let (response, painter) =
                     ui.allocate_painter(ui.available_size(), egui::Sense::click_and_drag());
+
+                self.last_width.replace(ui.available_width());
 
                 let display_position = view_state.timeline_position_state.position(response.rect.width() as _);
                 let (low, hi) = display_position.range(response.rect.width() as _);

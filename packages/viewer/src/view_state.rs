@@ -66,7 +66,6 @@ pub struct ViewState {
     pub initial_message: InitialMessage,
     pub threads: BTreeMap<u64, ThreadState>,
     pub selected_span: Option<SelectedSpanMetadata>,
-    pub is_live: bool,
     pub current_symbol_detail: Option<usize>,
 
     pub timeline_position_state: TimelinePositionState,
@@ -83,7 +82,6 @@ impl ViewStateContainer {
             initial_message,
             threads: BTreeMap::new(),
             selected_span: None,
-            is_live: false,
             current_symbol_detail: None,
         })
     }
