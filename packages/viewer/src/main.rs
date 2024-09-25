@@ -14,7 +14,6 @@ use egui_tiles::{Tabs, Tile, Tree};
 use ps4libdoc::LoadedDocumentation;
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
-use std::time::Instant;
 use std::{io, thread};
 
 struct TreeBehaviorArgs<'a> {
@@ -419,8 +418,6 @@ impl eframe::App for SpanViewer {
                 let (low, hi) = display_position.range(response.rect.width() as _);
                 let range = hi - low;
 
-                let cycles_per_pixel = (hi - low) / (response.rect.width() as f64);
-
                 let is_clicked = response.clicked();
 
                 let hover_position = response.hover_pos();
@@ -445,7 +442,7 @@ impl eframe::App for SpanViewer {
                     let view_spans = thread_state.folded_spans_state.fold(
                         visible_range,
                         &thread_state.spans,
-                        cycles_per_pixel as u64 * 4,
+                        display_position.cycles_per_pixel as u64 * 4,
                     );
 
                     for (start_idx, end_idx) in view_spans {
