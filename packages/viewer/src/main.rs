@@ -2,16 +2,17 @@ mod proto;
 mod timeline_position;
 mod view_state;
 
-use crate::proto::{InitialMessage, SymbolInfo, TraceEvent};
-use crate::view_state::{SelectedSpanMetadata, ViewState, ViewStateContainer};
+use crate::proto::{InitialMessage, LibraryInfo, ModuleInfo, SymbolInfo, TraceEvent};
+use crate::view_state::{SelectedSpanMetadata, ThreadSpan, ViewState, ViewStateContainer};
 use eframe::egui::{
-    vec2, Align, CentralPanel, Color32, Frame, Id, Layout, Rounding, ScrollArea, SidePanel, Stroke,
-    TopBottomPanel, Ui,
+    pos2, vec2, Align, Align2, CentralPanel, Color32, FontId, Frame, Id, Layout, Painter, Rounding,
+    ScrollArea, SidePanel, Stroke, TopBottomPanel, Ui, Vec2,
 };
 use eframe::emath::Rect;
+use eframe::epaint::FontFamily;
 use eframe::{egui, emath};
 use egui_tiles::{Tabs, Tile, Tree};
-use ps4libdoc::LoadedDocumentation;
+use ps4libdoc::{LoadedDocumentation, SymbolDocumentation};
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::{io, thread};
@@ -463,14 +464,19 @@ impl eframe::App for SpanViewer {
                         let span_max =
                             emath::remap(end_span.end_time as f64, (low)..=(hi), x_range.clone());
 
+                        let thread_row_height = 20.;
+                        let thread_row_padding_vertical = 2.;
+
                         let rect = Rect {
-                            min: egui::pos2(
+                            min: pos2(
                                 span_min as f32,
-                                response.rect.min.y + thread_idx as f32 * 10.0f32,
+                                response.rect.min.y + thread_idx as f32 * thread_row_height,
                             ),
-                            max: egui::pos2(
+                            max: pos2(
                                 span_max as f32,
-                                response.rect.min.y + thread_idx as f32 * 10.0f32 + 8.0f32,
+                                response.rect.min.y
+                                    + thread_idx as f32 * thread_row_height
+                                    + (thread_row_height - thread_row_padding_vertical),
                             ),
                         };
 
@@ -487,6 +493,8 @@ impl eframe::App for SpanViewer {
                         if folded {
                             painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
                         } else {
+                            let span = &thread_state.spans[*start_idx];
+
                             let is_selected = if same_thread_as_selected {
                                 view_state
                                     .selected_span
@@ -496,10 +504,9 @@ impl eframe::App for SpanViewer {
                                 false
                             };
 
-                            let is_same_type_as_selected =
-                                view_state.current_symbol_detail.map_or(false, |it| {
-                                    it == (thread_state.spans[*start_idx].label_id as usize)
-                                });
+                            let is_same_type_as_selected = view_state
+                                .current_symbol_detail
+                                .map_or(false, |it| it == (span.label_id as usize));
 
                             if is_hovered && is_clicked {
                                 let selected_span_metadata = SelectedSpanMetadata {
@@ -508,9 +515,7 @@ impl eframe::App for SpanViewer {
                                 };
 
                                 view_state.selected_span.replace(selected_span_metadata);
-                                view_state
-                                    .current_symbol_detail
-                                    .replace(thread_state.spans[*start_idx].label_id as _);
+                                view_state.current_symbol_detail.replace(span.label_id as _);
                             };
 
                             painter.rect_filled(
@@ -523,6 +528,16 @@ impl eframe::App for SpanViewer {
                                 } else {
                                     Color32::GREEN
                                 },
+                            );
+
+                            let text_color = ui.style().visuals.text_color();
+                            render_text(
+                                &painter,
+                                span,
+                                &view_state.initial_message,
+                                &self.docs,
+                                rect,
+                                text_color,
                             );
                         }
 
@@ -605,6 +620,67 @@ impl eframe::App for SpanViewer {
                 ui.add_space(ui.spacing().menu_spacing);
             });
     }
+}
+
+fn render_text(
+    painter: &Painter,
+    span: &ThreadSpan,
+    initial_message: &InitialMessage,
+    docs: &LoadedDocumentation,
+    rect: Rect,
+    color: Color32,
+) {
+    let Some(symbol) = initial_message.symbols.get(span.label_id as usize) else {
+        return;
+    };
+
+    let library = initial_message.libraries.get(&(symbol.library_id as _));
+    let module = initial_message.modules.get(&(symbol.module_id as _));
+
+    let resolved_symbol_name =
+        (|| -> Option<(&ModuleInfo, &LibraryInfo, Option<&SymbolDocumentation>)> {
+            let library = library?;
+            let module = module?;
+            let resolved_symbol = docs.lookup(&module.name, &library.name, &symbol.name);
+
+            Some((module, library, resolved_symbol))
+        })();
+
+    let text = match resolved_symbol_name {
+        Some((
+            _module,
+            _library,
+            Some(SymbolDocumentation {
+                name: Some(resolved_symbol_name),
+                ..
+            }),
+        )) => format!("{}", resolved_symbol_name),
+        Some((module, library, Some(SymbolDocumentation { name: None, .. })))
+        | Some((module, library, None)) => {
+            format!("{}::{}::{}", module.name, library.name, symbol.name)
+        }
+        None => format!("{}", symbol.name),
+    };
+
+    let layout = painter.layout_no_wrap(
+        text,
+        FontId {
+            size: rect.height() * 0.8,
+            family: FontFamily::Monospace,
+        },
+        color,
+    );
+
+    let text_layout_rect = Align2::LEFT_CENTER.anchor_size(
+        pos2(rect.min.x.max(0.), rect.y_range().center()),
+        layout.size(),
+    );
+
+    if text_layout_rect.x_range().max >= rect.x_range().max {
+        return;
+    }
+
+    painter.galley(text_layout_rect.min, layout, color);
 }
 
 fn format_time(seconds: f64) -> String {
