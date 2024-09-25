@@ -145,8 +145,9 @@ impl ViewState {
                         spans: Vec::new(),
                         currently_started: None,
                     });
-                if let None = thread.currently_started.replace(start) {
-                    // println!("two spans started");
+
+                if let Some(..) = thread.currently_started.replace(start) {
+                    println!("two spans started");
                 };
             }
             SpanEvent::End(end) => {
