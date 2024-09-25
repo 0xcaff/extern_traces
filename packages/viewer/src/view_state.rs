@@ -155,6 +155,19 @@ impl ViewState {
 
                 let state = self.threads.get_mut(&end.thread_id).unwrap();
                 if let Some(start) = state.currently_started.take() {
+                    if let Some(last_span) = state.spans.last() {
+                        if start.time < last_span.end_time {
+                            println!(
+                                "out-of-order span detected on thread {}: start time {} is before last span end time {}",
+                                end.thread_id,
+                                start.time,
+                                last_span.end_time
+                            );
+
+                            return;
+                        }
+                    }
+
                     state.spans.push(ThreadSpan::from_events(start, end));
                 };
             }
