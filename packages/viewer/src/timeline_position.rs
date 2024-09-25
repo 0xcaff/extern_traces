@@ -1,6 +1,6 @@
 use crate::proto::InitialMessage;
-use std::time::SystemTime;
 use crate::view_state::ThreadSpan;
+use std::time::SystemTime;
 
 pub struct TimelinePositionState {
     tsc_frequency: u64,
@@ -60,12 +60,10 @@ impl TimelinePositionState {
     }
 
     pub fn pan_to(&mut self, thread_span: &ThreadSpan, width: f64) {
-        self.view_range = ViewRange::Slice(
-            DisplayPosition {
-                offset: thread_span.start_time as f64,
-                cycles_per_pixel: (thread_span.end_time - thread_span.start_time) as f64 / width,
-            }
-        )
+        self.view_range = ViewRange::Slice(DisplayPosition {
+            offset: thread_span.start_time as f64,
+            cycles_per_pixel: (thread_span.end_time - thread_span.start_time) as f64 / width,
+        })
     }
 
     pub fn position(&self, range: f64) -> DisplayPosition {

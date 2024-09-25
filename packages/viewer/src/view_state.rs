@@ -1,6 +1,7 @@
 use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart};
 use crate::timeline_position::TimelinePositionState;
 use std::collections::BTreeMap;
+use std::ops::Range;
 
 #[derive(Clone)]
 pub struct ThreadSpan {
@@ -24,32 +25,53 @@ pub struct ThreadState {
     pub currently_started: Option<SpanStart>,
 }
 
-pub fn fold_spans(thread_spans: &[ThreadSpan], cycles_per_pixel: u64) -> Vec<(usize, usize)> {
-    let mut spans = Vec::new();
+pub struct FoldSpansState {
+    last_calculated_value: Option<(Range<usize>, Vec<(usize, usize)>)>,
+}
 
-    let mut idx = 0;
-    while idx < thread_spans.len() {
-        let span = &thread_spans[idx];
+impl FoldSpansState {
+    pub fn new() -> FoldSpansState {
+        FoldSpansState {
+            last_calculated_value: None,
+        }
+    }
+}
 
-        let mut next_idx = idx + 1;
-        loop {
-            if next_idx >= thread_spans.len() {
-                break;
-            };
+impl FoldSpansState {
+    pub fn fold(
+        &mut self,
+        range: Range<usize>,
+        thread_spans: &[ThreadSpan],
+        cycles_per_pixel: u64,
+    ) -> &[(usize, usize)] {
+        let mut spans = Vec::new();
 
-            let next_span = &thread_spans[next_idx];
-            if (next_span.end_time - span.start_time) >= cycles_per_pixel {
-                break;
+        let mut idx = range.start;
+        while idx < range.end {
+            let span = &thread_spans[idx];
+
+            let mut next_idx = idx + 1;
+            loop {
+                if next_idx >= range.end {
+                    break;
+                };
+
+                let next_span = &thread_spans[next_idx];
+                if (next_span.end_time - span.start_time) >= cycles_per_pixel {
+                    break;
+                }
+
+                next_idx = next_idx + 1;
             }
 
-            next_idx = next_idx + 1;
+            spans.push((idx, next_idx));
+            idx = next_idx;
         }
 
-        spans.push((idx, next_idx));
-        idx = next_idx;
-    }
+        self.last_calculated_value = Some((range, spans));
 
-    spans
+        (&self.last_calculated_value).as_ref().unwrap().1.as_slice()
+    }
 }
 
 pub struct SelectedSpanMetadata {

@@ -3,7 +3,7 @@ mod timeline_position;
 mod view_state;
 
 use crate::proto::{InitialMessage, SymbolInfo, TraceEvent};
-use crate::view_state::{fold_spans, SelectedSpanMetadata, ViewState, ViewStateContainer};
+use crate::view_state::{FoldSpansState, SelectedSpanMetadata, ViewState, ViewStateContainer};
 use eframe::egui::{
     vec2, Align, CentralPanel, Color32, Frame, Id, Layout, Rounding, ScrollArea, SidePanel, Stroke,
     TopBottomPanel, Ui, Widget,
@@ -88,7 +88,9 @@ impl SpanDetailPane {
             let button_response = ui.button("zoom");
             if button_response.clicked() {
                 if let Some(last_width) = args.last_width {
-                    view_state.timeline_position_state.pan_to(&span, last_width as _);
+                    view_state
+                        .timeline_position_state
+                        .pan_to(&span, last_width as _);
                 }
             }
 
@@ -99,7 +101,12 @@ impl SpanDetailPane {
     }
 }
 
-fn render_symbol_info(args: &InitialMessage, docs: &LoadedDocumentation, symbol: &SymbolInfo, ui: &mut Ui) {
+fn render_symbol_info(
+    args: &InitialMessage,
+    docs: &LoadedDocumentation,
+    symbol: &SymbolInfo,
+    ui: &mut Ui,
+) {
     let library_name = &args
         .libraries
         .get(&(symbol.library_id as u16))
@@ -115,8 +122,7 @@ fn render_symbol_info(args: &InitialMessage, docs: &LoadedDocumentation, symbol:
         ui.label(
             (|| Some(((*library_name)?, (*module_name)?)))()
                 .and_then(|(library_name, module_name)| {
-                    docs
-                        .lookup(module_name, library_name, symbol.name.as_ref())
+                    docs.lookup(module_name, library_name, symbol.name.as_ref())
                         .and_then(|it| it.name.clone())
                 })
                 .unwrap_or_else(|| format!("nid: {}", symbol.name.as_str())),
@@ -407,7 +413,10 @@ impl eframe::App for SpanViewer {
 
                 self.last_width.replace(ui.available_width());
 
-                let display_position = view_state.timeline_position_state.position(response.rect.width() as _);
+                let display_position = view_state
+                    .timeline_position_state
+                    .position(response.rect.width() as _);
+
                 let (low, hi) = display_position.range(response.rect.width() as _);
                 let range = hi - low;
 
@@ -424,22 +433,27 @@ impl eframe::App for SpanViewer {
                         .as_ref()
                         .map_or(false, |it| it.thread_id == *thread_id);
 
-                    let (visible_span_start_idx, visible_spans) = {
+                    let visible_range = {
                         let spans = &thread_state.spans;
 
                         let i = spans.partition_point(|span| (span.end_time as f64) < low);
                         let j = spans.partition_point(|span| (span.start_time as f64) < hi);
 
-                        let visible_spans = &spans[i..j];
-
-                        (i, visible_spans)
+                        i..j
                     };
 
-                    let view_spans = fold_spans(visible_spans, cycles_per_pixel as u64);
+                    let mut fold_spans_state = FoldSpansState::new();
+
+                    let view_spans = fold_spans_state.fold(
+                        visible_range,
+                        &thread_state.spans,
+                        cycles_per_pixel as _,
+                    );
+
                     for (start_idx, end_idx) in view_spans {
-                        let start_span = &visible_spans[start_idx];
-                        let end_span = &visible_spans[end_idx - 1];
-                        let folded = start_idx != end_idx - 1;
+                        let start_span = &thread_state.spans[*start_idx];
+                        let end_span = &thread_state.spans[*end_idx - 1];
+                        let folded = *start_idx != *end_idx - 1;
 
                         let x_range = {
                             let range = response.rect.x_range();
@@ -479,22 +493,23 @@ impl eframe::App for SpanViewer {
                             painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
                         } else {
                             let is_selected = if same_thread_as_selected {
-                                view_state.selected_span.as_ref().map_or(false, |it| {
-                                    it.span_idx == visible_span_start_idx + start_idx
-                                })
+                                view_state
+                                    .selected_span
+                                    .as_ref()
+                                    .map_or(false, |it| it.span_idx == *start_idx)
                             } else {
                                 false
                             };
 
                             let is_same_type_as_selected =
                                 view_state.selected_span_ref().map_or(false, |(_, span)| {
-                                    visible_spans[start_idx].label_id == span.label_id
+                                    thread_state.spans[*start_idx].label_id == span.label_id
                                 });
 
                             if is_hovered && is_clicked {
                                 let selected_span_metadata = SelectedSpanMetadata {
                                     thread_id: *thread_id,
-                                    span_idx: visible_span_start_idx + start_idx,
+                                    span_idx: *start_idx,
                                 };
 
                                 view_state.selected_span.replace(selected_span_metadata);
@@ -529,7 +544,9 @@ impl eframe::App for SpanViewer {
                     let percentage = scroll_delta.x / response.rect.width();
                     let diff = -(percentage as f64 * range);
 
-                    view_state.timeline_position_state.translate_x(diff, display_position);
+                    view_state
+                        .timeline_position_state
+                        .translate_x(diff, display_position);
                 }
 
                 // Zooming
