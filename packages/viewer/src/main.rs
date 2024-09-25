@@ -6,8 +6,8 @@ use crate::proto::{InitialMessage, LibraryInfo, ModuleInfo, SymbolInfo, TraceEve
 use crate::view_state::{SelectedSpanMetadata, ThreadSpan, ViewState, ViewStateContainer};
 use eframe::egui::scroll_area::ScrollBarVisibility;
 use eframe::egui::{
-    pos2, vec2, Align, Align2, CentralPanel, Color32, FontId, Frame, Id, Layout, Painter, Rounding,
-    ScrollArea, SidePanel, Stroke, TopBottomPanel, Ui, Vec2b,
+    pos2, vec2, Align, Align2, CentralPanel, Color32, Context, FontId, Frame, Id, Layout, Painter,
+    Rounding, ScrollArea, SidePanel, Stroke, TopBottomPanel, Ui, Vec2b,
 };
 use eframe::emath::Rect;
 use eframe::epaint::FontFamily;
@@ -408,195 +408,7 @@ impl eframe::App for SpanViewer {
                 ..Default::default()
             })
             .show(ctx, |ui| -> (f64, f64) {
-                let available_width = ui.available_width();
-                self.last_width.replace(available_width);
-
-                let thread_row_height = 20.;
-                let thread_row_padding_vertical = 2.;
-
-                let total_height = view_state.threads.len() as f32 * thread_row_height;
-
-                let response = ScrollArea::vertical()
-                    .auto_shrink(Vec2b::FALSE)
-                    .scroll_bar_visibility(ScrollBarVisibility::VisibleWhenNeeded)
-                    .show(ui, |ui| {
-                        let (response, painter) = ui.allocate_painter(
-                            vec2(available_width, total_height),
-                            egui::Sense::click_and_drag(),
-                        );
-
-                        let display_position = view_state
-                            .timeline_position_state
-                            .position(response.rect.width() as _);
-
-                        let (low, hi) = display_position.range(response.rect.width() as _);
-                        let range = hi - low;
-
-                        let is_clicked = response.clicked();
-
-                        let hover_position = response.hover_pos();
-
-                        for (thread_idx, (thread_id, thread_state)) in
-                            view_state.threads.iter_mut().enumerate()
-                        {
-                            let same_thread_as_selected = view_state
-                                .selected_span
-                                .as_ref()
-                                .map_or(false, |it| it.thread_id == *thread_id);
-
-                            let visible_range = {
-                                let spans = &thread_state.spans;
-
-                                let i = spans.partition_point(|span| (span.end_time as f64) < low);
-                                let j = spans.partition_point(|span| (span.start_time as f64) < hi);
-
-                                i..j
-                            };
-
-                            let view_spans = thread_state.folded_spans_state.fold(
-                                visible_range,
-                                &thread_state.spans,
-                                display_position.cycles_per_pixel as u64 * 4,
-                            );
-
-                            for (start_idx, end_idx) in view_spans {
-                                let start_span = &thread_state.spans[*start_idx];
-                                let end_span = &thread_state.spans[*end_idx - 1];
-                                let folded = *start_idx != *end_idx - 1;
-
-                                let x_range = {
-                                    let range = response.rect.x_range();
-                                    (range.min as f64)..=(range.max as f64)
-                                };
-
-                                let span_min = emath::remap(
-                                    start_span.start_time as f64,
-                                    (low)..=(hi),
-                                    x_range.clone(),
-                                );
-                                let span_max = emath::remap(
-                                    end_span.end_time as f64,
-                                    (low)..=(hi),
-                                    x_range.clone(),
-                                );
-
-                                let rect = Rect {
-                                    min: pos2(
-                                        span_min as f32,
-                                        response.rect.min.y + thread_idx as f32 * thread_row_height,
-                                    ),
-                                    max: pos2(
-                                        span_max as f32,
-                                        response.rect.min.y
-                                            + thread_idx as f32 * thread_row_height
-                                            + (thread_row_height - thread_row_padding_vertical),
-                                    ),
-                                };
-
-                                let is_hovered = if let Some(hover_position) = hover_position {
-                                    if rect.contains(hover_position) {
-                                        true
-                                    } else {
-                                        false
-                                    }
-                                } else {
-                                    false
-                                };
-
-                                if folded {
-                                    painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
-                                } else {
-                                    let span = &thread_state.spans[*start_idx];
-
-                                    let is_selected = if same_thread_as_selected {
-                                        view_state
-                                            .selected_span
-                                            .as_ref()
-                                            .map_or(false, |it| it.span_idx == *start_idx)
-                                    } else {
-                                        false
-                                    };
-
-                                    let is_same_type_as_selected = view_state
-                                        .current_symbol_detail
-                                        .map_or(false, |it| it == (span.label_id as usize));
-
-                                    if is_hovered && is_clicked {
-                                        let selected_span_metadata = SelectedSpanMetadata {
-                                            thread_id: *thread_id,
-                                            span_idx: *start_idx,
-                                        };
-
-                                        view_state.selected_span.replace(selected_span_metadata);
-                                        view_state
-                                            .current_symbol_detail
-                                            .replace(span.label_id as _);
-                                    };
-
-                                    painter.rect_filled(
-                                        rect,
-                                        Rounding::default(),
-                                        if is_selected {
-                                            Color32::BLUE
-                                        } else if is_same_type_as_selected {
-                                            Color32::LIGHT_BLUE
-                                        } else {
-                                            Color32::GREEN
-                                        },
-                                    );
-
-                                    let text_color = ui.style().visuals.text_color();
-                                    render_text(
-                                        &painter,
-                                        span,
-                                        &view_state.initial_message,
-                                        &self.docs,
-                                        rect,
-                                        text_color,
-                                    );
-                                }
-
-                                if is_hovered {
-                                    painter.rect_stroke(
-                                        rect,
-                                        Rounding::default(),
-                                        Stroke::new(1.0f32, Color32::BLACK),
-                                    );
-                                }
-                            }
-                        }
-
-                        // Panning
-                        if hover_position.is_some() {
-                            let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
-                            let percentage = scroll_delta.x / response.rect.width();
-                            let diff = -(percentage as f64 * range);
-
-                            view_state
-                                .timeline_position_state
-                                .translate_x(diff, display_position);
-                        }
-
-                        // Zooming
-                        (|| -> Option<()> {
-                            let hover_position = hover_position?;
-                            let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
-                            let anchor_position = (hover_position.x / response.rect.width()) as f64;
-
-                            view_state.timeline_position_state.zoom_anchored(
-                                1. / zoom_delta,
-                                anchor_position,
-                                response.rect.width() as f64,
-                                display_position,
-                            );
-
-                            Some(())
-                        })();
-
-                        (low, hi)
-                    });
-
-                response.inner
+                render_central_panel_contents(ui, ctx, view_state, &mut self.last_width, &self.docs)
             });
 
         egui::Area::new(Id::new("summary_toolbar_contents"))
@@ -638,6 +450,195 @@ impl eframe::App for SpanViewer {
                 ui.add_space(ui.spacing().menu_spacing);
             });
     }
+}
+
+fn render_central_panel_contents(
+    ui: &mut Ui,
+    ctx: &Context,
+    view_state: &mut ViewState,
+    last_width: &mut Option<f32>,
+    docs: &LoadedDocumentation,
+) -> (f64, f64) {
+    let available_width = ui.available_width();
+    last_width.replace(available_width);
+
+    let thread_row_height = 20.;
+    let thread_row_padding_vertical = 2.;
+
+    let total_height = view_state.threads.len() as f32 * thread_row_height;
+
+    let response = ScrollArea::vertical()
+        .auto_shrink(Vec2b::FALSE)
+        .scroll_bar_visibility(ScrollBarVisibility::VisibleWhenNeeded)
+        .show(ui, |ui| {
+            let (response, painter) = ui.allocate_painter(
+                vec2(available_width, total_height),
+                egui::Sense::click_and_drag(),
+            );
+
+            let display_position = view_state
+                .timeline_position_state
+                .position(response.rect.width() as _);
+
+            let (low, hi) = display_position.range(response.rect.width() as _);
+            let range = hi - low;
+
+            let is_clicked = response.clicked();
+
+            let hover_position = response.hover_pos();
+
+            for (thread_idx, (thread_id, thread_state)) in view_state.threads.iter_mut().enumerate()
+            {
+                let same_thread_as_selected = view_state
+                    .selected_span
+                    .as_ref()
+                    .map_or(false, |it| it.thread_id == *thread_id);
+
+                let visible_range = {
+                    let spans = &thread_state.spans;
+
+                    let i = spans.partition_point(|span| (span.end_time as f64) < low);
+                    let j = spans.partition_point(|span| (span.start_time as f64) < hi);
+
+                    i..j
+                };
+
+                let view_spans = thread_state.folded_spans_state.fold(
+                    visible_range,
+                    &thread_state.spans,
+                    display_position.cycles_per_pixel as u64 * 4,
+                );
+
+                for (start_idx, end_idx) in view_spans {
+                    let start_span = &thread_state.spans[*start_idx];
+                    let end_span = &thread_state.spans[*end_idx - 1];
+                    let folded = *start_idx != *end_idx - 1;
+
+                    let x_range = {
+                        let range = response.rect.x_range();
+                        (range.min as f64)..=(range.max as f64)
+                    };
+
+                    let span_min =
+                        emath::remap(start_span.start_time as f64, (low)..=(hi), x_range.clone());
+                    let span_max =
+                        emath::remap(end_span.end_time as f64, (low)..=(hi), x_range.clone());
+
+                    let rect = Rect {
+                        min: pos2(
+                            span_min as f32,
+                            response.rect.min.y + thread_idx as f32 * thread_row_height,
+                        ),
+                        max: pos2(
+                            span_max as f32,
+                            response.rect.min.y
+                                + thread_idx as f32 * thread_row_height
+                                + (thread_row_height - thread_row_padding_vertical),
+                        ),
+                    };
+
+                    let is_hovered = if let Some(hover_position) = hover_position {
+                        if rect.contains(hover_position) {
+                            true
+                        } else {
+                            false
+                        }
+                    } else {
+                        false
+                    };
+
+                    if folded {
+                        painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
+                    } else {
+                        let span = &thread_state.spans[*start_idx];
+
+                        let is_selected = if same_thread_as_selected {
+                            view_state
+                                .selected_span
+                                .as_ref()
+                                .map_or(false, |it| it.span_idx == *start_idx)
+                        } else {
+                            false
+                        };
+
+                        let is_same_type_as_selected = view_state
+                            .current_symbol_detail
+                            .map_or(false, |it| it == (span.label_id as usize));
+
+                        if is_hovered && is_clicked {
+                            let selected_span_metadata = SelectedSpanMetadata {
+                                thread_id: *thread_id,
+                                span_idx: *start_idx,
+                            };
+
+                            view_state.selected_span.replace(selected_span_metadata);
+                            view_state.current_symbol_detail.replace(span.label_id as _);
+                        };
+
+                        painter.rect_filled(
+                            rect,
+                            Rounding::default(),
+                            if is_selected {
+                                Color32::BLUE
+                            } else if is_same_type_as_selected {
+                                Color32::LIGHT_BLUE
+                            } else {
+                                Color32::GREEN
+                            },
+                        );
+
+                        let text_color = ui.style().visuals.text_color();
+                        render_text(
+                            &painter,
+                            span,
+                            &view_state.initial_message,
+                            docs,
+                            rect,
+                            text_color,
+                        );
+                    }
+
+                    if is_hovered {
+                        painter.rect_stroke(
+                            rect,
+                            Rounding::default(),
+                            Stroke::new(1.0f32, Color32::BLACK),
+                        );
+                    }
+                }
+            }
+
+            // Panning
+            if hover_position.is_some() {
+                let scroll_delta = ctx.input(|it| it.smooth_scroll_delta);
+                let percentage = scroll_delta.x / response.rect.width();
+                let diff = -(percentage as f64 * range);
+
+                view_state
+                    .timeline_position_state
+                    .translate_x(diff, display_position);
+            }
+
+            // Zooming
+            (|| -> Option<()> {
+                let hover_position = hover_position?;
+                let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
+                let anchor_position = (hover_position.x / response.rect.width()) as f64;
+
+                view_state.timeline_position_state.zoom_anchored(
+                    1. / zoom_delta,
+                    anchor_position,
+                    response.rect.width() as f64,
+                    display_position,
+                );
+
+                Some(())
+            })();
+
+            (low, hi)
+        });
+
+    response.inner
 }
 
 fn render_text(
