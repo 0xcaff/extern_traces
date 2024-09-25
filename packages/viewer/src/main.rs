@@ -30,19 +30,34 @@ struct TreeBehavior<'a> {
     pane_response: Option<PaneResponse>,
 }
 
-#[derive(Eq, PartialEq)]
 enum Pane {
     CurrentlySelectedSpanDetail(SpanDetailPane),
     SearchPane(SearchPane),
     CurrentSymbolDetailsPane(SymbolDetailPane),
 }
 
-enum PaneResponse {
-    OpenPane(Pane),
-    FocusPane(Pane),
+impl Pane {
+    pub fn key(&self) -> PaneKey {
+        match self {
+            Pane::CurrentlySelectedSpanDetail(_) => PaneKey::CurrentlySelectedSpanDetail,
+            Pane::SearchPane(_) => PaneKey::SearchPane,
+            Pane::CurrentSymbolDetailsPane(_) => PaneKey::CurrentSymbolDetailsPane,
+        }
+    }
 }
 
 #[derive(Eq, PartialEq)]
+enum PaneKey {
+    CurrentlySelectedSpanDetail,
+    SearchPane,
+    CurrentSymbolDetailsPane,
+}
+
+enum PaneResponse {
+    OpenPane(Pane),
+    FocusPane(PaneKey),
+}
+
 struct SpanDetailPane;
 
 impl SpanDetailPane {
@@ -143,7 +158,6 @@ fn render_symbol_info(
     });
 }
 
-#[derive(Eq, PartialEq)]
 struct SearchPane {
     current_text: String,
 }
@@ -203,9 +217,8 @@ impl SearchPane {
                 if link_response.clicked() {
                     args.view_state.current_symbol_detail = Some(symbol_idx);
 
-                    pane_response.replace(PaneResponse::FocusPane(Pane::CurrentSymbolDetailsPane(
-                        SymbolDetailPane,
-                    )));
+                    pane_response
+                        .replace(PaneResponse::FocusPane(PaneKey::CurrentSymbolDetailsPane));
                 }
             }
         });
@@ -214,8 +227,9 @@ impl SearchPane {
     }
 }
 
-#[derive(Eq, PartialEq)]
-struct SymbolDetailPane;
+struct SymbolDetailPane {
+    pub last_matching: Option<(usize, Vec<SelectedSpanMetadata>)>,
+}
 
 impl SymbolDetailPane {
     pub fn title(&self) -> egui::WidgetText {
@@ -226,29 +240,52 @@ impl SymbolDetailPane {
     pub fn pane_ui(&mut self, args: &mut TreeBehaviorArgs, ui: &mut Ui) -> Option<PaneResponse> {
         let symbol_idx = args.view_state.current_symbol_detail?;
 
-        ScrollArea::vertical().show(ui, |ui| {
-            ui.allocate_space(vec2(ui.available_width(), 0.));
+        let should_replace = if self.last_matching.is_none() {
+            true
+        } else {
+            let last = self.last_matching.as_ref().unwrap().0;
+            last != symbol_idx
+        };
 
-            ScrollArea::vertical().show(ui, |ui| {
-                render_symbol_info(
-                    &args.view_state.initial_message,
-                    args.docs,
-                    &args.view_state.initial_message.symbols[symbol_idx],
-                    ui,
-                );
-
-                let it = args
-                    .view_state
+        if should_replace {
+            self.last_matching.replace((
+                symbol_idx,
+                args.view_state
                     .threads
                     .iter()
                     .flat_map(|(thread_id, spans)| {
-                        spans.spans.iter().map(|span| (*thread_id, span))
+                        spans
+                            .spans
+                            .iter()
+                            .enumerate()
+                            .map(|(span_idx, span)| (*thread_id, span_idx, span))
                     })
-                    .filter(|(thread_id, span)| (span.label_id as usize) == symbol_idx);
-                for (idx, (thread_id, span)) in it.enumerate() {
-                    ui.label(format!("{:?}", idx));
-                }
-            });
+                    .filter(|(thread_id, span_idx, span)| (span.label_id as usize) == symbol_idx)
+                    .map(|(thread_id, span_idx, _)| SelectedSpanMetadata {
+                        span_idx,
+                        thread_id,
+                    })
+                    .collect(),
+            ));
+        };
+
+        let matching = &self.last_matching.as_ref().unwrap().1;
+
+        render_symbol_info(
+            &args.view_state.initial_message,
+            args.docs,
+            &args.view_state.initial_message.symbols[symbol_idx],
+            ui,
+        );
+
+        let text_style = TextStyle::Body;
+        let row_height = ui.text_style_height(&text_style);
+        ScrollArea::vertical().show_rows(ui, row_height, matching.len(), |ui, row_range| {
+            ui.allocate_space(vec2(ui.available_width(), 0.));
+
+            for idx in row_range {
+                ui.label(format!("{:?}", idx));
+            }
         });
 
         None
@@ -372,7 +409,9 @@ impl SpanViewer {
                 }));
 
                 let symbol_pane =
-                    tiles.insert_pane(Pane::CurrentSymbolDetailsPane(SymbolDetailPane));
+                    tiles.insert_pane(Pane::CurrentSymbolDetailsPane(SymbolDetailPane {
+                        last_matching: None,
+                    }));
 
                 let root = tiles.insert_container(Tabs::new(vec![
                     currently_selected_span_detail_pane,
@@ -457,7 +496,7 @@ impl eframe::App for SpanViewer {
                                     return false;
                                 };
 
-                                needle_pane == &pane
+                                needle_pane.key() == pane
                             });
                         }
                     }

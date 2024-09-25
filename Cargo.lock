@@ -1170,7 +1170,6 @@ dependencies = [
  "eframe",
  "egui_plot",
  "egui_tiles",
- "itertools",
  "ps4libdoc",
 ]
 
