@@ -23,7 +23,7 @@ pub struct ThreadState {
     pub currently_started: Option<SpanStart>,
 }
 
-pub fn fold_spans(thread_spans: &[&ThreadSpan], cycles_per_pixel: u64) -> Vec<(usize, usize)> {
+pub fn fold_spans(thread_spans: &[ThreadSpan], cycles_per_pixel: u64) -> Vec<(usize, usize)> {
     let mut spans = Vec::new();
 
     let mut idx = 0;
@@ -44,7 +44,7 @@ pub fn fold_spans(thread_spans: &[&ThreadSpan], cycles_per_pixel: u64) -> Vec<(u
             next_idx = next_idx + 1;
         }
 
-        spans.push(((idx, next_idx)));
+        spans.push((idx, next_idx));
         idx = next_idx;
     }
 

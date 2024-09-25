@@ -416,19 +416,21 @@ impl eframe::App for SpanViewer {
                         .as_ref()
                         .map_or(false, |it| it.thread_id == *thread_id);
 
-                    let (visible_span_idx, visible_spans) = thread_state
-                        .spans
-                        .iter()
-                        .enumerate()
-                        .filter(|(_idx, it)| {
-                            it.end_time as f64 >= low && (it.start_time as f64) < hi
-                        })
-                        .unzip::<_, _, Vec<_>, Vec<_>>();
+                    let (visible_span_start_idx, visible_spans) = {
+                        let spans = &thread_state.spans;
 
-                    let view_spans = fold_spans(&visible_spans, cycles_per_pixel as u64);
+                        let i = spans.partition_point(|span| (span.end_time as f64) < low);
+                        let j = spans.partition_point(|span| (span.start_time as f64) < hi);
+
+                        let visible_spans = &spans[i..j];
+
+                        (i, visible_spans)
+                    };
+
+                    let view_spans = fold_spans(visible_spans, cycles_per_pixel as u64);
                     for (start_idx, end_idx) in view_spans {
-                        let start_span = visible_spans[start_idx];
-                        let end_span = visible_spans[end_idx - 1];
+                        let start_span = &visible_spans[start_idx];
+                        let end_span = &visible_spans[end_idx - 1];
                         let folded = start_idx != end_idx - 1;
 
                         let x_range = {
@@ -469,10 +471,9 @@ impl eframe::App for SpanViewer {
                             painter.rect_filled(rect, Rounding::default(), Color32::YELLOW);
                         } else {
                             let is_selected = if same_thread_as_selected {
-                                view_state
-                                    .selected_span
-                                    .as_ref()
-                                    .map_or(false, |it| it.span_idx == visible_span_idx[start_idx])
+                                view_state.selected_span.as_ref().map_or(false, |it| {
+                                    it.span_idx == visible_span_start_idx + start_idx
+                                })
                             } else {
                                 false
                             };
@@ -485,7 +486,7 @@ impl eframe::App for SpanViewer {
                             if is_hovered && is_clicked {
                                 let selected_span_metadata = SelectedSpanMetadata {
                                     thread_id: *thread_id,
-                                    span_idx: visible_span_idx[start_idx],
+                                    span_idx: visible_span_start_idx + start_idx,
                                 };
 
                                 view_state.selected_span.replace(selected_span_metadata);
