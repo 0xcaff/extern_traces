@@ -1,4 +1,5 @@
 mod proto;
+mod timeline_position;
 mod view_state;
 
 use crate::proto::{InitialMessage, SymbolInfo, TraceEvent};
@@ -399,7 +400,7 @@ impl eframe::App for SpanViewer {
                 let (response, painter) =
                     ui.allocate_painter(ui.available_size(), egui::Sense::click_and_drag());
 
-                let display_position = view_state.position(response.rect.width() as _);
+                let display_position = view_state.timeline_position_state.position(response.rect.width() as _);
                 let (low, hi) = display_position.range(response.rect.width() as _);
                 let range = hi - low;
 
@@ -521,7 +522,7 @@ impl eframe::App for SpanViewer {
                     let percentage = scroll_delta.x / response.rect.width();
                     let diff = -(percentage as f64 * range);
 
-                    view_state.translate_x(diff, display_position);
+                    view_state.timeline_position_state.translate_x(diff, display_position);
                 }
 
                 // Zooming
@@ -530,7 +531,7 @@ impl eframe::App for SpanViewer {
                     let zoom_delta = ctx.input(|it| it.zoom_delta()) as f64;
                     let anchor_position = (hover_position.x / response.rect.width()) as f64;
 
-                    view_state.zoom_anchored(
+                    view_state.timeline_position_state.zoom_anchored(
                         1. / zoom_delta,
                         anchor_position,
                         response.rect.width() as f64,

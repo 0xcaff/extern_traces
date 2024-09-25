@@ -1,4 +1,5 @@
 use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart};
+use crate::timeline_position::TimelinePositionState;
 use std::collections::BTreeMap;
 
 #[derive(Clone)]
@@ -51,23 +52,6 @@ pub fn fold_spans(thread_spans: &[ThreadSpan], cycles_per_pixel: u64) -> Vec<(us
     spans
 }
 
-enum ViewRange {
-    Full,
-    Slice(DisplayPosition),
-}
-
-#[derive(Clone, Copy)]
-pub struct DisplayPosition {
-    pub offset: f64,
-    pub cycles_per_pixel: f64,
-}
-
-impl DisplayPosition {
-    pub fn range(&self, range: f64) -> (f64, f64) {
-        (self.offset, self.offset + range * self.cycles_per_pixel)
-    }
-}
-
 pub struct SelectedSpanMetadata {
     pub thread_id: u64,
     pub span_idx: usize,
@@ -81,11 +65,11 @@ pub enum ViewStateContainer {
 pub struct ViewState {
     pub initial_message: InitialMessage,
     pub threads: BTreeMap<u64, ThreadState>,
-    pub timestamp_range: TimestampRange,
-    pub view_range: ViewRange,
     pub selected_span: Option<SelectedSpanMetadata>,
     pub is_live: bool,
     pub current_symbol_detail: Option<usize>,
+
+    pub timeline_position_state: TimelinePositionState,
 }
 
 impl ViewStateContainer {
@@ -95,32 +79,13 @@ impl ViewStateContainer {
 
     pub fn initialize(&mut self, initial_message: InitialMessage) {
         *self = ViewStateContainer::Initialized(ViewState {
+            timeline_position_state: TimelinePositionState::new(&initial_message),
             initial_message,
             threads: BTreeMap::new(),
-            timestamp_range: TimestampRange { values: None },
-            view_range: ViewRange::Full,
             selected_span: None,
             is_live: false,
             current_symbol_detail: None,
         })
-    }
-}
-
-#[derive(Debug)]
-pub struct TimestampRange {
-    values: Option<(u64, u64)>,
-}
-
-impl TimestampRange {
-    pub fn add_value(&mut self, value: u64) {
-        let old_values = self.values.take();
-        let (low, high) = if let Some((low, high)) = old_values {
-            (u64::min(low, value), u64::max(high, value))
-        } else {
-            (value, value)
-        };
-
-        self.values.replace((low, high));
     }
 }
 
@@ -136,7 +101,7 @@ impl ViewState {
     pub fn update_span(&mut self, event: SpanEvent) {
         match event {
             SpanEvent::Start(start) => {
-                self.timestamp_range.add_value(start.time);
+                self.timeline_position_state.add_timestamp_range(start.time);
 
                 let thread = self
                     .threads
@@ -151,7 +116,7 @@ impl ViewState {
                 };
             }
             SpanEvent::End(end) => {
-                self.timestamp_range.add_value(end.time);
+                self.timeline_position_state.add_timestamp_range(end.time);
 
                 let state = self.threads.get_mut(&end.thread_id).unwrap();
                 if let Some(start) = state.currently_started.take() {
@@ -176,72 +141,5 @@ impl ViewState {
 
     pub fn total_spans(&self) -> usize {
         self.threads.values().map(|v| v.spans.len()).sum()
-    }
-
-    pub fn translate_x(&mut self, cycles_delta: f64, current_position: DisplayPosition) {
-        if cycles_delta == 0. {
-            return;
-        }
-
-        self.view_range = ViewRange::Slice(DisplayPosition {
-            offset: current_position.offset + cycles_delta,
-            cycles_per_pixel: current_position.cycles_per_pixel,
-        });
-    }
-
-    pub fn zoom_anchored(
-        &mut self,
-        multiplier: f64,
-        anchor: f64,
-        width: f64,
-        current_position: DisplayPosition,
-    ) {
-        if multiplier == 1. {
-            return;
-        }
-
-        let current_width = width;
-        let new_width = width * multiplier;
-
-        let delta = (current_width - new_width) * current_position.cycles_per_pixel;
-
-        self.view_range = ViewRange::Slice(DisplayPosition {
-            offset: current_position.offset + (anchor * delta),
-            cycles_per_pixel: current_position.cycles_per_pixel * multiplier,
-        });
-    }
-
-    pub fn position(&self, range: f64) -> DisplayPosition {
-        match self.view_range {
-            ViewRange::Full => {
-                let (min, max) = self
-                    .timestamp_range
-                    .values
-                    .unwrap_or((0, self.initial_message.tsc_frequency));
-
-                let offset = min as f64;
-
-                let delta = max as f64 - min as f64;
-
-                let cycles_per_pixel = delta / range;
-
-                DisplayPosition {
-                    offset,
-                    cycles_per_pixel,
-                }
-            }
-            ViewRange::Slice(position) => position,
-        }
-    }
-
-    pub fn pan_to(&mut self, span: &ThreadSpan) {
-        let ViewRange::Slice(position) = self.view_range else {
-            return;
-        };
-
-        self.view_range = ViewRange::Slice(DisplayPosition {
-            offset: span.start_time as f64,
-            cycles_per_pixel: position.cycles_per_pixel,
-        });
     }
 }
