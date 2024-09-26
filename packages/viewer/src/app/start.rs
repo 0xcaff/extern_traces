@@ -32,7 +32,10 @@ impl StartScene {
 
                 ui.heading("extern_traces");
 
-                ui.label("version 1.0.0");
+                let version = env!("CARGO_PKG_VERSION");
+                let git_short_sha = env!("GIT_SHA_SHORT");
+
+                ui.label(format!("v{version} @ {git_short_sha}"));
 
                 ui.allocate_space(vec2(0., 4.));
 
