@@ -1,6 +1,6 @@
 use crate::app::tracing::TracingScene;
 use crate::app::Scene;
-use eframe::egui::{vec2, CentralPanel, Context, Frame, Margin};
+use eframe::egui::{vec2, CentralPanel, Context, Frame, Key, Margin};
 use rfd::FileDialog;
 use std::net::{AddrParseError, SocketAddr};
 use std::str::FromStr;
@@ -54,15 +54,17 @@ impl StartScene {
                 ui.vertical(|ui| {
                     ui.label("listen for traces");
 
-                    ui.horizontal(|ui| {
-                        ui.text_edit_singleline(&mut self.address);
-                    });
+                    let text_edit = ui.text_edit_singleline(&mut self.address);
 
                     let button = ui.button("listen");
-                    if button.clicked() {
+                    if (text_edit.lost_focus()
+                        && text_edit.ctx.input(|r| r.key_pressed(Key::Enter)))
+                        || button.clicked()
+                    {
                         match SocketAddr::from_str(self.address.as_str()) {
                             Ok(addr) => {
-                                next_scene.replace(Scene::Tracing(TracingScene::from_network(addr)));
+                                next_scene
+                                    .replace(Scene::Tracing(TracingScene::from_network(addr)));
                             }
                             Err(err) => {
                                 self.last_error = Some(err);
@@ -70,6 +72,10 @@ impl StartScene {
                         };
                     }
                 });
+
+                if let Some(it) = &self.last_error {
+                    ui.colored_label(ui.style().visuals.error_fg_color, format!("{:?}", it));
+                }
             });
 
         next_scene
