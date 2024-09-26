@@ -44,7 +44,9 @@ impl StartScene {
                     let button = ui.button("open");
                     if button.clicked() {
                         if let Some(file_path) = FileDialog::new().pick_file() {
-                            println!("{:#?}", file_path);
+                            next_scene.replace(
+                                Scene::Tracing(TracingScene::from_file_path(file_path))
+                            );
                         }
                     }
                 });

@@ -19,7 +19,10 @@ use eframe::egui::{
 use eframe::{egui, emath};
 use egui_tiles::{Tile, Tree};
 use ps4libdoc::{LoadedDocumentation, SymbolDocumentation};
-use std::net::{SocketAddr, TcpListener, TcpStream};
+use std::fs::File;
+use std::io::Read;
+use std::net::{SocketAddr, TcpListener};
+use std::path::PathBuf;
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::thread::JoinHandle;
 use std::{io, thread};
@@ -29,17 +32,15 @@ pub struct TracingScene {
     state: ViewStateContainer,
     receiver: Receiver<TraceEvent>,
     tree: Tree<Pane>,
-    listening_thread_handle: JoinHandle<()>,
+    loading_thread_handle: JoinHandle<io::Result<()>>,
 }
 
 impl TracingScene {
     pub fn from_network(socket_addr: SocketAddr) -> TracingScene {
         let (sender, receiver) = channel();
 
-        let listening_thread_handle = thread::spawn(move || {
-            if let Err(e) = run_server(socket_addr, sender.clone()) {
-                eprintln!("Server error: {}", e);
-            }
+        let loading_thread_handle = thread::spawn(move || {
+            run_server(socket_addr, sender.clone())
         });
 
         TracingScene {
@@ -47,7 +48,27 @@ impl TracingScene {
             state: ViewStateContainer::new(),
             receiver,
             tree: create_tree(),
-            listening_thread_handle,
+            loading_thread_handle,
+        }
+    }
+    
+    pub fn from_file_path(path: PathBuf) -> TracingScene {
+        let (sender, receiver) = channel();
+
+        let loading_thread_handle = thread::spawn(move || -> io::Result<()> {
+            let file = File::open(path)?;
+            
+            read_stream(file, sender)?;
+            
+            Ok(())
+        });
+        
+        TracingScene {
+            last_width: None,
+            state: ViewStateContainer::Empty,
+            receiver,
+            tree: create_tree(),
+            loading_thread_handle,
         }
     }
 
@@ -189,7 +210,7 @@ impl TracingScene {
     }
 }
 
-fn handle_client(mut stream: TcpStream, sender: Sender<TraceEvent>) -> io::Result<()> {
+fn read_stream(mut stream: impl Read, sender: Sender<TraceEvent>) -> io::Result<()> {
     let initial_message = InitialMessage::read(&mut stream)?;
     sender.send(TraceEvent::Start(initial_message)).unwrap();
 
@@ -206,7 +227,7 @@ fn run_server(addr: SocketAddr, sender: Sender<TraceEvent>) -> io::Result<()> {
             Ok(stream) => {
                 let sender_clone = sender.clone();
                 thread::spawn(move || {
-                    if let Err(e) = handle_client(stream, sender_clone) {
+                    if let Err(e) = read_stream(stream, sender_clone) {
                         eprintln!("error handling client: {}", e);
                     }
                 });
