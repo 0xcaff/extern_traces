@@ -39,9 +39,7 @@ impl TracingScene {
     pub fn from_network(socket_addr: SocketAddr) -> TracingScene {
         let (sender, receiver) = channel();
 
-        let loading_thread_handle = thread::spawn(move || {
-            run_server(socket_addr, sender.clone())
-        });
+        let loading_thread_handle = thread::spawn(move || run_server(socket_addr, sender.clone()));
 
         TracingScene {
             last_width: None,
@@ -51,18 +49,18 @@ impl TracingScene {
             loading_thread_handle,
         }
     }
-    
+
     pub fn from_file_path(path: PathBuf) -> TracingScene {
         let (sender, receiver) = channel();
 
         let loading_thread_handle = thread::spawn(move || -> io::Result<()> {
             let file = File::open(path)?;
-            
+
             read_stream(file, sender)?;
-            
+
             Ok(())
         });
-        
+
         TracingScene {
             last_width: None,
             state: ViewStateContainer::Empty,

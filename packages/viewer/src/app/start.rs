@@ -21,6 +21,16 @@ impl StartScene {
     pub fn update(&mut self, ctx: &Context) -> Option<Scene> {
         let mut next_scene = None;
 
+        if let Some(file_path) = ctx.input(|it| {
+            it.raw
+                .dropped_files
+                .iter()
+                .flat_map(|it| it.path.clone())
+                .next()
+        }) {
+            return Some(Scene::Tracing(TracingScene::from_file_path(file_path)));
+        }
+
         CentralPanel::default()
             .frame(Frame {
                 fill: ctx.style().visuals.panel_fill,
@@ -44,9 +54,8 @@ impl StartScene {
                     let button = ui.button("open");
                     if button.clicked() {
                         if let Some(file_path) = FileDialog::new().pick_file() {
-                            next_scene.replace(
-                                Scene::Tracing(TracingScene::from_file_path(file_path))
-                            );
+                            next_scene
+                                .replace(Scene::Tracing(TracingScene::from_file_path(file_path)));
                         }
                     }
                 });
