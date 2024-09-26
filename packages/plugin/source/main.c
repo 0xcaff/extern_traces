@@ -46,6 +46,31 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     final_printf("Configuration loaded: target_address=%s, target_port=%d, original_tls_size=%d\n",
                  config.target_address, config.target_port, config.original_tls_size);
 
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0)
+    {
+        final_printf("socket creation failed\n");
+        return 1;
+    }
+
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(config.target_port);
+
+    if (inet_pton(AF_INET, config.target_address, &server_addr.sin_addr) <= 0)
+    {
+        final_printf("invalid address\n");
+        close(sock);
+        return 1;
+    }
+
+    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+    {
+        final_printf("connection failed\n");
+        close(sock);
+        return 1;
+    }
+
     SELFParserState* parser = initialize_self_parser("/app0/eboot.bin");
 
     int tls_phdr_idx = get_phdr_index_by_type(parser, PT_TLS);
@@ -110,9 +135,9 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     struct FlushThreadArgs flush_thread_args = {
         .is_ready = false,
-        .plugin_config = &config,
         .dynamic_info = &info,
         .jump_slot_relocations = &jump_slot_relocations,
+        .sock = sock,
     };
 
     OrbisPthread thread;

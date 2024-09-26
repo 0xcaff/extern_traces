@@ -316,30 +316,7 @@ struct InitialMessageHeader {
 void *flush_thread(void *arg)
 {
     struct FlushThreadArgs* args = arg;
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0)
-    {
-        final_printf("socket creation failed\n");
-        return NULL;
-    }
-
-    struct sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(args->plugin_config->target_port);
-
-    if (inet_pton(AF_INET, args->plugin_config->target_address, &server_addr.sin_addr) <= 0)
-    {
-        final_printf("invalid address\n");
-        close(sock);
-        return NULL;
-    }
-
-    if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
-    {
-        final_printf("connection failed\n");
-        close(sock);
-        return NULL;
-    }
+    int sock = args->sock;
 
     struct InitialMessageHeader initial_message = {
         .tsc_frequency = sceKernelGetTscFrequency(),

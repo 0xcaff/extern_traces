@@ -32,7 +32,7 @@ struct FlushThreadArgs {
     bool is_ready;
     DynamicInfo* dynamic_info;
     JumpSlotRelocationList* jump_slot_relocations;
-    const PluginConfig* plugin_config;
+    int sock;
 };
 
 void *flush_thread(void *arg);
