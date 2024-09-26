@@ -26,7 +26,7 @@ __attribute__((naked)) void hook()
         "sub $0x88, %rsp\n\t"
 
         // call logger
-        "movq %fs:-32, %rdi\n\t"
+        "movl %fs:-32, %edi\n\t"
         "movq %fs:-8, %rsi\n\t"
         "call emit_span_start\n\t"
         "nop\n\t"
@@ -89,7 +89,7 @@ __attribute__((naked)) void hook()
 }
 
 #define PAGE_SIZE 4096
-#define HOOK_FN_SIZE 0xc9
+#define HOOK_FN_SIZE 0xc8
 
 void* build_hook_fn(uint16_t static_tls_base) {
     size_t required_size = HOOK_FN_SIZE + 16;
@@ -114,12 +114,12 @@ void* build_hook_fn(uint16_t static_tls_base) {
     } ThreadLocalStoragePatches;
 
     ThreadLocalStoragePatches patches[] = {
-        {0x3f + 5, -32},
-        {0x48 + 5, -8},
-        {0x98 + 5, -16},
-        {0xa1 + 5, -24},
-        {0xac + 5, -16},
-        {0xb8 + 5, -8},
+        {0x3f + 4, -32},
+        {0x47 + 5, -8},
+        {0x97 + 5, -16},
+        {0xa0 + 5, -24},
+        {0xab + 5, -16},
+        {0xb7 + 5, -8},
     };
     size_t num_patches = sizeof(patches) / sizeof(ThreadLocalStoragePatches);
 
@@ -138,12 +138,12 @@ void* build_hook_fn(uint16_t static_tls_base) {
 
     {
         unsigned char patch[] = {0xFF, 0x15, 0x72, 0x00, 0x00, 0x00};
-        memcpy(new_mem + 0x51, patch, sizeof(patch));
+        memcpy(new_mem + 0x50, patch, sizeof(patch));
     }
 
     {
         unsigned char patch[] = {0xFF, 0x15, 0x0A, 0x00, 0x00, 0x00};
-        memcpy(new_mem + 0xC1, patch, sizeof(patch));
+        memcpy(new_mem + 0xC0, patch, sizeof(patch));
     }
 
     *(void**)((char*)new_mem + HOOK_FN_SIZE) = emit_span_start;
@@ -212,7 +212,7 @@ bool register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
 
         void** function_ptr = (void**)(reloc->relocation_offset + 0x0000000000400000);
         sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
-        final_printf("offset = %lx, addr = %lx, symbol = %s\n", reloc->relocation_offset, (uint64_t)*function_ptr, reloc->symbol_info->data.parsed.name);
+        final_printf("label_id = %u, offset = %lx, addr = %lx, symbol = %s\n", label_idx, reloc->relocation_offset, (uint64_t)*function_ptr, reloc->symbol_info->data.parsed.name);
 
         *(uint32_t*)((char*)func_mem + 8) = label_idx;
         *(void**)((char*)func_mem + 34) = *function_ptr;
@@ -222,6 +222,8 @@ bool register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     }
     
     final_printf("trampolines installed\n");
+    
+    // hex_dump(mem, total_size);
 
     sceKernelMprotect((void *)mem, total_size, VM_PROT_READ | VM_PROT_EXECUTE);
 
