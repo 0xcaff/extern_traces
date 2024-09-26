@@ -11,3 +11,4 @@ egui_plot = "0.28.1"
 ps4libdoc = { path = "../ps4libdoc" }
 egui_tiles = "0.9.1"
 rfd = "0.15.0"
+clap = { version = "4.5.18", features = ["derive"] }

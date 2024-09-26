@@ -3,10 +3,10 @@ use crate::app::tracing::TracingScene;
 use eframe::egui::Context;
 use ps4libdoc::LoadedDocumentation;
 
-mod start;
-mod tracing;
+pub mod start;
+pub mod tracing;
 
-enum Scene {
+pub enum Scene {
     Start(StartScene),
     Tracing(TracingScene),
 }
@@ -23,12 +23,12 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(_cc: &eframe::CreationContext<'_>, initial_scene: Scene) -> Self {
         let docs = LoadedDocumentation::bundled().unwrap();
 
         App {
             docs,
-            scene: Scene::initial(),
+            scene: initial_scene,
         }
     }
 }
