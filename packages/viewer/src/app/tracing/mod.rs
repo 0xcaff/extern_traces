@@ -134,7 +134,7 @@ impl TracingScene {
                             );
                         }
                         PaneResponse::FocusPane(pane) => {
-                            self.tree.make_active(|it, tile| {
+                            self.tree.make_active(|_it, tile| {
                                 let Tile::Pane(needle_pane) = tile else {
                                     return false;
                                 };

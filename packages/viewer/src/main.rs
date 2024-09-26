@@ -1,6 +1,6 @@
 use crate::app::tracing::TracingScene;
 use crate::app::Scene;
-use clap::{Args, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 use std::net::SocketAddr;
 use std::path::PathBuf;
 

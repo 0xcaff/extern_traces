@@ -37,7 +37,7 @@ impl SymbolDetailPane {
                             .enumerate()
                             .map(|(span_idx, span)| (*thread_id, span_idx, span))
                     })
-                    .filter(|(thread_id, span_idx, span)| (span.label_id as usize) == symbol_idx)
+                    .filter(|(_thread_id, _span_idx, span)| (span.label_id as usize) == symbol_idx)
                     .map(|(thread_id, span_idx, _)| SelectedSpanMetadata {
                         span_idx,
                         thread_id,
