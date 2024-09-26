@@ -1,5 +1,5 @@
+use crate::app::tracing::view_state::ThreadSpan;
 use crate::proto::InitialMessage;
-use crate::view_state::ThreadSpan;
 use std::time::SystemTime;
 
 pub struct TimelinePositionState {

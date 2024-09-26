@@ -1,5 +1,5 @@
+use crate::app::tracing::timeline_position::TimelinePositionState;
 use crate::proto::{InitialMessage, SpanEnd, SpanEvent, SpanStart};
-use crate::timeline_position::TimelinePositionState;
 use std::collections::BTreeMap;
 use std::ops::Range;
 
