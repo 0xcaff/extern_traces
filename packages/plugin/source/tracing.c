@@ -37,15 +37,40 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
     uint64_t time = get_current_time_rdtscp();
 
     if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffersForWorkload) {
-        struct SpanStartAdditionalData span = {
+        uint32_t count = (uint32_t)args->args[0];
+        uint8_t **draw_buffers = (uint8_t **)args->args[1];
+        uint32_t *draw_sizes = (uint32_t *)args->args[2];
+        uint8_t **compute_buffers = (uint8_t **)args->args[3];
+        uint32_t *compute_sizes = (uint32_t *)args->args[4];
+
+        uint64_t total_size = sizeof(uint32_t); // For count
+        total_size += count * sizeof(uint32_t) * 2; // For draw_sizes and compute_sizes
+
+        for (uint32_t i = 0; i < count; i++) {
+            total_size += draw_sizes[i];
+            total_size += compute_sizes[i];
+        }
+
+        struct SpanStartAdditionalData span_header = {
             .message_tag = 3,
             .thread_id = state->thread_id,
             .time = time,
             .label_id = label_id,
-            .extra_data_length = 0,
+            .extra_data_length = total_size,
         };
 
-        write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
+        write_to_buffer(state, (const uint8_t *)&span_header, sizeof(span_header));
+        write_to_buffer(state, (const uint8_t *)&count, sizeof(count));
+        write_to_buffer(state, (const uint8_t *)draw_sizes, count * sizeof(uint32_t));
+        write_to_buffer(state, (const uint8_t *)compute_sizes, count * sizeof(uint32_t));
+
+        for (uint32_t i = 0; i < count && draw_buffers && draw_sizes; i++) {
+            write_to_buffer(state, draw_buffers[i], draw_sizes[i]);
+        }
+
+        for (uint32_t i = 0; i < count && compute_buffers && compute_sizes; i++) {
+            write_to_buffer(state, compute_buffers[i], compute_sizes[i]);
+        }
     } else {
         struct SpanStart span = {
             .message_tag = 0,
