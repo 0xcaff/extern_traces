@@ -1,5 +1,6 @@
 #include "logger.h"
 #include "time.h"
+#include "tracing.h"
 
 struct SpanStart
 {
@@ -16,7 +17,7 @@ struct SpanEnd
     uint64_t time;
 };
 
-void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state) {
+void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state, struct Args* args) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
     uint64_t time = get_current_time_rdtscp();
 
