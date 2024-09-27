@@ -116,6 +116,10 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     JumpSlotRelocationList jump_slot_relocations;
     find_jump_slot_relocations(&info, &jump_slot_relocations);
+    
+    struct SpecificSymbolsTable specific_symbols_table;
+    fill_specific_symbols_table(&jump_slot_relocations, &specific_symbols_table);
+    initialize_specific_symbols_table(&specific_symbols_table);
 
     if (!register_hooks(&jump_slot_relocations, tls_base)) {
         cleanup_jump_slot_relocation_list(&jump_slot_relocations);

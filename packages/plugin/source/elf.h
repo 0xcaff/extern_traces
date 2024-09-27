@@ -131,3 +131,9 @@ typedef struct {
 
 void find_jump_slot_relocations(const DynamicInfo* info, JumpSlotRelocationList* result);
 void cleanup_jump_slot_relocation_list(JumpSlotRelocationList* list);
+
+struct SpecificSymbolsTable {
+    int64_t sceGnmSubmitAndFlipCommandBuffersForWorkload;
+};
+
+void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct SpecificSymbolsTable* table);

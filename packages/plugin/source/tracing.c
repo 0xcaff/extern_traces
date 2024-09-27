@@ -2,6 +2,12 @@
 #include "time.h"
 #include "tracing.h"
 
+static struct SpecificSymbolsTable sharedTable;
+
+void initialize_specific_symbols_table(struct SpecificSymbolsTable* table) {
+    sharedTable = *table;
+}
+
 struct SpanStart
 {
     uint64_t message_tag;
