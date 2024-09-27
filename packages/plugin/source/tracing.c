@@ -16,6 +16,15 @@ struct SpanStart
     uint64_t label_id;
 };
 
+struct SpanStartAdditionalData
+{
+    uint64_t message_tag;
+    uint64_t thread_id;
+    uint64_t time;
+    uint64_t label_id;
+    uint64_t extra_data_length;
+};
+
 struct SpanEnd
 {
     uint64_t message_tag;
@@ -27,14 +36,26 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
     uint64_t time = get_current_time_rdtscp();
 
-    struct SpanStart span = {
-        .message_tag = 0,
-        .thread_id = state->thread_id,
-        .time = time,
-        .label_id = label_id,
-    };
+    if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffersForWorkload) {
+        struct SpanStartAdditionalData span = {
+            .message_tag = 3,
+            .thread_id = state->thread_id,
+            .time = time,
+            .label_id = label_id,
+            .extra_data_length = 0,
+        };
 
-    write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
+        write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
+    } else {
+        struct SpanStart span = {
+            .message_tag = 0,
+            .thread_id = state->thread_id,
+            .time = time,
+            .label_id = label_id,
+        };
+
+        write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
+    }
 }
 
 void emit_span_end(struct ThreadLoggingState* initial_state) {
