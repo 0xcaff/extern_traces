@@ -109,6 +109,7 @@ from you, my email and X DMs are open.
 * illusion for helping me figure out how to hook the global offset table
 * options for helping me think through the wait free data structure design
 * kiwi for showing me how kernel space ps4 code works
+* LightningMods for explaining libc memory allocation constraints
 
 [releases]: https://github.com/0xcaff/extern_traces/releases
 [patch_self.py]: https://github.com/0xcaff/extern_traces/blob/main/patch_self.py
