@@ -43,12 +43,17 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
         uint8_t **compute_buffers = (uint8_t **)args->args[3];
         uint32_t *compute_sizes = (uint32_t *)args->args[4];
 
-        uint64_t total_size = sizeof(uint32_t); // For count
-        total_size += count * sizeof(uint32_t) * 2; // For draw_sizes and compute_sizes
+        uint64_t total_size = sizeof(struct SpanStartAdditionalData) + sizeof(uint32_t);
+        total_size += count * sizeof(uint32_t) * 2;
 
         for (uint32_t i = 0; i < count; i++) {
             total_size += draw_sizes[i];
             total_size += compute_sizes[i];
+        }
+
+        struct BufferReservation reservation = thread_logging_state_reserve_space(state, total_size);
+        if (reservation.buffer == NULL) {
+            return;
         }
 
         struct SpanStartAdditionalData span_header = {
@@ -56,21 +61,23 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
             .thread_id = state->thread_id,
             .time = time,
             .label_id = label_id,
-            .extra_data_length = total_size,
+            .extra_data_length = total_size - sizeof(struct SpanStartAdditionalData),
         };
 
-        write_to_buffer(state, (const uint8_t *)&span_header, sizeof(span_header));
-        write_to_buffer(state, (const uint8_t *)&count, sizeof(count));
-        write_to_buffer(state, (const uint8_t *)draw_sizes, count * sizeof(uint32_t));
-        write_to_buffer(state, (const uint8_t *)compute_sizes, count * sizeof(uint32_t));
+        buffer_reservation_write(&reservation, (const uint8_t *)&span_header, sizeof(span_header));
+        buffer_reservation_write(&reservation, (const uint8_t *)&count, sizeof(count));
+        buffer_reservation_write(&reservation, (const uint8_t *)draw_sizes, count * sizeof(uint32_t));
+        buffer_reservation_write(&reservation, (const uint8_t *)compute_sizes, count * sizeof(uint32_t));
 
         for (uint32_t i = 0; i < count && draw_buffers && draw_sizes; i++) {
-            write_to_buffer(state, draw_buffers[i], draw_sizes[i]);
+            buffer_reservation_write(&reservation, draw_buffers[i], draw_sizes[i]);
         }
 
         for (uint32_t i = 0; i < count && compute_buffers && compute_sizes; i++) {
-            write_to_buffer(state, compute_buffers[i], compute_sizes[i]);
+            buffer_reservation_write(&reservation, compute_buffers[i], compute_sizes[i]);
         }
+
+        thread_logging_state_flush_reservation(state, reservation);
     } else {
         struct SpanStart span = {
             .message_tag = 0,
