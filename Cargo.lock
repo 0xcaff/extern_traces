@@ -1353,6 +1353,7 @@ dependencies = [
  "eframe",
  "egui_plot",
  "egui_tiles",
+ "hex",
  "ps4libdoc",
  "rfd",
 ]
