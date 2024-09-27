@@ -94,6 +94,7 @@ pub struct SpanStart {
     pub thread_id: u64,
     pub time: u64,
     pub label_id: u64,
+    pub extra_data: Option<Vec<u8>>,
 }
 
 #[derive(Debug, Clone)]
@@ -196,6 +197,7 @@ impl TraceEvent {
                     thread_id,
                     time,
                     label_id,
+                    extra_data: None,
                 })))
             }
             1 => {
@@ -223,6 +225,25 @@ impl TraceEvent {
                     last_time,
                     time,
                 }))
+            }
+            3 => {
+                // SpanStartAdditionalData
+                let mut data = [0u8; 32];
+                stream.read_exact(&mut data)?;
+                let thread_id = u64::from_le_bytes(data[0..8].try_into().unwrap());
+                let time = u64::from_le_bytes(data[8..16].try_into().unwrap());
+                let label_id = u64::from_le_bytes(data[16..24].try_into().unwrap());
+                let extra_data_length = u64::from_le_bytes(data[24..32].try_into().unwrap());
+
+                let mut extra_data = vec![0u8; extra_data_length as usize];
+                stream.read_exact(&mut extra_data)?;
+
+                Ok(TraceEvent::Span(SpanEvent::Start(SpanStart {
+                    thread_id,
+                    time,
+                    label_id,
+                    extra_data: Some(extra_data),
+                })))
             }
             _ => Err(ErrorKind::InvalidData.into()),
         }
