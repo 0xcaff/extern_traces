@@ -4,6 +4,8 @@ a low-overhead, realtime trace capture tool for ps4 applications. collects
 traces in realtime for calls of all non-libc imports for arbitrary
 applications.
 
+<img src="./screenshot.png">
+
 ## installation
 
 1. install `extern_traces.prx`
@@ -42,7 +44,7 @@ its thread local storage segment.
 
 to patch an application, extract it and use the [patch_self.py] on the
 application's SELF eboot.bin. i've been using ModdedWarfare's Patch Builder to
-extract, patch and rebuild fpkgs. i believe itemzflow's nfs mounting of
+extract, patch and rebuild fpkgs. i believe itemzflow's nfs mounting for
 unpacked applications may work as well.
 
 update the `/data/extern_traces.ini` with a section for the newly patched title
@@ -59,7 +61,7 @@ original_tls_size = 528
    * make sure the ps4 can reach the specified listen port.
    * make sure there is a high quality network link between the ps4 and trace
      collector. trace volume ranges from 10-50MB/s. messages will first spill
-     to memory then get dropped if available memory is exceeded.
+     to memory then get dropped if available memory is exceeded on the ps4.
 
 2. with extern_traces.prx loaded, launch the game.
 
@@ -81,7 +83,7 @@ if something doesn't work, search klog for `extern_traces`. please open an
 issue along with the following information
 
 * the title and version you're trying to trace
-* explain how eboot.bin was patched and gotten running on ths ps4
+* explain how eboot.bin was patched and loaded onto the ps4
 * include the klog (`nc <ps4 addr> 3232`)
 
 ## contributing
@@ -92,8 +94,21 @@ feedback, make sure it is rock solid and to make the lives of people building
 GoldHEN plugins, emulators and more, easier. if something is broken, please
 open an issue.
 
-also if you're building something pushing the limits of the platform,
-i want to hear from you, my email and X DMs are open.
+if you're building something using this in an interesting way, i want to hear
+from you, my email and X DMs are open.
+
+## future plans
+
+* deeper trace information around coordination primitives (locks, threads,
+  semaphores, queues)
+* collect and display full graphics state
+* make the UI useful for more use cases
+
+## special thanks
+
+* illusion for helping me figure out how to hook the global offset table
+* options for helping me think through the wait free data structure design
+* kiwi for showing me how kernel space ps4 code works
 
 [releases]: https://github.com/0xcaff/extern_traces/releases
 [patch_self.py]: https://github.com/0xcaff/extern_traces/blob/main/patch_self.py
