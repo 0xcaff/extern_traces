@@ -32,7 +32,7 @@ jobs:
 
       - run: |
           mkdir release
-          mv build-artifacts/prx_final/extern_traces.prx
+          mv build-artifacts/prx_final/extern_traces.prx release/extern_traces.prx
 
       - name: release
         uses: softprops/action-gh-release@v2
