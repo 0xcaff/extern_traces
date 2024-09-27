@@ -82,8 +82,7 @@ void write_thread_logging_state_slow(uint64_t new_value)
         : "memory");
 }
 
-bool try_write_to_buffer(struct BufferState *state, const uint8_t *data, size_t length)
-{
+uint64_t buffer_state_free_space(struct BufferState *state) {
     uint64_t free_space;
     uint64_t read_idx = state->read_idx;
     uint64_t size = state->size - sizeof(struct BufferState);
@@ -97,56 +96,80 @@ bool try_write_to_buffer(struct BufferState *state, const uint8_t *data, size_t 
         free_space = read_idx - state->write_idx;
     }
 
-    if (free_space <= length)
-    {
-        return false;
-    }
-
-    size_t end_pos = (state->write_idx + length) % size;
-    if (end_pos < state->write_idx)
-    {
-        size_t first_chunk = size - state->write_idx;
-        memcpy(&state->buffer[state->write_idx], data, first_chunk);
-        memcpy(state->buffer, data + first_chunk, end_pos);
-    }
-    else
-    {
-        memcpy(&state->buffer[state->write_idx], data, length);
-    }
-
-    // this operation must occur after writing to buffer completes as updating
-    // write_idx marks allows the region to be read
-    state->write_idx = end_pos;
-
-    return true;
+    return free_space;
 }
 
-bool write_to_thread_logger(
+struct BufferReservation thread_logging_state_reserve_space(
     struct ThreadLoggingState* thread_state,
-    const uint8_t *data,
     size_t length
 ) {
     struct BufferState* current_buffer = thread_state->current_buffer;
-    bool current_buffer_accepted = try_write_to_buffer(current_buffer, data, length);
-    if (current_buffer_accepted) {
-        return true;
+    uint64_t buffer_free_space = buffer_state_free_space(thread_state->current_buffer);
+    if (buffer_free_space >= length) {
+        struct BufferReservation value = {
+            .buffer = current_buffer,
+            .write_idx = current_buffer->write_idx,
+            .length = length,
+            .is_new = false,
+        };
+
+        return value;
     }
 
     struct BufferState* next_buffer = new_buffer_state(current_buffer->size * 2);
     if (!next_buffer) {
-        return false;
+        thread_state->dropped_packets_count += 1;
+
+        struct BufferReservation value = {
+            .buffer = NULL,
+            .write_idx = 0,
+            .length = 0,
+            .is_new = false,
+        };
+
+        return value;
     }
 
     next_buffer->last_buffer = current_buffer;
+    struct BufferReservation value = {
+        .buffer = next_buffer,
+        .write_idx = next_buffer->write_idx,
+        .length = length,
+        .is_new = true,
+    };
 
-    bool next_buffer_accepted = try_write_to_buffer(next_buffer, data, length);
-    if (!next_buffer_accepted) {
-        final_printf("[INVARIANT VIOLATED] failed to write to new buffer\n");
-        return false;
+    return value;
+}
+
+void buffer_reservation_write(
+    struct BufferReservation* reservation,
+    const uint8_t *data,
+    size_t length
+) {
+    uint64_t size = reservation->buffer->size - sizeof(struct BufferState);
+    size_t end_pos = (reservation->write_idx + length) % size;
+    if (end_pos < reservation->write_idx)
+    {
+        size_t first_chunk = size - reservation->write_idx;
+        memcpy(&reservation->buffer->buffer[reservation->write_idx], data, first_chunk);
+        memcpy(&reservation->buffer->buffer, data + first_chunk, end_pos);
+    }
+    else
+    {
+        memcpy(&reservation->buffer->buffer[reservation->write_idx], data, length);
     }
 
-    thread_state->current_buffer = next_buffer;
-    return true;
+    reservation->write_idx = end_pos;
+}
+
+void thread_logging_state_flush_reservation(
+    struct ThreadLoggingState* thread_state,
+    struct BufferReservation reservation
+) {
+    reservation.buffer->write_idx = reservation.buffer->write_idx;
+    if (reservation.is_new) {
+        thread_state->current_buffer = reservation.buffer;
+    }
 }
 
 void write_to_buffer(
@@ -154,11 +177,13 @@ void write_to_buffer(
     const uint8_t *data,
     size_t length
 ) {
-    if (write_to_thread_logger(thread_state, data, length)) {
+    struct BufferReservation reservation = thread_logging_state_reserve_space(thread_state, length);
+    if (reservation.buffer == NULL) {
         return;
     }
 
-    thread_state->dropped_packets_count += 1;
+    buffer_reservation_write(&reservation, data, length);
+    thread_logging_state_flush_reservation(thread_state, reservation);
 }
 
 ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
