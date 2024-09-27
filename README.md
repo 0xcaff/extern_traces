@@ -1,8 +1,8 @@
 # extern_traces
 
 a low-overhead, realtime trace capture tool for ps4 applications. collects
-traces in realtime for calls of all non-libc imports for arbitrary
-applications.
+traces for calls of all non-libc imports for arbitrary applications running on
+the ps4.
 
 <img src="./screenshot.png">
 
