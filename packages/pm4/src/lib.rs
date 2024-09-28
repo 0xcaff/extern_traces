@@ -8,6 +8,7 @@ mod packet;
 mod packet_value;
 mod reader;
 mod registers;
+mod shader;
 
 pub use intermediate::*;
 pub use packet::*;
