@@ -1,5 +1,7 @@
+use alloc::{format, vec};
+use alloc::string::{String, ToString};
 use crate::instructions::display::DisplayInstruction;
-use crate::instructions::formats::{combine, ParseInstruction, Reader, VOP2Instruction};
+use crate::instructions::formats::{combine, ParseInstruction, VOP2Instruction};
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
 use crate::instructions::operands::{
     ScalarDestinationOperand, ScalarSourceOperand, SourceOperand, VectorGPR,
@@ -10,6 +12,7 @@ use anyhow::format_err;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::FromRepr;
+use crate::SliceReader;
 
 #[derive(Debug, FromBits)]
 #[bits(64)]
@@ -62,8 +65,8 @@ impl OutputModifier {
     }
 }
 
-impl<R: Reader> ParseInstruction<R> for VOP3Instruction {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
+impl ParseInstruction for VOP3Instruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(VOP3Instruction::from_bits(token))
     }

@@ -1,3 +1,5 @@
+use alloc::{format, vec};
+use alloc::string::ToString;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::ScalarDestinationOperand;

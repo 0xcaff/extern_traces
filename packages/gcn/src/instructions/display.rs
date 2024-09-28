@@ -1,3 +1,7 @@
+use alloc::format;
+use alloc::string::String;
+use alloc::vec::Vec;
+
 pub trait DisplayInstruction {
     fn display(&self, literal_constant: Option<u32>) -> DisplayableInstruction;
 }

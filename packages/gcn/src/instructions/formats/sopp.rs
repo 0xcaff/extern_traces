@@ -1,3 +1,6 @@
+use alloc::format;
+use alloc::string::ToString;
+use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::ops::SOPPOpCode;
 use crate::instructions::DisplayableInstruction;

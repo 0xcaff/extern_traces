@@ -1,14 +1,19 @@
-use crate::instructions::display::DisplayInstruction;
-use crate::instructions::formats::{combine, ParseInstruction, Reader};
 use crate::instructions::instruction_info::OperandInfo;
+use crate::instructions::operands::ScalarDestinationOperand;
+use alloc::{format, vec};
+use alloc::string::{String, ToString};
+use alloc::vec::Vec;
+use core::fmt;
+use crate::instructions::display::DisplayInstruction;
+use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::operands::{
-    ScalarDestinationOperand, ScalarGeneralPurposeRegisterGroup, VectorGPR,
+    ScalarGeneralPurposeRegisterGroup, VectorGPR,
 };
 use crate::instructions::ops::MIMGOpCode;
 use crate::instructions::DisplayableInstruction;
 use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
-use std::fmt;
+use crate::SliceReader;
 
 /// Image Memory Buffer Operations
 ///
@@ -94,8 +99,8 @@ impl fmt::Debug for DMask {
     }
 }
 
-impl<R: Reader> ParseInstruction<R> for MIMGInstruction {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
+impl ParseInstruction for MIMGInstruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MIMGInstruction::from_bits(token))
     }

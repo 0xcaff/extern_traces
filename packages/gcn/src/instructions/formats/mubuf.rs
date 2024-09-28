@@ -1,11 +1,14 @@
+use alloc::{format, vec};
+use alloc::string::ToString;
 use crate::instructions::display::DisplayInstruction;
-use crate::instructions::formats::{combine, ParseInstruction, Reader};
+use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::instructions::ops::MUBUFOpCode;
 use crate::instructions::DisplayableInstruction;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
+use crate::SliceReader;
 
 /// Untyped Vector Memory Buffer Operation
 ///
@@ -62,8 +65,8 @@ impl FromBits<12> for Offset {
     }
 }
 
-impl<R: Reader> ParseInstruction<R> for MUBUFInstruction {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
+impl ParseInstruction for MUBUFInstruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MUBUFInstruction::from_bits(token))
     }

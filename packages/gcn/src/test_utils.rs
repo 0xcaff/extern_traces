@@ -1,7 +1,10 @@
+use alloc::{format, vec};
+use alloc::string::String;
+use alloc::vec::Vec;
 use crate::instructions::formats::{FormattedInstruction, SOPPInstruction};
 use crate::instructions::ops::SOPPOpCode;
 use crate::instructions::Instruction;
-use std::io::Cursor;
+use crate::SliceReader;
 
 pub struct GCNInstructionStream {
     pub instructions: Vec<Instruction>,
@@ -9,16 +12,16 @@ pub struct GCNInstructionStream {
 
 impl GCNInstructionStream {
     pub fn new(shader_bytes: &[u8]) -> Result<GCNInstructionStream, anyhow::Error> {
-        let mut cursor = Cursor::new(shader_bytes);
+        let mut reader = SliceReader::new(bytemuck::cast_slice(shader_bytes));
         let mut instructions = vec![];
 
         loop {
-            if cursor.is_empty() {
+            if !reader.has_more() {
                 break;
             }
 
-            let position = cursor.position();
-            let instruction = Instruction::parse(&mut cursor, position)?;
+            let position = reader.position();
+            let instruction = Instruction::parse(&mut reader, (position * 4) as _)?;
             let is_end_pgm = if let FormattedInstruction::SOPP(SOPPInstruction {
                 op: SOPPOpCode::s_endpgm,
                 ..

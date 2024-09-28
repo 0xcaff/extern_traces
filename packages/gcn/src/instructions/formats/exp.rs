@@ -1,9 +1,13 @@
+use alloc::format;
+use alloc::string::{String, ToString};
+use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
-use crate::instructions::formats::{combine, ParseInstruction, Reader};
+use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::operands::VectorGPR;
 use crate::instructions::DisplayableInstruction;
 use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
+use crate::SliceReader;
 
 /// Export
 ///
@@ -37,8 +41,8 @@ pub struct ExpInstruction {
     pub vsrc3: Option<VectorGPR>,
 }
 
-impl<R: Reader> ParseInstruction<R> for ExpInstruction {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
+impl ParseInstruction for ExpInstruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(ExpInstruction::from_bits(token))
     }

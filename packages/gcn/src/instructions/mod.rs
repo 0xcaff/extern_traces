@@ -7,10 +7,9 @@ pub mod operands;
 #[path = "generated/mod.rs"]
 pub mod ops;
 
-use crate::reader::Reader;
-
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
 use crate::instructions::formats::{FormattedInstruction, ParseInstruction};
+use crate::SliceReader;
 
 #[derive(Debug)]
 pub struct Instruction {
@@ -25,7 +24,7 @@ impl Instruction {
     }
 
     pub fn parse(
-        reader: &mut impl Reader,
+        reader: &mut SliceReader,
         program_counter: u64,
     ) -> Result<Instruction, anyhow::Error> {
         let token = reader.read_u32()?;

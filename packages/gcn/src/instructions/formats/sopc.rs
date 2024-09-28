@@ -1,3 +1,5 @@
+use alloc::string::ToString;
+use alloc::vec;
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
 use crate::instructions::operands::ScalarSourceOperand;
 use crate::instructions::ops::SOPCOpCode;

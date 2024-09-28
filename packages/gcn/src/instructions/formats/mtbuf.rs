@@ -1,11 +1,14 @@
+use alloc::string::ToString;
+use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::mubuf::Offset;
-use crate::instructions::formats::{combine, ParseInstruction, Reader};
+use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::instructions::ops::MTBUFOpCode;
 use crate::instructions::DisplayableInstruction;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
+use crate::SliceReader;
 
 /// Typed Memory Buffer Operation
 ///
@@ -89,8 +92,8 @@ impl FromBits<4> for DataFormat {
     }
 }
 
-impl<R: Reader> ParseInstruction<R> for MTBufInstruction {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
+impl ParseInstruction for MTBufInstruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
         Ok(MTBufInstruction::from_bits(token))
     }

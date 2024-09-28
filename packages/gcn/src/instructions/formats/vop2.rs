@@ -1,3 +1,5 @@
+use alloc::string::ToString;
+use alloc::vec;
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::instructions::ops::VOP2OpCode;

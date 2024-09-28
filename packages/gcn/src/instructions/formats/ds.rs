@@ -1,11 +1,13 @@
+use alloc::string::ToString;
+use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::operands::VectorGPR;
 use crate::instructions::ops::DSOpCode;
 use crate::instructions::DisplayableInstruction;
-use crate::reader::Reader;
 use bits::FromBits;
 use bits_macros::FromBits;
+use crate::SliceReader;
 
 /// Data Share Instruction
 #[derive(Debug, FromBits)]
@@ -36,8 +38,8 @@ pub struct DSInstruction {
     pub vdst: VectorGPR,
 }
 
-impl<R: Reader> ParseInstruction<R> for DSInstruction {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error> {
+impl ParseInstruction for DSInstruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
 
         Ok(DSInstruction::from_bits(token))

@@ -16,10 +16,10 @@ pub use crate::instructions::formats::vop3::VOP3Instruction;
 pub use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::instructions::operands::{ScalarSourceOperand, SourceOperand};
 use crate::instructions::ops::{SOPKOpCode, VOP1OpCode, VOP2OpCode};
-use crate::reader::Reader;
 use bits::FromBits;
 use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
-use std::io;
+use crate::reader::EofError;
+use crate::SliceReader;
 
 pub mod ds;
 pub mod exp;
@@ -190,14 +190,14 @@ impl FormattedInstruction {
     }
 }
 
-pub trait ParseInstruction<R: Reader> {
-    fn parse(token: u32, reader: &mut R) -> Result<Self, anyhow::Error>
+pub trait ParseInstruction {
+    fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error>
     where
         Self: Sized;
 }
 
-impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
-    fn parse(token: u32, _reader: &mut R) -> Result<Self, anyhow::Error>
+impl<T: FromBits<32>> ParseInstruction for T {
+    fn parse(token: u32, _reader: &mut SliceReader) -> Result<Self, anyhow::Error>
     where
         Self: Sized,
     {
@@ -205,7 +205,7 @@ impl<R: Reader, T: FromBits<32>> ParseInstruction<R> for T {
     }
 }
 
-fn combine<R: Reader>(first_token: u32, reader: &mut R) -> Result<u64, io::Error> {
+fn combine(first_token: u32, reader: &mut SliceReader) -> Result<u64, EofError> {
     let second_token = reader.read_u32()?;
     let token = (first_token as u64) | ((second_token as u64) << 32);
 
