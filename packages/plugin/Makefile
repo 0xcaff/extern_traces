@@ -62,7 +62,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 $(TARGET): $(INTDIR) $(OBJS)
-	$(LD) $(GH_SDK)/build/crtprx.o $(INTDIR)/*.o -o $(TARGET_ELF).elf $(LDFLAGS)
+	$(LD) $(GH_SDK)/build/crtprx.o $(INTDIR)/*.o ../plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a -o $(TARGET_ELF).elf $(LDFLAGS)
 	$(TOOLCHAIN)/bin/$(CDIR)/create-fself -in=$(TARGET_ELF).elf -out=$(TARGET_ELF).oelf --lib=$(TARGET).prx --paid 0x3800000000000011
 
 $(TARGETSTUB): $(INTDIR) $(STUBOBJS)

@@ -1,0 +1,17 @@
+[package]
+name = "plugin_support"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+pm4 = { path = "../../../ps4-tools/packages/pm4" }
+libc = "0.2.159"
+
+[profile.release]
+panic = "abort"
+
+[profile.dev]
+panic = "abort"

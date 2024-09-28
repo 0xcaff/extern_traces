@@ -33,6 +33,8 @@ struct SpanEnd
     uint64_t time;
 };
 
+extern void log_pm4(const uint8_t* ptr, uint64_t len);
+
 void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state, struct Args* args) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
     uint64_t time = get_current_time_rdtscp();
@@ -74,6 +76,7 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
             uint32_t size = draw_sizes[i];
             uint8_t* buffer = draw_buffers[i];
 
+            log_pm4(buffer, (uint64_t)size);
             buffer_reservation_write(&reservation, buffer, size);
         }
 
