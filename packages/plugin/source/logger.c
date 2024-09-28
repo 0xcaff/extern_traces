@@ -113,7 +113,7 @@ struct BufferReservation thread_logging_state_reserve_space(
 ) {
     struct BufferState* current_buffer = thread_state->current_buffer;
     uint64_t buffer_free_space = buffer_state_free_space(thread_state->current_buffer);
-    if (buffer_free_space >= length) {
+    if (buffer_free_space > length) {
         struct BufferReservation value = {
             .buffer = current_buffer,
             .write_idx = current_buffer->write_idx,
