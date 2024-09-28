@@ -1,10 +1,10 @@
-use alloc::{format, vec};
-use alloc::string::String;
-use alloc::vec::Vec;
 use crate::instructions::formats::{FormattedInstruction, SOPPInstruction};
 use crate::instructions::ops::SOPPOpCode;
 use crate::instructions::Instruction;
 use crate::SliceReader;
+use alloc::string::String;
+use alloc::vec::Vec;
+use alloc::{format, vec};
 
 pub struct GCNInstructionStream {
     pub instructions: Vec<Instruction>,

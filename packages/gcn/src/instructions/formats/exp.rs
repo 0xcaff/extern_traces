@@ -1,13 +1,13 @@
-use alloc::format;
-use alloc::string::{String, ToString};
-use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::operands::VectorGPR;
 use crate::instructions::DisplayableInstruction;
+use crate::SliceReader;
+use alloc::format;
+use alloc::string::{String, ToString};
+use alloc::vec;
 use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
-use crate::SliceReader;
 
 /// Export
 ///

@@ -9,20 +9,20 @@ pub struct Reader<'a> {
 #[derive(Debug, Snafu)]
 pub struct EofError;
 
-impl <'a> Reader<'a> {
+impl<'a> Reader<'a> {
     pub fn new(inner: &'a [u8]) -> Reader<'a> {
-        Reader {
-            inner,
-            cursor: 0,
-        }
+        Reader { inner, cursor: 0 }
     }
 
     pub fn has_more(&self) -> bool {
-         self.cursor < self.inner.len()
+        self.cursor < self.inner.len()
     }
 
     pub fn read_u32(&mut self) -> Result<u32, EofError> {
-        let bytes: [u8; 4] = self.inner[self.cursor..(self.cursor + 4)].try_into().ok().ok_or(EofError)?;
+        let bytes: [u8; 4] = self.inner[self.cursor..(self.cursor + 4)]
+            .try_into()
+            .ok()
+            .ok_or(EofError)?;
         self.cursor += 4;
         Ok(u32::from_le_bytes(bytes))
     }

@@ -1,7 +1,7 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::VGT_DRAW_INITIATOR;
+use alloc::vec::Vec;
 use bits::FromBits;
 
 #[derive(Debug, Clone)]

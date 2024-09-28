@@ -1,9 +1,9 @@
-use alloc::format;
-use alloc::string::ToString;
-use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::ops::SOPPOpCode;
 use crate::instructions::DisplayableInstruction;
+use alloc::format;
+use alloc::string::ToString;
+use alloc::vec;
 use bits_macros::FromBits;
 
 /// Scalar Instruction One Input, One Special Operation

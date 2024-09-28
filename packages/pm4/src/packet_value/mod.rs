@@ -1,4 +1,3 @@
-use alloc::vec::Vec;
 use crate::indirect_buffer::IndirectBufferPacket;
 use crate::op_codes::OpCode;
 use crate::packet_value::acquire_memory::AcquireMemoryPacket;
@@ -12,6 +11,7 @@ use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterP
 use crate::packet_value::release_memory::ReleaseMemoryPacket;
 use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
+use alloc::vec::Vec;
 use pm4_internal_macros::ParsePacketValue;
 
 pub mod acquire_memory;

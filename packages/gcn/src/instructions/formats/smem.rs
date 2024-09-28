@@ -1,10 +1,10 @@
-use alloc::{format, vec};
-use alloc::string::ToString;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::ScalarDestinationOperand;
 use crate::instructions::ops::SMEMOpCode;
 use crate::instructions::DisplayableInstruction;
+use alloc::string::ToString;
+use alloc::{format, vec};
 use bits_macros::FromBits;
 
 /// Scalar Instruction Memory Access

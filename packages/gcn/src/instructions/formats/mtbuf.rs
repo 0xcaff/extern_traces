@@ -1,14 +1,14 @@
-use alloc::string::ToString;
-use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::mubuf::Offset;
 use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::instructions::ops::MTBUFOpCode;
 use crate::instructions::DisplayableInstruction;
+use crate::SliceReader;
+use alloc::string::ToString;
+use alloc::vec;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
-use crate::SliceReader;
 
 /// Typed Memory Buffer Operation
 ///

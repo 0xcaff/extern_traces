@@ -1,6 +1,6 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
+use alloc::vec::Vec;
 
 #[derive(Debug, Clone)]
 pub struct DispatchDirectPacket {

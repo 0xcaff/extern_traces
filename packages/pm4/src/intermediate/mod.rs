@@ -1,9 +1,5 @@
 pub mod build;
 
-use alloc::format;
-use alloc::collections::BTreeMap;
-use alloc::vec;
-use alloc::vec::Vec;
 use crate::dispatch_direct::DispatchDirectPacket;
 use crate::draw_index_auto::DrawIndexAutoPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
@@ -29,6 +25,10 @@ use crate::{
     SPI_SHADER_PGM_RSRC2_PS, SPI_SHADER_PGM_RSRC2_VS, SPI_SHADER_POS_FORMAT, SPI_SHADER_Z_FORMAT,
     SPI_VS_OUT_CONFIG, VGT_PRIMITIVE_TYPE,
 };
+use alloc::collections::BTreeMap;
+use alloc::format;
+use alloc::vec;
+use alloc::vec::Vec;
 use pm4_internal_macros::{Build, BuildUserData};
 
 #[derive(Debug)]

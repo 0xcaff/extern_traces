@@ -8,8 +8,7 @@ pub struct SliceReader<'a> {
     offset: usize,
 }
 
-impl SliceReader<'_> {
-}
+impl SliceReader<'_> {}
 
 impl<'a> SliceReader<'a> {
     pub fn new(slice: &'a [u32]) -> SliceReader<'a> {
@@ -19,11 +18,11 @@ impl<'a> SliceReader<'a> {
     pub fn has_more(&self) -> bool {
         !self.slice.is_empty()
     }
-    
+
     pub fn position(&self) -> usize {
         self.offset
     }
-    
+
     pub fn read_u32(&mut self) -> Result<u32, EofError> {
         if self.slice.is_empty() {
             return Err(EofError);

@@ -16,10 +16,10 @@ pub use crate::instructions::formats::vop3::VOP3Instruction;
 pub use crate::instructions::formats::vopc::VOPCInstruction;
 use crate::instructions::operands::{ScalarSourceOperand, SourceOperand};
 use crate::instructions::ops::{SOPKOpCode, VOP1OpCode, VOP2OpCode};
-use bits::FromBits;
-use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
 use crate::reader::EofError;
 use crate::SliceReader;
+use bits::FromBits;
+use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
 
 pub mod ds;
 pub mod exp;

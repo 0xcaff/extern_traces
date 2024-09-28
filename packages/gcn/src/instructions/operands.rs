@@ -1,8 +1,8 @@
-use core::fmt;
+use crate::instructions::instruction_info::OperandInfo;
 use alloc::format;
 use alloc::string::{String, ToString};
-use crate::instructions::instruction_info::OperandInfo;
 use bits::{Bits, FromBits};
+use core::fmt;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
 #[derive(Debug, Clone)]

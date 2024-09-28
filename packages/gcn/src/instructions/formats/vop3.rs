@@ -1,5 +1,3 @@
-use alloc::{format, vec};
-use alloc::string::{String, ToString};
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction, VOP2Instruction};
 use crate::instructions::instruction_info::{InstructionInfo, OperandInfo};
@@ -8,11 +6,13 @@ use crate::instructions::operands::{
 };
 use crate::instructions::ops::{VOP1OpCode, VOP2OpCode, VOP3OpCode, VOPCOpCode};
 use crate::instructions::DisplayableInstruction;
+use crate::SliceReader;
+use alloc::string::{String, ToString};
+use alloc::{format, vec};
 use anyhow::format_err;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::FromRepr;
-use crate::SliceReader;
 
 #[derive(Debug, FromBits)]
 #[bits(64)]

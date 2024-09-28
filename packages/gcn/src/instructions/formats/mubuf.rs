@@ -1,14 +1,14 @@
-use alloc::{format, vec};
-use alloc::string::ToString;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction};
 use crate::instructions::instruction_info::OperandInfo;
 use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::instructions::ops::MUBUFOpCode;
 use crate::instructions::DisplayableInstruction;
+use crate::SliceReader;
+use alloc::string::ToString;
+use alloc::{format, vec};
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
-use crate::SliceReader;
 
 /// Untyped Vector Memory Buffer Operation
 ///

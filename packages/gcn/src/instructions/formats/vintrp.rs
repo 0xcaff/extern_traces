@@ -1,10 +1,10 @@
-use alloc::format;
-use alloc::string::ToString;
-use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::VectorGPR;
 use crate::instructions::ops::VINTRPOpCode;
 use crate::instructions::DisplayableInstruction;
+use alloc::format;
+use alloc::string::ToString;
+use alloc::vec;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use strum::{AsRefStr, FromRepr};

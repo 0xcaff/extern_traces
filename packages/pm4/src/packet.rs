@@ -1,7 +1,7 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::packet_value::{ParsePacketValue, Type3PacketValue};
 use crate::reader::Reader;
+use alloc::vec::Vec;
 use bits::bitrange;
 
 #[derive(Debug)]

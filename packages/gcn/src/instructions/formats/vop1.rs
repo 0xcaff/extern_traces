@@ -1,9 +1,9 @@
-use alloc::string::ToString;
-use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::instructions::ops::VOP1OpCode;
 use crate::instructions::DisplayableInstruction;
+use alloc::string::ToString;
+use alloc::vec;
 use bits_macros::FromBits;
 
 /// Vector Instruction One Input, One Output

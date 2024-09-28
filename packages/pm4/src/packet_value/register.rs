@@ -1,8 +1,8 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::registers::ParseRegisterEntry;
 use crate::{Register, RegisterEntry};
+use alloc::vec::Vec;
 use bits::bitrange;
 
 #[derive(Debug)]

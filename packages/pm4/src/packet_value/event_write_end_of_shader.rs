@@ -1,6 +1,6 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::{ParseType3Packet, VGT_EVENT_TYPE};
+use alloc::vec::Vec;
 use bits::{bitrange, Bits, FromBits};
 
 #[derive(Debug, Clone)]

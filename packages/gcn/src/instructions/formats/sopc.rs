@@ -1,8 +1,8 @@
-use alloc::string::ToString;
-use alloc::vec;
 use crate::instructions::display::{DisplayInstruction, DisplayableInstruction};
 use crate::instructions::operands::ScalarSourceOperand;
 use crate::instructions::ops::SOPCOpCode;
+use alloc::string::ToString;
+use alloc::vec;
 use bits_macros::FromBits;
 
 /// Scalar Instruction Two Inputs, One Comparison

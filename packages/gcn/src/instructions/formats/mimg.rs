@@ -1,19 +1,17 @@
-use crate::instructions::instruction_info::OperandInfo;
-use crate::instructions::operands::ScalarDestinationOperand;
-use alloc::{format, vec};
-use alloc::string::{String, ToString};
-use alloc::vec::Vec;
-use core::fmt;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::formats::{combine, ParseInstruction};
-use crate::instructions::operands::{
-    ScalarGeneralPurposeRegisterGroup, VectorGPR,
-};
+use crate::instructions::instruction_info::OperandInfo;
+use crate::instructions::operands::ScalarDestinationOperand;
+use crate::instructions::operands::{ScalarGeneralPurposeRegisterGroup, VectorGPR};
 use crate::instructions::ops::MIMGOpCode;
 use crate::instructions::DisplayableInstruction;
+use crate::SliceReader;
+use alloc::string::{String, ToString};
+use alloc::vec::Vec;
+use alloc::{format, vec};
 use bits::{bit, Bits, FromBits};
 use bits_macros::FromBits;
-use crate::SliceReader;
+use core::fmt;
 
 /// Image Memory Buffer Operations
 ///

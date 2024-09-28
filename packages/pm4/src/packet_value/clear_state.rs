@@ -1,6 +1,6 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::ParseType3Packet;
+use alloc::vec::Vec;
 
 #[derive(Debug)]
 pub struct ClearStatePacket;

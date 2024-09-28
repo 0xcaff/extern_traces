@@ -1,10 +1,10 @@
-use alloc::format;
-use alloc::string::ToString;
-use alloc::vec;
 use crate::instructions::display::DisplayInstruction;
 use crate::instructions::operands::ScalarDestinationOperand;
 use crate::instructions::ops::SOPKOpCode;
 use crate::instructions::DisplayableInstruction;
+use alloc::format;
+use alloc::string::ToString;
+use alloc::vec;
 use bits_macros::FromBits;
 
 /// Scalar Instruction One Inline Constant Input, One Output

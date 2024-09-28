@@ -1,7 +1,7 @@
-use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::RELEASE_MEM_OP;
+use alloc::vec::Vec;
 use bits::{Bits, FromBits};
 use bits_macros::FromBits;
 use custom_debug::Debug;
