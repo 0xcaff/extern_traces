@@ -1,5 +1,4 @@
 use alloc::vec::Vec;
-use anyhow::format_err;
 use crate::op_codes::OpCode;
 use crate::packet_value::{ParsePacketValue, Type3PacketValue};
 use crate::reader::Reader;
@@ -14,14 +13,14 @@ pub enum PM4Packet {
 
 impl PM4Packet {
     fn parse(reader: &mut Reader) -> Result<PM4Packet, anyhow::Error> {
-        let value = reader.read_u32().ok_or_else(|| format_err!("eof"))?;
+        let value = reader.read_u32()?;
         let packet_type = bitrange(31, 30).of_32(value);
         let count = bitrange(29, 16).of_32(value) as u16 + 1;
 
         match packet_type {
             0 => Ok(PM4Packet::Type0(Type0Packet {
                 base_idx: bitrange(15, 0).of_32(value) as u16,
-                body: reader.read_dwords(count as usize).ok_or_else(|| format_err!("eof"))?,
+                body: reader.read_dwords(count as usize)?,
             })),
             2 => Ok(PM4Packet::Type2(Type2Header {
                 reserved: bitrange(29, 0).of_32(value) as u32,
@@ -42,7 +41,7 @@ impl PM4Packet {
                 },
                 value: Type3PacketValue::parse(
                     OpCode::from_op(bitrange(15, 8).of_32(value) as u8)?,
-                    reader.read_dwords(count as usize).ok_or_else(|| format_err!("eof"))?,
+                    reader.read_dwords(count as usize)?,
                 ),
             })),
             _ => panic!("unexpected packet type {}", packet_type),
