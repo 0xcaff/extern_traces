@@ -117,7 +117,6 @@ struct BufferReservation thread_logging_state_reserve_space(
         struct BufferReservation value = {
             .buffer = current_buffer,
             .write_idx = current_buffer->write_idx,
-            .length = length,
             .is_new = false,
         };
 
@@ -132,7 +131,6 @@ struct BufferReservation thread_logging_state_reserve_space(
         struct BufferReservation value = {
             .buffer = NULL,
             .write_idx = 0,
-            .length = 0,
             .is_new = false,
         };
 
@@ -143,7 +141,6 @@ struct BufferReservation thread_logging_state_reserve_space(
     struct BufferReservation value = {
         .buffer = next_buffer,
         .write_idx = next_buffer->write_idx,
-        .length = length,
         .is_new = true,
     };
 
