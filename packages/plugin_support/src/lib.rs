@@ -53,36 +53,43 @@ extern "C" fn log_pm4(buffer: *const u8, len: usize) {
         match command {
             Command::Draw { pipeline, .. } => {
                 if let Some(vertex_shader) = pipeline.vertex_shader.entrypoint_gpu_address {
-                    let invocation =
-                        unsafe { ShaderInvocation::decode_from_memory(vertex_shader) }.unwrap();
+                    if vertex_shader != 0 {
+                        let invocation =
+                            unsafe { ShaderInvocation::decode_from_memory(vertex_shader) }.unwrap();
 
-                    println!(
-                        "vertex @ 0x{:x} len {}",
-                        (vertex_shader as u64) << 8,
-                        invocation.bytes.len() * 4
-                    );
+                        println!(
+                            "vertex @ 0x{:x} len {}",
+                            (vertex_shader as u64) << 8,
+                            invocation.bytes.len() * 4
+                        );
+                    }
                 }
 
                 if let Some(pixel_shader) = pipeline.pixel_shader.address {
-                    let invocation =
-                        unsafe { ShaderInvocation::decode_from_memory(pixel_shader) }.unwrap();
+                    if pixel_shader != 0 {
+                        let invocation =
+                            unsafe { ShaderInvocation::decode_from_memory(pixel_shader) }.unwrap();
 
-                    println!(
-                        "pixel @ 0x{:x} len {}",
-                        (pixel_shader as u64) << 8,
-                        invocation.bytes.len() * 4
-                    );
+                        println!(
+                            "pixel @ 0x{:x} len {}",
+                            (pixel_shader as u64) << 8,
+                            invocation.bytes.len() * 4
+                        );
+                    }
                 }
             }
             Command::Dispatch { pipeline, .. } => {
-                let invocation =
-                    unsafe { ShaderInvocation::decode_from_memory(pipeline.address_lo) }.unwrap();
+                if pipeline.address_lo != 0 {
+                    let invocation =
+                        unsafe { ShaderInvocation::decode_from_memory(pipeline.address_lo) }
+                            .unwrap();
 
-                println!(
-                    "compute @ 0x{:x} len {}",
-                    (pipeline.address_lo as u64) << 8,
-                    invocation.bytes.len() * 4
-                );
+                    println!(
+                        "compute @ 0x{:x} len {}",
+                        (pipeline.address_lo as u64) << 8,
+                        invocation.bytes.len() * 4
+                    );
+                }
             }
             _ => {}
         }
