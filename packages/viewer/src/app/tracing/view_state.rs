@@ -8,6 +8,7 @@ pub struct ThreadSpan {
     pub start_time: u64,
     pub end_time: u64,
     pub label_id: u64,
+    pub extra_data: Option<Vec<u8>>,
 }
 
 impl ThreadSpan {
@@ -16,6 +17,7 @@ impl ThreadSpan {
             start_time: start.time,
             end_time: end.time,
             label_id: start.label_id,
+            extra_data: start.extra_data,
         }
     }
 }

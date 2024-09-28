@@ -57,6 +57,14 @@ impl SpanDetailPane {
                 }
             }
 
+            if let Some(extra_data) = &span.extra_data {
+                let button_response = ui.button("copy raw data");
+                if button_response.clicked() {
+                    let encoded = hex::encode(extra_data.as_slice());
+                    ui.output_mut(|it| it.copied_text = encoded);
+                }
+            }
+
             Some(())
         });
 

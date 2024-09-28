@@ -9,44 +9,47 @@ __attribute__((naked)) void hook()
 {
     asm volatile(
         // backup argument registers
-        "push %rdi\n\t"
-        "push %rsi\n\t"
-        "push %rdx\n\t"
-        "push %rcx\n\t"
-        "push %r8\n\t"
         "push %r9\n\t"
-        "movdqu %xmm0, -0x10(%rsp)\n\t"
-        "movdqu %xmm1, -0x20(%rsp)\n\t"
-        "movdqu %xmm2, -0x30(%rsp)\n\t"
-        "movdqu %xmm3, -0x40(%rsp)\n\t"
-        "movdqu %xmm4, -0x50(%rsp)\n\t"
-        "movdqu %xmm5, -0x60(%rsp)\n\t"
-        "movdqu %xmm6, -0x70(%rsp)\n\t"
-        "movdqu %xmm7, -0x80(%rsp)\n\t"
+        "push %r8\n\t"
+        "push %rcx\n\t"
+        "push %rdx\n\t"
+        "push %rsi\n\t"
+        "push %rdi\n\t"
+
+        "movdqu %xmm0, -0x80(%rsp)\n\t"
+        "movdqu %xmm1, -0x70(%rsp)\n\t"
+        "movdqu %xmm2, -0x60(%rsp)\n\t"
+        "movdqu %xmm3, -0x50(%rsp)\n\t"
+        "movdqu %xmm4, -0x40(%rsp)\n\t"
+        "movdqu %xmm5, -0x30(%rsp)\n\t"
+        "movdqu %xmm6, -0x20(%rsp)\n\t"
+        "movdqu %xmm7, -0x10(%rsp)\n\t"
         "sub $0x88, %rsp\n\t"
 
         // call logger
         "movl %fs:-32, %edi\n\t"
         "movq %fs:-8, %rsi\n\t"
+        "lea 0x8(%rsp), %rdx\n\t"
         "call emit_span_start\n\t"
         "nop\n\t"
 
         // restore argument registers
         "add $0x88, %rsp\n\t"
-        "movdqu -0x10(%rsp), %xmm0\n\t"
-        "movdqu -0x20(%rsp), %xmm1\n\t"
-        "movdqu -0x30(%rsp), %xmm2\n\t"
-        "movdqu -0x40(%rsp), %xmm3\n\t"
-        "movdqu -0x50(%rsp), %xmm4\n\t"
-        "movdqu -0x60(%rsp), %xmm5\n\t"
-        "movdqu -0x70(%rsp), %xmm6\n\t"
-        "movdqu -0x80(%rsp), %xmm7\n\t"
-        "pop %r9\n\t"
-        "pop %r8\n\t"
-        "pop %rcx\n\t"
-        "pop %rdx\n\t"
-        "pop %rsi\n\t"
+        "movdqu -0x80(%rsp), %xmm0\n\t"
+        "movdqu -0x70(%rsp), %xmm1\n\t"
+        "movdqu -0x60(%rsp), %xmm2\n\t"
+        "movdqu -0x50(%rsp), %xmm3\n\t"
+        "movdqu -0x40(%rsp), %xmm4\n\t"
+        "movdqu -0x30(%rsp), %xmm5\n\t"
+        "movdqu -0x20(%rsp), %xmm6\n\t"
+        "movdqu -0x10(%rsp), %xmm7\n\t"
+
         "pop %rdi\n\t"
+        "pop %rsi\n\t"
+        "pop %rdx\n\t"
+        "pop %rcx\n\t"
+        "pop %r8\n\t"
+        "pop %r9\n\t"
 
         // backup return address
         // use r10 as a scratch register. it is a caller saved register and not
@@ -89,7 +92,7 @@ __attribute__((naked)) void hook()
 }
 
 #define PAGE_SIZE 4096
-#define HOOK_FN_SIZE 0xc8
+#define HOOK_FN_SIZE 0xcd
 
 void* build_hook_fn(uint16_t static_tls_base) {
     size_t required_size = HOOK_FN_SIZE + 16;
@@ -116,10 +119,10 @@ void* build_hook_fn(uint16_t static_tls_base) {
     ThreadLocalStoragePatches patches[] = {
         {0x3f + 4, -32},
         {0x47 + 5, -8},
-        {0x97 + 5, -16},
-        {0xa0 + 5, -24},
-        {0xab + 5, -16},
-        {0xb7 + 5, -8},
+        {0x9c + 5, -16},
+        {0xa5 + 5, -24},
+        {0xb0 + 5, -16},
+        {0xbc + 5, -8},
     };
     size_t num_patches = sizeof(patches) / sizeof(ThreadLocalStoragePatches);
 
@@ -138,12 +141,12 @@ void* build_hook_fn(uint16_t static_tls_base) {
 
     {
         unsigned char patch[] = {0xFF, 0x15, 0x72, 0x00, 0x00, 0x00};
-        memcpy(new_mem + 0x50, patch, sizeof(patch));
+        memcpy(new_mem + 0x55, patch, sizeof(patch));
     }
 
     {
         unsigned char patch[] = {0xFF, 0x15, 0x0A, 0x00, 0x00, 0x00};
-        memcpy(new_mem + 0xC0, patch, sizeof(patch));
+        memcpy(new_mem + 0xC5, patch, sizeof(patch));
     }
 
     *(void**)((char*)new_mem + HOOK_FN_SIZE) = emit_span_start;

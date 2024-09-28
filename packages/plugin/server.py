@@ -6,6 +6,7 @@ SPAN_START_FORMAT = "QQQ"  # 4 * uint64_t (thread_id, time, label_id)
 SPAN_END_FORMAT = "QQ"  # 2 * uint64_t (thread_id, time)
 INITIAL_MESSAGE_FORMAT = "QqqQ"  # InitialMessage format
 COUNTERS_UPDATE_FORMAT = "QQQQ"  # CountersUpdate format
+SPAN_START_ADDITIONAL_DATA_FORMAT = SPAN_START_FORMAT + "Q"  # SpanStartAdditionalData format
 
 
 def recv_exactly(client_socket, num_bytes):
@@ -181,6 +182,30 @@ def handle_client_connection(client_socket):
                     f"{'-' * 40}"
                 )
 
+            elif message_tag == 3:  # SpanStartAdditionalData
+                span_start_additional_data = recv_exactly(client_socket, 32)
+                if not span_start_additional_data:
+                    break
+
+                # Unpack the SpanStartAdditionalData header
+                thread_id, time, label_id, extra_data_length = struct.unpack(
+                    SPAN_START_ADDITIONAL_DATA_FORMAT, span_start_additional_data
+                )
+
+                # Read and discard the extra data
+                extra_data = recv_exactly(client_socket, extra_data_length)
+                if not extra_data:
+                    break
+
+                # Log the SpanStartAdditionalData message (without parsing the extra data)
+                logging.info(
+                    f"SpanStartAdditionalData:\n"
+                    f"  thread id: {thread_id}\n"
+                    f"  time: {time}\n"
+                    f"  label id: {label_id}\n"
+                    f"  extra data length: {extra_data_length}\n"
+                    f"{'-' * 40}"
+                )
             else:
                 logging.error(f"unknown message tag: {message_tag}")
 

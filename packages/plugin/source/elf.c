@@ -472,3 +472,21 @@ void cleanup_jump_slot_relocation_list(JumpSlotRelocationList* list) {
     list->count = 0;
     list->capacity = 0;
 }
+
+void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct SpecificSymbolsTable* table) {
+    table->sceGnmSubmitAndFlipCommandBuffersForWorkload = -1;
+
+    for (size_t i = 0; i < list->count; i++) {
+        const SymbolInfo* symbol_info = list->items[i].symbol_info;
+        
+        if (
+            strncmp(
+                symbol_info->data.parsed.name,
+                "Ga6r7H6Y0RI",
+                sizeof(symbol_info->data.parsed.name) - 1
+            ) == 0
+        ) {
+            table->sceGnmSubmitAndFlipCommandBuffersForWorkload = i;
+        }
+    }
+}
