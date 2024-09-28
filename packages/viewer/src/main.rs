@@ -15,10 +15,10 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    #[command(name = "file")]
+    #[command(name = "load")]
     LoadFile { path: PathBuf },
 
-    #[command(name = "network")]
+    #[command(name = "listen")]
     ListenNetwork { addr: SocketAddr },
 }
 
