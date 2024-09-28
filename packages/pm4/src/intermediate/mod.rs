@@ -192,7 +192,7 @@ pub fn convert(
 pub struct GraphicsPipeline {
     pub depth_buffer: DepthBuffer,
 
-    primitive_assembly: PrimitiveAssembly,
+    primitive_assembly: Option<PrimitiveAssembly>,
 
     pub color_buffer: ColorBuffer,
 
@@ -208,7 +208,7 @@ pub struct GraphicsPipeline {
 #[allow(dead_code)]
 pub struct VertexGrouperTesselator {
     #[entry(RegisterEntry::VGT_PRIMITIVE_TYPE)]
-    pub primitive_type: VGT_PRIMITIVE_TYPE,
+    pub primitive_type: Option<VGT_PRIMITIVE_TYPE>,
 }
 
 #[derive(Build, Debug)]
@@ -224,7 +224,7 @@ pub struct DepthBuffer {
     pub render_control: Option<DB_RENDER_CONTROL>,
 
     #[entry(RegisterEntry::DB_SHADER_CONTROL)]
-    shader_control: DB_SHADER_CONTROL,
+    shader_control: Option<DB_SHADER_CONTROL>,
 
     htile: Option<HTile>,
 }
@@ -245,7 +245,7 @@ struct HTile {
 #[allow(dead_code)]
 pub struct Depth {
     #[entry(RegisterEntry::DB_DEPTH_CONTROL)]
-    pub control: DB_DEPTH_CONTROL,
+    pub control: Option<DB_DEPTH_CONTROL>,
 
     #[entry(RegisterEntry::DB_DEPTH_CLEAR)]
     pub clear: Option<u32>,
@@ -299,10 +299,10 @@ pub struct ColorBuffer {
     pub color0: Option<ColorBufferInstance>,
 
     #[entry(RegisterEntry::CB_TARGET_MASK)]
-    pub target_mask: CB_TARGET_MASK,
+    pub target_mask: Option<CB_TARGET_MASK>,
 
     #[entry(RegisterEntry::CB_SHADER_MASK)]
-    pub shader_mask: CB_SHADER_MASK,
+    pub shader_mask: Option<CB_SHADER_MASK>,
 }
 
 #[derive(Build, Debug)]
@@ -342,7 +342,7 @@ pub struct ColorBufferInstance {
 #[allow(dead_code)]
 struct PrimitiveAssembly {
     clip: Clip,
-    scissor_clip: ScissorClip,
+    scissor_clip: Option<ScissorClip>,
     shader_unit: ShaderUnit,
 }
 
@@ -350,15 +350,15 @@ struct PrimitiveAssembly {
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
 struct Clip {
-    viewport: ClipViewport,
+    viewport: Option<ClipViewport>,
 
     #[entry(RegisterEntry::PA_CL_VTE_CNTL)]
-    viewport_transform_engine_control: PA_CL_VTE_CNTL,
+    viewport_transform_engine_control: Option<PA_CL_VTE_CNTL>,
 
     #[entry(RegisterEntry::PA_CL_VS_OUT_CNTL)]
     vertex_shader_out_control: PA_CL_VS_OUT_CNTL,
 
-    guard_band: GuardBand,
+    guard_band: Option<GuardBand>,
 }
 
 #[derive(Build, Debug)]
@@ -406,7 +406,7 @@ struct ScissorClip {
 #[allow(dead_code)]
 struct ShaderUnit {
     #[entry(RegisterEntry::PA_SU_HARDWARE_SCREEN_OFFSET)]
-    hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET,
+    hardware_screen_offset: Option<PA_SU_HARDWARE_SCREEN_OFFSET>,
 
     #[entry(RegisterEntry::PA_SU_SC_MODE_CNTL)]
     control: Option<PA_SU_SC_MODE_CNTL>,
@@ -451,7 +451,7 @@ struct Shader {
 #[allow(dead_code)]
 pub struct PixelShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_PS)]
-    pub address: u32,
+    pub address: Option<u32>,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_PS)]
     resource1: Option<SPI_SHADER_PGM_RSRC1_PS>,
@@ -484,13 +484,13 @@ pub struct PixelShaderUserData(pub BTreeMap<u8, u32>);
 #[allow(dead_code)]
 pub struct VertexShader {
     #[entry(RegisterEntry::SPI_SHADER_PGM_LO_VS)]
-    pub entrypoint_gpu_address: u32,
+    pub entrypoint_gpu_address: Option<u32>,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC1_VS)]
-    resource1: SPI_SHADER_PGM_RSRC1_VS,
+    resource1: Option<SPI_SHADER_PGM_RSRC1_VS>,
 
     #[entry(RegisterEntry::SPI_SHADER_PGM_RSRC2_VS)]
-    resource2: SPI_SHADER_PGM_RSRC2_VS,
+    resource2: Option<SPI_SHADER_PGM_RSRC2_VS>,
 
     #[entry(RegisterEntry::SPI_VS_OUT_CONFIG)]
     out_config: Option<SPI_VS_OUT_CONFIG>,

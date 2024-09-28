@@ -175,26 +175,30 @@
                 primitive_assembly: Some(
                     PrimitiveAssembly {
                         clip: Clip {
-                            viewport: ClipViewport {
-                                xscale: 1148190720,
-                                xoffset: 1148190720,
-                                yscale: 3288793088,
-                                yoffset: 1141309440,
-                                zscale: 1056964608,
-                                zoffset: 1056964608,
-                            },
-                            viewport_transform_engine_control: PA_CL_VTE_CNTL {
-                                VPORT_X_SCALE_ENA: true,
-                                VPORT_X_OFFSET_ENA: true,
-                                VPORT_Y_SCALE_ENA: true,
-                                VPORT_Y_OFFSET_ENA: true,
-                                VPORT_Z_SCALE_ENA: true,
-                                VPORT_Z_OFFSET_ENA: true,
-                                VTX_XY_FMT: false,
-                                VTX_Z_FMT: false,
-                                VTX_W0_FMT: true,
-                                PERFCOUNTER_REF: false,
-                            },
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
                             vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
                                 CLIP_DIST_ENA_0: false,
                                 CLIP_DIST_ENA_1: false,
@@ -223,30 +227,36 @@
                                 VS_OUT_MISC_SIDE_BUS_ENA: false,
                                 USE_VTX_GS_CUT_FLAG: false,
                             },
-                            guard_band: GuardBand {
-                                vertical_clip: 1114550848,
-                                vertical_discard: 1065353216,
-                                horizontal_clip: 1107593351,
-                                horizontal_discard: 1065353216,
-                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
                         },
-                        scissor_clip: ScissorClip {
-                            viewport_zmin0: 0,
-                            viewport_zmax0: 1065353216,
-                            screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                                TL_X: 0,
-                                TL_Y: 0,
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
                             },
-                            screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                                BR_X: 1920,
-                                BR_Y: 1080,
-                            },
-                        },
+                        ),
                         shader_unit: ShaderUnit {
-                            hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                                HW_SCREEN_OFFSET_X: 60,
-                                HW_SCREEN_OFFSET_Y: 32,
-                            },
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
                             control: Some(
                                 PA_SU_SC_MODE_CNTL {
                                     CULL_FRONT: false,
@@ -620,26 +630,30 @@
                 primitive_assembly: Some(
                     PrimitiveAssembly {
                         clip: Clip {
-                            viewport: ClipViewport {
-                                xscale: 1148190720,
-                                xoffset: 1148190720,
-                                yscale: 3288793088,
-                                yoffset: 1141309440,
-                                zscale: 1056964608,
-                                zoffset: 1056964608,
-                            },
-                            viewport_transform_engine_control: PA_CL_VTE_CNTL {
-                                VPORT_X_SCALE_ENA: true,
-                                VPORT_X_OFFSET_ENA: true,
-                                VPORT_Y_SCALE_ENA: true,
-                                VPORT_Y_OFFSET_ENA: true,
-                                VPORT_Z_SCALE_ENA: true,
-                                VPORT_Z_OFFSET_ENA: true,
-                                VTX_XY_FMT: false,
-                                VTX_Z_FMT: false,
-                                VTX_W0_FMT: true,
-                                PERFCOUNTER_REF: false,
-                            },
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
                             vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
                                 CLIP_DIST_ENA_0: false,
                                 CLIP_DIST_ENA_1: false,
@@ -668,30 +682,36 @@
                                 VS_OUT_MISC_SIDE_BUS_ENA: false,
                                 USE_VTX_GS_CUT_FLAG: false,
                             },
-                            guard_band: GuardBand {
-                                vertical_clip: 1114550848,
-                                vertical_discard: 1065353216,
-                                horizontal_clip: 1107593351,
-                                horizontal_discard: 1065353216,
-                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
                         },
-                        scissor_clip: ScissorClip {
-                            viewport_zmin0: 0,
-                            viewport_zmax0: 1065353216,
-                            screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                                TL_X: 0,
-                                TL_Y: 0,
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
                             },
-                            screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                                BR_X: 1920,
-                                BR_Y: 1080,
-                            },
-                        },
+                        ),
                         shader_unit: ShaderUnit {
-                            hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                                HW_SCREEN_OFFSET_X: 60,
-                                HW_SCREEN_OFFSET_Y: 32,
-                            },
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
                             control: Some(
                                 PA_SU_SC_MODE_CNTL {
                                     CULL_FRONT: false,
@@ -1065,26 +1085,30 @@
                 primitive_assembly: Some(
                     PrimitiveAssembly {
                         clip: Clip {
-                            viewport: ClipViewport {
-                                xscale: 1148190720,
-                                xoffset: 1148190720,
-                                yscale: 3288793088,
-                                yoffset: 1141309440,
-                                zscale: 1056964608,
-                                zoffset: 1056964608,
-                            },
-                            viewport_transform_engine_control: PA_CL_VTE_CNTL {
-                                VPORT_X_SCALE_ENA: true,
-                                VPORT_X_OFFSET_ENA: true,
-                                VPORT_Y_SCALE_ENA: true,
-                                VPORT_Y_OFFSET_ENA: true,
-                                VPORT_Z_SCALE_ENA: true,
-                                VPORT_Z_OFFSET_ENA: true,
-                                VTX_XY_FMT: false,
-                                VTX_Z_FMT: false,
-                                VTX_W0_FMT: true,
-                                PERFCOUNTER_REF: false,
-                            },
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
                             vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
                                 CLIP_DIST_ENA_0: false,
                                 CLIP_DIST_ENA_1: false,
@@ -1113,30 +1137,36 @@
                                 VS_OUT_MISC_SIDE_BUS_ENA: false,
                                 USE_VTX_GS_CUT_FLAG: false,
                             },
-                            guard_band: GuardBand {
-                                vertical_clip: 1114550848,
-                                vertical_discard: 1065353216,
-                                horizontal_clip: 1107593351,
-                                horizontal_discard: 1065353216,
-                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
                         },
-                        scissor_clip: ScissorClip {
-                            viewport_zmin0: 0,
-                            viewport_zmax0: 1065353216,
-                            screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                                TL_X: 0,
-                                TL_Y: 0,
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
                             },
-                            screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                                BR_X: 1920,
-                                BR_Y: 1080,
-                            },
-                        },
+                        ),
                         shader_unit: ShaderUnit {
-                            hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                                HW_SCREEN_OFFSET_X: 60,
-                                HW_SCREEN_OFFSET_Y: 32,
-                            },
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
                             control: Some(
                                 PA_SU_SC_MODE_CNTL {
                                     CULL_FRONT: false,
@@ -1510,26 +1540,30 @@
                 primitive_assembly: Some(
                     PrimitiveAssembly {
                         clip: Clip {
-                            viewport: ClipViewport {
-                                xscale: 1148190720,
-                                xoffset: 1148190720,
-                                yscale: 3288793088,
-                                yoffset: 1141309440,
-                                zscale: 1056964608,
-                                zoffset: 1056964608,
-                            },
-                            viewport_transform_engine_control: PA_CL_VTE_CNTL {
-                                VPORT_X_SCALE_ENA: true,
-                                VPORT_X_OFFSET_ENA: true,
-                                VPORT_Y_SCALE_ENA: true,
-                                VPORT_Y_OFFSET_ENA: true,
-                                VPORT_Z_SCALE_ENA: true,
-                                VPORT_Z_OFFSET_ENA: true,
-                                VTX_XY_FMT: false,
-                                VTX_Z_FMT: false,
-                                VTX_W0_FMT: true,
-                                PERFCOUNTER_REF: false,
-                            },
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
                             vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
                                 CLIP_DIST_ENA_0: false,
                                 CLIP_DIST_ENA_1: false,
@@ -1558,30 +1592,36 @@
                                 VS_OUT_MISC_SIDE_BUS_ENA: false,
                                 USE_VTX_GS_CUT_FLAG: false,
                             },
-                            guard_band: GuardBand {
-                                vertical_clip: 1114550848,
-                                vertical_discard: 1065353216,
-                                horizontal_clip: 1107593351,
-                                horizontal_discard: 1065353216,
-                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
                         },
-                        scissor_clip: ScissorClip {
-                            viewport_zmin0: 0,
-                            viewport_zmax0: 1065353216,
-                            screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                                TL_X: 0,
-                                TL_Y: 0,
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
                             },
-                            screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                                BR_X: 1920,
-                                BR_Y: 1080,
-                            },
-                        },
+                        ),
                         shader_unit: ShaderUnit {
-                            hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                                HW_SCREEN_OFFSET_X: 60,
-                                HW_SCREEN_OFFSET_Y: 32,
-                            },
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
                             control: Some(
                                 PA_SU_SC_MODE_CNTL {
                                     CULL_FRONT: false,
@@ -1955,26 +1995,30 @@
                 primitive_assembly: Some(
                     PrimitiveAssembly {
                         clip: Clip {
-                            viewport: ClipViewport {
-                                xscale: 1148190720,
-                                xoffset: 1148190720,
-                                yscale: 3288793088,
-                                yoffset: 1141309440,
-                                zscale: 1056964608,
-                                zoffset: 1056964608,
-                            },
-                            viewport_transform_engine_control: PA_CL_VTE_CNTL {
-                                VPORT_X_SCALE_ENA: true,
-                                VPORT_X_OFFSET_ENA: true,
-                                VPORT_Y_SCALE_ENA: true,
-                                VPORT_Y_OFFSET_ENA: true,
-                                VPORT_Z_SCALE_ENA: true,
-                                VPORT_Z_OFFSET_ENA: true,
-                                VTX_XY_FMT: false,
-                                VTX_Z_FMT: false,
-                                VTX_W0_FMT: true,
-                                PERFCOUNTER_REF: false,
-                            },
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
                             vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
                                 CLIP_DIST_ENA_0: false,
                                 CLIP_DIST_ENA_1: false,
@@ -2003,30 +2047,36 @@
                                 VS_OUT_MISC_SIDE_BUS_ENA: false,
                                 USE_VTX_GS_CUT_FLAG: false,
                             },
-                            guard_band: GuardBand {
-                                vertical_clip: 1114550848,
-                                vertical_discard: 1065353216,
-                                horizontal_clip: 1107593351,
-                                horizontal_discard: 1065353216,
-                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
                         },
-                        scissor_clip: ScissorClip {
-                            viewport_zmin0: 0,
-                            viewport_zmax0: 1065353216,
-                            screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
-                                TL_X: 0,
-                                TL_Y: 0,
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
                             },
-                            screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
-                                BR_X: 1920,
-                                BR_Y: 1080,
-                            },
-                        },
+                        ),
                         shader_unit: ShaderUnit {
-                            hardware_screen_offset: PA_SU_HARDWARE_SCREEN_OFFSET {
-                                HW_SCREEN_OFFSET_X: 60,
-                                HW_SCREEN_OFFSET_Y: 32,
-                            },
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
                             control: Some(
                                 PA_SU_SC_MODE_CNTL {
                                     CULL_FRONT: false,
