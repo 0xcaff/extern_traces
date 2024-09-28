@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use bits::FromBits;
 
 use crate::op_codes::OpCode;

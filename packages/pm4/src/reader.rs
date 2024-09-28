@@ -1,26 +1,33 @@
-use byteorder::{ByteOrder, LittleEndian, ReadBytesExt};
-use std::io;
-use std::io::Read;
+use alloc::vec::Vec;
 
-pub trait Reader {
-    fn read_u32(&mut self) -> Result<u32, io::Error>;
-
-    fn read_dwords(&mut self, len: usize) -> Result<Vec<u32>, io::Error>;
+pub struct Reader<'a> {
+    inner: &'a [u8],
+    cursor: usize,
 }
 
-impl<R: Read> Reader for R {
-    fn read_u32(&mut self) -> Result<u32, io::Error> {
-        Ok(ReadBytesExt::read_u32::<LittleEndian>(self)?)
+impl <'a> Reader<'a> {
+    pub fn new(inner: &'a [u8]) -> Reader<'a> {
+        Reader {
+            inner,
+            cursor: 0,
+        }
+    }
+    
+    pub fn has_more(&self) -> bool {
+         self.cursor < self.inner.len()
+    }
+    
+    pub fn read_u32(&mut self) -> Option<u32> {
+        let bytes: [u8; 4] = self.inner[self.cursor..(self.cursor + 4)].try_into().ok()?;
+        self.cursor += 4;
+        Some(u32::from_le_bytes(bytes))
     }
 
-    fn read_dwords(&mut self, len: usize) -> Result<Vec<u32>, io::Error> {
-        let mut buffer = vec![0; len * 4];
-
-        self.read_exact(&mut buffer)?;
-
-        Ok(buffer
-            .chunks(4)
-            .map(|it| LittleEndian::read_u32(it))
-            .collect::<Vec<u32>>())
+    pub fn read_dwords(&mut self, len: usize) -> Option<Vec<u32>> {
+        let mut result = Vec::with_capacity(len);
+        for _ in 0..len {
+            result.push(self.read_u32()?);
+        }
+        Some(result)
     }
 }

@@ -1,5 +1,7 @@
-#![feature(cursor_remaining)]
 #![deny(warnings)]
+
+#![no_std]
+extern crate alloc;
 
 mod intermediate;
 mod op_codes;

@@ -1,8 +1,9 @@
+use alloc::vec::Vec;
+use anyhow::format_err;
 use crate::op_codes::OpCode;
 use crate::packet_value::{ParsePacketValue, Type3PacketValue};
 use crate::reader::Reader;
 use bits::bitrange;
-use std::io::Cursor;
 
 #[derive(Debug)]
 pub enum PM4Packet {
@@ -12,15 +13,15 @@ pub enum PM4Packet {
 }
 
 impl PM4Packet {
-    pub fn parse(mut reader: impl Reader) -> Result<PM4Packet, anyhow::Error> {
-        let value = reader.read_u32()?;
+    fn parse(reader: &mut Reader) -> Result<PM4Packet, anyhow::Error> {
+        let value = reader.read_u32().ok_or_else(|| format_err!("eof"))?;
         let packet_type = bitrange(31, 30).of_32(value);
         let count = bitrange(29, 16).of_32(value) as u16 + 1;
 
         match packet_type {
             0 => Ok(PM4Packet::Type0(Type0Packet {
                 base_idx: bitrange(15, 0).of_32(value) as u16,
-                body: reader.read_dwords(count as usize)?,
+                body: reader.read_dwords(count as usize).ok_or_else(|| format_err!("eof"))?,
             })),
             2 => Ok(PM4Packet::Type2(Type2Header {
                 reserved: bitrange(29, 0).of_32(value) as u32,
@@ -41,7 +42,7 @@ impl PM4Packet {
                 },
                 value: Type3PacketValue::parse(
                     OpCode::from_op(bitrange(15, 8).of_32(value) as u8)?,
-                    reader.read_dwords(count as usize)?,
+                    reader.read_dwords(count as usize).ok_or_else(|| format_err!("eof"))?,
                 ),
             })),
             _ => panic!("unexpected packet type {}", packet_type),
@@ -49,12 +50,11 @@ impl PM4Packet {
     }
 
     pub fn parse_all(draw_command_buffer: &[u8]) -> Result<Vec<PM4Packet>, anyhow::Error> {
-        let mut cursor = Cursor::new(draw_command_buffer);
-
+        let mut reader = Reader::new(draw_command_buffer);
         let mut result = Vec::new();
 
-        while !cursor.is_empty() {
-            let packet = PM4Packet::parse(&mut cursor)?;
+        while reader.has_more() {
+            let packet = PM4Packet::parse(&mut reader)?;
 
             result.push(packet);
         }

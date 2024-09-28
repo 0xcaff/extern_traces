@@ -1,3 +1,5 @@
+#![no_std]
+
 mod bitrange;
 mod bits;
 mod from_bits;

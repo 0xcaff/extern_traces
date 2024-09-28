@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use crate::indirect_buffer::IndirectBufferPacket;
 use crate::op_codes::OpCode;
 use crate::packet_value::acquire_memory::AcquireMemoryPacket;

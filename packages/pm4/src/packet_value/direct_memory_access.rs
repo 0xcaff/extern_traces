@@ -1,3 +1,4 @@
+use alloc::vec::Vec;
 use crate::op_codes::OpCode;
 use crate::{DMA_DATA_WORD0_cik, ParseType3Packet, COMMAND};
 use bits::FromBits;
