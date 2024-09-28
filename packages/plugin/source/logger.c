@@ -175,7 +175,7 @@ void thread_logging_state_flush_reservation(
     struct ThreadLoggingState* thread_state,
     struct BufferReservation reservation
 ) {
-    reservation.buffer->write_idx = reservation.buffer->write_idx;
+    reservation.buffer->write_idx = reservation.write_idx;
     if (reservation.is_new) {
         thread_state->current_buffer = reservation.buffer;
     }
