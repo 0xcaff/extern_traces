@@ -82,6 +82,7 @@ pub enum OpCode {
     SET_SH_REG_PAIRS = 0xBA,                     /* GFX11+, PFP version >= 1448 */
     SET_SH_REG_PAIRS_PACKED = 0xBB,              /* GFX11+, PFP version >= 1448 */
     SET_SH_REG_PAIRS_PACKED_N = 0xBD,            /* GFX11+, PFP version >= 1448 */
+    UNKNOWN_1 = 0x9D,
 }
 
 impl OpCode {
