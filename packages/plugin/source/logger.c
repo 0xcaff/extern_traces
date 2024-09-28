@@ -117,6 +117,7 @@ struct BufferReservation thread_logging_state_reserve_space(
         struct BufferReservation value = {
             .buffer = current_buffer,
             .write_idx = current_buffer->write_idx,
+            .available_bytes = buffer_free_space - 1,
             .is_new = false,
         };
 
@@ -124,13 +125,15 @@ struct BufferReservation thread_logging_state_reserve_space(
     }
 
     uint64_t next_size = (((length * 2) + (INITIAL_ALLOCATION_SIZE - 1)) / INITIAL_ALLOCATION_SIZE) * INITIAL_ALLOCATION_SIZE;
-    struct BufferState* next_buffer = new_buffer_state(max(next_size, current_buffer->size * 2));
+    uint64_t resolved_size = max(next_size, current_buffer->size * 2);
+    struct BufferState* next_buffer = new_buffer_state(resolved_size);
     if (!next_buffer) {
         thread_state->dropped_packets_count += 1;
 
         struct BufferReservation value = {
             .buffer = NULL,
             .write_idx = 0,
+            .available_bytes = 0,
             .is_new = false,
         };
 
@@ -141,6 +144,7 @@ struct BufferReservation thread_logging_state_reserve_space(
     struct BufferReservation value = {
         .buffer = next_buffer,
         .write_idx = next_buffer->write_idx,
+        .available_bytes = resolved_size - 1,
         .is_new = true,
     };
 
@@ -152,6 +156,11 @@ void buffer_reservation_write(
     const uint8_t *data,
     size_t length
 ) {
+    if (length > reservation->available_bytes) {
+        final_printf("invariant violated, exceeded reserved space!\n");
+        return;
+    }
+
     uint64_t size = reservation->buffer->size - sizeof(struct BufferState);
     size_t end_pos = (reservation->write_idx + length) % size;
     if (end_pos < reservation->write_idx)
@@ -166,6 +175,7 @@ void buffer_reservation_write(
     }
 
     reservation->write_idx = end_pos;
+    reservation->available_bytes -= length;
 }
 
 void thread_logging_state_flush_reservation(

@@ -46,6 +46,7 @@ void set_static_tls_base(uint16_t base);
 struct BufferReservation {
     struct BufferState* buffer;
     uint64_t write_idx;
+    uint64_t available_bytes;
     bool is_new;
 };
 
