@@ -1,6 +1,7 @@
 #include "logger.h"
 #include "time.h"
 #include "tracing.h"
+#include "plugin_common.h"
 
 static struct SpecificSymbolsTable sharedTable;
 
@@ -37,11 +38,11 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
     uint64_t time = get_current_time_rdtscp();
 
     if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffersForWorkload) {
-        uint32_t count = (uint32_t)args->args[0];
-        uint8_t **draw_buffers = (uint8_t **)args->args[1];
-        uint32_t *draw_sizes = (uint32_t *)args->args[2];
-        uint8_t **compute_buffers = (uint8_t **)args->args[3];
-        uint32_t *compute_sizes = (uint32_t *)args->args[4];
+        uint32_t count = (uint32_t)args->args[1];
+        uint8_t **draw_buffers = (uint8_t **)args->args[2];
+        uint32_t *draw_sizes = (uint32_t *)args->args[3];
+        uint8_t **compute_buffers = (uint8_t **)args->args[4];
+        uint32_t *compute_sizes = (uint32_t *)args->args[5];
 
         uint64_t total_size = sizeof(struct SpanStartAdditionalData) + sizeof(uint32_t);
         total_size += count * sizeof(uint32_t) * 2;
@@ -69,12 +70,18 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
         buffer_reservation_write(&reservation, (const uint8_t *)draw_sizes, count * sizeof(uint32_t));
         buffer_reservation_write(&reservation, (const uint8_t *)compute_sizes, count * sizeof(uint32_t));
 
-        for (uint32_t i = 0; i < count && draw_buffers && draw_sizes; i++) {
-            buffer_reservation_write(&reservation, draw_buffers[i], draw_sizes[i]);
+        for (uint32_t i = 0; i < count; i++) {
+            uint32_t size = draw_sizes[i];
+            uint8_t* buffer = draw_buffers[i];
+
+            buffer_reservation_write(&reservation, buffer, size);
         }
 
-        for (uint32_t i = 0; i < count && compute_buffers && compute_sizes; i++) {
-            buffer_reservation_write(&reservation, compute_buffers[i], compute_sizes[i]);
+        for (uint32_t i = 0; i < count; i++) {
+            uint32_t size = compute_sizes[i];
+            uint8_t* buffer = compute_buffers[i];
+
+            buffer_reservation_write(&reservation, buffer, size);
         }
 
         thread_logging_state_flush_reservation(state, reservation);

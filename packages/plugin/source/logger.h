@@ -6,7 +6,7 @@
 #include "elf.h"
 #include "config.h"
 
-#define INITIAL_ALLOCATION_SIZE 16 * 1024
+#define INITIAL_ALLOCATION_SIZE (16 * 1024)
 
 struct BufferState {
     uint64_t write_idx;

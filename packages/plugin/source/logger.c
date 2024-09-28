@@ -99,6 +99,14 @@ uint64_t buffer_state_free_space(struct BufferState *state) {
     return free_space;
 }
 
+uint64_t max(uint64_t a, uint64_t b) {
+    if (a > b) {
+        return a;
+    }
+
+    return b;
+}
+
 struct BufferReservation thread_logging_state_reserve_space(
     struct ThreadLoggingState* thread_state,
     size_t length
@@ -116,7 +124,8 @@ struct BufferReservation thread_logging_state_reserve_space(
         return value;
     }
 
-    struct BufferState* next_buffer = new_buffer_state(current_buffer->size * 2);
+    uint64_t next_size = (((length * 2) + (INITIAL_ALLOCATION_SIZE - 1)) / INITIAL_ALLOCATION_SIZE) * INITIAL_ALLOCATION_SIZE;
+    struct BufferState* next_buffer = new_buffer_state(max(next_size, current_buffer->size * 2));
     if (!next_buffer) {
         thread_state->dropped_packets_count += 1;
 
