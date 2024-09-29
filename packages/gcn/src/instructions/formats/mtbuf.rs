@@ -7,13 +7,13 @@ use crate::instructions::DisplayableInstruction;
 use crate::SliceReader;
 use alloc::string::ToString;
 use alloc::vec;
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, FromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 
 /// Typed Memory Buffer Operation
 ///
 /// Typed memory buffer operation. Two words
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(64)]
 pub struct MTBufInstruction {
     #[bits(18, 16)]
@@ -95,7 +95,7 @@ impl FromBits<4> for DataFormat {
 impl ParseInstruction for MTBufInstruction {
     fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(MTBufInstruction::from_bits(token))
+        Ok(MTBufInstruction::try_from_bits_container(token)?)
     }
 }
 

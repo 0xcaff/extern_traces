@@ -4,9 +4,9 @@ use crate::instructions::ops::VOPCOpCode;
 use crate::instructions::DisplayableInstruction;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct VOPCInstruction {
     #[bits(24, 17)]

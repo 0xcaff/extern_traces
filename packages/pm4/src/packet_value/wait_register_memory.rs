@@ -1,8 +1,8 @@
 use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use alloc::vec::Vec;
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, FromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 use custom_debug::Debug;
 use strum::FromRepr;
 
@@ -38,7 +38,7 @@ impl FromBits<1> for Engine {
     }
 }
 
-#[derive(Debug, FromBits, Clone)]
+#[derive(Debug, TryFromBitsContainer, Clone)]
 #[bits(32)]
 pub struct Fields {
     #[bits(8, 8)]
@@ -106,7 +106,7 @@ impl ParseType3Packet for WaitRegisterMemoryPacket {
 
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
-            fields: Fields::from_bits(body[0]),
+            fields: Fields::try_from_bits_container(body[0]).unwrap(),
             poll_address_lo: body[1],
             poll_address_hi: body[2],
             reference: body[3],

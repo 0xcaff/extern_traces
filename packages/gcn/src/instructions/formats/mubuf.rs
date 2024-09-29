@@ -7,13 +7,13 @@ use crate::instructions::DisplayableInstruction;
 use crate::SliceReader;
 use alloc::string::ToString;
 use alloc::{format, vec};
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, FromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 
 /// Untyped Vector Memory Buffer Operation
 ///
 /// Untyped memory buffer operation. First word with LDS, second word non-LDS.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(64)]
 pub struct MUBUFInstruction {
     #[bits(24, 18)]
@@ -68,7 +68,7 @@ impl FromBits<12> for Offset {
 impl ParseInstruction for MUBUFInstruction {
     fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(MUBUFInstruction::from_bits(token))
+        Ok(MUBUFInstruction::try_from_bits_container(token)?)
     }
 }
 

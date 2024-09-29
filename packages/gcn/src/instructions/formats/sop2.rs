@@ -4,13 +4,13 @@ use crate::instructions::ops::SOP2OpCode;
 use crate::instructions::DisplayableInstruction;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Scalar Format Two Inputs, One Output
 ///
 /// This is a scalar instruction with two inputs and one output. Can be
 /// followed by a 32-bit literal
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct SOP2Instruction {
     #[bits(29, 23)]

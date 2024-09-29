@@ -6,11 +6,11 @@ use crate::instructions::DisplayableInstruction;
 use crate::SliceReader;
 use alloc::string::ToString;
 use alloc::vec;
-use bits::FromBits;
-use bits_macros::FromBits;
+use bits::TryFromBitsContainer;
+use bits_macros::TryFromBitsContainer;
 
 /// Data Share Instruction
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(64)]
 pub struct DSInstruction {
     #[bits(25, 18)]
@@ -42,7 +42,7 @@ impl ParseInstruction for DSInstruction {
     fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
 
-        Ok(DSInstruction::from_bits(token))
+        Ok(DSInstruction::try_from_bits_container(token)?)
     }
 }
 

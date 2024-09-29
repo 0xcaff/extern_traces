@@ -3,13 +3,13 @@ use crate::instructions::operands::{SourceOperand, VectorGPR};
 use crate::instructions::ops::VOP2OpCode;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Vector Instruction Two Inputs, One Output
 ///
 /// Vector instruction taking two inputs and producing one output. Can be
 /// followed by a 32-bit literal constant.
-#[derive(Debug, FromBits, Clone)]
+#[derive(Debug, TryFromBitsContainer, Clone)]
 #[bits(32)]
 pub struct VOP2Instruction {
     #[bits(30, 25)]

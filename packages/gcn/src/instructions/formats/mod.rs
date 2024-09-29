@@ -18,7 +18,7 @@ use crate::instructions::operands::{ScalarSourceOperand, SourceOperand};
 use crate::instructions::ops::{SOPKOpCode, VOP1OpCode, VOP2OpCode};
 use crate::reader::EofError;
 use crate::SliceReader;
-use bits::FromBits;
+use bits::TryFromBitsContainer;
 use gcn_internal_macros::{DisplayInstruction, ParseInstruction};
 
 pub mod ds;
@@ -196,12 +196,12 @@ pub trait ParseInstruction {
         Self: Sized;
 }
 
-impl<T: FromBits<32>> ParseInstruction for T {
+impl<T: TryFromBitsContainer<32>> ParseInstruction for T {
     fn parse(token: u32, _reader: &mut SliceReader) -> Result<Self, anyhow::Error>
     where
         Self: Sized,
     {
-        Ok(Self::from_bits(token))
+        Ok(Self::try_from_bits_container(token)?)
     }
 }
 

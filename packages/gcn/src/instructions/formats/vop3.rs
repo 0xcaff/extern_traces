@@ -9,12 +9,11 @@ use crate::instructions::DisplayableInstruction;
 use crate::SliceReader;
 use alloc::string::{String, ToString};
 use alloc::{format, vec};
-use anyhow::format_err;
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, BitsContainerError, FromBits, TryFromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 use strum::FromRepr;
 
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(64)]
 pub struct VOP3Instruction {
     #[bits(25, 17)]
@@ -68,11 +67,11 @@ impl OutputModifier {
 impl ParseInstruction for VOP3Instruction {
     fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(VOP3Instruction::from_bits(token))
+        Ok(VOP3Instruction::try_from_bits_container(token)?)
     }
 }
 
-fn src<T: Bits>(idx: u8) -> impl Fn(T) -> TransformedOperand {
+fn src<T: Bits>(idx: u8) -> impl Fn(T) -> Result<TransformedOperand, BitsContainerError> {
     move |token| TransformedOperand::parse(token, idx)
 }
 
@@ -105,10 +104,6 @@ impl OpCode {
         None
     }
 
-    fn decode(op: u64) -> Result<OpCode, anyhow::Error> {
-        Ok(Self::from(op).ok_or_else(|| format_err!("unknown op code {} for VOP3", op))?)
-    }
-
     fn instruction_info(&self) -> InstructionInfo {
         match self {
             OpCode::VOP3(op) => op.instruction_info(),
@@ -130,9 +125,9 @@ impl AsRef<str> for OpCode {
     }
 }
 
-impl FromBits<9> for OpCode {
-    fn from_bits(value: impl Bits) -> Self {
-        Self::decode(value.full()).unwrap()
+impl TryFromBits<9> for OpCode {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
+        Self::from(value.full())
     }
 }
 
@@ -144,12 +139,12 @@ pub struct TransformedOperand {
 }
 
 impl TransformedOperand {
-    fn parse(token: impl Bits, idx: u8) -> TransformedOperand {
+    fn parse(token: impl Bits, idx: u8) -> Result<TransformedOperand, BitsContainerError> {
         let highest_idx = match idx {
             0 => 40,
             1 => 49,
             2 => 58,
-            _ => panic!("invalid index {}", idx),
+            _ => return Err(BitsContainerError::new(0)),
         };
 
         let op_value = token.slice(highest_idx, highest_idx - 8);
@@ -157,11 +152,11 @@ impl TransformedOperand {
         let abs_idx = 10 - idx;
         let neg_idx = 63 - idx;
 
-        TransformedOperand {
+        Ok(TransformedOperand {
             abs: token.slice(abs_idx, abs_idx).full() == 1,
             neg: token.slice(neg_idx, neg_idx).full() == 1,
-            operand: SourceOperand::from_bits(op_value),
-        }
+            operand: SourceOperand::try_from_bits_container(op_value)?,
+        })
     }
 
     fn display(&self, operand_info: &Option<OperandInfo>) -> String {

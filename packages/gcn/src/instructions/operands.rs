@@ -1,7 +1,7 @@
 use crate::instructions::instruction_info::OperandInfo;
 use alloc::format;
 use alloc::string::{String, ToString};
-use bits::{Bits, FromBits};
+use bits::{Bits, FromBits, TryFromBits};
 use core::fmt;
 
 /// Also referred as SDST (**S**calar **D**e**s**ination) operand.
@@ -34,18 +34,20 @@ impl ScalarDestinationOperand {
     }
 }
 
-impl FromBits<7> for ScalarDestinationOperand {
-    fn from_bits(value: impl Bits) -> Self {
+impl TryFromBits<7> for ScalarDestinationOperand {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
         let value = value.full() as u8;
-        match value {
+        let result = match value {
             0..=103 => ScalarDestinationOperand::ScalarGPR(value),
             106 => ScalarDestinationOperand::VccLo,
             107 => ScalarDestinationOperand::VccHi,
             124 => ScalarDestinationOperand::M0,
             126 => ScalarDestinationOperand::ExecLo,
             127 => ScalarDestinationOperand::ExecHi,
-            _ => panic!("unknown {}", value),
-        }
+            _ => return None,
+        };
+
+        Some(result)
     }
 }
 
@@ -144,11 +146,13 @@ impl InlineFloatConstant {
     }
 }
 
-impl FromBits<8> for ScalarSourceOperand {
-    fn from_bits(value: impl Bits) -> Self {
+impl TryFromBits<8> for ScalarSourceOperand {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
         let encoded = value.full() as u8;
-        match encoded {
-            0..=127 => ScalarSourceOperand::Destination(ScalarDestinationOperand::from_bits(value)),
+        let result = match encoded {
+            0..=127 => {
+                ScalarSourceOperand::Destination(ScalarDestinationOperand::try_from_bits(value)?)
+            }
 
             128..=208 => {
                 ScalarSourceOperand::IntegerConstant(InlineIntegerConstant { value: encoded })
@@ -160,8 +164,10 @@ impl FromBits<8> for ScalarSourceOperand {
             253 => ScalarSourceOperand::ScalarConditionCode,
             254 => ScalarSourceOperand::LDSDirect,
             255 => ScalarSourceOperand::LiteralConstant,
-            _ => panic!("unknown value {}", encoded),
-        }
+            _ => return None,
+        };
+
+        Some(result)
     }
 }
 
@@ -194,16 +200,18 @@ pub enum SourceOperand {
     VectorGPR(VectorGPR),
 }
 
-impl FromBits<9> for SourceOperand {
-    fn from_bits(raw_value: impl Bits) -> Self {
+impl TryFromBits<9> for SourceOperand {
+    fn try_from_bits(raw_value: impl Bits) -> Option<Self> {
         let value = raw_value.full() as u16;
-        match value {
-            0..=255 => SourceOperand::Scalar(ScalarSourceOperand::from_bits(raw_value)),
+        let result = match value {
+            0..=255 => SourceOperand::Scalar(ScalarSourceOperand::try_from_bits(raw_value)?),
             256..=511 => SourceOperand::VectorGPR(VectorGPR {
                 register_idx: (value - 256) as u8,
             }), // 256..=511 to VGPR0..VGPR255
-            _ => panic!("unexpected value {}", value),
-        }
+            _ => return None,
+        };
+
+        Some(result)
     }
 }
 

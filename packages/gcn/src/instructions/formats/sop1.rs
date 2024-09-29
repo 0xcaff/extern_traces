@@ -4,13 +4,13 @@ use crate::instructions::ops::SOP1OpCode;
 use crate::instructions::DisplayableInstruction;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Scalar Instruction One Input, One Output
 ///
 /// This is a scalar instruction with one input and one output. Can be followed
 /// by a 32-bit literal constant.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct SOP1Instruction {
     #[bits(15, 8)]

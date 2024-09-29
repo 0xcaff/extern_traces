@@ -1,7 +1,7 @@
 use crate::op_codes::OpCode;
 use crate::{DMA_DATA_WORD0_cik, ParseType3Packet, COMMAND};
 use alloc::vec::Vec;
-use bits::FromBits;
+use bits::TryFromBitsContainer;
 
 #[derive(Debug)]
 pub struct DirectMemoryAccessPacket {
@@ -15,10 +15,10 @@ impl ParseType3Packet for DirectMemoryAccessPacket {
     const OP: OpCode = OpCode::DMA_DATA;
 
     fn parse_type3_packet(body: Vec<u32>) -> Self {
-        let fields = DMA_DATA_WORD0_cik::from_bits(body[0]);
+        let fields = DMA_DATA_WORD0_cik::try_from_bits_container(body[0]).unwrap();
         let src_address = (body[1] as u64) | ((body[2] as u64) << 32);
         let dst_address = (body[3] as u64) | ((body[4] as u64) << 32);
-        let command = COMMAND::from_bits(body[5]);
+        let command = COMMAND::try_from_bits_container(body[5]).unwrap();
 
         Self {
             fields,

@@ -1,5 +1,5 @@
 use alloc::vec::Vec;
-use bits::FromBits;
+use bits::TryFromBitsContainer;
 
 use crate::op_codes::OpCode;
 use crate::{ParseType3Packet, CP_COHER_CNTL};
@@ -16,7 +16,8 @@ impl ParseType3Packet for AcquireMemoryPacket {
     const OP: OpCode = OpCode::ACQUIRE_MEM;
 
     fn parse_type3_packet(body: Vec<u32>) -> Self {
-        let command_processor_cache_coherence_control = CP_COHER_CNTL::from_bits(body[0]);
+        let command_processor_cache_coherence_control =
+            CP_COHER_CNTL::try_from_bits_container(body[0]).unwrap();
         let command_processor_cache_coherence_size = (body[1] as u64) | ((body[2] as u64) << 32);
         let command_processor_cache_coherence_base = (body[3] as u64) | ((body[4] as u64) << 32);
         let poll_interval = body[5];

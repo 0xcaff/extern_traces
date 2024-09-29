@@ -5,13 +5,13 @@ use crate::instructions::ops::SMEMOpCode;
 use crate::instructions::DisplayableInstruction;
 use alloc::string::ToString;
 use alloc::{format, vec};
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Scalar Instruction Memory Access
 ///
 /// Scalar instruction performing a memory operation on scalar L1 memory. Two
 /// Dwords.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct SMEMInstruction {
     #[bits(26, 22)]

@@ -6,14 +6,14 @@ use crate::SliceReader;
 use alloc::format;
 use alloc::string::{String, ToString};
 use alloc::vec;
-use bits::{bit, Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{bit, Bits, BitsContainerError, FromBits, TryFromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 
 /// Export
 ///
 /// Export (output) pixel color, pixel depth, vertex position, or vertex
 /// parameter data. Two words.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(64)]
 pub struct ExpInstruction {
     #[bits(9, 4)]
@@ -44,11 +44,11 @@ pub struct ExpInstruction {
 impl ParseInstruction for ExpInstruction {
     fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(ExpInstruction::from_bits(token))
+        Ok(ExpInstruction::try_from_bits_container(token)?)
     }
 }
 
-fn vsrc<T: Bits>(idx: u8) -> impl Fn(T) -> Option<VectorGPR> {
+fn vsrc<T: Bits>(idx: u8) -> impl Fn(T) -> Result<Option<VectorGPR>, BitsContainerError> {
     move |token: T| {
         let token = token.full();
 
@@ -62,16 +62,16 @@ fn vsrc<T: Bits>(idx: u8) -> impl Fn(T) -> Option<VectorGPR> {
         };
 
         if !enabled {
-            return None;
+            return Ok(None);
         }
 
-        Some(VectorGPR::from_bits(match idx {
+        Ok(Some(VectorGPR::from_bits(match idx {
             0 => token.slice(39, 32),
             1 => token.slice(47, 40),
             2 => token.slice(55, 48),
             3 => token.slice(63, 56),
-            _ => unreachable!("invalid index"),
-        }))
+            _ => return Err(BitsContainerError::new(0)),
+        })))
     }
 }
 
@@ -128,18 +128,20 @@ pub enum ExportTarget {
     Parameter(u8),
 }
 
-impl FromBits<6> for ExportTarget {
-    fn from_bits(value: impl Bits) -> Self {
+impl TryFromBits<6> for ExportTarget {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
         let value = value.full();
 
-        match value {
+        let result = match value {
             0..=7 => ExportTarget::RenderTarget(value as _),
             8 => ExportTarget::Z,
             9 => ExportTarget::Null,
             12..=15 => ExportTarget::Position((value - 12) as _),
             32..=63 => ExportTarget::Parameter((value - 32) as _),
-            _ => panic!("unexpected value {}", value),
-        }
+            _ => return None,
+        };
+
+        Some(result)
     }
 }
 

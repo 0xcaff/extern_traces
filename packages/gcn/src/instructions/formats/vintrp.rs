@@ -5,11 +5,11 @@ use crate::instructions::DisplayableInstruction;
 use alloc::format;
 use alloc::string::ToString;
 use alloc::vec;
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, FromBits, TryFromBits};
+use bits_macros::TryFromBitsContainer;
 use strum::{AsRefStr, FromRepr};
 
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct VINTRPInstruction {
     #[bits(17, 16)]
@@ -41,9 +41,9 @@ pub enum AttributeChannel {
     W = 3,
 }
 
-impl FromBits<2> for AttributeChannel {
-    fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full() as u8).unwrap()
+impl TryFromBits<2> for AttributeChannel {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
+        Self::from_repr(value.full() as u8)
     }
 }
 

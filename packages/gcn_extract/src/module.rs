@@ -2,7 +2,7 @@ use crate::analysis::AnalysisState;
 use alloc::collections::BTreeMap;
 use alloc::vec;
 use alloc::vec::Vec;
-use bits::FromBits;
+use bits::{FromBits, TryFromBitsContainer};
 use gcn::instructions::formats::FormattedInstruction;
 use gcn::instructions::ops::SMEMOpCode;
 use gcn::instructions::Instruction;
@@ -107,7 +107,7 @@ pub fn pixel_shader_extract_image_usages(
 
                 let resource = {
                     let values_read: &[u64] = bytemuck::cast_slice(values.as_slice());
-                    TextureBufferResource::from_bits(values_read)
+                    TextureBufferResource::try_from_bits_container(values_read).unwrap()
                 };
 
                 ((*values.into_boxed_slice()).try_into().unwrap(), resource)

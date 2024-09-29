@@ -2,8 +2,8 @@ use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::RELEASE_MEM_OP;
 use alloc::vec::Vec;
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, FromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 use custom_debug::Debug;
 use strum::FromRepr;
 
@@ -18,7 +18,7 @@ pub struct ReleaseMemoryPacket {
 
 // From Mesa
 // https://gitlab.freedesktop.org/mesa/mesa/blob/d09ad16fd4a0596fb6c97cffaf0fdf031053b5a4/src/amd/common/sid.h#L178-L189
-#[derive(Debug, Clone, FromBits)]
+#[derive(Debug, Clone, TryFromBitsContainer)]
 #[bits(32)]
 pub struct Selectors {
     #[bits(17, 16)]
@@ -83,8 +83,8 @@ impl ParseType3Packet for ReleaseMemoryPacket {
 
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
-            op: RELEASE_MEM_OP::from_bits(body[0]),
-            selector: Selectors::from_bits(body[1]),
+            op: RELEASE_MEM_OP::try_from_bits_container(body[0]).unwrap(),
+            selector: Selectors::try_from_bits_container(body[1]).unwrap(),
             virtual_address: (body[2] as u64) | ((body[3] as u64) << 32),
             immediate_data: (body[4] as u64) | ((body[5] as u64) << 32),
         }

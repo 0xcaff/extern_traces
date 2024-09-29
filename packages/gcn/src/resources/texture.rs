@@ -1,8 +1,8 @@
-use bits::{Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{Bits, FromBits, TryFromBits};
+use bits_macros::TryFromBitsContainer;
 use strum::FromRepr;
 
-#[derive(FromBits, Debug, Hash, Eq, PartialEq, Clone)]
+#[derive(TryFromBitsContainer, Debug, Hash, Eq, PartialEq, Clone)]
 #[bits(256)]
 pub struct TextureBufferResource {
     #[bits(37, 0)]
@@ -200,9 +200,9 @@ pub enum SurfaceFormat {
     Format1Reversed = 0x3C,
 }
 
-impl FromBits<6> for SurfaceFormat {
-    fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full() as u8).unwrap()
+impl TryFromBits<6> for SurfaceFormat {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
+        Self::from_repr(value.full() as u8)
     }
 }
 
@@ -272,9 +272,9 @@ pub enum TextureChannelType {
     UBScaled = 0x0000000D,
 }
 
-impl FromBits<4> for TextureChannelType {
-    fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full() as u8).unwrap()
+impl TryFromBits<4> for TextureChannelType {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
+        Self::from_repr(value.full() as u8)
     }
 }
 
@@ -300,9 +300,9 @@ pub enum TextureType {
     Type2dArrayMsaa = 0x0000000F,
 }
 
-impl FromBits<4> for TextureType {
-    fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full() as u8).unwrap()
+impl TryFromBits<4> for TextureType {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
+        Self::from_repr(value.full() as u8)
     }
 }
 
@@ -373,9 +373,9 @@ pub enum TileMode {
     DisplayLinearGeneral = 0x0000001F,
 }
 
-impl FromBits<5> for TileMode {
-    fn from_bits(value: impl Bits) -> Self {
-        Self::from_repr(value.full() as u8).unwrap()
+impl TryFromBits<5> for TileMode {
+    fn try_from_bits(value: impl Bits) -> Option<Self> {
+        Self::from_repr(value.full() as u8)
     }
 }
 

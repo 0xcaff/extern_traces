@@ -3,13 +3,13 @@ use crate::instructions::operands::ScalarSourceOperand;
 use crate::instructions::ops::SOPCOpCode;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Scalar Instruction Two Inputs, One Comparison
 ///
 /// Scalar instruction taking two inputs and producing a comparison result. Can
 /// be followed by a 32-bit literal constant
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct SOPCInstruction {
     #[bits(22, 16)]

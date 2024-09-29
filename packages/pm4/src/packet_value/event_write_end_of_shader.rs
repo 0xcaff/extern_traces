@@ -1,7 +1,7 @@
 use crate::op_codes::OpCode;
 use crate::{ParseType3Packet, VGT_EVENT_TYPE};
 use alloc::vec::Vec;
-use bits::{bitrange, Bits, FromBits};
+use bits::{bitrange, Bits, TryFromBitsContainer};
 
 #[derive(Debug, Clone)]
 pub struct EventWriteEndOfShaderPacket {
@@ -34,7 +34,7 @@ impl ParseType3Packet for EventWriteEndOfShaderPacket {
         let data_info = body[3];
 
         Self {
-            event_type: VGT_EVENT_TYPE::from_bits(event_type),
+            event_type: VGT_EVENT_TYPE::try_from_bits_container(event_type).unwrap(),
             address: { (address_lo << 1) | (address_hi << 32) } as _,
             data: {
                 match cmd {

@@ -4,13 +4,13 @@ use crate::instructions::DisplayableInstruction;
 use alloc::format;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Scalar Instruction One Input, One Special Operation
 ///
 /// Scalar instruction taking one inline constant input and performing a
 /// special operation (for example: jump).
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct SOPPInstruction {
     #[bits(22, 16)]

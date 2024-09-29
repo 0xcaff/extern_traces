@@ -9,14 +9,14 @@ use crate::SliceReader;
 use alloc::string::{String, ToString};
 use alloc::vec::Vec;
 use alloc::{format, vec};
-use bits::{bit, Bits, FromBits};
-use bits_macros::FromBits;
+use bits::{bit, Bits, FromBits, TryFromBitsContainer};
+use bits_macros::TryFromBitsContainer;
 use core::fmt;
 
 /// Image Memory Buffer Operations
 ///
 /// Image memory buffer operations. Two words.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(64)]
 pub struct MIMGInstruction {
     #[bits(24, 18)]
@@ -100,7 +100,7 @@ impl fmt::Debug for DMask {
 impl ParseInstruction for MIMGInstruction {
     fn parse(token: u32, reader: &mut SliceReader) -> Result<Self, anyhow::Error> {
         let token = combine(token, reader)?;
-        Ok(MIMGInstruction::from_bits(token))
+        Ok(MIMGInstruction::try_from_bits_container(token)?)
     }
 }
 

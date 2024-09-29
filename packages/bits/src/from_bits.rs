@@ -1,7 +1,53 @@
 use crate::Bits;
+use alloc::vec;
+use alloc::vec::Vec;
+use snafu::Snafu;
+
+pub trait TryFromBits<const BITS: usize>: Sized {
+    fn try_from_bits(value: impl Bits) -> Option<Self>;
+}
 
 pub trait FromBits<const BITS: usize>: Sized {
     fn from_bits(value: impl Bits) -> Self;
+}
+
+impl<const BITS: usize, T: FromBits<BITS>> TryFromBits<BITS> for T {
+    fn try_from_bits(bits: impl Bits) -> Option<Self> {
+        Some(Self::from_bits(bits))
+    }
+}
+
+#[derive(Debug, Snafu)]
+#[snafu(display("error {} in bits container: {:#?}", value, path))]
+pub struct BitsContainerError {
+    pub value: u64,
+    pub path: Vec<&'static str>,
+}
+
+impl BitsContainerError {
+    pub fn new(value: u64) -> BitsContainerError {
+        BitsContainerError {
+            path: vec![],
+            value,
+        }
+    }
+
+    pub fn extend(self, segment: &'static str) -> BitsContainerError {
+        let mut path = self.path;
+        path.push(segment);
+
+        Self { path, value: self.value }
+    }
+}
+
+pub trait TryFromBitsContainer<const BITS: usize>: Sized {
+    fn try_from_bits_container(value: impl Bits) -> Result<Self, BitsContainerError>;
+}
+
+impl<const BITS: usize, T: TryFromBits<BITS>> TryFromBitsContainer<BITS> for T {
+    fn try_from_bits_container(bits: impl Bits) -> Result<Self, BitsContainerError> {
+        Ok(Self::try_from_bits(bits).ok_or_else(|| BitsContainerError::new(bits.full()))?)
+    }
 }
 
 impl FromBits<16> for u16 {

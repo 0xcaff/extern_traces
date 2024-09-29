@@ -5,12 +5,12 @@ use crate::instructions::DisplayableInstruction;
 use alloc::format;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Scalar Instruction One Inline Constant Input, One Output
 ///
 /// This is a scalar instruction with one inline constant input and one output.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct SOPKInstruction {
     #[bits(27, 23)]

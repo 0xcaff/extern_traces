@@ -4,13 +4,13 @@ use crate::instructions::ops::VOP1OpCode;
 use crate::instructions::DisplayableInstruction;
 use alloc::string::ToString;
 use alloc::vec;
-use bits_macros::FromBits;
+use bits_macros::TryFromBitsContainer;
 
 /// Vector Instruction One Input, One Output
 ///
 /// Vector instruction taking one input and producing one output. Can be
 /// followed by a 32-bit literal constant.
-#[derive(Debug, FromBits)]
+#[derive(Debug, TryFromBitsContainer)]
 #[bits(32)]
 pub struct VOP1Instruction {
     #[bits(16, 9)]

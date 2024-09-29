@@ -2,7 +2,7 @@ use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use crate::VGT_DRAW_INITIATOR;
 use alloc::vec::Vec;
-use bits::FromBits;
+use bits::TryFromBitsContainer;
 
 #[derive(Debug, Clone)]
 pub struct DrawIndexAutoPacket {
@@ -16,7 +16,7 @@ impl ParseType3Packet for DrawIndexAutoPacket {
     fn parse_type3_packet(body: Vec<u32>) -> Self {
         Self {
             index_count: body[0],
-            draw_initiator: VGT_DRAW_INITIATOR::from_bits(body[1]),
+            draw_initiator: VGT_DRAW_INITIATOR::try_from_bits_container(body[1]).unwrap(),
         }
     }
 }

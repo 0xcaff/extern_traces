@@ -2,11 +2,11 @@ use crate::attrs::FromBitsFieldAttribute;
 use macro_utils::exactly_one;
 use proc_macro2::TokenStream;
 use quote::quote;
-use syn::parse::{Parse, ParseStream};
+use syn::parse::Parse;
 use syn::spanned::Spanned;
-use syn::{parse2, Data, DeriveInput, Expr, Field, LitInt, Token};
+use syn::{parse2, Data, DeriveInput, Field, LitInt};
 
-pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
+pub fn derive_try_from_bits_container(input: DeriveInput) -> Result<TokenStream, syn::Error> {
     let struct_ident = &input.ident;
 
     let attribute = exactly_one(&input.attrs, "bits", &input)?;
@@ -23,11 +23,11 @@ pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
         .collect::<Result<Vec<_>, _>>()?;
 
     Ok(quote! {
-        impl ::bits::FromBits<#bits_length> for #struct_ident {
-            fn from_bits(value: impl ::bits::Bits) -> Self {
-                #struct_ident {
+        impl ::bits::TryFromBitsContainer<#bits_length> for #struct_ident {
+            fn try_from_bits_container(value: impl ::bits::Bits) -> Result<Self, ::bits::BitsContainerError> {
+                Ok(#struct_ident {
                     #(#initializers)*
-                }
+                })
             }
         }
     })
@@ -62,12 +62,12 @@ fn field(field: &Field) -> Result<TokenStream, syn::Error> {
             let len = (range.highest_bit - range.lowest_bit + 1) as usize;
 
             quote! {
-                #identifier: <#typ as ::bits::FromBits<#len>>::from_bits(value.slice(#highest_bit, #lowest_bit)),
+                #identifier: <#typ as ::bits::TryFromBitsContainer<#len>>::try_from_bits_container(value.slice(#highest_bit, #lowest_bit)).map_err(|err| err.extend(stringify!(identifier)))?,
             }
         }
         FromBitsFieldAttribute::With(expr) => {
             quote! {
-                #identifier: #expr(value),
+                #identifier: #expr(value).map_err(|err| err.extend(stringify!(identifier)))?,
             }
         }
     })
