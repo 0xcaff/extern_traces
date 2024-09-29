@@ -8,13 +8,11 @@ edition = "2021"
 [dependencies]
 bits = { path = "../bits" }
 bits_macros = { path = "../bits_macros" }
-anyhow = "1.0.79"
-byteorder = "1.5.0"
-strum = { version = "0.25.0", features = ["derive"] }
+anyhow = { version = "1.0.79", default-features = false }
+strum = { version = "0.25.0", features = ["derive"], default-features = false }
 pm4_internal_macros = { path = "../pm4_internal_macros" }
 custom_debug = "0.6.1"
-hex = "0.4.3"
-snafu = "0.8.5"
+snafu = { version = "0.8.5", default-features = false, features = ["rust_1_81"] }
 
 [dev-dependencies]
 insta = { version = "1.33.0" }

@@ -821,6 +821,7 @@ pub fn translate_pixel_shader<'a>(
     Ok(builder.module())
 }
 
+#[derive(Debug)]
 pub struct BufferUsage {
     pub resource: VertexBufferResource,
     pub program_counter: u64,
@@ -880,6 +881,7 @@ pub fn extract_buffer_usages(
     usages
 }
 
+#[derive(Debug)]
 pub struct ImageSamplerUsage {
     pub raw_texture_resource: [u32; 8],
     pub texture_resource: TextureBufferResource,

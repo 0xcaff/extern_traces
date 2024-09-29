@@ -23,6 +23,9 @@ pub mod execution_state_input;
 mod logger;
 mod r#loop;
 pub mod module;
+mod shader;
+
+pub use shader::ShaderInvocation;
 
 pub fn wrap_exec_condition(
     builder: &mut Builder,
@@ -711,8 +714,8 @@ fn translate_vop3(
                 [Operand::IdRef(vec_value)],
             )?
         }
-        unknown => {
-            unimplemented!("unknown {:#?}", unknown)
+        it => {
+            unimplemented!("unknown {:#?}", it)
         }
     };
 

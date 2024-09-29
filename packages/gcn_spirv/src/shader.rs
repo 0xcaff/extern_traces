@@ -1,5 +1,7 @@
-use core::slice;
 use anyhow::bail;
+use core::slice;
+use gcn::instructions::Instruction;
+use gcn::SliceReader;
 
 pub struct ShaderInvocation {
     pub bytes: &'static [u32],
@@ -21,5 +23,20 @@ impl ShaderInvocation {
         Ok(ShaderInvocation {
             bytes: slice::from_raw_parts(raw_code_pointer, code_length as usize),
         })
+    }
+
+    pub fn as_flat_instructions(&self) -> Result<Vec<Instruction>, anyhow::Error> {
+        let bytes = self.bytes;
+        let mut reader = SliceReader::new(self.bytes);
+        let mut instructions = vec![];
+
+        while reader.has_more() {
+            let program_counter = unsafe { self.bytes.as_ptr().offset_from(bytes.as_ptr()) } as u64;
+            let instruction = Instruction::parse(&mut reader, program_counter)?;
+
+            instructions.push(instruction);
+        }
+
+        Ok(instructions)
     }
 }
