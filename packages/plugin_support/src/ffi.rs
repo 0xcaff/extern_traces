@@ -1,3 +1,5 @@
+use crate::println;
+
 #[repr(C)]
 pub struct Args {
     pub xmm0: [u64; 2],
@@ -24,6 +26,7 @@ impl Args {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct BufferReservation {
     buffer: *mut (),
     write_idx: u64,

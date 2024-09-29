@@ -118,7 +118,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
         total_size += size_of::<u32>() // address
             + size_of::<u8>()  // kind
             + size_of::<u32>() // length
-            + shader.shader_invocation.bytes.len();
+            + shader.shader_invocation.bytes.len() * 4;
     }
 
     let Some(mut res) = thread_logging_state.reserve(total_size) else {
