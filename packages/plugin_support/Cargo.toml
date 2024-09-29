@@ -8,6 +8,8 @@ crate-type = ["staticlib"]
 
 [dependencies]
 pm4 = { path = "../../../ps4-tools/packages/pm4" }
+gcn_extract = { path = "../../../ps4-tools/packages/gcn_extract" }
+gcn = { path = "../../../ps4-tools/packages/gcn" }
 libc = "0.2.159"
 bytemuck = { version = "1.18.0", features = ["derive"] }
 

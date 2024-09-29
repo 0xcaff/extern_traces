@@ -15,7 +15,9 @@ use bytemuck::{Pod, Zeroable};
 use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
-use pm4::{convert, Command, PM4Packet, ShaderInvocation};
+use gcn::instructions::Instruction;
+use gcn_extract::{extract_buffer_usages, pixel_shader_extract_image_usages, ShaderInvocation};
+use pm4::{convert, Command, PM4Packet};
 
 #[lang = "eh_personality"]
 extern "C" fn eh_personality() {}
@@ -96,8 +98,9 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
 
     let mut shaders = ShadersCollector::new();
 
-    let mut total_size =
-        size_of::<SpanStartAdditionalData>() + size_of::<u32>() + (size_of::<u32>() * 2 * (count as usize));
+    let mut total_size = size_of::<SpanStartAdditionalData>()
+        + size_of::<u32>()
+        + (size_of::<u32>() * 2 * (count as usize));
 
     let draw_command_buffers =
         unsafe { command_buffers(count as _, draw_buffers, draw_sizes) }.collect::<Vec<_>>();
@@ -166,7 +169,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
 }
 
 #[repr(u8)]
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 enum ShaderKind {
     Compute,
     Vertex,
@@ -176,6 +179,7 @@ enum ShaderKind {
 struct Shader {
     kind: ShaderKind,
     shader_invocation: ShaderInvocation,
+    instructions: Option<Vec<Instruction>>,
 }
 
 struct ShadersCollector {
@@ -198,40 +202,67 @@ impl ShadersCollector {
             match command {
                 Command::Draw { pipeline, .. } => {
                     if let Some(vertex_shader) = pipeline.vertex_shader.entrypoint_gpu_address {
-                        self.collect_shader(vertex_shader, ShaderKind::Vertex);
+                        self.collect_shader(
+                            vertex_shader,
+                            ShaderKind::Vertex,
+                            &pipeline.vertex_shader.user_data.0,
+                        );
                     }
 
                     if let Some(pixel_shader) = pipeline.pixel_shader.address {
-                        self.collect_shader(pixel_shader, ShaderKind::Pixel);
+                        self.collect_shader(
+                            pixel_shader,
+                            ShaderKind::Pixel,
+                            &pipeline.pixel_shader.user_data.0,
+                        );
                     }
                 }
                 Command::Dispatch { pipeline, .. } => {
-                    self.collect_shader(pipeline.address_lo, ShaderKind::Compute);
+                    self.collect_shader(
+                        pipeline.address_lo,
+                        ShaderKind::Compute,
+                        &pipeline.user_data.0,
+                    );
                 }
                 _ => {}
             }
         }
     }
 
-    fn collect_shader(&mut self, shader_address: u32, kind: ShaderKind) {
+    fn collect_shader(
+        &mut self,
+        shader_address: u32,
+        kind: ShaderKind,
+        user_data: &BTreeMap<u8, u32>,
+    ) {
         if shader_address == 0 {
             return;
         }
 
-        let entry = self.shaders.entry(shader_address);
-        let Entry::Vacant(item) = entry else {
-            return;
+        let shader = match self.shaders.entry(shader_address) {
+            Entry::Vacant(item) => {
+                let Ok(shader_invocation) =
+                    (unsafe { ShaderInvocation::decode_from_memory(shader_address) })
+                else {
+                    return;
+                };
+
+                let instructions = shader_invocation.as_flat_instructions().ok();
+
+                item.insert(Shader {
+                    shader_invocation,
+                    kind,
+                    instructions,
+                })
+            }
+            Entry::Occupied(value) => value.into_mut(),
         };
 
-        let Ok(shader_invocation) =
-            (unsafe { ShaderInvocation::decode_from_memory(shader_address) })
-        else {
-            return;
-        };
+        if let Some(instructions) = shader.instructions.as_ref() {
+            let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
+            let texture_usages = pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
 
-        item.insert(Shader {
-            shader_invocation,
-            kind,
-        });
+            println!("{} {:#?} {:#?} {:#?}", shader_address, kind, buffer_usages, texture_usages);
+        }
     }
 }

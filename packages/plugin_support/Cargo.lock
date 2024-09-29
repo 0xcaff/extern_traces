@@ -43,6 +43,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "byteorder"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
+
+[[package]]
 name = "custom_debug"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -113,6 +119,40 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
+name = "gcn"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bits",
+ "bits_macros",
+ "bytemuck",
+ "byteorder",
+ "gcn_internal_macros",
+ "snafu",
+ "strum",
+]
+
+[[package]]
+name = "gcn_extract"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bits",
+ "bytemuck",
+ "gcn",
+]
+
+[[package]]
+name = "gcn_internal_macros"
+version = "0.1.0"
+dependencies = [
+ "macro_utils",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "heck"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -159,6 +199,8 @@ name = "plugin_support"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
+ "gcn",
+ "gcn_extract",
  "libc",
  "pm4",
 ]
