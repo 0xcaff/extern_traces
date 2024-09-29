@@ -5,7 +5,7 @@
 0x0014: v_add_co_u32 v26, vcc_lo, v0
 0x0018: v_sad_u32 v27, s4, 0, v1
 0x0020: s_waitcnt 0x7f
-0x0024: v_cmp_lt_u32 vcc, s3, v27, s0
+0x0024: v_cmp_lt_u32 v4, s3, v27, s0
 0x002c: v_cmp_lt_u32 s2, v26
 0x0030: s_nor_b64 vcc, vcc, s[4:5]
 0x0034: s_and_saveexec_b64 vcc, vcc
@@ -56,8 +56,8 @@
 0x0120: s_waitcnt 0xf70
 0x0124: v_max_f32 v34, v7, v9
 0x0128: v_max_f32 v35, s28, v8
-0x012c: v_cmp_gt_f32 vcc, vcc_lo, v34, s0
-0x0134: v_cmp_gt_f32 vcc, v35, 0.5.f, abs(s0)
+0x012c: v_cmp_gt_f32 v2, vcc_lo, v34, s0
+0x0134: v_cmp_gt_f32 v106, v35, 0.5.f, abs(s0)
 0x013c: s_and_b64 vcc, s[2:3], vcc
 0x0140: s_and_saveexec_b64 s[2:3], vcc
 0x0144: s_cbranch_execz 0xad
@@ -67,10 +67,10 @@
 0x015c: v_mov_b32 v32, v27
 0x0160: image_load v[21:24], v[14:15], s[12:19], s[0:3], dmask(rgba)
 0x0168: image_load v[17:20], v[31:32], s[12:19], s[0:3], dmask(rgba)
-0x0170: unknown_1 v28, 1, v26
+0x0170: v_bcnt_u32_b32 v28, 1, v26
 0x0174: v_mov_b32 v29, v27
 0x0178: image_load v[11:14], v[28:29], s[12:19], s[0:3], dmask(rgba)
-0x0180: unknown_1 v30, 1, v27
+0x0180: v_bcnt_u32_b32 v30, 1, v27
 0x0184: v_mov_b32 v29, v26
 0x0188: image_load v[7:10], v[29:30], s[12:19], s[0:3], dmask(rgba)
 0x0190: s_brev_b32 s4, 1

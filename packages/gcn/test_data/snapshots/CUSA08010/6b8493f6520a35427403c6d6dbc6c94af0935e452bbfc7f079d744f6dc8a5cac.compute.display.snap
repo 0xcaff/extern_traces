@@ -56,7 +56,7 @@
 0x0130: v_madak_f32 v13, v13, v12
 0x0138: v_madak_f32 v13, v13, v12
 0x0140: v_madak_f32 v12, v13, v12
-0x0148: v_cmp_lt_f32 vcc, v9, abs(v11), abs(s0)
+0x0148: v_cmp_lt_f32 v106, v9, abs(v11), abs(s0)
 0x0150: v_mul_f32 v11, v10, v12
 0x0154: v_madak_f32 v13, -2.f, v11
 0x015c: v_mov_b32 v11, 0xc0490fdb
@@ -71,10 +71,10 @@
 0x0184: v_mad_f32 v6, v2, abs(v1), -abs(1.f)
 0x018c: v_mul_f32 v11, 0xbdf15bef, v6
 0x0194: v_mul_f32 v0, v2, v0
-0x0198: v_cmp_lt_f32 vcc, v10, -v10, s0
+0x0198: v_cmp_lt_f32 v2, v10, -v10, s0
 0x01a0: v_mul_f32 v10, v6, v6
 0x01a4: v_madmk_f32 v11, v10, v11
-0x01ac: v_cmp_ge_f32 vcc, v0, -v0, s0
+0x01ac: v_cmp_ge_f32 v106, v0, -v0, s0
 0x01b4: v_mul_f32 v0, v2, v1
 0x01b8: v_mul_f32 v1, v6, v10
 0x01bc: v_mul_f32 v2, 0xba8197e8, v10

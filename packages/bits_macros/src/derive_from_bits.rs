@@ -2,9 +2,8 @@ use crate::attrs::FromBitsFieldAttribute;
 use macro_utils::exactly_one;
 use proc_macro2::TokenStream;
 use quote::quote;
-use syn::parse::{Parse, ParseStream};
 use syn::spanned::Spanned;
-use syn::{parse2, Data, DeriveInput, Expr, Field, LitInt, Token};
+use syn::{parse2, Data, DeriveInput, Field, LitInt};
 
 pub fn derive_from_bits(input: DeriveInput) -> Result<TokenStream, syn::Error> {
     let struct_ident = &input.ident;

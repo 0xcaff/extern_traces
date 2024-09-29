@@ -17,7 +17,7 @@
 0x0058: s_movk_i32 vcc_lo, 0x4000
 0x005c: s_waitcnt 0x7f
 0x0060: v_lshlrev_b32 v1, 2, s2, s0
-0x0068: v_cmp_gt_u32 vcc, vcc_lo, v0, s0
+0x0068: v_cmp_gt_u32 v8, vcc_lo, v0, s0
 0x0070: s_bfm_b32 m0, 2, 14
 0x0074: unknown 
 0x007c: s_waitcnt 0xf0f
@@ -31,7 +31,7 @@
 0x00a0: s_waitcnt 0xf70
 0x00a4: v_lshrrev_b32 v2, s2, v1
 0x00a8: v_and_b32 v2, 1, v2
-0x00ac: v_cmp_lg_u32 vcc, 0, v2, s0
+0x00ac: v_cmp_lg_u32 v4, 0, v2, s0
 0x00b4: s_waitcnt 0x7f
 0x00b8: s_bcnt1_i32_b64 s6, s[4:5]
 0x00bc: s_lshl_b32 vcc_lo, s2, 18
@@ -44,7 +44,7 @@
 0x00e4: s_waitcnt 0xf0f
 0x00e8: s_and_saveexec_b64 vcc, s[8:9]
 0x00ec: s_cbranch_execz 0xe
-0x00f0: unknown v4, s4, v4
+0x00f0: v_mbcnt_lo_u32_b32 v4, s4, v4
 0x00f4: v_mbcnt_hi_u32_b32 v4, s5, v4
 0x00f8: v_sub_co_u32 v3, 0x4000, v3
 0x0100: v_add_co_u32 v3, v4, v3

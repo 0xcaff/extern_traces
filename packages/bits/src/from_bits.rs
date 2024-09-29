@@ -36,7 +36,10 @@ impl BitsContainerError {
         let mut path = self.path;
         path.push(segment);
 
-        Self { path, value: self.value }
+        Self {
+            path,
+            value: self.value,
+        }
     }
 }
 

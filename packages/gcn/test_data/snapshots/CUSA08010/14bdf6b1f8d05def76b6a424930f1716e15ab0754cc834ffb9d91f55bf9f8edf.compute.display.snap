@@ -5,7 +5,7 @@
 0x0014: v_add_co_u32 v0, vcc_lo, v0
 0x0018: v_sad_u32 v1, s5, 0, v1
 0x0020: s_waitcnt 0x7f
-0x0024: v_cmp_gt_u32 vcc, s3, v1, s0
+0x0024: v_cmp_gt_u32 v6, s3, v1, s0
 0x002c: v_cmp_gt_u32 s2, v0
 0x0030: s_and_b64 vcc, vcc, s[6:7]
 0x0034: s_and_saveexec_b64 vcc, vcc

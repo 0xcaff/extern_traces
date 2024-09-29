@@ -20,7 +20,7 @@
 0x0050: v_or_b32 v9, vcc_hi, v0
 0x0054: v_or_b32 v8, vcc_lo, v1
 0x0058: s_waitcnt 0x7f
-0x005c: v_cmp_gt_u32 vcc, s3, v9, s0
+0x005c: v_cmp_gt_u32 v4, s3, v9, s0
 0x0064: v_cmp_gt_u32 s2, v8
 0x0068: s_and_b64 vcc, vcc, s[4:5]
 0x006c: s_and_saveexec_b64 vcc, vcc
@@ -115,7 +115,7 @@
 0x0220: s_add_i32 s4, vcc_lo, 32
 0x0224: s_load_dword s4, s[2:3], 0x4
 0x0228: s_waitcnt 0x7f
-0x022c: v_cmp_gt_f32 vcc, s4, 0, s0
+0x022c: v_cmp_gt_f32 v106, s4, 0, s0
 0x0234: s_cbranch_vccz 0xc
 0x0238: v_mov_b32 v1, s4
 0x023c: s_mov_b32 vcc_lo, 0x40a00000

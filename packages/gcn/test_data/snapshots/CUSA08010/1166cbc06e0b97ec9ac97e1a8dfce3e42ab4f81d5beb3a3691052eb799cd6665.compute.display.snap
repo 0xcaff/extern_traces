@@ -5,7 +5,7 @@
 0x0014: v_add_co_u32 v4, vcc_lo, v0
 0x0018: v_sad_u32 v5, s7, 0, v1
 0x0020: s_waitcnt 0x7f
-0x0024: v_cmp_le_u32 vcc, s5, v5, s0
+0x0024: v_cmp_le_u32 v8, s5, v5, s0
 0x002c: v_cmp_le_u32 s4, v4
 0x0030: s_nor_b64 vcc, vcc, s[8:9]
 0x0034: s_and_saveexec_b64 vcc, vcc
@@ -166,7 +166,7 @@
 0x0344: v_mac_f32 v14, s11, -v13, s0
 0x034c: v_mul_f32 v14, s14, v14
 0x0350: v_cmp_gt_f32 v14, v2
-0x0354: v_cmp_lt_f32 vcc, v13, -v2, s0
+0x0354: v_cmp_lt_f32 v4, v13, -v2, s0
 0x035c: s_or_b64 s[4:5], vcc, s[4:5]
 0x0360: s_add_i32 s8, s10, 24
 0x0364: s_load_dword s10, s[2:3], 0x8
@@ -177,11 +177,11 @@
 0x0378: v_sqrt_f32 v13, v13
 0x037c: v_mac_f32 v13, s11, -v19, s0
 0x0384: v_mul_f32 v13, s14, v13
-0x0388: v_cmp_gt_f32 vcc, v13, v3, s0
+0x0388: v_cmp_gt_f32 v6, v13, v3, s0
 0x0390: v_subrev_f32 v13, s10, v19
-0x0394: v_cmp_gt_f32 vcc, v13, v3, s0
+0x0394: v_cmp_gt_f32 v10, v13, v3, s0
 0x039c: s_or_b64 s[4:5], s[4:5], vcc
-0x03a0: v_cmp_lt_f32 vcc, v19, -v3, s0
+0x03a0: v_cmp_lt_f32 v106, v19, -v3, s0
 0x03a8: s_or_b64 vcc, s[6:7], vcc
 0x03ac: s_or_b64 vcc, vcc, s[10:11]
 0x03b0: s_nand_b64 vcc, s[4:5], vcc

@@ -34,16 +34,16 @@
 0x00a0: v_mad_f32 v3, -s15, v7, v3
 0x00a8: v_mac_f32 v9, v2, v2
 0x00ac: v_mad_f32 v8, v3, v3, v9
-0x00b4: v_cmp_class_f32 vcc, v8, vcc_lo, s0
+0x00b4: v_cmp_class_f32 v4, v8, vcc_lo, s0
 0x00bc: v_cmp_eq_f32 0, v8
 0x00c0: v_add_f32 v9, -1.f, v8
-0x00c4: v_cmp_le_f32 vcc, v9, s6, abs(s0)
+0x00c4: v_cmp_le_f32 v6, v9, s6, abs(s0)
 0x00cc: v_cndmask_b32 v9, 0, 1, vcc
 0x00d4: s_or_b64 vcc, vcc, s[4:5]
 0x00d8: s_or_b64 vcc, s[6:7], vcc
 0x00dc: s_and_saveexec_b64 s[4:5], vcc
 0x00e0: s_cbranch_execz 0xc
-0x00e4: v_cmp_eq_f32 vcc, 0, v8, s0
+0x00e4: v_cmp_eq_f32 v6, 0, v8, s0
 0x00ec: v_cmp_lg_u32 0, v9
 0x00f0: s_or_b64 vcc, s[6:7], vcc
 0x00f4: v_cndmask_b32 v19, v0, 0, vcc
@@ -63,17 +63,17 @@
 0x013c: v_mac_f32 v0, v21, v21
 0x0140: v_mac_f32 v0, v22, v22
 0x0144: s_movk_i32 vcc_lo, 0x204
-0x0148: v_cmp_class_f32 vcc, v0, vcc_lo, s0
+0x0148: v_cmp_class_f32 v4, v0, vcc_lo, s0
 0x0150: v_cmp_eq_f32 0, v0
 0x0154: v_add_f32 v1, -1.f, v0
 0x0158: v_cndmask_b32 v2, 0, 1, vcc
 0x0160: s_mov_b32 s6, 0x350637bd
 0x0168: s_or_b64 vcc, vcc, s[4:5]
-0x016c: v_cmp_le_f32 vcc, v1, s6, abs(s0)
+0x016c: v_cmp_le_f32 v4, v1, s6, abs(s0)
 0x0174: s_or_b64 vcc, s[4:5], vcc
 0x0178: s_and_saveexec_b64 s[4:5], vcc
 0x017c: s_cbranch_execz 0xc
-0x0180: v_cmp_eq_f32 vcc, 0, v0, s0
+0x0180: v_cmp_eq_f32 v6, 0, v0, s0
 0x0188: v_cmp_lg_u32 0, v2
 0x018c: s_or_b64 vcc, s[6:7], vcc
 0x0190: v_cndmask_b32 v12, v19, 0, -vcc

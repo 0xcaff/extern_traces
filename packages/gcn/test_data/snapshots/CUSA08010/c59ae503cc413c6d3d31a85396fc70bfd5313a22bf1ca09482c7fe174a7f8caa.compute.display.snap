@@ -1,0 +1,82 @@
+0x0000: s_mov_b32 vcc_hi, 0x41
+0x0008: s_lshl_b32 vcc_lo, s2, 6
+0x000c: s_load_dword s2, s[0:1], 0xa
+0x0010: v_add_co_u32 v15, vcc_lo, v0
+0x0014: s_waitcnt 0x7f
+0x0018: v_cmpx_gt_u32 s2, v15
+0x001c: s_cbranch_execz 0x69
+0x0020: s_load_dwordx2 s[8:9], s[0:1], 0x8
+0x0024: s_load_dwordx8 s[0:7], s[0:1], 0x0
+0x0028: s_waitcnt 0x7f
+0x002c: buffer_load_dwordx3 v[6:8], v15, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0034: buffer_load_dwordx3 v[3:5], v15, s[4:7], idxen, offset=0xc, soffset=0x80
+0x003c: buffer_load_dwordx3 v[9:11], v15, s[4:7], idxen, offset=0x24, soffset=0x80
+0x0044: buffer_load_dwordx3 v[0:2], v15, s[4:7], idxen, offset=0x18, soffset=0x80
+0x004c: s_load_dwordx8 s[4:11], s[8:9], 0xff
+0x0050: v_cndmask_b32 v0, s80, v1
+0x0054: s_waitcnt 0x7f
+0x0058: v_mul_f32 v12, 2.f, s7, s0
+0x0060: v_mul_f32 v16, s9, v12
+0x0064: v_mov_b32 v22, s7
+0x0068: v_mad_f32 v13, s9, -v16, v22
+0x0070: v_mul_f32 v18, s10, v12
+0x0074: v_mul_f32 v20, s11, v18
+0x0078: v_mul_f32 v23, s8, v12
+0x007c: v_mac_f32 v13, s10, -v18, s0
+0x0084: v_mad_f32 v12, s9, v23, v20
+0x008c: v_mul_f32 v19, s8, v18
+0x0090: v_mac_f32 v22, s8, -v23, s0
+0x0098: v_mad_f32 v14, s11, v16, -v19
+0x00a0: v_mad_f32 v20, -s9, v23, v20
+0x00a8: v_mul_f32 v17, s11, v23
+0x00ac: v_mac_f32 v19, s11, v16
+0x00b0: v_mad_f32 v21, s10, -v18, v22
+0x00b8: v_mad_f32 v18, s10, v16, v17
+0x00c0: v_mad_f32 v17, -s10, v16, v17
+0x00c8: v_mad_f32 v16, s9, -v16, v22
+0x00d0: s_waitcnt 0xf73
+0x00d4: v_mul_f32 v23, v8, v13
+0x00d8: v_mul_f32 v22, v7, v13
+0x00dc: v_mul_f32 v13, v6, v13
+0x00e0: s_waitcnt 0xf72
+0x00e4: v_mac_f32 v23, v12, v5
+0x00e8: v_mac_f32 v13, v12, v3
+0x00ec: s_waitcnt 0xf71
+0x00f0: v_mac_f32 v11, s4, v8
+0x00f4: v_mac_f32 v22, v12, v4
+0x00f8: s_waitcnt 0xf70
+0x00fc: v_mad_f32 v12, v0, v14, v13
+0x0104: v_mac_f32 v11, s5, v5
+0x0108: v_mac_f32 v10, s4, v7
+0x010c: v_mad_f32 v13, v1, v14, v22
+0x0114: v_mad_f32 v14, v2, v14, v23
+0x011c: v_mul_f32 v22, v6, v20
+0x0120: v_mad_f32 v23, s4, v6, v9
+0x0128: v_mul_f32 v6, v6, v19
+0x012c: v_mad_f32 v9, v4, s5, v10
+0x0134: v_mac_f32 v22, v21, v3
+0x0138: v_mac_f32 v6, v17, v3
+0x013c: v_mac_f32 v23, s5, v3
+0x0140: v_mad_f32 v10, v2, s6, v11
+0x0148: v_mul_f32 v11, v8, v20
+0x014c: v_mac_f32 v11, v21, v5
+0x0150: v_mac_f32 v9, s6, v1
+0x0154: buffer_store_dwordx3 v[12:14], v15, s[0:3], idxen, offset=0x0, soffset=0x80
+0x015c: s_nop 0x0
+0x0160: v_mul_f32 v12, v7, v20
+0x0164: v_mul_f32 v14, v8, v19
+0x0168: v_mul_f32 v7, v7, v19
+0x016c: v_mac_f32 v12, v21, v4
+0x0170: v_mac_f32 v14, v17, v5
+0x0174: v_mac_f32 v7, v17, v4
+0x0178: v_mad_f32 v13, v2, v18, v11
+0x0180: v_mad_f32 v11, v0, v18, v22
+0x0188: v_mad_f32 v2, v2, v16, v14
+0x0190: v_mad_f32 v8, v0, s6, v23
+0x0198: v_mad_f32 v0, v0, v16, v6
+0x01a0: v_mac_f32 v12, v18, v1
+0x01a4: v_mad_f32 v1, v1, v16, v7
+0x01ac: buffer_store_dwordx3 v[11:13], v15, s[0:3], idxen, offset=0xc, soffset=0x80
+0x01b4: buffer_store_dwordx3 v[0:2], v15, s[0:3], idxen, offset=0x18, soffset=0x80
+0x01bc: buffer_store_dwordx3 v[8:10], v15, s[0:3], idxen, offset=0x24, soffset=0x80
+0x01c4: s_endpgm 0x0

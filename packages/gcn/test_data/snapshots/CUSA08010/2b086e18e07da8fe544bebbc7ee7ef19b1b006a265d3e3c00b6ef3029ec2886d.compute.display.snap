@@ -8,7 +8,7 @@
 0x0028: v_add_co_u32 v5, -1, v21
 0x002c: v_mov_b32 v0, v4
 0x0030: v_mov_b32 v1, v21
-0x0034: unknown_1 v24, 1, v21
+0x0034: v_bcnt_u32_b32 v24, 1, v21
 0x0038: v_mov_b32 v23, v4
 0x003c: s_waitcnt 0x7f
 0x0040: image_load v[12:15], v[4:5], s[8:15], s[0:3], dmask(rgba)
@@ -17,18 +17,18 @@
 0x0058: image_load v[8:11], v[23:24], s[8:15], s[0:3], dmask(rgba)
 0x0060: v_mov_b32 v25, v20
 0x0064: v_mov_b32 v26, v5
-0x0068: unknown_1 v22, 1, v20
+0x0068: v_bcnt_u32_b32 v22, 1, v20
 0x006c: v_mov_b32 v23, v5
 0x0070: image_load v[4:7], v[25:26], s[8:15], s[0:3], dmask(rgba)
 0x0078: s_waitcnt 0xf74
-0x007c: v_cmp_class_f32 vcc, v15, 60, s0
+0x007c: v_cmp_class_f32 v106, v15, 60, s0
 0x0084: s_waitcnt 0xf73
-0x0088: v_cmp_class_f32 vcc, v19, 60, s0
+0x0088: v_cmp_class_f32 v16, v19, 60, s0
 0x0090: v_mad_f32 v26, 0.5.f, abs(v15), -1.f, clamp
 0x0098: s_xor_b64 vcc, vcc, s[16:17]
 0x009c: v_cndmask_b32 v26, v26, 0, vcc
 0x00a4: s_waitcnt 0xf72
-0x00a8: v_cmp_class_f32 vcc, v3, 60, s0
+0x00a8: v_cmp_class_f32 v106, v3, 60, s0
 0x00b0: v_mad_f32 v14, v14, v26, v18
 0x00b8: v_mac_f32 v16, v26, v12
 0x00bc: v_mad_f32 v12, 0.5.f, abs(v3), -1.f, clamp
@@ -36,7 +36,7 @@
 0x00c8: s_xor_b64 vcc, vcc, s[16:17]
 0x00cc: v_cndmask_b32 v18, v12, 0, vcc
 0x00d4: s_waitcnt 0xf71
-0x00d8: v_cmp_class_f32 vcc, v11, 60, s0
+0x00d8: v_cmp_class_f32 v106, v11, 60, s0
 0x00e0: v_mad_f32 v13, 0.5.f, abs(v11), -1.f, clamp
 0x00e8: v_add_f32 v12, v26, v18
 0x00ec: v_mac_f32 v14, v18, v2
@@ -44,7 +44,7 @@
 0x00f4: s_xor_b64 vcc, vcc, s[16:17]
 0x00f8: v_cndmask_b32 v13, v13, 0, vcc
 0x0100: s_waitcnt 0xf70
-0x0104: v_cmp_class_f32 vcc, v7, 60, s0
+0x0104: v_cmp_class_f32 v106, v7, 60, s0
 0x010c: v_mac_f32 v19, v26, v15
 0x0110: v_mov_b32 v26, v24
 0x0114: v_mac_f32 v17, v18, v1
@@ -69,7 +69,7 @@
 0x0184: image_load v[4:7], v[22:23], s[8:15], s[0:3], dmask(rgba)
 0x018c: v_add_f32 v23, v16, v25
 0x0190: s_waitcnt 0xf73
-0x0194: v_cmp_class_f32 vcc, v15, 60, s0
+0x0194: v_cmp_class_f32 v106, v15, 60, s0
 0x019c: v_mad_f32 v16, 0.5.f, abs(v15), -1.f, clamp
 0x01a4: s_waitcnt 0xf72
 0x01a8: v_mad_f32 v22, 0.5.f, abs(v3), -1.f, clamp
@@ -77,14 +77,14 @@
 0x01b4: v_mad_f32 v17, 0.5.f, abs(v11), -1.f, clamp
 0x01bc: s_xor_b64 vcc, vcc, s[16:17]
 0x01c0: v_cndmask_b32 v16, v16, 0, vcc
-0x01c8: v_cmp_class_f32 vcc, v3, 60, s0
+0x01c8: v_cmp_class_f32 v106, v3, 60, s0
 0x01d0: v_add_f32 v23, v23, v16
 0x01d4: v_mac_f32 v18, v16, v12
 0x01d8: v_mac_f32 v24, v16, v15
 0x01dc: v_mac_f32 v27, v16, v14
 0x01e0: s_xor_b64 vcc, vcc, s[16:17]
 0x01e4: v_cndmask_b32 v15, v22, 0, vcc
-0x01ec: v_cmp_class_f32 vcc, v11, 60, s0
+0x01ec: v_cmp_class_f32 v106, v11, 60, s0
 0x01f4: v_add_f32 v19, v23, v15
 0x01f8: v_mac_f32 v26, v16, v13
 0x01fc: v_mac_f32 v18, v15, v0
@@ -92,7 +92,7 @@
 0x0204: s_xor_b64 vcc, vcc, s[16:17]
 0x0208: v_cndmask_b32 v0, v17, 0, vcc
 0x0210: s_waitcnt 0xf70
-0x0214: v_cmp_class_f32 vcc, v7, 60, s0
+0x0214: v_cmp_class_f32 v106, v7, 60, s0
 0x021c: v_add_f32 v17, v19, v0
 0x0220: v_mac_f32 v27, v15, v2
 0x0224: v_mac_f32 v26, v15, v1

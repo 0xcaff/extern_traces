@@ -92,7 +92,8 @@ impl ScalarDestinationOperand {
             },
             ScalarDestinationOperand::VccLo => match operand_info {
                 Some(OperandInfo::Size(1)) | None => "vcc_lo",
-                Some(OperandInfo::Size(2)) => "vcc",
+                Some(OperandInfo::Vcc) | Some(OperandInfo::Size(2)) => "vcc",
+                Some(OperandInfo::SCC) => "scc",
                 _ => unimplemented!(),
             }
             .to_string(),
@@ -105,7 +106,15 @@ impl ScalarDestinationOperand {
             }
             .to_string(),
             ScalarDestinationOperand::ExecHi => "exec_hi".to_string(),
-            _ => unimplemented!()
+            ScalarDestinationOperand::TrapHandlerBaseAddressLo => match operand_info {
+                Some(OperandInfo::Size(1)) => "tba_lo".to_string(),
+                _ => unimplemented!(),
+            },
+            ScalarDestinationOperand::ReservedLo => match operand_info {
+                Some(OperandInfo::Size(1)) => "scratch_lo".to_string(),
+                _ => unimplemented!(),
+            },
+            _ => unimplemented!(),
         }
     }
 }
@@ -273,7 +282,8 @@ impl VectorGPR {
 
         let size = match operand_info {
             Some(OperandInfo::Size(words)) => *words,
-            Some(_) => unimplemented!("not implemented"),
+            Some(OperandInfo::Vcc) => 1,
+            Some(_) => unimplemented!("{:?} not implemented", operand_info),
             None => 1,
         };
 

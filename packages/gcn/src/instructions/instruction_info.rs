@@ -3,6 +3,7 @@ pub struct InstructionInfo {
     pub operands: &'static [Option<OperandInfo>; 4],
 }
 
+#[derive(Debug)]
 pub enum OperandInfo {
     M0,
     SCC,

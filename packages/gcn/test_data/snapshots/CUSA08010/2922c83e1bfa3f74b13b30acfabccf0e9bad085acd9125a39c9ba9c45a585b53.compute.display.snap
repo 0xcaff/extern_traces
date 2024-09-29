@@ -9,7 +9,7 @@
 0x0024: s_lshl_b32 s3, s3, 3
 0x0028: v_sad_u32 v0, vcc_lo, 0, v0
 0x0030: v_sad_u32 v1, s3, 0, v1
-0x0038: v_cmp_gt_u32 vcc, s5, v1, s0
+0x0038: v_cmp_gt_u32 v2, s5, v1, s0
 0x0040: v_cmp_gt_u32 s8, v0
 0x0044: s_and_b64 vcc, vcc, s[2:3]
 0x0048: s_and_saveexec_b64 vcc, vcc
@@ -19,7 +19,7 @@
 0x0058: v_cmp_eq_u32 vcc_lo, v0
 0x005c: v_cndmask_b32 v4, 0, 1, vcc
 0x0064: v_lshlrev_b32 v3, 1, v1
-0x0068: unknown_1 v6, 1, v2
+0x0068: v_bcnt_u32_b32 v6, 1, v2
 0x006c: v_mov_b32 v7, 0
 0x0070: unknown_1 s13, 0x8006
 0x0074: s_cselect_b32 s2, 1, 0
@@ -29,7 +29,7 @@
 0x0088: v_and_b32 v4, s2, v4
 0x008c: v_cmp_lg_u32 0, v4
 0x0090: v_cndmask_b32 v8, 1, 2, vcc
-0x0098: unknown_1 v9, 1, v3
+0x0098: v_bcnt_u32_b32 v9, 1, v3
 0x009c: v_cvt_f32_u32 v4, s4
 0x00a0: unknown_1 s13, 0x8007
 0x00a4: s_cselect_b32 vcc_lo, 1, 0

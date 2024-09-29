@@ -36,7 +36,7 @@
 0x0098: v_max_f32 v1, 0, v1
 0x009c: v_mul_f32 v2, v2, v2
 0x00a0: v_mac_f32 v2, v1, v1
-0x00a4: v_cmp_nle_f32 vcc, v2, s9, s0
+0x00a4: v_cmp_nle_f32 v2, v2, s9, s0
 0x00ac: s_or_b32 vcc_lo, s4, 2
 0x00b0: v_mov_b32 v5, vcc_lo
 0x00b4: s_and_saveexec_b64 s[2:3], s[2:3]
@@ -55,7 +55,7 @@
 0x00f4: v_add_f32 v5, s6, abs(v9), s0
 0x00fc: v_mac_f32 v2, v4, v4
 0x0100: v_mac_f32 v3, v5, v5
-0x0104: v_cmp_ge_f32 vcc, s5, v2, s0
+0x0104: v_cmp_ge_f32 v8, s5, v2, s0
 0x010c: v_cmp_le_f32 s7, v3
 0x0110: s_and_b64 vcc, vcc, s[8:9]
 0x0114: v_cndmask_b32 v5, 4, v1

@@ -15,7 +15,7 @@
 0x0048: buffer_load_dwordx3 v[27:29], v51, s[20:23], idxen, offset=0x18, soffset=0x80
 0x0050: buffer_load_dwordx3 v[36:38], v51, s[20:23], idxen, offset=0x24, soffset=0x80
 0x0058: buffer_load_dword v3, v51, s[20:23], idxen, offset=0xb0, soffset=0x80
-0x0060: v_cmp_gt_f32 vcc, s2, 0, s0
+0x0060: v_cmp_gt_f32 v106, s2, 0, s0
 0x0068: s_cbranch_vccz 0x36
 0x006c: s_waitcnt 0xf70
 0x0070: v_lshrrev_b32 v0, 16, v3
@@ -529,7 +529,7 @@
 0x0bbc: buffer_store_dwordx4 v[0:3], v51, s[4:7], idxen, offset=0x18c, soffset=0x80
 0x0bc4: buffer_store_dwordx4 v[4:7], v51, s[4:7], idxen, offset=0x15c, soffset=0x80
 0x0bcc: s_mov_b64 exec, s[24:25]
-0x0bd0: v_cmp_lg_u32 vcc, 0, v65, s0
+0x0bd0: v_cmp_lg_u32 v8, 0, v65, s0
 0x0bd8: s_waitcnt 0xf70
 0x0bdc: s_bfe_u32 vcc_lo, s3, 0xb0006
 0x0be4: s_or_b32 m0, vcc_lo, 0x5080000
@@ -538,7 +538,7 @@
 0x0bf4: unknown 
 0x0bfc: s_waitcnt 0x7f
 0x0c00: s_waitcnt 0xf0f
-0x0c04: unknown v0, s8, v0
+0x0c04: v_mbcnt_lo_u32_b32 v0, s8, v0
 0x0c08: v_mbcnt_hi_u32_b32 v0, s9, v0
 0x0c0c: s_and_saveexec_b64 s[2:3], s[8:9]
 0x0c10: s_cbranch_execz 0x9

@@ -19,14 +19,14 @@
 0x0064: image_load v26, v[8:9], s[8:15], s[0:3], dmask(r)
 0x006c: image_load v27, v[10:11], s[8:15], s[0:3], dmask(r)
 0x0074: v_mov_b32 v11, v1
-0x0078: unknown_1 v4, 1, v8
-0x007c: unknown_1 v6, 3, v8
+0x0078: v_bcnt_u32_b32 v4, 1, v8
+0x007c: v_bcnt_u32_b32 v6, 3, v8
 0x0080: v_mov_b32 v12, v2
 0x0084: image_load v17, v[6:7], s[8:15], s[0:3], dmask(r)
 0x008c: image_load v18, v[12:13], s[8:15], s[0:3], dmask(r)
 0x0094: image_load v24, v[10:11], s[8:15], s[0:3], dmask(r)
 0x009c: image_load v28, v[4:5], s[8:15], s[0:3], dmask(r)
-0x00a4: unknown_1 v11, 1, v1
+0x00a4: v_bcnt_u32_b32 v11, 1, v1
 0x00a8: v_mov_b32 v5, v1
 0x00ac: v_mov_b32 v9, v11
 0x00b0: v_mov_b32 v0, v8
@@ -47,7 +47,7 @@
 0x010c: image_load v16, v[6:7], s[8:15], s[0:3], dmask(r)
 0x0114: image_load v13, v[2:3], s[8:15], s[0:3], dmask(r)
 0x011c: v_mov_b32 v7, v1
-0x0120: unknown_1 v3, 3, v1
+0x0120: v_bcnt_u32_b32 v3, 3, v1
 0x0124: v_mov_b32 v9, v3
 0x0128: v_mov_b32 v5, v3
 0x012c: image_load v14, v[6:7], s[8:15], s[0:3], dmask(r)

@@ -20,8 +20,8 @@
 0x0050: v_or_b32 v5, vcc_lo, v8
 0x0054: v_lshlrev_b32 v2, 1, v6
 0x0058: v_lshlrev_b32 v1, 1, v5
-0x005c: unknown_1 v2, 1, v2
-0x0060: unknown_1 v1, 1, v1
+0x005c: v_bcnt_u32_b32 v2, 1, v2
+0x0060: v_bcnt_u32_b32 v1, 1, v1
 0x0064: s_load_dwordx8 s[4:11], s[0:1], 0x18
 0x0068: s_load_dwordx8 s[12:19], s[0:1], 0x8
 0x006c: v_cvt_f32_u32 v2, v2
@@ -29,7 +29,7 @@
 0x0074: s_waitcnt 0x7f
 0x0078: image_gather4_lz v1, v[1:2], s[12:19], s[8:11], dmask(r), unorm
 0x0080: v_and_b32 v7, 1, v7
-0x0084: v_cmp_lg_u32 vcc, 0, v7, s0
+0x0084: v_cmp_lg_u32 v2, 0, v7, s0
 0x008c: v_and_b32 v7, 1, v8
 0x0090: v_cmp_lg_u32 0, v7
 0x0094: v_and_b32 v0, 3, v0
