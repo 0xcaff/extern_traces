@@ -55,8 +55,13 @@ extern "C" {
 }
 
 impl ThreadLoggingState {
-    pub fn reserve(&mut self, length: usize) -> BufferReservation {
-        unsafe { thread_logging_state_reserve_space(self, length) }
+    pub fn reserve(&mut self, length: usize) -> Option<BufferReservation> {
+        let reservation = unsafe { thread_logging_state_reserve_space(self, length) };
+        if reservation.buffer.is_null() {
+            return None;
+        }
+
+        Some(reservation)
     }
 
     pub fn flush(&mut self, buffer_reservation: BufferReservation) {

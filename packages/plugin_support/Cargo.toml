@@ -9,6 +9,7 @@ crate-type = ["staticlib"]
 [dependencies]
 pm4 = { path = "../../../ps4-tools/packages/pm4" }
 libc = "0.2.159"
+bytemuck = { version = "1.18.0", features = ["derive"] }
 
 [profile.release]
 panic = "abort"

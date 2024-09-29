@@ -7,9 +7,11 @@ extern crate alloc;
 mod ffi;
 mod io;
 
-use alloc::collections::btree_map::Entry;
 use crate::ffi::{Args, ThreadLoggingState};
+use alloc::collections::btree_map::Entry;
 use alloc::collections::BTreeMap;
+use alloc::vec::Vec;
+use bytemuck::{Pod, Zeroable};
 use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
@@ -65,10 +67,23 @@ unsafe fn command_buffers<'a>(
     })
 }
 
+#[repr(C)]
+#[derive(Pod, Copy, Clone, Zeroable)]
+struct SpanStartAdditionalData {
+    message_tag: u64,
+    thread_id: u64,
+    time: u64,
+    label_id: u64,
+    extra_data_length: u64,
+}
+
 #[no_mangle]
 extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     args: *const Args,
     thread_logging_state: *mut ThreadLoggingState,
+    time: u64,
+    label_id: u64,
+    thread_id: u64,
 ) {
     let args = unsafe { args.as_ref_unchecked() };
     let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
@@ -80,21 +95,78 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     let compute_sizes = args.args[5] as *const u32;
 
     let mut shaders = ShadersCollector::new();
-    
-    let draw_command_buffers = unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
-    for command_buffer in draw_command_buffers {
+
+    let mut total_size =
+        size_of::<SpanStartAdditionalData>() + size_of::<u32>() + (size_of::<u32>() * 2);
+
+    let draw_command_buffers =
+        unsafe { command_buffers(count as _, draw_buffers, draw_sizes) }.collect::<Vec<_>>();
+    for command_buffer in &draw_command_buffers {
+        total_size += command_buffer.len();
         shaders.collect(command_buffer);
     }
-    
+
     let compute_command_buffers =
-        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
-    for command_buffer in compute_command_buffers {
+        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) }.collect::<Vec<_>>();
+    for command_buffer in &compute_command_buffers {
+        total_size += command_buffer.len();
         shaders.collect(command_buffer);
     }
-    
-    
+
+    total_size += size_of::<u32>(); // Shader count
+    for (_, shader) in &shaders.shaders {
+        total_size += size_of::<u32>() // address
+            + size_of::<u8>()  // kind
+            + size_of::<u32>() // length
+            + shader.shader_invocation.bytes.len();
+    }
+
+    let Some(mut res) = thread_logging_state.reserve(total_size) else {
+        return;
+    };
+
+    let span_header = SpanStartAdditionalData {
+        message_tag: 3,
+        thread_id,
+        time,
+        label_id,
+        extra_data_length: total_size as u64 - size_of::<SpanStartAdditionalData>() as u64,
+    };
+
+    res.write(bytemuck::cast_slice(&[span_header]));
+    res.write(bytemuck::cast_slice(&[count]));
+    res.write(unsafe { bytemuck::cast_slice(slice::from_raw_parts(draw_sizes, count as usize)) });
+    res.write(unsafe {
+        bytemuck::cast_slice(slice::from_raw_parts(compute_sizes, count as usize))
+    });
+
+    for draw_command_buffer in &draw_command_buffers {
+        res.write(draw_command_buffer);
+    }
+
+    for compute_command_buffer in &compute_command_buffers {
+        res.write(compute_command_buffer);
+    }
+
+    res.write(bytemuck::cast_slice(&[shaders.shaders.len() as u32]));
+
+    for (&address, shader) in &shaders.shaders {
+        res.write(bytemuck::cast_slice(&[address]));
+
+        let kind_u8 = shader.kind as u8;
+        res.write(bytemuck::cast_slice(&[kind_u8]));
+
+        let len = shader.shader_invocation.bytes.len() as u32;
+        res.write(bytemuck::cast_slice(&[len]));
+
+        res.write(bytemuck::cast_slice(shader.shader_invocation.bytes));
+    }
+
+    thread_logging_state.flush(res);
 }
 
+#[repr(u8)]
+#[derive(Copy, Clone)]
 enum ShaderKind {
     Compute,
     Vertex,
@@ -113,7 +185,7 @@ struct ShadersCollector {
 impl ShadersCollector {
     pub fn new() -> ShadersCollector {
         ShadersCollector {
-            shaders: BTreeMap::new()
+            shaders: BTreeMap::new(),
         }
     }
 }
@@ -151,15 +223,15 @@ impl ShadersCollector {
             return;
         };
 
-        let Ok(shader_invocation) = (unsafe { ShaderInvocation::decode_from_memory(shader_address) }) else {
+        let Ok(shader_invocation) =
+            (unsafe { ShaderInvocation::decode_from_memory(shader_address) })
+        else {
             return;
         };
 
-        item.insert(
-            Shader {
-                shader_invocation,
-                kind,
-            }
-        );
+        item.insert(Shader {
+            shader_invocation,
+            kind,
+        });
     }
 }
