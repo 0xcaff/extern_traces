@@ -1,18 +1,18 @@
+use alloc::collections::BTreeMap;
 use gcn::instructions::formats::{FormattedInstruction, SMEMInstruction, SOP1Instruction};
 use gcn::instructions::operands::ScalarDestinationOperand;
 use gcn::instructions::ops::{SMEMOpCode, SOP1OpCode};
 use gcn::instructions::Instruction;
-use std::collections::{BTreeMap, HashMap};
 
 #[derive(Clone)]
 pub struct AnalysisState {
-    sgprs: HashMap<u8, AnalysisRegisterState>,
+    sgprs: BTreeMap<u8, AnalysisRegisterState>,
 }
 
 impl AnalysisState {
     pub fn new(user_data_entries: &BTreeMap<u8, u32>) -> AnalysisState {
         let sgprs = {
-            let mut sgprs = HashMap::new();
+            let mut sgprs = BTreeMap::new();
 
             for (slot, value) in user_data_entries {
                 sgprs.insert(*slot, AnalysisRegisterState::Value(*value));

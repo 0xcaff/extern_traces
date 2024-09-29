@@ -17,15 +17,11 @@ use rspirv::spirv::{GLOp, SelectionControl, StorageClass};
 use crate::execution_state::ExecutionState;
 use gcn::resources::{SamplerResource, TextureBufferResource, VertexBufferResource};
 
-pub mod analysis;
 mod execution_state;
 pub mod execution_state_input;
 mod logger;
 mod r#loop;
 pub mod module;
-mod shader;
-
-pub use shader::ShaderInvocation;
 
 pub fn wrap_exec_condition(
     builder: &mut Builder,

@@ -1,3 +1,5 @@
+use alloc::vec;
+use alloc::vec::Vec;
 use anyhow::bail;
 use core::slice;
 use gcn::instructions::Instruction;
