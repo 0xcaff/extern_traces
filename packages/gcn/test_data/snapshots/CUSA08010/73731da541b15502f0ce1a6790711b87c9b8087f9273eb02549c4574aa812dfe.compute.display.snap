@@ -1,0 +1,26 @@
+0x0000: s_mov_b32 vcc_hi, 0x15
+0x0008: s_lshl_b32 vcc_lo, s2, 6
+0x000c: s_load_dword s8, s[0:1], 0xc
+0x0010: v_sad_u32 v6, vcc_lo, 0, v0
+0x0018: s_waitcnt 0x7f
+0x001c: v_cmp_gt_u32 s8, v6
+0x0020: s_and_saveexec_b64 vcc, vcc
+0x0024: s_cbranch_execz 0xc
+0x0028: s_load_dwordx8 s[0:7], s[0:1], 0x4
+0x002c: s_waitcnt 0x7f
+0x0030: buffer_load_dwordx3 v[0:2], v6, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0038: buffer_load_dwordx3 v[3:5], v6, s[4:7], idxen, offset=0xc, soffset=0x80
+0x0040: s_waitcnt 0xf71
+0x0044: buffer_store_dwordx3 v[0:2], v6, s[0:3], idxen, offset=0x0, soffset=0x80
+0x004c: s_waitcnt 0xf71
+0x0050: buffer_store_dwordx3 v[3:5], v6, s[0:3], idxen, offset=0xc, soffset=0x80
+0x0058: s_mov_b64 exec, vcc
+0x005c: v_cmpx_gt_u32 7, v6
+0x0060: s_cbranch_execz 0x7
+0x0064: v_cmp_eq_i32 2, v6
+0x0068: v_mov_b32 v0, s8
+0x006c: v_cndmask_b32 v0, 0, v0
+0x0070: v_lshlrev_b32 v1, 2, v6
+0x0074: s_bfm_b32 m0, 2, 14
+0x0078: unknown 
+0x0080: s_endpgm 0x0

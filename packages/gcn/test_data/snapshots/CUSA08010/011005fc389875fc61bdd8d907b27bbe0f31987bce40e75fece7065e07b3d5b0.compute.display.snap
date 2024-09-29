@@ -1,0 +1,12 @@
+0x0000: s_mov_b32 vcc_hi, 0x8
+0x0008: s_lshl_b32 vcc_lo, s0, 6
+0x000c: v_add_co_u32 v0, vcc_lo, v0
+0x0010: v_cmpx_gt_u32 3, v0
+0x0014: s_cbranch_execz 0x8
+0x0018: v_cmp_eq_i32 1, v0
+0x001c: v_mov_b32 v1, 0x7f800000
+0x0024: v_cndmask_b32 v1, 0, v1
+0x0028: v_lshlrev_b32 v0, 2, v0
+0x002c: s_bfm_b32 m0, 2, 14
+0x0030: unknown 
+0x0038: s_endpgm 0x0

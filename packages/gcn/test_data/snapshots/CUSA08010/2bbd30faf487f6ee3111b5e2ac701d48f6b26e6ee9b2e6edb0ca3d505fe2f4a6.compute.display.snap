@@ -1,0 +1,52 @@
+0x0000: s_mov_b32 vcc_hi, 0x26
+0x0008: s_lshl_b32 vcc_lo, s2, 6
+0x000c: v_sad_u32 v3, vcc_lo, 0, v0
+0x0014: v_cmp_gt_u32 35, v3
+0x0018: s_and_saveexec_b64 vcc, vcc
+0x001c: s_cbranch_execz 0x5
+0x0020: v_lshlrev_b32 v0, 2, v3
+0x0024: v_mov_b32 v1, 0
+0x0028: s_bfm_b32 m0, 2, 14
+0x002c: unknown 
+0x0034: s_waitcnt 0xf0f
+0x0038: s_mov_b64 exec, vcc
+0x003c: v_cmp_gt_u32 2, v3
+0x0040: s_and_saveexec_b64 vcc, vcc
+0x0044: s_cbranch_execz 0x7
+0x0048: v_mov_b32 v0, 0
+0x004c: s_load_dwordx4 s[4:7], s[0:1], 0x0
+0x0050: v_mov_b32 v1, 1
+0x0054: v_mov_b32 v2, 1
+0x0058: s_waitcnt 0x7f
+0x005c: buffer_store_dwordx3 v[0:2], v3, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0064: s_mov_b64 exec, vcc
+0x0068: v_cmpx_gt_u32 5, v3
+0x006c: s_cbranch_execz 0x26
+0x0070: v_mul_lo_i32 v1, 5, v3, s0
+0x0078: s_load_dwordx4 s[0:3], s[0:1], 0x4
+0x007c: v_mov_b32 v3, 14
+0x0080: unknown_1 v2, 1, v1
+0x0084: v_mov_b32 v0, 0
+0x0088: s_mov_b64 s[6:7], exec
+0x008c: s_waitcnt 0x7f
+0x0090: v_cmpx_gt_u32 exec, s2, v1, s0
+0x0098: buffer_store_dword v3, v1, s[0:3], idxen, offset=0x0, soffset=0x80
+0x00a0: s_mov_b64 exec, s[6:7]
+0x00a4: unknown_1 v3, 3, v1
+0x00a8: s_mov_b64 s[6:7], exec
+0x00ac: v_cmpx_gt_u32 exec, s2, v2, s0
+0x00b4: buffer_store_dword v0, v2, s[0:3], idxen, offset=0x0, soffset=0x80
+0x00bc: s_mov_b64 exec, s[6:7]
+0x00c0: unknown_1 v2, 7, v1
+0x00c4: s_mov_b64 s[6:7], exec
+0x00c8: v_cmpx_gt_u32 exec, s2, v3, s0
+0x00d0: buffer_store_dword v0, v3, s[0:3], idxen, offset=0x0, soffset=0x80
+0x00d8: s_mov_b64 exec, s[6:7]
+0x00dc: unknown_1 v1, 15, v1
+0x00e0: s_mov_b64 s[6:7], exec
+0x00e4: v_cmpx_gt_u32 exec, s2, v2, s0
+0x00ec: buffer_store_dword v0, v2, s[0:3], idxen, offset=0x0, soffset=0x80
+0x00f4: s_mov_b64 exec, s[6:7]
+0x00f8: v_cmpx_gt_u32 exec, s2, v1, s0
+0x0100: buffer_store_dword v0, v1, s[0:3], idxen, offset=0x0, soffset=0x80
+0x0108: s_endpgm 0x0

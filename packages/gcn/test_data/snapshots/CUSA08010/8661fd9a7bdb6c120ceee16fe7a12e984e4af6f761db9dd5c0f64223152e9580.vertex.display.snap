@@ -1,0 +1,10 @@
+0x0000: s_mov_b32 vcc_hi, 0x8
+0x0008: v_cmp_eq_u32 1, v0
+0x000c: v_cmp_eq_u32 vcc, 2, v0, s0
+0x0014: v_cndmask_b32 v0, -1.f, 1.f, vcc
+0x001c: v_cndmask_b32 v1, -1.f, 1.f, vcc
+0x0024: v_mov_b32 v2, 0
+0x0028: v_mov_b32 v3, 1.f
+0x002c: exp pos0, v0, v1, v2, v3, done
+0x0034: exp param0, v2, v2, v2, v2
+0x003c: s_endpgm 0x0
