@@ -18,7 +18,7 @@ impl<const BITS: usize, T: FromBits<BITS>> TryFromBits<BITS> for T {
 }
 
 #[derive(Debug, Snafu)]
-#[snafu(display("error {} in bits container: {:#?}", value, path))]
+#[snafu(display("failed to parse {:?}, got value {}", path, value))]
 pub struct BitsContainerError {
     pub value: u64,
     pub path: Vec<&'static str>,

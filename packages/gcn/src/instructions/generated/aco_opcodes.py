@@ -683,6 +683,11 @@ VOP2 = {
    (0x1f, 0x1f, 0x16, 0x16, 0x1f,   -1, "v_mac_f32", True, True, dst(1), src(1, 1, 1)),
    (0x20, 0x20, 0x17, 0x17, 0x20,   -1, "v_madmk_f32", False, False, dst(1), src(1, 1, 1)),
    (0x21, 0x21, 0x18, 0x18, 0x21,   -1, "v_madak_f32", False, False, dst(1), src(1, 1, 1)),
+
+   # from shadps4
+   (  -1, 0x22,   -1,   -1,   -1,  -1, "v_bcnt_u32_b32", False, False, dst(1), src(1, 1)),
+   (  -1, 0x23,   -1,   -1,   -1,  -1, "v_mbcnt_lo_u32_b32", False, False, dst(1), src(1, 1)),
+
    (0x24, 0x24,   -1,   -1,   -1,   -1, "v_mbcnt_hi_u32_b32", False, False, dst(1), src(1, 1)),
    (0x25, 0x25, 0x19, 0x19,   -1,   -1, "v_add_co_u32", False, False, dst(1, VCC), src(1, 1)), # VOP3B only in RDNA
    (0x26, 0x26, 0x1a, 0x1a,   -1,   -1, "v_sub_co_u32", False, False, dst(1, VCC), src(1, 1)), # VOP3B only in RDNA
@@ -690,6 +695,9 @@ VOP2 = {
    (0x28, 0x28, 0x1c, 0x1c, 0x28, 0x20, "v_addc_co_u32", False, False, dst(1, VCC), src(1, 1, VCC)), # v_add_co_ci_u32 in RDNA
    (0x29, 0x29, 0x1d, 0x1d, 0x29, 0x21, "v_subb_co_u32", False, False, dst(1, VCC), src(1, 1, VCC)), # v_sub_co_ci_u32 in RDNA
    (0x2a, 0x2a, 0x1e, 0x1e, 0x2a, 0x22, "v_subbrev_co_u32", False, False, dst(1, VCC), src(1, 1, VCC)), # v_subrev_co_ci_u32 in RDNA
+
+   (  -1, 0x2b,   -1,   -1,   -1,   -1, "v_ldexp_f32", False, True, dst(1), src(1, 1)),
+
    (  -1,   -1,   -1,   -1, 0x2b, 0x2b, "v_fmac_f32", True, True, dst(1), src(1, 1, 1)),
    (  -1,   -1,   -1,   -1, 0x2c, 0x2c, "v_fmamk_f32", False, False, dst(1), src(1, 1, 1)),
    (  -1,   -1,   -1,   -1, 0x2d, 0x2d, "v_fmaak_f32", False, False, dst(1), src(1, 1, 1)),
@@ -1083,12 +1091,8 @@ VOP3 = {
    (   -1,    -1, 0x275, 0x275, 0x343,    -1, "v_interp_p1lv_f16", True, True, dst(1), src(1, M0, 1)),
    (   -1,    -1, 0x276, 0x276,    -1,    -1, "v_interp_p2_legacy_f16", True, True, dst(1), src(1, M0, 1)),
    (   -1,    -1,    -1, 0x277, 0x35a,    -1, "v_interp_p2_f16", True, True, dst(1), src(1, M0, 1)),
-   (0x12b, 0x12b, 0x288, 0x288, 0x362, 0x31c, "v_ldexp_f32", False, True, dst(1), src(1, 1)),
    (   -1,    -1, 0x289, 0x289, 0x360, 0x360, "v_readlane_b32_e64", False, False, dst(1), src(1, 1)),
    (   -1,    -1, 0x28a, 0x28a, 0x361, 0x361, "v_writelane_b32_e64", False, False, dst(1), src(1, 1, 1)),
-   (0x122, 0x122, 0x28b, 0x28b, 0x364, 0x31e, "v_bcnt_u32_b32", False, False, dst(1), src(1, 1)),
-   (0x123, 0x123, 0x28c, 0x28c, 0x365, 0x31f, "v_mbcnt_lo_u32_b32", False, False, dst(1), src(1, 1)),
-   (   -1,    -1, 0x28d, 0x28d, 0x366, 0x320, "v_mbcnt_hi_u32_b32_e64", False, False, dst(1), src(1, 1)),
    (   -1,    -1, 0x28f, 0x28f, 0x2ff, 0x33c, "v_lshlrev_b64", False, False, dst(2), src(1, 2), InstrClass.Valu64),
    (   -1,    -1, 0x290, 0x290, 0x300, 0x33d, "v_lshrrev_b64", False, False, dst(2), src(1, 2), InstrClass.Valu64),
    (   -1,    -1, 0x291, 0x291, 0x301, 0x33e, "v_ashrrev_i64", False, False, dst(2), src(1, 2), InstrClass.Valu64),

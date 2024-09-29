@@ -45,7 +45,7 @@
     Instruction {
         inner: VOP3(
             VOP3Instruction {
-                op: VOP3(
+                op: VOP2(
                     v_bcnt_u32_b32,
                 ),
                 vdst: VectorGPR {
@@ -1212,7 +1212,7 @@
     Instruction {
         inner: VOP3(
             VOP3Instruction {
-                op: VOP3(
+                op: VOP2(
                     v_bcnt_u32_b32,
                 ),
                 vdst: VectorGPR {

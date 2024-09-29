@@ -4601,7 +4601,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 8,
@@ -4621,7 +4621,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -4641,7 +4641,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 2,
@@ -5246,7 +5246,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 17,
@@ -5266,7 +5266,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 18,
@@ -5286,7 +5286,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 16,
@@ -6111,7 +6111,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 28,
@@ -6131,7 +6131,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 29,
@@ -6151,7 +6151,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 27,
@@ -6976,7 +6976,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 19,
@@ -6996,7 +6996,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 28,
@@ -7016,7 +7016,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 18,
@@ -7861,7 +7861,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 32,
@@ -7881,7 +7881,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 37,
@@ -7901,7 +7901,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -8708,7 +8708,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -8728,7 +8728,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 15,
@@ -8748,7 +8748,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 37,
@@ -9595,7 +9595,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 31,
@@ -9615,7 +9615,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 37,
@@ -9635,7 +9635,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -10440,7 +10440,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -10460,7 +10460,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 17,
@@ -10480,7 +10480,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 32,
@@ -11285,7 +11285,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 33,
@@ -11305,7 +11305,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 35,
@@ -11325,7 +11325,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -12110,7 +12110,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -12130,7 +12130,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 32,
@@ -12150,7 +12150,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 38,
@@ -12955,7 +12955,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -12975,7 +12975,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 21,
@@ -12995,7 +12995,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 37,
@@ -13820,7 +13820,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 19,
@@ -13840,7 +13840,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 30,
@@ -13860,7 +13860,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -14665,7 +14665,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 1,
@@ -14685,7 +14685,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 36,
@@ -14705,7 +14705,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_3,
+                op: v_ldexp_f32,
                 src0: VectorGPR(
                     VectorGPR {
                         register_idx: 34,

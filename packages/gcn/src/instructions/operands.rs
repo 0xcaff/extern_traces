@@ -13,6 +13,21 @@ pub enum ScalarDestinationOperand {
     VccLo,
     VccHi,
 
+    // Scratch registers maybe?
+    ReservedLo,
+    ReservedHi,
+
+    /// TBA_LO
+    TrapHandlerBaseAddressLo,
+
+    /// TBA_HI
+    TrapHandlerBaseAddressHi,
+
+    TMALo,
+    TMAHi,
+
+    TTMP(u8),
+
     M0,
 
     ExecLo,
@@ -39,8 +54,15 @@ impl TryFromBits<7> for ScalarDestinationOperand {
         let value = value.full() as u8;
         let result = match value {
             0..=103 => ScalarDestinationOperand::ScalarGPR(value),
+            104 => ScalarDestinationOperand::ReservedLo,
+            105 => ScalarDestinationOperand::ReservedHi,
             106 => ScalarDestinationOperand::VccLo,
             107 => ScalarDestinationOperand::VccHi,
+            108 => ScalarDestinationOperand::TrapHandlerBaseAddressLo,
+            109 => ScalarDestinationOperand::TrapHandlerBaseAddressHi,
+            110 => ScalarDestinationOperand::TMALo,
+            111 => ScalarDestinationOperand::TMAHi,
+            112..=123 => ScalarDestinationOperand::TTMP(value - 112),
             124 => ScalarDestinationOperand::M0,
             126 => ScalarDestinationOperand::ExecLo,
             127 => ScalarDestinationOperand::ExecHi,
@@ -83,6 +105,7 @@ impl ScalarDestinationOperand {
             }
             .to_string(),
             ScalarDestinationOperand::ExecHi => "exec_hi".to_string(),
+            _ => unimplemented!()
         }
     }
 }

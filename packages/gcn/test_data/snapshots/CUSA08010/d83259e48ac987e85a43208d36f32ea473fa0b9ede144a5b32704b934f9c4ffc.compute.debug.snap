@@ -8,7 +8,7 @@
             },
         ),
         literal_constant: Some(
-            157,
+            170,
         ),
         program_counter: 0,
     },
@@ -35,7 +35,7 @@
         inner: SOPK(
             SOPKInstruction {
                 op: s_movk_i32,
-                simm16: 1556,
+                simm16: 1560,
                 sdst: VccLo,
             },
         ),
@@ -114,7 +114,7 @@
             DSInstruction {
                 op: ds_read2_b32,
                 offset0: 0,
-                offset1: 2,
+                offset1: 17,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 0,
@@ -137,8 +137,8 @@
         inner: DS(
             DSInstruction {
                 op: ds_read2_b64,
-                offset0: 196,
-                offset1: 197,
+                offset0: 204,
+                offset1: 205,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -171,8 +171,8 @@
         inner: DS(
             DSInstruction {
                 op: ds_read2_b64,
-                offset0: 198,
-                offset1: 199,
+                offset0: 206,
+                offset1: 207,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -376,6 +376,25 @@
         program_counter: 96,
     },
     Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    IntegerConstant(
+                        InlineIntegerConstant(
+                            1,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 5,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 100,
+    },
+    Instruction {
         inner: VOP3(
             VOP3Instruction {
                 op: VOP3(
@@ -418,7 +437,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 100,
+        program_counter: 104,
     },
     Instruction {
         inner: VOP3(
@@ -463,7 +482,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 108,
+        program_counter: 112,
     },
     Instruction {
         inner: VOP3(
@@ -508,13 +527,13 @@
             },
         ),
         literal_constant: None,
-        program_counter: 116,
+        program_counter: 120,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_read_b64,
-                offset0: 80,
+                offset0: 144,
                 offset1: 6,
                 gds: true,
                 addr: VectorGPR {
@@ -532,7 +551,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 124,
+        program_counter: 128,
     },
     Instruction {
         inner: SMEM(
@@ -547,7 +566,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 132,
+        program_counter: 136,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 32,
+                },
+            },
+        ),
+        literal_constant: Some(
+            159,
+        ),
+        program_counter: 140,
     },
     Instruction {
         inner: VOP1(
@@ -562,9 +598,9 @@
             },
         ),
         literal_constant: Some(
-            79,
+            154,
         ),
-        program_counter: 136,
+        program_counter: 148,
     },
     Instruction {
         inner: VOP1(
@@ -579,9 +615,9 @@
             },
         ),
         literal_constant: Some(
-            74,
+            149,
         ),
-        program_counter: 144,
+        program_counter: 156,
     },
     Instruction {
         inner: VOP1(
@@ -596,53 +632,32 @@
             },
         ),
         literal_constant: Some(
-            69,
+            144,
         ),
-        program_counter: 152,
+        program_counter: 164,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            64,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 32,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 160,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            1,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 31,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 164,
+        literal_constant: Some(
+            139,
+        ),
+        program_counter: 172,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_read_b32,
-                offset0: 88,
+                offset0: 152,
                 offset1: 6,
                 gds: true,
                 addr: VectorGPR {
@@ -660,14 +675,14 @@
             },
         ),
         literal_constant: None,
-        program_counter: 168,
+        program_counter: 180,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_write2_b64,
-                offset0: 214,
-                offset1: 215,
+                offset0: 222,
+                offset1: 223,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -684,7 +699,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 176,
+        program_counter: 188,
     },
     Instruction {
         inner: SOP1(
@@ -699,7 +714,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 184,
+        program_counter: 196,
     },
     Instruction {
         inner: SOPP(
@@ -709,7 +724,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 188,
+        program_counter: 200,
     },
     Instruction {
         inner: VOP3(
@@ -734,7 +749,7 @@
                 src1: TransformedOperand {
                     operand: VectorGPR(
                         VectorGPR {
-                            register_idx: 31,
+                            register_idx: 5,
                         },
                     ),
                     abs: false,
@@ -756,7 +771,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 192,
+        program_counter: 204,
     },
     Instruction {
         inner: MUBUF(
@@ -771,7 +786,7 @@
                 addr64: false,
                 lds: false,
                 vaddr: VectorGPR {
-                    register_idx: 31,
+                    register_idx: 5,
                 },
                 vdata: VectorGPR {
                     register_idx: 4,
@@ -785,7 +800,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 200,
+        program_counter: 212,
     },
     Instruction {
         inner: SOP1(
@@ -800,14 +815,14 @@
             },
         ),
         literal_constant: None,
-        program_counter: 208,
+        program_counter: 220,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_read2_b64,
-                offset0: 200,
-                offset1: 201,
+                offset0: 208,
+                offset1: 209,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -824,7 +839,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 212,
+        program_counter: 224,
     },
     Instruction {
         inner: SOPP(
@@ -834,7 +849,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 220,
+        program_counter: 232,
     },
     Instruction {
         inner: VOP2(
@@ -854,7 +869,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 224,
+        program_counter: 236,
     },
     Instruction {
         inner: VOP2(
@@ -874,7 +889,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 228,
+        program_counter: 240,
     },
     Instruction {
         inner: VOP3(
@@ -919,7 +934,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 232,
+        program_counter: 244,
     },
     Instruction {
         inner: VOP3(
@@ -964,7 +979,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 240,
+        program_counter: 252,
     },
     Instruction {
         inner: VOP3(
@@ -1009,7 +1024,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 248,
+        program_counter: 260,
     },
     Instruction {
         inner: VOP3(
@@ -1054,7 +1069,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 256,
+        program_counter: 268,
     },
     Instruction {
         inner: SOP1(
@@ -1069,7 +1084,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 264,
+        program_counter: 276,
     },
     Instruction {
         inner: SOPP(
@@ -1079,7 +1094,113 @@
             },
         ),
         literal_constant: None,
-        program_counter: 268,
+        program_counter: 280,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 32,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 284,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 32,
+                },
+                vdata: VectorGPR {
+                    register_idx: 30,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 292,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 300,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 304,
     },
     Instruction {
         inner: VOP3(
@@ -1126,7 +1247,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 272,
+        program_counter: 308,
     },
     Instruction {
         inner: MUBUF(
@@ -1144,7 +1265,7 @@
                     register_idx: 33,
                 },
                 vdata: VectorGPR {
-                    register_idx: 30,
+                    register_idx: 24,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
                     value: 1,
@@ -1155,7 +1276,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 280,
+        program_counter: 316,
     },
     Instruction {
         inner: SOP1(
@@ -1170,7 +1291,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 288,
+        program_counter: 324,
     },
     Instruction {
         inner: SOP1(
@@ -1185,7 +1306,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 292,
+        program_counter: 328,
     },
     Instruction {
         inner: VOP3(
@@ -1232,7 +1353,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 296,
+        program_counter: 332,
     },
     Instruction {
         inner: MUBUF(
@@ -1250,7 +1371,7 @@
                     register_idx: 34,
                 },
                 vdata: VectorGPR {
-                    register_idx: 24,
+                    register_idx: 23,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
                     value: 1,
@@ -1261,7 +1382,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 304,
+        program_counter: 340,
     },
     Instruction {
         inner: SOP1(
@@ -1276,7 +1397,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 312,
+        program_counter: 348,
     },
     Instruction {
         inner: SOP1(
@@ -1291,7 +1412,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 316,
+        program_counter: 352,
     },
     Instruction {
         inner: VOP3(
@@ -1338,7 +1459,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 320,
+        program_counter: 356,
     },
     Instruction {
         inner: MUBUF(
@@ -1356,131 +1477,6 @@
                     register_idx: 35,
                 },
                 vdata: VectorGPR {
-                    register_idx: 23,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 328,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 336,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            59,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 33,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 340,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 344,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 32,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 348,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 32,
-                },
-                vdata: VectorGPR {
                     register_idx: 22,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
@@ -1492,7 +1488,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 356,
+        program_counter: 364,
     },
     Instruction {
         inner: SOP1(
@@ -1504,669 +1500,42 @@
                     ),
                 ),
                 sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 364,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            54,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 32,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 368,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
             },
         ),
         literal_constant: None,
         program_counter: 372,
     },
     Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
-                    register_idx: 0,
+                    register_idx: 32,
                 },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 33,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
             },
         ),
-        literal_constant: None,
+        literal_constant: Some(
+            134,
+        ),
         program_counter: 376,
     },
     Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
                 ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 33,
-                },
-                vdata: VectorGPR {
-                    register_idx: 21,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
+                sdst: ScalarGPR(
+                    2,
+                ),
             },
         ),
         literal_constant: None,
         program_counter: 384,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 392,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 396,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 32,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 400,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 32,
-                },
-                vdata: VectorGPR {
-                    register_idx: 18,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 408,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 416,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            49,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 32,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 420,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 424,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 32,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 428,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 32,
-                },
-                vdata: VectorGPR {
-                    register_idx: 17,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 436,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 444,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            44,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 32,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 448,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 452,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 32,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 456,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 32,
-                },
-                vdata: VectorGPR {
-                    register_idx: 28,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 464,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 472,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            39,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 28,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 476,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 480,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 28,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 484,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 28,
-                },
-                vdata: VectorGPR {
-                    register_idx: 27,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 492,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 500,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            0,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 27,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 504,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            4,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 28,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 508,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 512,
     },
     Instruction {
         inner: VOP3(
@@ -2213,7 +1582,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 516,
+        program_counter: 388,
     },
     Instruction {
         inner: MUBUF(
@@ -2231,7 +1600,7 @@
                     register_idx: 31,
                 },
                 vdata: VectorGPR {
-                    register_idx: 16,
+                    register_idx: 21,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
                     value: 1,
@@ -2242,7 +1611,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 524,
+        program_counter: 396,
     },
     Instruction {
         inner: SOP1(
@@ -2257,7 +1626,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 532,
+        program_counter: 404,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+            },
+        ),
+        literal_constant: Some(
+            129,
+        ),
+        program_counter: 408,
     },
     Instruction {
         inner: SOP1(
@@ -2272,7 +1658,359 @@
             },
         ),
         literal_constant: None,
-        program_counter: 536,
+        program_counter: 416,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 32,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 420,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 32,
+                },
+                vdata: VectorGPR {
+                    register_idx: 18,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 428,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 436,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 440,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 31,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 444,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 31,
+                },
+                vdata: VectorGPR {
+                    register_idx: 17,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 452,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 460,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+            },
+        ),
+        literal_constant: Some(
+            124,
+        ),
+        program_counter: 464,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 472,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 31,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 476,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 31,
+                },
+                vdata: VectorGPR {
+                    register_idx: 28,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 484,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 492,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 28,
+                },
+            },
+        ),
+        literal_constant: Some(
+            119,
+        ),
+        program_counter: 496,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 504,
     },
     Instruction {
         inner: VOP3(
@@ -2319,7 +2057,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 540,
+        program_counter: 508,
     },
     Instruction {
         inner: MUBUF(
@@ -2348,7 +2086,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 548,
+        program_counter: 516,
     },
     Instruction {
         inner: SOP1(
@@ -2363,7 +2101,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 556,
+        program_counter: 524,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 28,
+                },
+            },
+        ),
+        literal_constant: Some(
+            81,
+        ),
+        program_counter: 528,
     },
     Instruction {
         inner: VOP1(
@@ -2372,7 +2127,7 @@
                 src0: Scalar(
                     IntegerConstant(
                         InlineIntegerConstant(
-                            6,
+                            0,
                         ),
                     ),
                 ),
@@ -2382,7 +2137,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 560,
+        program_counter: 536,
     },
     Instruction {
         inner: SOP1(
@@ -2397,7 +2152,253 @@
             },
         ),
         literal_constant: None,
+        program_counter: 540,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 28,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 544,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 28,
+                },
+                vdata: VectorGPR {
+                    register_idx: 16,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 552,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 560,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 28,
+                },
+            },
+        ),
+        literal_constant: Some(
+            84,
+        ),
         program_counter: 564,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 572,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 28,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 576,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 28,
+                },
+                vdata: VectorGPR {
+                    register_idx: 27,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 584,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 592,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 27,
+                },
+            },
+        ),
+        literal_constant: Some(
+            86,
+        ),
+        program_counter: 596,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 604,
     },
     Instruction {
         inner: VOP3(
@@ -2444,7 +2445,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 568,
+        program_counter: 608,
     },
     Instruction {
         inner: MUBUF(
@@ -2473,7 +2474,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 576,
+        program_counter: 616,
     },
     Instruction {
         inner: SOP1(
@@ -2488,26 +2489,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 584,
+        program_counter: 624,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            9,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 8,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 588,
+        literal_constant: Some(
+            89,
+        ),
+        program_counter: 628,
     },
     Instruction {
         inner: SOP1(
@@ -2522,7 +2521,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 592,
+        program_counter: 636,
     },
     Instruction {
         inner: VOP3(
@@ -2569,7 +2568,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 596,
+        program_counter: 640,
     },
     Instruction {
         inner: MUBUF(
@@ -2598,7 +2597,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 604,
+        program_counter: 648,
     },
     Instruction {
         inner: SOP1(
@@ -2613,26 +2612,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 612,
+        program_counter: 656,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            11,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 8,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 616,
+        literal_constant: Some(
+            91,
+        ),
+        program_counter: 660,
     },
     Instruction {
         inner: SOP1(
@@ -2647,7 +2644,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 620,
+        program_counter: 668,
     },
     Instruction {
         inner: VOP3(
@@ -2694,7 +2691,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 624,
+        program_counter: 672,
     },
     Instruction {
         inner: MUBUF(
@@ -2723,7 +2720,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 632,
+        program_counter: 680,
     },
     Instruction {
         inner: SOP1(
@@ -2738,26 +2735,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 640,
+        program_counter: 688,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            14,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 8,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 644,
+        literal_constant: Some(
+            94,
+        ),
+        program_counter: 692,
     },
     Instruction {
         inner: SOP1(
@@ -2772,7 +2767,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 648,
+        program_counter: 700,
     },
     Instruction {
         inner: VOP3(
@@ -2819,7 +2814,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 652,
+        program_counter: 704,
     },
     Instruction {
         inner: MUBUF(
@@ -2848,7 +2843,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 660,
+        program_counter: 712,
     },
     Instruction {
         inner: SOP1(
@@ -2863,276 +2858,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 668,
+        program_counter: 720,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            16,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 8,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 672,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
+        literal_constant: Some(
+            96,
         ),
-        literal_constant: None,
-        program_counter: 676,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 8,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 680,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 8,
-                },
-                vdata: VectorGPR {
-                    register_idx: 10,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 688,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 696,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            19,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 8,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 700,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 704,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 8,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 708,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 8,
-                },
-                vdata: VectorGPR {
-                    register_idx: 13,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 716,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
         program_counter: 724,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            21,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 8,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 728,
     },
     Instruction {
         inner: SOP1(
@@ -3212,7 +2955,7 @@
                     register_idx: 8,
                 },
                 vdata: VectorGPR {
-                    register_idx: 11,
+                    register_idx: 10,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
                     value: 1,
@@ -3245,18 +2988,16 @@
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            24,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 8,
                 },
             },
         ),
-        literal_constant: None,
+        literal_constant: Some(
+            99,
+        ),
         program_counter: 756,
     },
     Instruction {
@@ -3272,7 +3013,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 760,
+        program_counter: 764,
     },
     Instruction {
         inner: VOP3(
@@ -3319,7 +3060,253 @@
             },
         ),
         literal_constant: None,
-        program_counter: 764,
+        program_counter: 768,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 8,
+                },
+                vdata: VectorGPR {
+                    register_idx: 13,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 776,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 784,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: Some(
+            101,
+        ),
+        program_counter: 788,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 796,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 800,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 8,
+                },
+                vdata: VectorGPR {
+                    register_idx: 11,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 808,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 816,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: Some(
+            104,
+        ),
+        program_counter: 820,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 828,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 832,
     },
     Instruction {
         inner: MUBUF(
@@ -3348,7 +3335,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 772,
+        program_counter: 840,
     },
     Instruction {
         inner: SOP1(
@@ -3363,26 +3350,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 780,
+        program_counter: 848,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            26,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 8,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 784,
+        literal_constant: Some(
+            106,
+        ),
+        program_counter: 852,
     },
     Instruction {
         inner: SOP1(
@@ -3397,7 +3382,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 788,
+        program_counter: 860,
     },
     Instruction {
         inner: VOP3(
@@ -3444,7 +3429,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 792,
+        program_counter: 864,
     },
     Instruction {
         inner: MUBUF(
@@ -3473,7 +3458,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 800,
+        program_counter: 872,
     },
     Instruction {
         inner: SOP1(
@@ -3488,26 +3473,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 808,
+        program_counter: 880,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            29,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 0,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 812,
+        literal_constant: Some(
+            109,
+        ),
+        program_counter: 884,
     },
     Instruction {
         inner: SOP1(
@@ -3522,7 +3505,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 816,
+        program_counter: 892,
     },
     Instruction {
         inner: VOP3(
@@ -3569,7 +3552,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 820,
+        program_counter: 896,
     },
     Instruction {
         inner: MUBUF(
@@ -3598,7 +3581,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 828,
+        program_counter: 904,
     },
     Instruction {
         inner: SOP1(
@@ -3613,26 +3596,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 836,
+        program_counter: 912,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            31,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 0,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 840,
+        literal_constant: Some(
+            111,
+        ),
+        program_counter: 916,
     },
     Instruction {
         inner: SOP1(
@@ -3647,7 +3628,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 844,
+        program_counter: 924,
     },
     Instruction {
         inner: VOP3(
@@ -3694,7 +3675,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 848,
+        program_counter: 928,
     },
     Instruction {
         inner: MUBUF(
@@ -3723,7 +3704,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 856,
+        program_counter: 936,
     },
     Instruction {
         inner: SOP1(
@@ -3738,401 +3719,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 864,
+        program_counter: 944,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            34,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 0,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 868,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
+        literal_constant: Some(
+            114,
         ),
-        literal_constant: None,
-        program_counter: 872,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 0,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 876,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 0,
-                },
-                vdata: VectorGPR {
-                    register_idx: 26,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 884,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 892,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            36,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 896,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 900,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 0,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 904,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 0,
-                },
-                vdata: VectorGPR {
-                    register_idx: 2,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 912,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 920,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            41,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 924,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ExecLo,
-                ),
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 928,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOPC(
-                    v_cmpx_gt_u32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                6,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: VectorGPR(
-                        VectorGPR {
-                            register_idx: 0,
-                        },
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 932,
-    },
-    Instruction {
-        inner: MUBUF(
-            MUBUFInstruction {
-                op: buffer_store_dword,
-                offset: Offset(
-                    0,
-                ),
-                offen: false,
-                idxen: true,
-                glc: false,
-                addr64: false,
-                lds: false,
-                vaddr: VectorGPR {
-                    register_idx: 0,
-                },
-                vdata: VectorGPR {
-                    register_idx: 3,
-                },
-                srsrc: ScalarGeneralPurposeRegisterGroup {
-                    value: 1,
-                },
-                slc: false,
-                tfe: false,
-                soffset: 128,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 940,
-    },
-    Instruction {
-        inner: SOP1(
-            SOP1Instruction {
-                op: s_mov_b64,
-                ssrc0: Destination(
-                    ScalarGPR(
-                        2,
-                    ),
-                ),
-                sdst: ExecLo,
-            },
-        ),
-        literal_constant: None,
         program_counter: 948,
-    },
-    Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            46,
-                        ),
-                    ),
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 952,
     },
     Instruction {
         inner: SOP1(
@@ -4212,7 +3816,7 @@
                     register_idx: 0,
                 },
                 vdata: VectorGPR {
-                    register_idx: 4,
+                    register_idx: 26,
                 },
                 srsrc: ScalarGeneralPurposeRegisterGroup {
                     value: 1,
@@ -4245,18 +3849,16 @@
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            51,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 0,
                 },
             },
         ),
-        literal_constant: None,
+        literal_constant: Some(
+            116,
+        ),
         program_counter: 980,
     },
     Instruction {
@@ -4272,7 +3874,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 984,
+        program_counter: 988,
     },
     Instruction {
         inner: VOP3(
@@ -4319,7 +3921,376 @@
             },
         ),
         literal_constant: None,
-        program_counter: 988,
+        program_counter: 992,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 0,
+                },
+                vdata: VectorGPR {
+                    register_idx: 2,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1000,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1008,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: Some(
+            121,
+        ),
+        program_counter: 1012,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1020,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 0,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1024,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 0,
+                },
+                vdata: VectorGPR {
+                    register_idx: 3,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1032,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1040,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: Some(
+            126,
+        ),
+        program_counter: 1044,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1052,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 0,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1056,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_store_dword,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 0,
+                },
+                vdata: VectorGPR {
+                    register_idx: 4,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1064,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1072,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: Some(
+            131,
+        ),
+        program_counter: 1076,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1084,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmpx_gt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                6,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 0,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1088,
     },
     Instruction {
         inner: MUBUF(
@@ -4348,7 +4319,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 996,
+        program_counter: 1096,
     },
     Instruction {
         inner: SOP1(
@@ -4363,26 +4334,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1004,
+        program_counter: 1104,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            56,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 0,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 1008,
+        literal_constant: Some(
+            136,
+        ),
+        program_counter: 1108,
     },
     Instruction {
         inner: SOP1(
@@ -4397,7 +4366,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1012,
+        program_counter: 1116,
     },
     Instruction {
         inner: VOP3(
@@ -4444,7 +4413,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1016,
+        program_counter: 1120,
     },
     Instruction {
         inner: MUBUF(
@@ -4473,7 +4442,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1024,
+        program_counter: 1128,
     },
     Instruction {
         inner: SOP1(
@@ -4488,26 +4457,24 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1032,
+        program_counter: 1136,
     },
     Instruction {
         inner: VOP1(
             VOP1Instruction {
                 op: v_mov_b32,
                 src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            61,
-                        ),
-                    ),
+                    LiteralConstant,
                 ),
                 vdst: VectorGPR {
                     register_idx: 0,
                 },
             },
         ),
-        literal_constant: None,
-        program_counter: 1036,
+        literal_constant: Some(
+            141,
+        ),
+        program_counter: 1140,
     },
     Instruction {
         inner: SOP1(
@@ -4522,7 +4489,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1040,
+        program_counter: 1148,
     },
     Instruction {
         inner: VOP3(
@@ -4569,7 +4536,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1044,
+        program_counter: 1152,
     },
     Instruction {
         inner: MUBUF(
@@ -4598,7 +4565,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1052,
+        program_counter: 1160,
     },
     Instruction {
         inner: SOP1(
@@ -4613,7 +4580,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1060,
+        program_counter: 1168,
     },
     Instruction {
         inner: VOP1(
@@ -4628,20 +4595,20 @@
             },
         ),
         literal_constant: Some(
-            66,
+            146,
         ),
-        program_counter: 1064,
+        program_counter: 1172,
     },
     Instruction {
         inner: SOPK(
             SOPKInstruction {
                 op: s_movk_i32,
-                simm16: 1692,
+                simm16: 1756,
                 sdst: VccLo,
             },
         ),
         literal_constant: None,
-        program_counter: 1072,
+        program_counter: 1180,
     },
     Instruction {
         inner: VOP1(
@@ -4658,7 +4625,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1076,
+        program_counter: 1184,
     },
     Instruction {
         inner: SOP1(
@@ -4673,7 +4640,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1080,
+        program_counter: 1188,
     },
     Instruction {
         inner: VOP3(
@@ -4720,7 +4687,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1084,
+        program_counter: 1192,
     },
     Instruction {
         inner: MUBUF(
@@ -4749,7 +4716,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1092,
+        program_counter: 1200,
     },
     Instruction {
         inner: SOP1(
@@ -4764,7 +4731,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1100,
+        program_counter: 1208,
     },
     Instruction {
         inner: VOP1(
@@ -4779,16 +4746,16 @@
             },
         ),
         literal_constant: Some(
-            71,
+            151,
         ),
-        program_counter: 1104,
+        program_counter: 1212,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_write_b64,
-                offset0: 208,
-                offset1: 6,
+                offset0: 16,
+                offset1: 7,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -4805,14 +4772,14 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1112,
+        program_counter: 1220,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_write2_b64,
-                offset0: 216,
-                offset1: 217,
+                offset0: 224,
+                offset1: 225,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -4829,14 +4796,14 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1120,
+        program_counter: 1228,
     },
     Instruction {
         inner: DS(
             DSInstruction {
                 op: ds_write2_b64,
-                offset0: 212,
-                offset1: 213,
+                offset0: 220,
+                offset1: 221,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 29,
@@ -4853,7 +4820,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1128,
+        program_counter: 1236,
     },
     Instruction {
         inner: SOP1(
@@ -4868,7 +4835,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1136,
+        program_counter: 1244,
     },
     Instruction {
         inner: SOPP(
@@ -4878,7 +4845,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1140,
+        program_counter: 1248,
     },
     Instruction {
         inner: VOP3(
@@ -4925,7 +4892,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1144,
+        program_counter: 1252,
     },
     Instruction {
         inner: MUBUF(
@@ -4954,7 +4921,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1152,
+        program_counter: 1260,
     },
     Instruction {
         inner: SOP1(
@@ -4969,7 +4936,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1160,
+        program_counter: 1268,
     },
     Instruction {
         inner: VOP1(
@@ -4984,9 +4951,9 @@
             },
         ),
         literal_constant: Some(
-            76,
+            156,
         ),
-        program_counter: 1164,
+        program_counter: 1272,
     },
     Instruction {
         inner: SOP1(
@@ -5001,7 +4968,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1172,
+        program_counter: 1280,
     },
     Instruction {
         inner: VOP3(
@@ -5048,7 +5015,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1176,
+        program_counter: 1284,
     },
     Instruction {
         inner: MUBUF(
@@ -5077,7 +5044,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1184,
+        program_counter: 1292,
     },
     Instruction {
         inner: SOP1(
@@ -5092,7 +5059,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1192,
+        program_counter: 1300,
     },
     Instruction {
         inner: VOP3(
@@ -5139,7 +5106,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1196,
+        program_counter: 1304,
     },
     Instruction {
         inner: DS(
@@ -5163,7 +5130,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1204,
+        program_counter: 1312,
     },
     Instruction {
         inner: SOPP(
@@ -5173,6 +5140,6 @@
             },
         ),
         literal_constant: None,
-        program_counter: 1212,
+        program_counter: 1320,
     },
 ]

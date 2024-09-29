@@ -8,7 +8,7 @@
             },
         ),
         literal_constant: Some(
-            20,
+            21,
         ),
         program_counter: 0,
     },
@@ -32,68 +32,6 @@
         program_counter: 8,
     },
     Instruction {
-        inner: SOPK(
-            SOPKInstruction {
-                op: s_movk_i32,
-                simm16: 2308,
-                sdst: ScalarGPR(
-                    2,
-                ),
-            },
-        ),
-        literal_constant: None,
-        program_counter: 12,
-    },
-    Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOP2(
-                    v_bcnt_u32_b32,
-                ),
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-                src0: TransformedOperand {
-                    operand: Scalar(
-                        IntegerConstant(
-                            InlineIntegerConstant(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src1: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                2,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
-                clamp: false,
-                output_modifier: None,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 16,
-    },
-    Instruction {
         inner: SOP2(
             SOP2Instruction {
                 op: s_bfm_b32,
@@ -111,17 +49,17 @@
             },
         ),
         literal_constant: None,
-        program_counter: 24,
+        program_counter: 12,
     },
     Instruction {
         inner: DS(
             DSInstruction {
-                op: ds_read2_b32,
-                offset0: 0,
-                offset1: 1,
+                op: ds_read_b64,
+                offset0: 8,
+                offset1: 6,
                 gds: true,
                 addr: VectorGPR {
-                    register_idx: 0,
+                    register_idx: 2,
                 },
                 data0: VectorGPR {
                     register_idx: 0,
@@ -131,6 +69,40 @@
                 },
                 vdst: VectorGPR {
                     register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 16,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3855,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 24,
+    },
+    Instruction {
+        inner: DS(
+            DSInstruction {
+                op: ds_read_b32,
+                offset0: 4,
+                offset1: 6,
+                gds: true,
+                addr: VectorGPR {
+                    register_idx: 2,
+                },
+                data0: VectorGPR {
+                    register_idx: 0,
+                },
+                data1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
                 },
             },
         ),
@@ -138,68 +110,14 @@
         program_counter: 28,
     },
     Instruction {
-        inner: DS(
-            DSInstruction {
-                op: ds_read_b32,
-                offset0: 16,
-                offset1: 9,
-                gds: true,
-                addr: VectorGPR {
-                    register_idx: 2,
-                },
-                data0: VectorGPR {
-                    register_idx: 0,
-                },
-                data1: VectorGPR {
-                    register_idx: 0,
-                },
-                vdst: VectorGPR {
-                    register_idx: 2,
-                },
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 383,
             },
         ),
         literal_constant: None,
         program_counter: 36,
-    },
-    Instruction {
-        inner: SOPP(
-            SOPPInstruction {
-                op: s_waitcnt,
-                simm16: 287,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 44,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_add_co_u32,
-                src0: VectorGPR(
-                    VectorGPR {
-                        register_idx: 0,
-                    },
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 48,
-    },
-    Instruction {
-        inner: SOPP(
-            SOPPInstruction {
-                op: s_waitcnt,
-                simm16: 127,
-            },
-        ),
-        literal_constant: None,
-        program_counter: 52,
     },
     Instruction {
         inner: VOP2(
@@ -209,7 +127,7 @@
                     LiteralConstant,
                 ),
                 vsrc1: VectorGPR {
-                    register_idx: 2,
+                    register_idx: 1,
                 },
                 vdst: VectorGPR {
                     register_idx: 1,
@@ -217,9 +135,39 @@
             },
         ),
         literal_constant: Some(
-            524288,
+            2097152,
         ),
-        program_counter: 56,
+        program_counter: 40,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 48,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_co_u32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 2,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 52,
     },
     Instruction {
         inner: VOP2(
@@ -239,29 +187,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 64,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_add_co_u32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            63,
-                        ),
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 3,
-                },
-            },
-        ),
-        literal_constant: None,
-        program_counter: 68,
+        program_counter: 56,
     },
     Instruction {
         inner: SOPP(
@@ -271,18 +197,48 @@
             },
         ),
         literal_constant: None,
-        program_counter: 72,
+        program_counter: 60,
     },
     Instruction {
-        inner: VOP3(
-            VOP3Instruction {
-                op: VOP2(
-                    v_bcnt_u32_b32,
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    IntegerConstant(
+                        InlineIntegerConstant(
+                            0,
+                        ),
+                    ),
                 ),
                 vdst: VectorGPR {
                     register_idx: 2,
                 },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 64,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_sad_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 3,
+                },
                 src0: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                63,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
                     operand: Scalar(
                         IntegerConstant(
                             InlineIntegerConstant(
@@ -293,24 +249,11 @@
                     abs: false,
                     neg: false,
                 },
-                src1: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                2,
-                            ),
-                        ),
-                    ),
-                    abs: false,
-                    neg: false,
-                },
                 src2: TransformedOperand {
-                    operand: Scalar(
-                        Destination(
-                            ScalarGPR(
-                                0,
-                            ),
-                        ),
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 1,
+                        },
                     ),
                     abs: false,
                     neg: false,
@@ -320,7 +263,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 76,
+        program_counter: 68,
     },
     Instruction {
         inner: VOP2(
@@ -342,26 +285,20 @@
             },
         ),
         literal_constant: None,
-        program_counter: 84,
+        program_counter: 76,
     },
     Instruction {
-        inner: VOP1(
-            VOP1Instruction {
-                op: v_mov_b32,
-                src0: Scalar(
-                    IntegerConstant(
-                        InlineIntegerConstant(
-                            0,
-                        ),
-                    ),
+        inner: SOPK(
+            SOPKInstruction {
+                op: s_movk_i32,
+                simm16: 1540,
+                sdst: ScalarGPR(
+                    8,
                 ),
-                vdst: VectorGPR {
-                    register_idx: 4,
-                },
             },
         ),
         literal_constant: None,
-        program_counter: 88,
+        program_counter: 80,
     },
     Instruction {
         inner: SMEM(
@@ -376,41 +313,32 @@
             },
         ),
         literal_constant: None,
-        program_counter: 92,
+        program_counter: 84,
     },
     Instruction {
-        inner: DS(
-            DSInstruction {
-                op: ds_write2_b32,
-                offset0: 0,
-                offset1: 1,
-                gds: true,
-                addr: VectorGPR {
-                    register_idx: 2,
-                },
-                data0: VectorGPR {
-                    register_idx: 0,
-                },
-                data1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    6,
+                ),
             },
         ),
         literal_constant: None,
-        program_counter: 96,
+        program_counter: 88,
     },
     Instruction {
         inner: SOPP(
             SOPPInstruction {
                 op: s_waitcnt,
-                simm16: 15,
+                simm16: 127,
             },
         ),
         literal_constant: None,
-        program_counter: 104,
+        program_counter: 92,
     },
     Instruction {
         inner: VOP3(
@@ -435,7 +363,7 @@
                 src1: TransformedOperand {
                     operand: VectorGPR(
                         VectorGPR {
-                            register_idx: 4,
+                            register_idx: 2,
                         },
                     ),
                     abs: false,
@@ -457,7 +385,7 @@
             },
         ),
         literal_constant: None,
-        program_counter: 108,
+        program_counter: 96,
     },
     Instruction {
         inner: MUBUF(
@@ -472,7 +400,7 @@
                 addr64: false,
                 lds: false,
                 vaddr: VectorGPR {
-                    register_idx: 4,
+                    register_idx: 2,
                 },
                 vdata: VectorGPR {
                     register_idx: 3,
@@ -486,7 +414,95 @@
             },
         ),
         literal_constant: None,
+        program_counter: 104,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        6,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 112,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP2(
+                    v_add_co_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                8,
+                            ),
+                        ),
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
         program_counter: 116,
+    },
+    Instruction {
+        inner: DS(
+            DSInstruction {
+                op: ds_write2_b32,
+                offset0: 0,
+                offset1: 1,
+                gds: true,
+                addr: VectorGPR {
+                    register_idx: 2,
+                },
+                data0: VectorGPR {
+                    register_idx: 0,
+                },
+                data1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 124,
     },
     Instruction {
         inner: SOPP(
@@ -496,6 +512,6 @@
             },
         ),
         literal_constant: None,
-        program_counter: 124,
+        program_counter: 132,
     },
 ]

@@ -14754,7 +14754,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown,
+                op: v_mbcnt_lo_u32_b32,
                 src0: Scalar(
                     Destination(
                         ScalarGPR(

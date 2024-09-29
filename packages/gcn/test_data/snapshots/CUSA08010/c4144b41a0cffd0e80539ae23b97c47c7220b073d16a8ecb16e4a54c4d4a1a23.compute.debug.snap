@@ -35,7 +35,7 @@
         inner: SOPK(
             SOPKInstruction {
                 op: s_movk_i32,
-                simm16: 2308,
+                simm16: 1540,
                 sdst: ScalarGPR(
                     2,
                 ),
@@ -142,7 +142,7 @@
             DSInstruction {
                 op: ds_read_b32,
                 offset0: 16,
-                offset1: 9,
+                offset1: 6,
                 gds: true,
                 addr: VectorGPR {
                     register_idx: 2,
@@ -217,7 +217,7 @@
             },
         ),
         literal_constant: Some(
-            524288,
+            2097152,
         ),
         program_counter: 56,
     },

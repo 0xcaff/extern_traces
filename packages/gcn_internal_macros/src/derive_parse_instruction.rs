@@ -20,6 +20,7 @@ pub fn derive_parse_instruction(input: DeriveInput) -> Result<TokenStream2, syn:
     Ok(quote! {
         impl crate::instructions::formats::ParseInstruction for #enum_ident {
             fn parse(token: u32, reader: &mut crate::reader::SliceReader) -> core::result::Result<Self, anyhow::Error> {
+                use anyhow::Context;
 
                 fn bitmask(size: u8) -> u32 {
                     ((1 << size) - 1) << (32 - size)
@@ -63,7 +64,7 @@ fn emit_blocks<'a>(
             quote! {
                 #repr => return Ok(
                     #enum_ident::#ident(
-                        <#typ as crate::instructions::formats::ParseInstruction>::parse(token, reader)?
+                        <#typ as crate::instructions::formats::ParseInstruction>::parse(token, reader).context(stringify!(#typ))?
                     )
                 ),
             }

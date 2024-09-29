@@ -62,7 +62,7 @@ fn field(field: &Field) -> Result<TokenStream, syn::Error> {
             let len = (range.highest_bit - range.lowest_bit + 1) as usize;
 
             quote! {
-                #identifier: <#typ as ::bits::TryFromBitsContainer<#len>>::try_from_bits_container(value.slice(#highest_bit, #lowest_bit)).map_err(|err| err.extend(stringify!(identifier)))?,
+                #identifier: <#typ as ::bits::TryFromBitsContainer<#len>>::try_from_bits_container(value.slice(#highest_bit, #lowest_bit)).map_err(|err| err.extend(stringify!(#identifier)))?,
             }
         }
         FromBitsFieldAttribute::With(expr) => {

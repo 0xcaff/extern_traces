@@ -526,7 +526,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_1,
+                op: v_bcnt_u32_b32,
                 src0: Scalar(
                     IntegerConstant(
                         InlineIntegerConstant(
@@ -548,7 +548,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_1,
+                op: v_bcnt_u32_b32,
                 src0: Scalar(
                     IntegerConstant(
                         InlineIntegerConstant(
@@ -703,7 +703,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_1,
+                op: v_bcnt_u32_b32,
                 src0: Scalar(
                     IntegerConstant(
                         InlineIntegerConstant(
@@ -1185,7 +1185,7 @@
     Instruction {
         inner: VOP2(
             VOP2Instruction {
-                op: unknown_1,
+                op: v_bcnt_u32_b32,
                 src0: Scalar(
                     IntegerConstant(
                         InlineIntegerConstant(
