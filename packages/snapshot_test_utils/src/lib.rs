@@ -92,6 +92,7 @@ pub fn generate_snapshots<
         fs::create_dir_all(snapshot_folder.parent().unwrap())?;
 
         let mut collector = TestResultCollectorFn {
+            relative_path,
             collector_fn: |key, value| {
                 let mut path = snapshot_folder.clone();
                 path.set_extension(&format!("{}.snap", key));
@@ -128,18 +129,24 @@ fn update_snapshot(snapshot_path: impl AsRef<Path>, expected: &str) -> Result<bo
     Ok(expected == file_contents)
 }
 
-pub trait TestResultCollector {
+pub trait TestResultCollector<'a> {
     fn result(&mut self, key: &str, value: &str) -> Result<(), anyhow::Error>;
+    fn relative_path(&self) -> &'a Path;
 }
 
-struct TestResultCollectorFn<F: FnMut(&str, &str) -> Result<(), anyhow::Error>> {
+struct TestResultCollectorFn<'a, F: FnMut(&str, &str) -> Result<(), anyhow::Error>> {
+    relative_path: &'a Path,
     collector_fn: F,
 }
 
-impl<F: FnMut(&str, &str) -> Result<(), anyhow::Error>> TestResultCollector
-    for TestResultCollectorFn<F>
+impl<'a, F: FnMut(&str, &str) -> Result<(), anyhow::Error>> TestResultCollector<'a>
+    for TestResultCollectorFn<'a, F>
 {
     fn result(&mut self, key: &str, value: &str) -> Result<(), anyhow::Error> {
         (self.collector_fn)(key, value)
+    }
+
+    fn relative_path(&self) -> &'a Path {
+        self.relative_path
     }
 }
