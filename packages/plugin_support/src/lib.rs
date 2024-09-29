@@ -97,7 +97,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     let mut shaders = ShadersCollector::new();
 
     let mut total_size =
-        size_of::<SpanStartAdditionalData>() + size_of::<u32>() + (size_of::<u32>() * 2);
+        size_of::<SpanStartAdditionalData>() + size_of::<u32>() + (size_of::<u32>() * 2 * (count as usize));
 
     let draw_command_buffers =
         unsafe { command_buffers(count as _, draw_buffers, draw_sizes) }.collect::<Vec<_>>();
