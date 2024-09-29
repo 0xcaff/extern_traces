@@ -5,7 +5,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.89"
+anyhow = { version = "1.0.89", default-features = false }
 gcn = { path = "../gcn" }
 bits = { path = "../bits" }
 bytemuck = "1.18.0"
