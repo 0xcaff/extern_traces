@@ -26,7 +26,6 @@
 0x0084: s_load_dwordx4 s[12:15], s[0:1], 0x68
 0x0088: s_waitcnt 0x7f
 0x008c: s_load_dwordx8 s[4:11], s[2:3], 0xff
-0x0090: v_cndmask_b32 v0, s72, v1
 0x0094: s_waitcnt 0x7f
 0x0098: v_mov_b32 v14, s6
 0x009c: v_mov_b32 v4, s4

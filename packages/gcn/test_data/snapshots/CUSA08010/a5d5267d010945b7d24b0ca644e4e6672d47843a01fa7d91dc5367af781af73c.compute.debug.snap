@@ -1704,30 +1704,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 396,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ScalarGPR(
-                            72,
-                        ),
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            584,
         ),
-        literal_constant: None,
-        program_counter: 400,
+        program_counter: 396,
     },
     Instruction {
         inner: SMEM(
@@ -1741,30 +1721,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 404,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ScalarGPR(
-                            72,
-                        ),
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            584,
         ),
-        literal_constant: None,
-        program_counter: 408,
+        program_counter: 404,
     },
     Instruction {
         inner: SOPK(

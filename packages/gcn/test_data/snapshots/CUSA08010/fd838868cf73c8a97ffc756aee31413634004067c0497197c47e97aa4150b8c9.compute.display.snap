@@ -14,7 +14,6 @@
 0x0044: s_load_dwordx4 s[12:15], s[0:1], 0x8
 0x0048: s_waitcnt 0x7f
 0x004c: s_load_dwordx8 s[4:11], s[24:25], 0xff
-0x0050: v_cndmask_b32 v0, s72, v1
 0x0054: s_movk_i32 vcc_lo, 0x204
 0x0058: buffer_load_dwordx4 v[4:7], v10, s[12:15], idxen, offset=0x0, soffset=0x80
 0x0060: buffer_load_dwordx4 v[0:3], v10, s[12:15], idxen, offset=0x10, soffset=0x80
@@ -222,18 +221,15 @@
 0x0494: s_and_saveexec_b64 vcc, vcc
 0x0498: s_cbranch_execz 0x4
 0x049c: s_load_dword s4, s[24:25], 0xff
-0x04a0: v_cndmask_b32 v0, scratch_lo, v1
 0x04a4: s_waitcnt 0x7f
 0x04a8: v_mov_b32 v3, s4
 0x04ac: s_andn2_b64 exec, vcc, exec
 0x04b0: s_cbranch_execz 0x5
 0x04b4: s_load_dword s4, s[24:25], 0xff
-0x04b8: v_cndmask_b32 v0, scratch_lo, v1
 0x04bc: s_waitcnt 0x7f
 0x04c0: v_mov_b32 v3, s4, s0, -s0
 0x04c8: s_mov_b64 exec, vcc
 0x04cc: s_load_dwordx8 s[4:11], s[24:25], 0xff
-0x04d0: v_cndmask_b32 v0, s80, v1
 0x04d4: v_add_f32 v2, v3, v2
 0x04d8: s_waitcnt 0x7f
 0x04dc: v_mul_f32 v7, s10, v2

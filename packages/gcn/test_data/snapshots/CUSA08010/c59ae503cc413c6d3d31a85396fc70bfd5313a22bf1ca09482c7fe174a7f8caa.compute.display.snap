@@ -13,7 +13,6 @@
 0x003c: buffer_load_dwordx3 v[9:11], v15, s[4:7], idxen, offset=0x24, soffset=0x80
 0x0044: buffer_load_dwordx3 v[0:2], v15, s[4:7], idxen, offset=0x18, soffset=0x80
 0x004c: s_load_dwordx8 s[4:11], s[8:9], 0xff
-0x0050: v_cndmask_b32 v0, s80, v1
 0x0054: s_waitcnt 0x7f
 0x0058: v_mul_f32 v12, 2.f, s7, s0
 0x0060: v_mul_f32 v16, s9, v12

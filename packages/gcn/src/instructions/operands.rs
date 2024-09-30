@@ -106,14 +106,6 @@ impl ScalarDestinationOperand {
             }
             .to_string(),
             ScalarDestinationOperand::ExecHi => "exec_hi".to_string(),
-            ScalarDestinationOperand::TrapHandlerBaseAddressLo => match operand_info {
-                Some(OperandInfo::Size(1)) => "tba_lo".to_string(),
-                _ => unimplemented!(),
-            },
-            ScalarDestinationOperand::ReservedLo => match operand_info {
-                Some(OperandInfo::Size(1)) => "scratch_lo".to_string(),
-                _ => unimplemented!(),
-            },
             _ => unimplemented!(),
         }
     }

@@ -332,30 +332,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 76,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ScalarGPR(
-                            72,
-                        ),
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            584,
         ),
-        literal_constant: None,
-        program_counter: 80,
+        program_counter: 76,
     },
     Instruction {
         inner: SOPK(
@@ -5745,28 +5725,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 1180,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ReservedLo,
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            616,
         ),
-        literal_constant: None,
-        program_counter: 1184,
+        program_counter: 1180,
     },
     Instruction {
         inner: SOPP(
@@ -5835,28 +5797,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 1204,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ReservedLo,
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            616,
         ),
-        literal_constant: None,
-        program_counter: 1208,
+        program_counter: 1204,
     },
     Instruction {
         inner: SOPP(
@@ -5942,30 +5886,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 1228,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ScalarGPR(
-                            80,
-                        ),
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            592,
         ),
-        literal_constant: None,
-        program_counter: 1232,
+        program_counter: 1228,
     },
     Instruction {
         inner: VOP2(

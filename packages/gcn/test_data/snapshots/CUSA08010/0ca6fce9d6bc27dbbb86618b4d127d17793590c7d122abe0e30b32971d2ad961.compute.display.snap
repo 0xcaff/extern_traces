@@ -4,7 +4,6 @@
 0x0010: s_load_dwordx4 s[0:3], s[0:1], 0x10
 0x0014: s_waitcnt 0x7f
 0x0018: s_load_dwordx16 s[20:35], s[8:9], 0xff
-0x001c: v_cndmask_b32 v0, s72, v1
 0x0020: v_mov_b32 v4, s18
 0x0024: s_waitcnt 0x7f
 0x0028: v_mov_b32 v8, s24

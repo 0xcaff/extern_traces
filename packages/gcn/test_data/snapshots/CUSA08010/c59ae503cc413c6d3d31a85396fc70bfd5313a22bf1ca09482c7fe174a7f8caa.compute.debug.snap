@@ -274,30 +274,10 @@
                 ),
             },
         ),
-        literal_constant: None,
-        program_counter: 76,
-    },
-    Instruction {
-        inner: VOP2(
-            VOP2Instruction {
-                op: v_cndmask_b32,
-                src0: Scalar(
-                    Destination(
-                        ScalarGPR(
-                            80,
-                        ),
-                    ),
-                ),
-                vsrc1: VectorGPR {
-                    register_idx: 1,
-                },
-                vdst: VectorGPR {
-                    register_idx: 0,
-                },
-            },
+        literal_constant: Some(
+            592,
         ),
-        literal_constant: None,
-        program_counter: 80,
+        program_counter: 76,
     },
     Instruction {
         inner: SOPP(

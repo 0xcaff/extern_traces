@@ -129,6 +129,10 @@ impl FormattedInstruction {
             ) | FormattedInstruction::VOPC(VOPCInstruction {
                 src0: SourceOperand::Scalar(ScalarSourceOperand::LiteralConstant),
                 ..
+            }) | FormattedInstruction::SMEM(SMEMInstruction {
+                imm: false,
+                offset: 255,
+                ..
             })
         )
     }
