@@ -135,7 +135,7 @@ pub fn create_tree() -> Tree<Pane> {
     let mut tiles = Tiles::default();
 
     let currently_selected_span_detail_pane =
-        tiles.insert_pane(Pane::CurrentlySelectedSpanDetail(SpanDetailPane));
+        tiles.insert_pane(Pane::CurrentlySelectedSpanDetail(SpanDetailPane::init()));
 
     let search_pane = tiles.insert_pane(Pane::SearchPane(SearchPane::init()));
 

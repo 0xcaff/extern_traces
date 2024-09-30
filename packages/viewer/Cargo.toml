@@ -13,3 +13,4 @@ egui_tiles = "0.9.1"
 rfd = "0.15.0"
 clap = { version = "4.5.18", features = ["derive"] }
 hex = "0.4.3"
+egui_extras = { version = "0.28.0", features = ["image"] }

@@ -1,9 +1,22 @@
+use std::borrow::Cow;
+use std::sync::Arc;
 use crate::app::tracing::panes::{PaneResponse, TreeBehaviorArgs};
 use crate::app::tracing::utils::{format_time, render_symbol_info};
 use eframe::egui;
-use eframe::egui::{vec2, Align, Layout, Ui};
+use eframe::egui::{vec2, Align, ImageSource, Layout, Ui};
+use eframe::egui::load::Bytes;
 
-pub struct SpanDetailPane;
+pub struct SpanDetailPane {
+    last_image: Option<Arc<[u8]>>,
+}
+
+impl SpanDetailPane {
+    pub fn init() -> SpanDetailPane {
+        SpanDetailPane {
+            last_image: None
+        }
+    }
+}
 
 impl SpanDetailPane {
     pub fn title(&self) -> egui::WidgetText {
@@ -48,12 +61,27 @@ impl SpanDetailPane {
                 ui.label(format_time(duration_seconds));
             });
 
+            ui.image(egui::include_image!("triangle.png"));
+
+            if let Some(it) = &self.last_image {
+                ui.image(ImageSource::Bytes {
+                    uri: Cow::Borrowed("bytes://image.png"),
+                    bytes: Bytes::Shared(it.clone()),
+                });
+            }
+
             let button_response = ui.button("zoom");
             if button_response.clicked() {
                 if let Some(last_width) = args.last_width {
                     view_state
                         .timeline_position_state
                         .pan_to(&span, last_width as _);
+                }
+            }
+
+            {
+                let button_response = ui.button("render frame");
+                if button_response.clicked() {
                 }
             }
 
@@ -70,4 +98,8 @@ impl SpanDetailPane {
 
         None
     }
+}
+
+fn render_frame() {
+
 }
