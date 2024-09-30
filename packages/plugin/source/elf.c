@@ -108,43 +108,15 @@ SELFSegment* find_matching_segment(const SELFParserState* state, int phdr_idx) {
     return NULL;
 }
 
-void* load_segment(const SELFParserState* state, Elf32_Word p_type, size_t* size) {
+void* load_segment(const SELFParserState* state, uint64_t phdr_idx, size_t* size) {
     unsigned int matching_segment_offset = 0;
-
-    int phdr_idx = get_phdr_index_by_type(state, p_type);
-    if (phdr_idx == -1) {
-        final_printf("segment not found\n");
-        return NULL;
-    }
 
     Elf64_Phdr* dynamic_phdr = &state->phdrs[phdr_idx];
 
     SELFSegment* matching_segment = find_matching_segment(state, phdr_idx);
     if (!matching_segment) {
-        for (int i = 0; i < state->elf_header.e_phnum; i++) {
-            Elf64_Phdr* phdr = &state->phdrs[i];
-                    
-            if (!(phdr->p_vaddr <= dynamic_phdr->p_vaddr)) {
-                continue;
-            }
-
-            int offset = dynamic_phdr->p_vaddr - phdr->p_vaddr;
-            if (!(phdr->p_filesz + offset >= dynamic_phdr->p_filesz)) {
-                continue;
-            }
-
-            matching_segment = find_matching_segment(state, i);
-            if (!matching_segment) {
-                continue;
-            }
-
-            matching_segment_offset = dynamic_phdr->p_offset - phdr->p_offset;
-        }
-
-        if (!matching_segment) {
-            final_printf("failed to find matching overlapping segment\n");
-            return NULL;
-        }
+        final_printf("failed to find matching segment\n");
+        return NULL;
     }
 
     void* segment_data = malloc(dynamic_phdr->p_filesz);

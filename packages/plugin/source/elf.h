@@ -112,7 +112,7 @@ typedef struct {
 
 SELFParserState* initialize_self_parser(const char* filename);
 int get_phdr_index_by_type(const SELFParserState* state, uint32_t type);
-void* load_segment(const SELFParserState* state, Elf32_Word p_type, size_t* size);
+void* load_segment(const SELFParserState* state, uint64_t phdr_idx, size_t* size);
 void teardown_self_parser(SELFParserState* state);
 
 void cleanup_dynamic_info(DynamicInfo* info);
