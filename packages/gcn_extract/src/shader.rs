@@ -2,6 +2,8 @@ use alloc::vec;
 use alloc::vec::Vec;
 use anyhow::bail;
 use core::slice;
+use gcn::instructions::formats::{FormattedInstruction, SOPPInstruction};
+use gcn::instructions::ops::SOPPOpCode;
 use gcn::instructions::Instruction;
 use gcn::SliceReader;
 
@@ -34,9 +36,23 @@ impl ShaderInvocation {
 
         while reader.has_more() {
             let program_counter = unsafe { self.bytes.as_ptr().offset_from(bytes.as_ptr()) } as u64;
-            let instruction = Instruction::parse(&mut reader, program_counter)?;
+            let instruction = Instruction::parse(&mut reader, program_counter * 4)?;
+
+            let is_end_pgm = if let FormattedInstruction::SOPP(SOPPInstruction {
+                op: SOPPOpCode::s_endpgm,
+                ..
+            }) = instruction.inner
+            {
+                true
+            } else {
+                false
+            };
 
             instructions.push(instruction);
+
+            if is_end_pgm {
+                break;
+            }
         }
 
         Ok(instructions)
