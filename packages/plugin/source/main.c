@@ -76,18 +76,21 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     int tls_phdr_idx = get_phdr_index_by_type(parser, PT_TLS);
     if (tls_phdr_idx == -1) {
         final_printf("no tls segment found\n");
+        teardown_self_parser(parser);
         return 1;
     }
 
     Elf64_Phdr* tls_phdr = &parser->phdrs[tls_phdr_idx];
     if (tls_phdr->p_memsz >= UINT16_MAX) {
         final_printf("static tls segment too large, not supported: %lu\n", tls_phdr->p_memsz);
+        teardown_self_parser(parser);
         return 1;
     }
 
     uint32_t expected_size = 32 + config.original_tls_size;
     if (tls_phdr->p_memsz != expected_size) {
         final_printf("memsz unexpected size, got: %lu, expected: %u\n", tls_phdr->p_memsz, expected_size);
+        teardown_self_parser(parser);
         return 1;
     }
 
@@ -95,24 +98,35 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     set_static_tls_base(tls_base);
 
-    size_t dynamic_segment_size;
-    void* dynamic_segment = load_segment(parser, PT_DYNAMIC, &dynamic_segment_size);
-    if (!dynamic_segment) {
+    int dynlib_segment_idx = get_phdr_index_by_type(parser, PT_SCE_DYNLIBDATA);
+    if (dynlib_segment_idx == -1) {
+        final_printf("dynlib_segment not found\n");
+        teardown_self_parser(parser);
+        return 1;
+    }
+    Elf64_Phdr* dynlib_segment_hdr = &parser->phdrs[dynlib_segment_idx];
+
+    size_t dynlib_segment_size;
+    void* dynlib_segment = load_segment(parser, dynlib_segment_idx, &dynlib_segment_size);
+    if (!dynlib_segment) {
         teardown_self_parser(parser);
         return 1;
     }
 
-    size_t dynlib_segment_size;
-    void* dynlib_segment = load_segment(parser, PT_SCE_DYNLIBDATA, &dynlib_segment_size);
-    if (!dynlib_segment) {
+    int dynamic_segment_idx = get_phdr_index_by_type(parser, PT_DYNAMIC);
+    if (dynamic_segment_idx == -1) {
+        final_printf("dynamic_segment not found\n");
         teardown_self_parser(parser);
-        free(dynamic_segment);
+        free(dynlib_segment);
         return 1;
     }
+    Elf64_Phdr* dynamic_segment_hdr = &parser->phdrs[dynamic_segment_idx];
+    uint64_t offset = dynamic_segment_hdr->p_offset - dynlib_segment_hdr->p_offset;
+    uint64_t dynamic_segment_size = dynamic_segment_hdr->p_filesz;
 
     teardown_self_parser(parser);
 
-    DynamicInfo info = parse_dynamic_section(dynamic_segment, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
+    DynamicInfo info = parse_dynamic_section(dynlib_segment + offset, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
 
     JumpSlotRelocationList jump_slot_relocations;
     find_jump_slot_relocations(&info, &jump_slot_relocations);
@@ -125,7 +139,6 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         cleanup_jump_slot_relocation_list(&jump_slot_relocations);
         cleanup_dynamic_info(&info);
 
-        free(dynamic_segment);
         free(dynlib_segment);
         return 1;
     }
@@ -160,7 +173,6 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
     cleanup_jump_slot_relocation_list(&jump_slot_relocations);
     cleanup_dynamic_info(&info);
 
-    free(dynamic_segment);
     free(dynlib_segment);
 
     return 0;
