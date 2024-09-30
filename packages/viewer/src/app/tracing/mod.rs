@@ -214,7 +214,12 @@ fn read_stream(ctx: Context, mut stream: impl Read, sender: Sender<TraceEvent>) 
     ctx.request_repaint();
 
     loop {
-        sender.send(TraceEvent::read(&mut stream)?).unwrap();
+        let trace_event = TraceEvent::read(&mut stream)?;
+        if let TraceEvent::CountersUpdate(counters) = &trace_event {
+            println!("{:#?}", counters);
+        }
+
+        sender.send(trace_event).unwrap();
         ctx.request_repaint()
     }
 }
