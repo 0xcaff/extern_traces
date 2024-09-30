@@ -17,7 +17,10 @@ use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
 use gcn::instructions::Instruction;
-use gcn_extract::{extract_buffer_usages, pixel_shader_extract_image_usages, ShaderInvocation};
+use gcn_extract::{
+    extract_buffer_usages, pixel_shader_extract_image_usages, SamplerResourceWithRaw,
+    ShaderInvocation, TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
+};
 use pm4::{convert, Command, PM4Packet};
 
 #[lang = "eh_personality"]
@@ -70,12 +73,15 @@ unsafe fn command_buffers<'a>(
     let draw_command_buffer_addrs = slice::from_raw_parts(addrs, count);
     let draw_command_buffer_sizes = slice::from_raw_parts(sizes, count);
 
-    (0usize..count).into_iter().map(|idx| {
-        slice::from_raw_parts(
-            draw_command_buffer_addrs[idx],
-            draw_command_buffer_sizes[idx] as usize,
-        )
-    }).collect()
+    (0usize..count)
+        .into_iter()
+        .map(|idx| {
+            slice::from_raw_parts(
+                draw_command_buffer_addrs[idx],
+                draw_command_buffer_sizes[idx] as usize,
+            )
+        })
+        .collect()
 }
 
 #[repr(C)]
@@ -105,8 +111,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     let compute_buffers = args.args[4] as *const *const u8;
     let compute_sizes = args.args[5] as *const u32;
 
-    let draw_command_buffers =
-        unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
+    let draw_command_buffers = unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
 
     let compute_command_buffers =
         unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
@@ -138,8 +143,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
     let compute_buffers = args.args[3] as *const *const u8;
     let compute_sizes = args.args[4] as *const u32;
 
-    let draw_command_buffers =
-        unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
+    let draw_command_buffers = unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
 
     let compute_command_buffers =
         unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
@@ -184,7 +188,16 @@ fn trace_command_buffer_submit(
         total_size += size_of::<u32>() // address
             + size_of::<u8>()  // kind
             + size_of::<u32>() // length
-            + shader.shader_invocation.bytes.len() * 4;
+            + shader.shader_invocation.bytes.len() * 4
+        + size_of::<u32>() // vertex_buffer_references length
+        + shader.vertex_buffer_references.len() * (size_of::<u32>() + size_of::<u32>())
+    }
+
+    total_size += size_of::<u32>();
+
+    for vertex_buffer in &shaders.vertex_buffers {
+        total_size +=
+            (size_of::<u32>() * 4) + size_of::<u32>() + vertex_buffer.resource.len() as usize
     }
 
     let Some(mut res) = thread_logging_state.reserve(total_size) else {
@@ -232,12 +245,35 @@ fn trace_command_buffer_submit(
 
         let len = shader.shader_invocation.bytes.len() as u32;
         res.write(bytemuck::cast_slice(&[len]));
-
         res.write(bytemuck::cast_slice(shader.shader_invocation.bytes));
+
+        res.write(bytemuck::cast_slice(&[
+            shader.vertex_buffer_references.len() as u32,
+        ]));
+        for (program_counter, idx) in &shader.vertex_buffer_references {
+            res.write(bytemuck::cast_slice(&[*program_counter as u32]));
+            res.write(bytemuck::cast_slice(&[*idx as u32]));
+        }
     }
 
+    res.write(bytemuck::cast_slice(&[shaders.vertex_buffers.len() as u32]));
+    for vertex_buffer in &shaders.vertex_buffers {
+        res.write(bytemuck::cast_slice(&vertex_buffer.raw));
+
+        res.write(bytemuck::cast_slice(&[vertex_buffer.resource.len() as u32]));
+        res.write(unsafe { vertex_buffer.resource.bytes() });
+    }
+
+    // todo: detile and send texture buffers
+    // res.write(bytemuck::cast_slice(&[shaders.texture_buffers.len() as u32]));
+    // for texture_buffer in &shaders.texture_buffers {
+    //     res.write(bytemuck::cast_slice(&texture_buffer.raw));
+    //
+    //     res.write(bytemuck::cast_slice(&[vertex_buffer.resource.len() as u32]));
+    //     res.write(unsafe { vertex_buffer.resource.bytes() });
+    // }
+
     thread_logging_state.flush(res);
-    println!("done!");
 }
 
 #[repr(u8)]
@@ -252,16 +288,22 @@ struct Shader {
     kind: ShaderKind,
     shader_invocation: ShaderInvocation,
     instructions: Option<Vec<Instruction>>,
+    vertex_buffer_references: Vec<(u64, usize)>,
+    texture_buffer_references: Vec<(u64, usize, SamplerResourceWithRaw)>,
 }
 
 struct ShadersCollector {
     shaders: BTreeMap<u32, Shader>,
+    vertex_buffers: Vec<VertexBufferResourceWithRaw>,
+    texture_buffers: Vec<TextureBufferResourceWithRaw>,
 }
 
 impl ShadersCollector {
     pub fn new() -> ShadersCollector {
         ShadersCollector {
             shaders: BTreeMap::new(),
+            vertex_buffers: vec![],
+            texture_buffers: vec![],
         }
     }
 }
@@ -329,6 +371,8 @@ impl ShadersCollector {
                     shader_invocation,
                     kind,
                     instructions: instructions.ok(),
+                    vertex_buffer_references: vec![],
+                    texture_buffer_references: vec![],
                 })
             }
             Entry::Occupied(value) => value.into_mut(),
@@ -336,13 +380,58 @@ impl ShadersCollector {
 
         if let Some(instructions) = shader.instructions.as_ref() {
             let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
+            for vertex_buffer_usage in &buffer_usages {
+                let idx = (|| {
+                    if let Some(idx) = self
+                        .vertex_buffers
+                        .iter()
+                        .enumerate()
+                        .filter(|(idx, it)| it.resource == vertex_buffer_usage.resource.resource)
+                        .map(|(idx, _)| idx)
+                        .next()
+                    {
+                        return idx;
+                    };
+
+                    self.vertex_buffers
+                        .push(vertex_buffer_usage.resource.clone());
+                    self.vertex_buffers.len() - 1
+                })();
+
+                shader
+                    .vertex_buffer_references
+                    .push((vertex_buffer_usage.program_counter, idx));
+            }
+
             let texture_usages =
                 pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
 
-            println!(
-                "extern_traces: {} {:#?} {:#?} {:#?}",
-                shader_address, kind, buffer_usages, texture_usages
-            );
+            for texture_buffer_usage in &texture_usages {
+                let idx = (|| {
+                    if let Some(idx) = self
+                        .texture_buffers
+                        .iter()
+                        .enumerate()
+                        .filter(|(idx, it)| {
+                            it.resource == texture_buffer_usage.texture_resource.resource
+                        })
+                        .map(|(idx, _)| idx)
+                        .next()
+                    {
+                        return idx;
+                    };
+
+                    self.texture_buffers
+                        .push(texture_buffer_usage.texture_resource.clone());
+                    self.texture_buffers.len() - 1
+                })();
+
+                shader.texture_buffer_references.push((
+                    texture_buffer_usage.program_counter,
+                    idx,
+                    texture_buffer_usage.sampler_resource.clone(),
+                ));
+            }
         }
     }
 }
