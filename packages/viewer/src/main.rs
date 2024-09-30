@@ -25,12 +25,6 @@ enum Commands {
 fn main() -> Result<(), eframe::Error> {
     let args = Cli::parse();
 
-    let scene = match args.command {
-        None => Scene::initial(),
-        Some(Commands::LoadFile { path }) => Scene::Tracing(TracingScene::from_file_path(path)),
-        Some(Commands::ListenNetwork { addr }) => Scene::Tracing(TracingScene::from_network(addr)),
-    };
-
     let options = eframe::NativeOptions {
         ..Default::default()
     };
@@ -38,6 +32,20 @@ fn main() -> Result<(), eframe::Error> {
     eframe::run_native(
         "extern_traces",
         options,
-        Box::new(|cc| Ok(Box::new(app::App::new(cc, scene)))),
+        Box::new(|cc| {
+            let ctx = cc.egui_ctx.clone();
+
+            let scene = match args.command {
+                None => Scene::initial(),
+                Some(Commands::LoadFile { path }) => {
+                    Scene::Tracing(TracingScene::from_file_path(ctx, path))
+                }
+                Some(Commands::ListenNetwork { addr }) => {
+                    Scene::Tracing(TracingScene::from_network(ctx, addr))
+                }
+            };
+
+            Ok(Box::new(app::App::new(cc, scene)))
+        }),
     )
 }
