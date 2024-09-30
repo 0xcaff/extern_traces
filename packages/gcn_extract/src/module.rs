@@ -8,7 +8,7 @@ use gcn::instructions::ops::SMEMOpCode;
 use gcn::instructions::Instruction;
 use gcn::resources::{SamplerResource, TextureBufferResource, VertexBufferResource};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct VertexBufferResourceWithRaw {
     pub raw: [u32; 4],
     pub resource: VertexBufferResource,
@@ -45,7 +45,10 @@ pub fn extract_buffer_usages(
                 let register_base_idx = instr.srsrc.lowest_register_idx();
                 let mut values = [0; 4];
                 for i in 0..4 {
-                    values[i] = analysis_state.get(register_base_idx + i as u8).value().unwrap();
+                    values[i] = analysis_state
+                        .get(register_base_idx + i as u8)
+                        .value()
+                        .unwrap();
                 }
 
                 VertexBufferResourceWithRaw::from_bits(&values)
@@ -84,7 +87,7 @@ pub fn extract_buffer_usages(
     usages
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TextureBufferResourceWithRaw {
     pub raw: [u32; 8],
     pub resource: TextureBufferResource,
@@ -94,12 +97,13 @@ impl TextureBufferResourceWithRaw {
     pub fn from_bits(values: &[u32; 8]) -> TextureBufferResourceWithRaw {
         TextureBufferResourceWithRaw {
             raw: values.clone(),
-            resource: TextureBufferResource::try_from_bits_container(bytemuck::cast_slice(values)).unwrap(),
+            resource: TextureBufferResource::try_from_bits_container(bytemuck::cast_slice(values))
+                .unwrap(),
         }
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SamplerResourceWithRaw {
     pub raw: [u32; 4],
     pub resource: SamplerResource,
@@ -136,7 +140,10 @@ pub fn pixel_shader_extract_image_usages(
                 let register_base_idx = instr.ssamp.lowest_register_idx();
                 let mut values = [0; 4];
                 for it in 0..4 {
-                    values[it] = analysis_state.get(register_base_idx + it as u8).value().unwrap();
+                    values[it] = analysis_state
+                        .get(register_base_idx + it as u8)
+                        .value()
+                        .unwrap();
                 }
 
                 SamplerResourceWithRaw::from_bits(&values)
@@ -146,7 +153,10 @@ pub fn pixel_shader_extract_image_usages(
                 let register_base_idx = instr.srsrc.lowest_register_idx();
                 let mut values = [0; 8];
                 for it in 0..8 {
-                    values[it] = analysis_state.get(register_base_idx + it as u8).value().unwrap();
+                    values[it] = analysis_state
+                        .get(register_base_idx + it as u8)
+                        .value()
+                        .unwrap();
                 }
 
                 TextureBufferResourceWithRaw::from_bits(&values)
