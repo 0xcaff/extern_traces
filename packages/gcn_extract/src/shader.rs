@@ -35,7 +35,7 @@ impl ShaderInvocation {
         let mut instructions = vec![];
 
         while reader.has_more() {
-            let program_counter = unsafe { self.bytes.as_ptr().offset_from(bytes.as_ptr()) } as u64;
+            let program_counter = reader.position() as u64;
             let instruction = Instruction::parse(&mut reader, program_counter * 4)?;
 
             let is_end_pgm = if let FormattedInstruction::SOPP(SOPPInstruction {

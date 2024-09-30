@@ -9,8 +9,23 @@ use gcn::instructions::Instruction;
 use gcn::resources::{SamplerResource, TextureBufferResource, VertexBufferResource};
 
 #[derive(Debug)]
-pub struct BufferUsage {
+pub struct VertexBufferResourceWithRaw {
+    pub raw: [u32; 4],
     pub resource: VertexBufferResource,
+}
+
+impl VertexBufferResourceWithRaw {
+    pub fn from_bits(values: &[u32; 4]) -> VertexBufferResourceWithRaw {
+        VertexBufferResourceWithRaw {
+            raw: values.clone(),
+            resource: VertexBufferResource::from_bits(bytemuck::cast_slice(values)),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct BufferUsage {
+    pub resource: VertexBufferResourceWithRaw,
     pub program_counter: u64,
 }
 
@@ -28,13 +43,12 @@ pub fn extract_buffer_usages(
         let value = match &instr.inner {
             FormattedInstruction::MUBUF(instr) => Some({
                 let register_base_idx = instr.srsrc.lowest_register_idx();
-                let values = (0..4)
-                    .into_iter()
-                    .map(|it| analysis_state.get(register_base_idx + it).value().unwrap())
-                    .collect::<Vec<_>>();
+                let mut values = [0; 4];
+                for i in 0..4 {
+                    values[i] = analysis_state.get(register_base_idx + i as u8).value().unwrap();
+                }
 
-                let values: &[u64] = bytemuck::cast_slice(values.as_slice());
-                VertexBufferResource::from_bits(values)
+                VertexBufferResourceWithRaw::from_bits(&values)
             }),
             FormattedInstruction::SMEM(instr) => match instr.op {
                 SMEMOpCode::s_buffer_load_dword
@@ -42,27 +56,24 @@ pub fn extract_buffer_usages(
                 | SMEMOpCode::s_buffer_load_dwordx4
                 | SMEMOpCode::s_buffer_load_dwordx8
                 | SMEMOpCode::s_buffer_load_dwordx16 => Some({
-                    let values = (0..4)
-                        .into_iter()
-                        .map(|it| {
-                            analysis_state
-                                .get(((instr.sbase as u8) << 1) + it)
-                                .value()
-                                .unwrap()
-                        })
-                        .collect::<Vec<_>>();
+                    let mut values = [0; 4];
+                    for it in 0..4 {
+                        values[it] = analysis_state
+                            .get(((instr.sbase as u8) << 1) + it as u8)
+                            .value()
+                            .unwrap();
+                    }
 
-                    let values: &[u64] = bytemuck::cast_slice(values.as_slice());
-                    VertexBufferResource::from_bits(values)
+                    VertexBufferResourceWithRaw::from_bits(&values)
                 }),
                 _ => None,
             },
             _ => None,
         };
 
-        if let Some(vertex_buffer_resource) = value {
+        if let Some(resource) = value {
             usages.push(BufferUsage {
-                resource: vertex_buffer_resource,
+                resource,
                 program_counter,
             });
         }
@@ -74,10 +85,39 @@ pub fn extract_buffer_usages(
 }
 
 #[derive(Debug)]
+pub struct TextureBufferResourceWithRaw {
+    pub raw: [u32; 8],
+    pub resource: TextureBufferResource,
+}
+
+impl TextureBufferResourceWithRaw {
+    pub fn from_bits(values: &[u32; 8]) -> TextureBufferResourceWithRaw {
+        TextureBufferResourceWithRaw {
+            raw: values.clone(),
+            resource: TextureBufferResource::try_from_bits_container(bytemuck::cast_slice(values)).unwrap(),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct SamplerResourceWithRaw {
+    pub raw: [u32; 4],
+    pub resource: SamplerResource,
+}
+
+impl SamplerResourceWithRaw {
+    pub fn from_bits(values: &[u32; 4]) -> SamplerResourceWithRaw {
+        SamplerResourceWithRaw {
+            raw: values.clone(),
+            resource: SamplerResource::from_bits(bytemuck::cast_slice(values)),
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct ImageSamplerUsage {
-    pub raw_texture_resource: [u32; 8],
-    pub texture_resource: TextureBufferResource,
-    pub sampler_resource: SamplerResource,
+    pub texture_resource: TextureBufferResourceWithRaw,
+    pub sampler_resource: SamplerResourceWithRaw,
     pub program_counter: u64,
 }
 
@@ -94,32 +134,25 @@ pub fn pixel_shader_extract_image_usages(
         if let FormattedInstruction::MIMG(instr) = &instr.inner {
             let sampler_resource = {
                 let register_base_idx = instr.ssamp.lowest_register_idx();
-                let values = (0..4)
-                    .into_iter()
-                    .map(|it| analysis_state.get(register_base_idx + it).value().unwrap())
-                    .collect::<Vec<_>>();
+                let mut values = [0; 4];
+                for it in 0..4 {
+                    values[it] = analysis_state.get(register_base_idx + it as u8).value().unwrap();
+                }
 
-                let values: &[u64] = bytemuck::cast_slice(values.as_slice());
-                SamplerResource::from_bits(values)
+                SamplerResourceWithRaw::from_bits(&values)
             };
 
-            let (raw_texture_resource, texture_resource) = {
+            let texture_resource = {
                 let register_base_idx = instr.srsrc.lowest_register_idx();
-                let values = (0..8)
-                    .into_iter()
-                    .map(|it| analysis_state.get(register_base_idx + it).value().unwrap())
-                    .collect::<Vec<_>>();
+                let mut values = [0; 8];
+                for it in 0..8 {
+                    values[it] = analysis_state.get(register_base_idx + it as u8).value().unwrap();
+                }
 
-                let resource = {
-                    let values_read: &[u64] = bytemuck::cast_slice(values.as_slice());
-                    TextureBufferResource::try_from_bits_container(values_read).unwrap()
-                };
-
-                ((*values.into_boxed_slice()).try_into().unwrap(), resource)
+                TextureBufferResourceWithRaw::from_bits(&values)
             };
 
             textures.push(ImageSamplerUsage {
-                raw_texture_resource,
                 texture_resource,
                 sampler_resource,
                 program_counter,
