@@ -16,7 +16,7 @@ use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
 use gcn::instructions::Instruction;
-use gcn_extract::{extract_buffer_usages, pixel_shader_extract_image_usages, ShaderInvocation};
+use gcn_extract::{extract_buffer_usages, ShaderInvocation};
 use pm4::{convert, Command, PM4Packet};
 
 #[lang = "eh_personality"]
@@ -247,22 +247,31 @@ impl ShadersCollector {
                     return;
                 };
 
-                let instructions = shader_invocation.as_flat_instructions().ok();
+                let instructions = shader_invocation.as_flat_instructions();
+
+                if let Err(err) = &instructions {
+                    println!("extern_traces: {:?}", err);
+                }
 
                 item.insert(Shader {
                     shader_invocation,
                     kind,
-                    instructions,
+                    instructions: instructions.ok(),
                 })
             }
             Entry::Occupied(value) => value.into_mut(),
         };
 
         if let Some(instructions) = shader.instructions.as_ref() {
-            let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
-            let texture_usages = pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
 
-            println!("{} {:#?} {:#?} {:#?}", shader_address, kind, buffer_usages, texture_usages);
+            let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
+            // let texture_usages =
+            //     pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
+
+            println!(
+                "extern_traces: {} {:#?} {:#?}",
+                shader_address, kind, buffer_usages
+            );
         }
     }
 }

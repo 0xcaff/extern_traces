@@ -11,6 +11,9 @@ checksum = "86fdf8605db99b54d3cd748a44c6d04df638eb5dafb219b135d0149bd0db01f6"
 [[package]]
 name = "bits"
 version = "0.1.0"
+dependencies = [
+ "snafu",
+]
 
 [[package]]
 name = "bits_macros"
