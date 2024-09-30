@@ -458,6 +458,7 @@ impl ExecutionState {
             ScalarDestinationOperand::ExecLo => self.exec_lo,
             ScalarDestinationOperand::ExecHi => self.exec_hi,
             ScalarDestinationOperand::M0 => self.m0,
+            _ => todo!(),
         };
 
         Ok(ptr)

@@ -2,7 +2,6 @@ use crate::attrs::FromBitsFieldAttribute;
 use macro_utils::exactly_one;
 use proc_macro2::TokenStream;
 use quote::quote;
-use syn::parse::Parse;
 use syn::spanned::Spanned;
 use syn::{parse2, Data, DeriveInput, Field, LitInt};
 
