@@ -1,5 +1,6 @@
 use crate::resources::{BufferChannelType, DestinationChannelSelect};
 use bits_macros::FromBits;
+use core::slice;
 
 #[derive(FromBits, Debug, Hash, Eq, PartialEq, Clone)]
 #[bits(128)]
@@ -61,4 +62,14 @@ pub struct VertexBufferResource {
 
     #[bits(127, 126)]
     pub typ: u64,
+}
+
+impl VertexBufferResource {
+    pub fn len(&self) -> u64 {
+        self.stride * self.num_records as u64
+    }
+
+    pub unsafe fn bytes<'a>(&self) -> &'a [u8] {
+        slice::from_raw_parts(self.base as *const u8, self.len() as _)
+    }
 }
