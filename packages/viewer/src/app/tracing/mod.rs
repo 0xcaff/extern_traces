@@ -36,10 +36,11 @@ pub struct TracingScene {
 }
 
 impl TracingScene {
-    pub fn from_network(socket_addr: SocketAddr) -> TracingScene {
+    pub fn from_network(ctx: Context, socket_addr: SocketAddr) -> TracingScene {
         let (sender, receiver) = channel();
 
-        let loading_thread_handle = thread::spawn(move || run_server(socket_addr, sender.clone()));
+        let loading_thread_handle =
+            thread::spawn(move || run_server(ctx, socket_addr, sender.clone()));
 
         TracingScene {
             last_width: None,
@@ -50,13 +51,13 @@ impl TracingScene {
         }
     }
 
-    pub fn from_file_path(path: PathBuf) -> TracingScene {
+    pub fn from_file_path(ctx: Context, path: PathBuf) -> TracingScene {
         let (sender, receiver) = channel();
 
         let loading_thread_handle = thread::spawn(move || -> io::Result<()> {
             let file = File::open(path)?;
 
-            read_stream(file, sender)?;
+            read_stream(ctx, file, sender)?;
 
             Ok(())
         });
@@ -92,7 +93,6 @@ impl TracingScene {
 
     pub fn update(&mut self, ctx: &Context, docs: &LoadedDocumentation) -> Option<Scene> {
         self.process_events();
-        ctx.request_repaint();
         let mut next_scene = None;
 
         let ViewStateContainer::Initialized(view_state) = &mut self.state else {
@@ -208,24 +208,32 @@ impl TracingScene {
     }
 }
 
-fn read_stream(mut stream: impl Read, sender: Sender<TraceEvent>) -> io::Result<()> {
+fn read_stream(ctx: Context, mut stream: impl Read, sender: Sender<TraceEvent>) -> io::Result<()> {
     let initial_message = InitialMessage::read(&mut stream)?;
     sender.send(TraceEvent::Start(initial_message)).unwrap();
+    ctx.request_repaint();
 
     loop {
-        sender.send(TraceEvent::read(&mut stream)?).unwrap();
+        let trace_event = TraceEvent::read(&mut stream)?;
+        if let TraceEvent::CountersUpdate(counters) = &trace_event {
+            println!("{:#?}", counters);
+        }
+
+        sender.send(trace_event).unwrap();
+        ctx.request_repaint()
     }
 }
 
-fn run_server(addr: SocketAddr, sender: Sender<TraceEvent>) -> io::Result<()> {
+fn run_server(ctx: Context, addr: SocketAddr, sender: Sender<TraceEvent>) -> io::Result<()> {
     let listener = TcpListener::bind(addr)?;
 
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
                 let sender_clone = sender.clone();
+                let ctx_clone = ctx.clone();
                 thread::spawn(move || {
-                    if let Err(e) = read_stream(stream, sender_clone) {
+                    if let Err(e) = read_stream(ctx_clone, stream, sender_clone) {
                         eprintln!("error handling client: {}", e);
                     }
                 });

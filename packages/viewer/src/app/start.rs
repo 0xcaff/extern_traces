@@ -28,7 +28,10 @@ impl StartScene {
                 .flat_map(|it| it.path.clone())
                 .next()
         }) {
-            return Some(Scene::Tracing(TracingScene::from_file_path(file_path)));
+            return Some(Scene::Tracing(TracingScene::from_file_path(
+                ctx.clone(),
+                file_path,
+            )));
         }
 
         CentralPanel::default()
@@ -54,8 +57,10 @@ impl StartScene {
                     let button = ui.button("open");
                     if button.clicked() {
                         if let Some(file_path) = FileDialog::new().pick_file() {
-                            next_scene
-                                .replace(Scene::Tracing(TracingScene::from_file_path(file_path)));
+                            next_scene.replace(Scene::Tracing(TracingScene::from_file_path(
+                                ctx.clone(),
+                                file_path,
+                            )));
                         }
                     }
                 });
@@ -74,8 +79,10 @@ impl StartScene {
                     {
                         match SocketAddr::from_str(self.address.as_str()) {
                             Ok(addr) => {
-                                next_scene
-                                    .replace(Scene::Tracing(TracingScene::from_network(addr)));
+                                next_scene.replace(Scene::Tracing(TracingScene::from_network(
+                                    ctx.clone(),
+                                    addr,
+                                )));
                             }
                             Err(err) => {
                                 self.last_error = Some(err);
