@@ -1,3 +1,4 @@
+mod render;
 mod search;
 mod span_detail;
 mod symbol_detail;

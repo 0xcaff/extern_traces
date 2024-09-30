@@ -1,10 +1,11 @@
-use std::borrow::Cow;
-use std::sync::Arc;
+use crate::app::tracing::panes::render::render_frame;
 use crate::app::tracing::panes::{PaneResponse, TreeBehaviorArgs};
 use crate::app::tracing::utils::{format_time, render_symbol_info};
 use eframe::egui;
-use eframe::egui::{vec2, Align, ImageSource, Layout, Ui};
 use eframe::egui::load::Bytes;
+use eframe::egui::{vec2, Align, ImageSource, Layout, Ui};
+use std::borrow::Cow;
+use std::sync::Arc;
 
 pub struct SpanDetailPane {
     last_image: Option<Arc<[u8]>>,
@@ -12,9 +13,7 @@ pub struct SpanDetailPane {
 
 impl SpanDetailPane {
     pub fn init() -> SpanDetailPane {
-        SpanDetailPane {
-            last_image: None
-        }
+        SpanDetailPane { last_image: None }
     }
 }
 
@@ -61,8 +60,6 @@ impl SpanDetailPane {
                 ui.label(format_time(duration_seconds));
             });
 
-            ui.image(egui::include_image!("triangle.png"));
-
             if let Some(it) = &self.last_image {
                 ui.image(ImageSource::Bytes {
                     uri: Cow::Borrowed("bytes://image.png"),
@@ -82,6 +79,7 @@ impl SpanDetailPane {
             {
                 let button_response = ui.button("render frame");
                 if button_response.clicked() {
+                    self.last_image.replace(render_frame());
                 }
             }
 
@@ -98,8 +96,4 @@ impl SpanDetailPane {
 
         None
     }
-}
-
-fn render_frame() {
-
 }
