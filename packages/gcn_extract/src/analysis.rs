@@ -1,6 +1,7 @@
 use alloc::collections::BTreeMap;
+use bits::TryFromBits;
 use gcn::instructions::formats::{FormattedInstruction, SMEMInstruction, SOP1Instruction};
-use gcn::instructions::operands::ScalarDestinationOperand;
+use gcn::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
 use gcn::instructions::ops::{SMEMOpCode, SOP1OpCode};
 use gcn::instructions::Instruction;
 
@@ -40,7 +41,30 @@ impl AnalysisState {
                 imm,
                 offset,
             }) => {
-                assert!(*imm);
+                let offset = if *imm {
+                    *offset as _
+                } else {
+                    let operand = ScalarSourceOperand::try_from_bits(*offset as u64).unwrap();
+                    match operand {
+                        ScalarSourceOperand::LiteralConstant => {
+                            instruction.literal_constant.unwrap()
+                        }
+                        ScalarSourceOperand::Destination(ScalarDestinationOperand::ScalarGPR(
+                            idx,
+                        )) => {
+                            let Some(it) = self.sgprs.get(&idx) else {
+                                return;
+                            };
+
+                            let Some(value) = it.value() else {
+                                return;
+                            };
+
+                            value
+                        }
+                        _ => unimplemented!(),
+                    }
+                };
                 match op {
                     SMEMOpCode::s_load_dword
                     | SMEMOpCode::s_load_dwordx2
@@ -61,19 +85,8 @@ impl AnalysisState {
                         let base_address = {
                             let base = (*sbase << 1) as u8;
 
-                            let lower_half = match self.sgprs.get(&base).unwrap() {
-                                AnalysisRegisterState::Value(value) => *value,
-                                _ => {
-                                    unimplemented!()
-                                }
-                            };
-
-                            let upper_half = match self.sgprs.get(&(base + 1)).unwrap() {
-                                AnalysisRegisterState::Value(value) => *value,
-                                _ => {
-                                    unimplemented!()
-                                }
-                            };
+                            let lower_half = self.sgprs.get(&base).unwrap().value().unwrap();
+                            let upper_half = self.sgprs.get(&(base + 1)).unwrap().value().unwrap();
 
                             lower_half as u64 | ((upper_half as u64) << 32)
                         };
@@ -85,7 +98,7 @@ impl AnalysisState {
                                 register_idx,
                                 AnalysisRegisterState::Memory {
                                     base_address,
-                                    offset: (*offset + register_addend) * 4,
+                                    offset: (offset as usize + register_addend as usize) * 4,
                                 },
                             );
                         }
@@ -93,24 +106,45 @@ impl AnalysisState {
                     _ => {}
                 }
             }
-            FormattedInstruction::SOP1(SOP1Instruction { op, sdst, .. }) => match op {
-                SOP1OpCode::s_swappc_b64 => match sdst {
-                    ScalarDestinationOperand::ScalarGPR(gpr_idx) => {
-                        let next_program_counter = instruction.program_counter + 4;
+            FormattedInstruction::SOP1(SOP1Instruction {
+                op: SOP1OpCode::s_swappc_b64,
+                sdst: ScalarDestinationOperand::ScalarGPR(dst_gpr_idx),
+                ..
+            }) => {
+                let next_program_counter = instruction.program_counter + 4;
 
-                        self.sgprs.insert(
-                            *gpr_idx,
-                            AnalysisRegisterState::Value(next_program_counter as u32),
-                        );
-                        self.sgprs.insert(
-                            *gpr_idx + 1,
-                            AnalysisRegisterState::Value((next_program_counter >> 32) as u32),
-                        );
+                self.sgprs.insert(
+                    *dst_gpr_idx,
+                    AnalysisRegisterState::Value(next_program_counter as u32),
+                );
+                self.sgprs.insert(
+                    *dst_gpr_idx + 1,
+                    AnalysisRegisterState::Value((next_program_counter >> 32) as u32),
+                );
+            }
+            FormattedInstruction::SOP1(SOP1Instruction {
+                op: SOP1OpCode::s_mov_b32,
+                sdst: ScalarDestinationOperand::ScalarGPR(dst_gpr_idx),
+                ssrc0,
+            }) => {
+                self.sgprs.insert(
+                    *dst_gpr_idx,
+                    match ssrc0 {
+                        ScalarSourceOperand::Destination(ScalarDestinationOperand::ScalarGPR(
+                            idx,
+                        )) => self.sgprs.get(idx).and_then(|it| it.value()),
+                        ScalarSourceOperand::IntegerConstant(value) => Some(value.value() as u32),
+                        ScalarSourceOperand::FloatConstant(value) => Some(value.value() as u32),
+                        ScalarSourceOperand::LiteralConstant => {
+                            Some(instruction.literal_constant.unwrap())
+                        }
+                        _ => None,
                     }
-                    _ => {}
-                },
-                _ => {}
-            },
+                    .map_or(AnalysisRegisterState::Undetermined, |it| {
+                        AnalysisRegisterState::Value(it)
+                    }),
+                );
+            }
             _ => {}
         }
     }
@@ -127,18 +161,18 @@ impl AnalysisState {
 pub enum AnalysisRegisterState {
     Undetermined,
     Value(u32),
-    Memory { base_address: u64, offset: u8 },
+    Memory { base_address: u64, offset: usize },
 }
 
 impl AnalysisRegisterState {
-    pub fn value(&self) -> u32 {
+    pub fn value(&self) -> Option<u32> {
         match self {
-            AnalysisRegisterState::Value(it) => *it,
+            AnalysisRegisterState::Value(it) => Some(*it),
             AnalysisRegisterState::Memory {
                 base_address,
                 offset,
-            } => unsafe { *((*base_address + (*offset as u64)) as *const u32) },
-            AnalysisRegisterState::Undetermined => unimplemented!(),
+            } => Some(unsafe { *((*base_address + (*offset as u64)) as *const u32) }),
+            AnalysisRegisterState::Undetermined => None,
         }
     }
 }

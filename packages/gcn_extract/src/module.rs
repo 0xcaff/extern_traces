@@ -30,7 +30,7 @@ pub fn extract_buffer_usages(
                 let register_base_idx = instr.srsrc.lowest_register_idx();
                 let values = (0..4)
                     .into_iter()
-                    .map(|it| analysis_state.get(register_base_idx + it).value())
+                    .map(|it| analysis_state.get(register_base_idx + it).value().unwrap())
                     .collect::<Vec<_>>();
 
                 let values: &[u64] = bytemuck::cast_slice(values.as_slice());
@@ -44,7 +44,12 @@ pub fn extract_buffer_usages(
                 | SMEMOpCode::s_buffer_load_dwordx16 => Some({
                     let values = (0..4)
                         .into_iter()
-                        .map(|it| analysis_state.get(((instr.sbase as u8) << 1) + it).value())
+                        .map(|it| {
+                            analysis_state
+                                .get(((instr.sbase as u8) << 1) + it)
+                                .value()
+                                .unwrap()
+                        })
                         .collect::<Vec<_>>();
 
                     let values: &[u64] = bytemuck::cast_slice(values.as_slice());
@@ -91,7 +96,7 @@ pub fn pixel_shader_extract_image_usages(
                 let register_base_idx = instr.ssamp.lowest_register_idx();
                 let values = (0..4)
                     .into_iter()
-                    .map(|it| analysis_state.get(register_base_idx + it).value())
+                    .map(|it| analysis_state.get(register_base_idx + it).value().unwrap())
                     .collect::<Vec<_>>();
 
                 let values: &[u64] = bytemuck::cast_slice(values.as_slice());
@@ -102,7 +107,7 @@ pub fn pixel_shader_extract_image_usages(
                 let register_base_idx = instr.srsrc.lowest_register_idx();
                 let values = (0..8)
                     .into_iter()
-                    .map(|it| analysis_state.get(register_base_idx + it).value())
+                    .map(|it| analysis_state.get(register_base_idx + it).value().unwrap())
                     .collect::<Vec<_>>();
 
                 let resource = {
