@@ -10,6 +10,7 @@ mod io;
 use crate::ffi::{Args, ThreadLoggingState};
 use alloc::collections::btree_map::Entry;
 use alloc::collections::BTreeMap;
+use alloc::vec;
 use alloc::vec::Vec;
 use bytemuck::{Pod, Zeroable};
 use core::alloc::{GlobalAlloc, Layout};
@@ -57,7 +58,15 @@ unsafe fn command_buffers<'a>(
     count: usize,
     addrs: *const *const u8,
     sizes: *const u32,
-) -> impl Iterator<Item = &'a [u8]> {
+) -> Vec<&'a [u8]> {
+    if addrs.is_null() {
+        return vec![];
+    }
+
+    if sizes.is_null() {
+        return vec![];
+    }
+
     let draw_command_buffer_addrs = slice::from_raw_parts(addrs, count);
     let draw_command_buffer_sizes = slice::from_raw_parts(sizes, count);
 
@@ -66,7 +75,7 @@ unsafe fn command_buffers<'a>(
             draw_command_buffer_addrs[idx],
             draw_command_buffer_sizes[idx] as usize,
         )
-    })
+    }).collect()
 }
 
 #[repr(C)]
@@ -96,22 +105,76 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     let compute_buffers = args.args[4] as *const *const u8;
     let compute_sizes = args.args[5] as *const u32;
 
+    let draw_command_buffers =
+        unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
+
+    let compute_command_buffers =
+        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
+
+    trace_command_buffer_submit(
+        thread_logging_state,
+        &draw_command_buffers,
+        &compute_command_buffers,
+        thread_id,
+        time,
+        label_id,
+    );
+}
+
+#[no_mangle]
+extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
+    args: *const Args,
+    thread_logging_state: *mut ThreadLoggingState,
+    time: u64,
+    label_id: u64,
+    thread_id: u64,
+) {
+    let args = unsafe { args.as_ref_unchecked() };
+    let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
+
+    let count = args.args[0] as u32;
+    let draw_buffers = args.args[1] as *const *const u8;
+    let draw_sizes = args.args[2] as *const u32;
+    let compute_buffers = args.args[3] as *const *const u8;
+    let compute_sizes = args.args[4] as *const u32;
+
+    let draw_command_buffers =
+        unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
+
+    let compute_command_buffers =
+        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
+
+    trace_command_buffer_submit(
+        thread_logging_state,
+        &draw_command_buffers,
+        &compute_command_buffers,
+        thread_id,
+        time,
+        label_id,
+    );
+}
+
+fn trace_command_buffer_submit(
+    thread_logging_state: &mut ThreadLoggingState,
+    draw_command_buffers: &[&[u8]],
+    compute_command_buffers: &[&[u8]],
+    thread_id: u64,
+    time: u64,
+    label_id: u64,
+) {
     let mut shaders = ShadersCollector::new();
 
     let mut total_size = size_of::<SpanStartAdditionalData>()
         + size_of::<u32>()
-        + (size_of::<u32>() * 2 * (count as usize));
+        + (draw_command_buffers.len() * size_of::<u32>())
+        + (compute_command_buffers.len() * size_of::<u32>());
 
-    let draw_command_buffers =
-        unsafe { command_buffers(count as _, draw_buffers, draw_sizes) }.collect::<Vec<_>>();
-    for command_buffer in &draw_command_buffers {
+    for command_buffer in draw_command_buffers {
         total_size += command_buffer.len();
         shaders.collect(command_buffer);
     }
 
-    let compute_command_buffers =
-        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) }.collect::<Vec<_>>();
-    for command_buffer in &compute_command_buffers {
+    for command_buffer in compute_command_buffers {
         total_size += command_buffer.len();
         shaders.collect(command_buffer);
     }
@@ -137,17 +200,25 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     };
 
     res.write(bytemuck::cast_slice(&[span_header]));
-    res.write(bytemuck::cast_slice(&[count]));
-    res.write(unsafe { bytemuck::cast_slice(slice::from_raw_parts(draw_sizes, count as usize)) });
-    res.write(unsafe {
-        bytemuck::cast_slice(slice::from_raw_parts(compute_sizes, count as usize))
-    });
 
-    for draw_command_buffer in &draw_command_buffers {
+    let count = draw_command_buffers.len() as u32;
+    res.write(bytemuck::cast_slice(&[count]));
+
+    for draw_command_buffer in draw_command_buffers {
+        let value = draw_command_buffer.len() as u32;
+        res.write(bytemuck::cast_slice(&[value]));
+    }
+
+    for compute_command_buffer in compute_command_buffers {
+        let value = compute_command_buffer.len() as u32;
+        res.write(bytemuck::cast_slice(&[value]));
+    }
+
+    for draw_command_buffer in draw_command_buffers {
         res.write(draw_command_buffer);
     }
 
-    for compute_command_buffer in &compute_command_buffers {
+    for compute_command_buffer in compute_command_buffers {
         res.write(compute_command_buffer);
     }
 
@@ -262,16 +333,15 @@ impl ShadersCollector {
             Entry::Occupied(value) => value.into_mut(),
         };
 
-        if let Some(instructions) = shader.instructions.as_ref() {
+        // if let Some(instructions) = shader.instructions.as_ref() {
+        //     let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
+        //     // let texture_usages =
+        //     //     pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
 
-            let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
-            // let texture_usages =
-            //     pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
-
-            println!(
-                "extern_traces: {} {:#?} {:#?}",
-                shader_address, kind, buffer_usages
-            );
-        }
+        //     println!(
+        //         "extern_traces: {} {:#?} {:#?}",
+        //         shader_address, kind, buffer_usages
+        //     );
+        // }
     }
 }

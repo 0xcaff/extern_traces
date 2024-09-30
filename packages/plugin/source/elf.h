@@ -134,6 +134,7 @@ void cleanup_jump_slot_relocation_list(JumpSlotRelocationList* list);
 
 struct SpecificSymbolsTable {
     int64_t sceGnmSubmitAndFlipCommandBuffersForWorkload;
+    int64_t sceGnmSubmitAndFlipCommandBuffers;
 };
 
 void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct SpecificSymbolsTable* table);

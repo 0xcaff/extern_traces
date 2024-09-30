@@ -460,5 +460,15 @@ void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct Spec
         ) {
             table->sceGnmSubmitAndFlipCommandBuffersForWorkload = i;
         }
+
+        if (
+            strncmp(
+                symbol_info->data.parsed.name,
+                "xbxNatawohc",
+                sizeof(symbol_info->data.parsed.name) - 1
+            ) == 0
+        ) {
+            table->sceGnmSubmitAndFlipCommandBuffers = i;
+        }
     }
 }
