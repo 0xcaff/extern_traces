@@ -17,7 +17,7 @@ use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
 use gcn::instructions::Instruction;
-use gcn_extract::{extract_buffer_usages, ShaderInvocation};
+use gcn_extract::{extract_buffer_usages, pixel_shader_extract_image_usages, ShaderInvocation};
 use pm4::{convert, Command, PM4Packet};
 
 #[lang = "eh_personality"]
@@ -60,11 +60,11 @@ unsafe fn command_buffers<'a>(
     sizes: *const u32,
 ) -> Vec<&'a [u8]> {
     if addrs.is_null() {
-        return vec![];
+        return vec![&[]; count];
     }
 
     if sizes.is_null() {
-        return vec![];
+        return vec![&[]; count];
     }
 
     let draw_command_buffer_addrs = slice::from_raw_parts(addrs, count);
@@ -237,6 +237,7 @@ fn trace_command_buffer_submit(
     }
 
     thread_logging_state.flush(res);
+    println!("done!");
 }
 
 #[repr(u8)]
@@ -333,15 +334,15 @@ impl ShadersCollector {
             Entry::Occupied(value) => value.into_mut(),
         };
 
-        // if let Some(instructions) = shader.instructions.as_ref() {
-        //     let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
-        //     // let texture_usages =
-        //     //     pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
+        if let Some(instructions) = shader.instructions.as_ref() {
+            let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
+            let texture_usages =
+                pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
 
-        //     println!(
-        //         "extern_traces: {} {:#?} {:#?}",
-        //         shader_address, kind, buffer_usages
-        //     );
-        // }
+            println!(
+                "extern_traces: {} {:#?} {:#?} {:#?}",
+                shader_address, kind, buffer_usages, texture_usages
+            );
+        }
     }
 }
