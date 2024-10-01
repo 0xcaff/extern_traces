@@ -43,8 +43,8 @@ pub fn process_dispatch_command(
         ..
     }: ComputePipeline,
     vertex_buffers: &[VertexBuffer],
-    data: BuffersDataContainer,
-    known_shaders: BTreeMap<u32, EncodedShader>,
+    data: &BuffersDataContainer,
+    known_shaders: &BTreeMap<u32, EncodedShader>,
 ) -> Result<BufferShaderStageResult, anyhow::Error> {
     let device = &graphics_context.device;
 
@@ -102,7 +102,7 @@ pub fn process_dispatch_command(
             graphics_context,
             descriptor_offset,
             buffer_resources.as_slice(),
-            data,
+            &data,
         )?;
 
         (

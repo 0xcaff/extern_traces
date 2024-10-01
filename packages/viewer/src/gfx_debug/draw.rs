@@ -17,8 +17,8 @@ use pm4::draw_index_auto::DrawIndexAutoPacket;
 use pm4::{BlendOp, ColorFormat, CombFunc, CompareFrag, VertexShader, ZFormat, VGT_DI_PRIM_TYPE};
 use rspirv::binary::Assemble;
 use std::collections::BTreeMap;
-use std::sync::Arc;
 use std::iter;
+use std::sync::Arc;
 use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
 use vulkano::command_buffer::{
     AutoCommandBufferBuilder, CommandBufferUsage, PrimaryCommandBufferAbstract,
@@ -49,15 +49,10 @@ use vulkano::render_pass::{
 use vulkano::shader::{ShaderModule, ShaderModuleCreateInfo, ShaderStages};
 use vulkano::sync::GpuFuture;
 
-struct DrawResult {
-    color_buffer: Option<Box<[u8]>>,
-    depth_buffer: Option<Box<[u8]>>,
-}
-
-struct DrawShaderStageResult {
-    buffers: BufferShaderStageResult,
-    color_buffer: Option<Box<[u8]>>,
-    depth_buffer: Option<Box<[u8]>>,
+pub struct DrawShaderStageResult {
+    pub buffers: BufferShaderStageResult,
+    pub color_buffer: Option<Box<[u8]>>,
+    pub depth_buffer: Option<Box<[u8]>>,
 }
 
 pub fn process_draw_command(
@@ -65,10 +60,10 @@ pub fn process_draw_command(
     draw_packet: DrawIndexAutoPacket,
     pipeline_input: pm4::GraphicsPipeline,
     vertex_buffers: &[VertexBuffer],
-    data: BuffersDataContainer,
-    known_shaders: BTreeMap<u32, EncodedShader>,
-    last_color_buffer: Option<Box<[u8]>>,
-    last_depth_buffer: Option<Box<[u8]>>,
+    data: &BuffersDataContainer,
+    known_shaders: &BTreeMap<u32, EncodedShader>,
+    last_color_buffer: &Option<Box<[u8]>>,
+    last_depth_buffer: &Option<Box<[u8]>>,
 ) -> Result<DrawShaderStageResult, anyhow::Error> {
     let color_buffer = if pipeline_input
         .color_buffer
@@ -549,7 +544,6 @@ pub fn process_draw_command(
                 stages.push(PipelineShaderStageCreateInfo::new(pixel_shader));
             }
 
-
             stages
         };
 
@@ -595,33 +589,23 @@ pub fn process_draw_command(
                     }),
                     rasterization_state: Some(RasterizationState::default()),
                     multisample_state: Some(MultisampleState::default()),
-                    color_blend_state: color_buffer.as_ref().map(
-                        |(_, _, color_buffer)| {
-                            ColorBlendState::with_attachment_states(
-                                subpass.num_color_attachments(),
-                                ColorBlendAttachmentState {
-                                    blend: color_buffer.blend.as_ref().map(|it| AttachmentBlend {
-                                        src_color_blend_factor: blend_factor_from(
-                                            &it.COLOR_SRCBLEND,
-                                        ),
-                                        dst_color_blend_factor: blend_factor_from(
-                                            &it.COLOR_DESTBLEND,
-                                        ),
-                                        color_blend_op: blend_op_from(&it.COLOR_COMB_FCN),
-                                        src_alpha_blend_factor: blend_factor_from(
-                                            &it.ALPHA_SRCBLEND,
-                                        ),
-                                        dst_alpha_blend_factor: blend_factor_from(
-                                            &it.ALPHA_DESTBLEND,
-                                        ),
-                                        alpha_blend_op: blend_op_from(&it.ALPHA_COMB_FCN),
-                                    }),
-                                    color_write_mask: ColorComponents::all(),
-                                    color_write_enable: true,
-                                },
-                            )
-                        },
-                    ),
+                    color_blend_state: color_buffer.as_ref().map(|(_, _, color_buffer)| {
+                        ColorBlendState::with_attachment_states(
+                            subpass.num_color_attachments(),
+                            ColorBlendAttachmentState {
+                                blend: color_buffer.blend.as_ref().map(|it| AttachmentBlend {
+                                    src_color_blend_factor: blend_factor_from(&it.COLOR_SRCBLEND),
+                                    dst_color_blend_factor: blend_factor_from(&it.COLOR_DESTBLEND),
+                                    color_blend_op: blend_op_from(&it.COLOR_COMB_FCN),
+                                    src_alpha_blend_factor: blend_factor_from(&it.ALPHA_SRCBLEND),
+                                    dst_alpha_blend_factor: blend_factor_from(&it.ALPHA_DESTBLEND),
+                                    alpha_blend_op: blend_op_from(&it.ALPHA_COMB_FCN),
+                                }),
+                                color_write_mask: ColorComponents::all(),
+                                color_write_enable: true,
+                            },
+                        )
+                    }),
                     depth_stencil_state: depth_buffer.as_ref().map(|_| DepthStencilState {
                         depth: Some(DepthState {
                             write_enable: true,

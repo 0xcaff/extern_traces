@@ -1,4 +1,5 @@
 use crate::gfx_debug::ctx::{CommandBufferBuilder, GraphicsContext};
+use crate::gfx_debug::process::VertexBuffer;
 use anyhow::format_err;
 use std::collections::BTreeMap;
 use vulkano::buffer::{Buffer, BufferCreateInfo, BufferUsage, Subbuffer};
@@ -101,6 +102,27 @@ pub struct BuffersDataContainer<'a> {
     vertex_buffers: BTreeMap<usize, BufferData<'a>>,
 }
 
+impl BuffersDataContainer<'_> {
+    pub fn new<'a>(vertex_buffers: &'a [VertexBuffer<'a>]) -> BuffersDataContainer<'a> {
+        let mut result = BTreeMap::new();
+
+        for (idx, vertex_buffer) in vertex_buffers.iter().enumerate() {
+            result.insert(idx, BufferData::Ref(vertex_buffer.bytes));
+        }
+
+        BuffersDataContainer {
+            vertex_buffers: result,
+        }
+    }
+
+    pub fn update(&mut self, stage_result: BufferShaderStageResult) {
+        for (idx, new_value) in stage_result.next_vertex_buffers.into_iter() {
+            self.vertex_buffers
+                .insert(idx, BufferData::Owned(new_value));
+        }
+    }
+}
+
 pub enum BufferData<'a> {
     Ref(&'a [u8]),
     Owned(Box<[u8]>),
@@ -125,7 +147,7 @@ impl SharedDescriptorSet {
         graphics_context: &GraphicsContext,
         binding_offset: u32,
         buffer_resources_indices: &[usize],
-        data: BuffersDataContainer,
+        data: &BuffersDataContainer,
     ) -> Result<SharedDescriptorSet, anyhow::Error> {
         let resources = buffer_resources_indices
             .iter()
