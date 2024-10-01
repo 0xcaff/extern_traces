@@ -126,11 +126,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -581,11 +577,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -1036,11 +1028,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -1491,11 +1479,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -1946,11 +1930,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(

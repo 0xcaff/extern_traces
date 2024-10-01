@@ -218,7 +218,7 @@ pub struct VertexGrouperTesselator {
 #[entry(RegisterEntry)]
 #[allow(dead_code)]
 pub struct DepthBuffer {
-    stencil: Stencil,
+    stencil: Option<Stencil>,
     pub z: Option<Z>,
 
     pub depth: Depth,
@@ -285,13 +285,13 @@ pub struct Z {
 #[allow(dead_code)]
 struct Stencil {
     #[entry(RegisterEntry::DB_STENCIL_READ_BASE)]
-    read_base: Option<u32>,
+    read_base: u32,
 
     #[entry(RegisterEntry::DB_STENCIL_WRITE_BASE)]
-    write_base: Option<u32>,
+    write_base: u32,
 
     #[entry(RegisterEntry::DB_STENCIL_INFO)]
-    info: Option<DB_STENCIL_INFO>,
+    info: DB_STENCIL_INFO,
 }
 
 // todo: think about color1

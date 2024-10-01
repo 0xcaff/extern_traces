@@ -2198,23 +2198,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -2519,23 +2515,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -2840,23 +2832,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -3161,23 +3149,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -3482,23 +3466,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -3803,23 +3783,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -4124,23 +4100,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -4445,23 +4417,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -4766,23 +4734,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -5087,23 +5051,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -5408,23 +5368,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -5729,23 +5685,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -6050,23 +6002,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -6371,23 +6319,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -6692,23 +6636,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -7013,23 +6953,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48458240,
@@ -11149,23 +11085,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48308352,
@@ -11470,23 +11402,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48308352,
@@ -11791,23 +11719,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48308352,
@@ -12112,23 +12036,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48308352,
@@ -13592,23 +13512,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48375040,
@@ -17934,23 +17850,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48641280,
@@ -18255,23 +18167,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48641280,
@@ -18576,23 +18484,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48641280,
@@ -18897,23 +18801,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48641280,
@@ -23057,11 +22957,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -23459,11 +23355,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -23798,23 +23690,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48549120,
@@ -24109,11 +23997,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -24513,11 +24397,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -25096,11 +24976,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -25201,11 +25077,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -25281,11 +25153,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -25799,11 +25667,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -25881,11 +25745,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -26060,11 +25920,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -26148,11 +26004,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -26236,11 +26088,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -26324,11 +26172,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -26412,11 +26256,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -26500,11 +26340,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -27340,23 +27176,19 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: Some(
-                            0,
-                        ),
-                        write_base: Some(
-                            0,
-                        ),
-                        info: Some(
-                            DB_STENCIL_INFO {
+                    stencil: Some(
+                        Stencil {
+                            read_base: 0,
+                            write_base: 0,
+                            info: DB_STENCIL_INFO {
                                 FORMAT: STENCIL_INVALID,
                                 TILE_SPLIT: ADDR_SURF_TILE_SPLIT_64B,
                                 TILE_MODE_INDEX: 0,
                                 ALLOW_EXPCLEAR: false,
                                 TILE_STENCIL_DISABLE: true,
                             },
-                        ),
-                    },
+                        },
+                    ),
                     z: Some(
                         Z {
                             read_base: 48373504,
@@ -27795,11 +27627,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -27877,11 +27705,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28056,11 +27880,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28144,11 +27964,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28232,11 +28048,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28320,11 +28132,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28408,11 +28216,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28784,11 +28588,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28859,11 +28659,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -28934,11 +28730,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29009,11 +28801,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29084,11 +28872,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29177,11 +28961,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29268,11 +29048,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29359,11 +29135,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29450,11 +29222,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29541,11 +29309,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29632,11 +29396,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29723,11 +29483,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29814,11 +29570,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29905,11 +29657,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -29996,11 +29744,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30087,11 +29831,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30178,11 +29918,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30269,11 +30005,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30360,11 +30092,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30435,11 +30163,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30510,11 +30234,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30585,11 +30305,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30660,11 +30376,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30735,11 +30447,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30810,11 +30518,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30885,11 +30589,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -30996,11 +30696,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: Some(
@@ -34361,11 +34057,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
@@ -34448,11 +34140,7 @@
             },
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
-                    stencil: Stencil {
-                        read_base: None,
-                        write_base: None,
-                        info: None,
-                    },
+                    stencil: None,
                     z: None,
                     depth: Depth {
                         control: None,
