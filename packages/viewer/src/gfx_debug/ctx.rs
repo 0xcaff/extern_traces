@@ -27,7 +27,7 @@ impl GraphicsContext {
             library,
             InstanceCreateInfo {
                 flags: InstanceCreateFlags::ENUMERATE_PORTABILITY,
-                enabled_layers: vec!["VK_LAYER_KHRONOS_validation".to_string()],
+                // enabled_layers: vec!["VK_LAYER_KHRONOS_validation".to_string()],
                 enabled_extensions: InstanceExtensions {
                     ext_debug_utils: true,
                     ..Default::default()
@@ -78,7 +78,8 @@ impl GraphicsContext {
             physical_device.clone(),
             DeviceCreateInfo {
                 enabled_features: Features {
-                    geometry_shader: true,
+                    // todo: geometry shader not supported in moltenvk
+                    // geometry_shader: true,
                     ..Default::default()
                 },
                 queue_create_infos: vec![QueueCreateInfo {

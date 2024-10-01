@@ -29,20 +29,20 @@ pub fn process_commands(
 
     for command in commands {
         match command {
-            Command::Dispatch {
-                dispatch_packet,
-                pipeline,
-            } => {
-                let result = process_dispatch_command(
-                    graphics_context,
-                    dispatch_packet,
-                    pipeline,
-                    initial_vertex_buffers,
-                    &data,
-                    &known_shaders,
-                )?;
-                data.update(result);
-            }
+            // Command::Dispatch {
+            //     dispatch_packet,
+            //     pipeline,
+            // } => {
+            //     let result = process_dispatch_command(
+            //         graphics_context,
+            //         dispatch_packet,
+            //         pipeline,
+            //         initial_vertex_buffers,
+            //         &data,
+            //         &known_shaders,
+            //     )?;
+            //     data.update(result);
+            // }
             Command::Draw {
                 draw_packet,
                 pipeline: pipeline_input,
@@ -154,7 +154,7 @@ impl ExtraData<'_> {
 
             let mut length_bytes = [0u8; size_of::<u32>()];
             cursor.read_exact(&mut length_bytes)?;
-            let length = u32::from_le_bytes(length_bytes);
+            let length = u32::from_le_bytes(length_bytes) * 4;
 
             let start = cursor.position() as usize;
             cursor.seek(std::io::SeekFrom::Current(length as i64))?;

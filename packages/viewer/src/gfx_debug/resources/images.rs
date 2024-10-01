@@ -69,7 +69,8 @@ impl ImageBufferResourceMemory {
                 ..Default::default()
             },
             AllocationCreateInfo {
-                memory_type_filter: MemoryTypeFilter::PREFER_HOST,
+                memory_type_filter: MemoryTypeFilter::PREFER_HOST
+                    | MemoryTypeFilter::HOST_RANDOM_ACCESS,
                 ..Default::default()
             },
             len,

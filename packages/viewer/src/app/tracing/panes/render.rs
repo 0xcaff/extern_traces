@@ -2,6 +2,7 @@ use crate::gfx_debug::{process_commands, ExtraData, GraphicsContext};
 use anyhow::{format_err, Result};
 use bytemuck;
 use pm4::PM4Packet;
+use std::io::Cursor;
 use std::sync::Arc;
 
 pub fn render_frame(bytes: &[u8]) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
@@ -27,5 +28,19 @@ pub fn render_frame(bytes: &[u8]) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
         known_shaders,
     )?;
 
-    Ok(next_color.map(Arc::from))
+    let Some(next_color) = next_color else {
+        return Ok(None);
+    };
+
+    let mut encoded_writer = Cursor::new(Vec::new());
+
+    {
+        let mut encoder = png::Encoder::new(&mut encoded_writer, 1920, 1080);
+        encoder.set_color(png::ColorType::Rgba);
+        encoder.set_depth(png::BitDepth::Eight);
+        let mut writer = encoder.write_header()?;
+        writer.write_image_data(&next_color)?;
+    }
+
+    Ok(Some(Arc::from(encoded_writer.into_inner())))
 }

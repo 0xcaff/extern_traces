@@ -74,7 +74,7 @@ pub fn process_dispatch_command(
             .into_iter()
             .collect::<Vec<_>>();
 
-        let instructions = GCNInstructionStream::new(shader.bytes)?;
+        let instructions = GCNInstructionStream::new(&bytes)?;
 
         let module = translate_compute_shader(
             instructions.instructions.as_slice(),

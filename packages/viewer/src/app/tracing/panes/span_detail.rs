@@ -94,7 +94,7 @@ impl SpanDetailPane {
                                 self.last_image.replace(value);
                             }
                             Err(err) => {
-                                println!("{}", err);
+                                println!("{:?}", err);
                             }
                         }
                     }
