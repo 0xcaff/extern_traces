@@ -8,33 +8,10 @@ use vulkano::descriptor_set::WriteDescriptorSet;
 use vulkano::memory::allocator::{AllocationCreateInfo, MemoryTypeFilter};
 use vulkano::shader::ShaderStages;
 
-#[derive(Clone)]
 struct BufferResourceMemory {
     input_buffer: Subbuffer<[u8]>,
     device_buffer: Subbuffer<[u8]>,
     output_buffer: Subbuffer<[u8]>,
-}
-
-pub struct ShaderStageResult {
-    next_vertex_buffers: BTreeMap<usize, Box<[u8]>>,
-}
-
-pub struct BuffersDataContainer<'a> {
-    vertex_buffers: BTreeMap<usize, BufferData<'a>>,
-}
-
-pub enum BufferData<'a> {
-    Ref(&'a [u8]),
-    Owned(Box<[u8]>),
-}
-
-impl BufferData<'_> {
-    pub fn bytes(&self) -> &[u8] {
-        match self {
-            BufferData::Ref(value) => *value,
-            BufferData::Owned(value) => value,
-        }
-    }
 }
 
 impl BufferResourceMemory {
@@ -96,6 +73,46 @@ impl BufferResourceMemory {
             output_buffer,
         })
     }
+
+    pub fn stage_input(&self, builder: &mut CommandBufferBuilder) -> Result<(), anyhow::Error> {
+        builder.copy_buffer(CopyBufferInfo::buffers(
+            self.input_buffer.clone(),
+            self.device_buffer.clone(),
+        ))?;
+
+        Ok(())
+    }
+
+    pub fn stage_output(&self, builder: &mut CommandBufferBuilder) -> Result<(), anyhow::Error> {
+        builder.copy_buffer(CopyBufferInfo::buffers(
+            self.device_buffer.clone(),
+            self.output_buffer.clone(),
+        ))?;
+
+        Ok(())
+    }
+}
+
+pub struct BufferShaderStageResult {
+    next_vertex_buffers: BTreeMap<usize, Box<[u8]>>,
+}
+
+pub struct BuffersDataContainer<'a> {
+    vertex_buffers: BTreeMap<usize, BufferData<'a>>,
+}
+
+pub enum BufferData<'a> {
+    Ref(&'a [u8]),
+    Owned(Box<[u8]>),
+}
+
+impl BufferData<'_> {
+    pub fn bytes(&self) -> &[u8] {
+        match self {
+            BufferData::Ref(value) => *value,
+            BufferData::Owned(value) => value,
+        }
+    }
 }
 
 pub struct SharedDescriptorSet {
@@ -151,10 +168,7 @@ impl SharedDescriptorSet {
 
     pub fn stage_input(&self, builder: &mut CommandBufferBuilder) -> Result<(), anyhow::Error> {
         for (it, _) in &self.resources {
-            builder.copy_buffer(CopyBufferInfo::buffers(
-                it.input_buffer.clone(),
-                it.device_buffer.clone(),
-            ))?;
+            it.stage_input(builder)?;
         }
 
         Ok(())
@@ -162,16 +176,13 @@ impl SharedDescriptorSet {
 
     pub fn stage_output(&self, builder: &mut CommandBufferBuilder) -> Result<(), anyhow::Error> {
         for (it, _) in &self.resources {
-            builder.copy_buffer(CopyBufferInfo::buffers(
-                it.device_buffer.clone(),
-                it.output_buffer.clone(),
-            ))?;
+            it.stage_output(builder)?;
         }
 
         Ok(())
     }
 
-    pub fn flush_output_memory(&self) -> Result<ShaderStageResult, anyhow::Error> {
+    pub fn flush_output_memory(&self) -> Result<BufferShaderStageResult, anyhow::Error> {
         let mut next_vertex_buffers = BTreeMap::new();
 
         for (it, resource_idx) in &self.resources {
@@ -179,7 +190,7 @@ impl SharedDescriptorSet {
             next_vertex_buffers.insert(*resource_idx, output_memory);
         }
 
-        Ok(ShaderStageResult {
+        Ok(BufferShaderStageResult {
             next_vertex_buffers,
         })
     }

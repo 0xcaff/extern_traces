@@ -1,7 +1,7 @@
 use crate::gfx_debug::ctx::GraphicsContext;
 use crate::gfx_debug::process::{EncodedShader, VertexBuffer};
 use crate::gfx_debug::resources::buffers::{
-    BuffersDataContainer, ShaderStageResult, SharedDescriptorSet,
+    BufferShaderStageResult, BuffersDataContainer, SharedDescriptorSet,
 };
 use anyhow::format_err;
 use gcn::resources::VertexBufferResource;
@@ -45,11 +45,12 @@ pub fn process_dispatch_command(
     vertex_buffers: &[VertexBuffer],
     data: BuffersDataContainer,
     known_shaders: BTreeMap<u32, EncodedShader>,
-) -> Result<ShaderStageResult, anyhow::Error> {
+) -> Result<BufferShaderStageResult, anyhow::Error> {
     let device = &graphics_context.device;
-    let descriptor_offset = 1;
 
-    let (compute_shader, buffer_resources) = {
+    let (compute_shader, descriptor_set) = {
+        let descriptor_offset = 1;
+
         let shader = known_shaders
             .get(&address_lo)
             .ok_or_else(|| format_err!("unknown shader"))?;
@@ -97,11 +98,18 @@ pub fn process_dispatch_command(
         let shader =
             unsafe { ShaderModule::new(device.clone(), ShaderModuleCreateInfo::new(&code)) }?;
 
+        let descriptor_set = SharedDescriptorSet::new(
+            graphics_context,
+            descriptor_offset,
+            buffer_resources.as_slice(),
+            data,
+        )?;
+
         (
             shader
                 .entry_point("main")
                 .ok_or_else(|| format_err!("missing entrypoint"))?,
-            buffer_resources,
+            descriptor_set,
         )
     };
 
@@ -127,13 +135,6 @@ pub fn process_dispatch_command(
         &command_buffer_allocator,
         graphics_context.queue.queue_family_index(),
         CommandBufferUsage::OneTimeSubmit,
-    )?;
-
-    let descriptor_set = SharedDescriptorSet::new(
-        graphics_context,
-        descriptor_offset,
-        buffer_resources.as_slice(),
-        data,
     )?;
 
     let compute_descriptor_set = PersistentDescriptorSet::new(
