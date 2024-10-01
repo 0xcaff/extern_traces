@@ -8,6 +8,7 @@ use vulkano::device::{
     Device, DeviceCreateInfo, DeviceExtensions, Features, Queue, QueueCreateInfo, QueueFlags,
 };
 use vulkano::instance::{Instance, InstanceCreateFlags, InstanceCreateInfo, InstanceExtensions};
+use vulkano::library::DynamicLibraryLoader;
 use vulkano::memory::allocator::StandardMemoryAllocator;
 use vulkano::VulkanLibrary;
 
@@ -21,7 +22,11 @@ pub struct GraphicsContext {
 
 impl GraphicsContext {
     pub fn init() -> (GraphicsContext, DebugHandle) {
-        let library = VulkanLibrary::new().unwrap();
+        let loader = unsafe {
+            DynamicLibraryLoader::new("/opt/homebrew/Cellar/molten-vk/1.2.10/lib/libMoltenVK.dylib").unwrap()
+        };
+
+        let library = VulkanLibrary::with_loader(loader).unwrap();
 
         let instance = Instance::new(
             library,
