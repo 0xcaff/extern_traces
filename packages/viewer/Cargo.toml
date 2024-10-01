@@ -5,6 +5,9 @@ edition = "2021"
 
 build = "build.rs"
 
+[features]
+renderdoc_hooks = ["renderdoc"]
+
 [dependencies]
 eframe = "0.28.1"
 egui_plot = "0.28.1"
@@ -17,3 +20,12 @@ egui_extras = { version = "0.28.0", features = ["image"] }
 png = "0.17.14"
 vulkano = "0.34.1"
 vulkano-shaders = "0.34.0"
+renderdoc = { version = "0.11.0", optional = true }
+pm4 = { path = "../../../ps4-tools/packages/pm4" }
+gcn = { path = "../../../ps4-tools/packages/gcn" }
+gcn_extract = { path = "../../../ps4-tools/packages/gcn_extract" }
+gcn_spirv = { path = "../../../ps4-tools/packages/gcn_spirv" }
+rspirv = "0.12.0"
+itertools = "0.11.0"
+bytemuck = { version = "1.14.0", features = ["derive"] }
+anyhow = { version = "1.0.71", features = ["backtrace"] }

@@ -5,6 +5,7 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 mod app;
+mod gfx_debug;
 mod proto;
 
 #[derive(Debug, Parser)]
