@@ -16,7 +16,7 @@ type CommandBufferBuilder = AutoCommandBufferBuilder<
 >;
 
 pub fn process_commands(
-    graphics_context: &mut GraphicsContext,
+    graphics_context: &GraphicsContext,
     commands: &[PM4Packet],
     initial_vertex_buffers: &[VertexBuffer],
     known_shaders: BTreeMap<u32, EncodedShader>,

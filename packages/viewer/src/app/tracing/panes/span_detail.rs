@@ -1,6 +1,7 @@
 use crate::app::tracing::panes::render::render_frame;
 use crate::app::tracing::panes::{PaneResponse, TreeBehaviorArgs};
 use crate::app::tracing::utils::{format_time, render_symbol_info};
+use crate::gfx_debug::{DebugHandle, GraphicsContext};
 use anyhow::format_err;
 use eframe::egui;
 use eframe::egui::load::Bytes;
@@ -10,11 +11,19 @@ use std::sync::Arc;
 
 pub struct SpanDetailPane {
     last_image: Option<Arc<[u8]>>,
+    debug_handle: DebugHandle,
+    ctx: GraphicsContext,
 }
 
 impl SpanDetailPane {
     pub fn init() -> SpanDetailPane {
-        SpanDetailPane { last_image: None }
+        let (ctx, debug_handle) = GraphicsContext::init();
+
+        SpanDetailPane {
+            last_image: None,
+            ctx,
+            debug_handle,
+        }
     }
 }
 
@@ -87,9 +96,10 @@ impl SpanDetailPane {
                 {
                     let button_response = ui.button("render frame");
                     if button_response.clicked() {
-                        match render_frame(extra_data.as_slice()).and_then(|it| {
-                            Ok(it.ok_or_else(|| format_err!("missing value color"))?)
-                        }) {
+                        match render_frame(&self.ctx, &mut self.debug_handle, extra_data.as_slice())
+                            .and_then(
+                                |it| Ok(it.ok_or_else(|| format_err!("missing value color"))?),
+                            ) {
                             Ok(value) => {
                                 self.last_image.replace(value);
                             }

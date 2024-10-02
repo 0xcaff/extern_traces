@@ -31,7 +31,7 @@ use vulkano::shader::{ShaderModule, ShaderModuleCreateInfo, ShaderStages};
 use vulkano::sync::GpuFuture;
 
 pub fn process_dispatch_command(
-    graphics_context: &mut GraphicsContext,
+    graphics_context: &GraphicsContext,
     dispatch_packet: DispatchDirectPacket,
     ComputePipeline {
         address_lo,

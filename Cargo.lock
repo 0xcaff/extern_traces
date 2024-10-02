@@ -1517,6 +1517,7 @@ dependencies = [
  "gcn_spirv",
  "hex",
  "itertools 0.11.0",
+ "libc",
  "pm4",
  "png",
  "ps4libdoc",

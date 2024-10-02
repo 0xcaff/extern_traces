@@ -56,7 +56,7 @@ pub struct DrawShaderStageResult {
 }
 
 pub fn process_draw_command(
-    graphics_context: &mut GraphicsContext,
+    graphics_context: &GraphicsContext,
     draw_packet: DrawIndexAutoPacket,
     pipeline_input: pm4::GraphicsPipeline,
     vertex_buffers: &[VertexBuffer],
