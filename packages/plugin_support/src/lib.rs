@@ -12,20 +12,19 @@ use alloc::collections::btree_map::Entry;
 use alloc::collections::BTreeMap;
 use alloc::vec;
 use alloc::vec::Vec;
+use anyhow::bail;
 use bytemuck::{Pod, Zeroable};
 use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
-use anyhow::bail;
 use gcn::instructions::formats::{FormattedInstruction, SOP1Instruction, SOPPInstruction};
 use gcn::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
 use gcn::instructions::ops::{SOP1OpCode, SOPPOpCode};
 use gcn::instructions::Instruction;
 use gcn::SliceReader;
 use gcn_extract::{
-    extract_buffer_usages, pixel_shader_extract_image_usages, AnalysisState,
-    SamplerResourceWithRaw, ShaderInvocation, TextureBufferResourceWithRaw,
-    VertexBufferResourceWithRaw,
+    extract_buffer_usages, pixel_shader_extract_image_usages, SamplerResourceWithRaw,
+    ShaderInvocation, TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
 };
 use pm4::{convert, Command, PM4Packet};
 
@@ -129,7 +128,8 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
         thread_id,
         time,
         label_id,
-    ).unwrap();
+    )
+    .unwrap();
 }
 
 #[no_mangle]
@@ -161,7 +161,8 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
         thread_id,
         time,
         label_id,
-    ).unwrap();
+    )
+    .unwrap();
 }
 
 fn trace_command_buffer_submit(
@@ -299,6 +300,7 @@ struct Shader {
     instructions: Vec<Instruction>,
     vertex_buffer_references: Vec<(u64, usize)>,
     texture_buffer_references: Vec<(u64, usize, SamplerResourceWithRaw)>,
+    read_user_data: Vec<(u8, u32)>,
 }
 
 struct ShadersCollector {
@@ -369,10 +371,16 @@ impl ShadersCollector {
             Entry::Occupied(item) => {
                 let value = item.get();
                 if value.has_fetch_shader {
-                    bail!("not allowed")
+                    for (key, value) in &value.read_user_data {
+                        if user_data.get(key) != Some(value) {
+                            bail!("not allowed")
+                        }
+                    }
+
+                    return Ok(());
                 }
 
-                return Ok(())
+                return Ok(());
             }
         };
 
@@ -440,6 +448,7 @@ impl ShadersCollector {
         item.insert(Shader {
             shader_bytes: shader.raw,
             has_fetch_shader: shader.has_fetch_shader,
+            read_user_data: shader.read_user_data,
             instructions,
             kind,
             vertex_buffer_references,
@@ -454,6 +463,7 @@ struct ExtractedShader {
     raw: Vec<u32>,
     instructions: Vec<Instruction>,
     has_fetch_shader: bool,
+    read_user_data: Vec<(u8, u32)>,
 }
 
 fn shader_extract(
@@ -465,8 +475,7 @@ fn shader_extract(
     let mut instructions = vec![];
     let mut reader = SliceReader::new(original_shader_bytes);
     let mut has_fetch_shader = false;
-
-    let mut analysis_state = AnalysisState::new(user_data);
+    let mut read_user_data = Vec::new();
 
     while reader.has_more() {
         let position = reader.position();
@@ -485,10 +494,14 @@ fn shader_extract(
                 return None;
             };
 
-            let lo = analysis_state.get(sgpr_base).value()?;
-            let hi = analysis_state.get(sgpr_base + 1).value()?;
+            let lo = *user_data.get(&sgpr_base)?;
+            let hi = *user_data.get(&(sgpr_base + 1))?;
 
-            let address = (hi as u64) >> 32 | lo as u64;
+            let address = (hi as u64) << 32 | lo as u64;
+
+            read_user_data.push((sgpr_base, lo));
+            read_user_data.push((sgpr_base + 1, hi));
+
             Some(address)
         })();
 
@@ -550,5 +563,6 @@ fn shader_extract(
         instructions,
         raw: stitched_shader_bytes,
         has_fetch_shader,
+        read_user_data,
     })
 }
