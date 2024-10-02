@@ -12,6 +12,7 @@ gcn_extract = { path = "../../../ps4-tools/packages/gcn_extract" }
 gcn = { path = "../../../ps4-tools/packages/gcn" }
 libc = "0.2.159"
 bytemuck = { version = "1.18.0", features = ["derive"] }
+anyhow = { version = "1.0.89", default-features = false }
 
 [profile.release]
 panic = "abort"

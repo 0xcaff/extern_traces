@@ -16,10 +16,16 @@ use bytemuck::{Pod, Zeroable};
 use core::alloc::{GlobalAlloc, Layout};
 use core::panic::PanicInfo;
 use core::slice;
+use anyhow::bail;
+use gcn::instructions::formats::{FormattedInstruction, SOP1Instruction, SOPPInstruction};
+use gcn::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
+use gcn::instructions::ops::{SOP1OpCode, SOPPOpCode};
 use gcn::instructions::Instruction;
+use gcn::SliceReader;
 use gcn_extract::{
-    extract_buffer_usages, pixel_shader_extract_image_usages, SamplerResourceWithRaw,
-    ShaderInvocation, TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
+    extract_buffer_usages, pixel_shader_extract_image_usages, AnalysisState,
+    SamplerResourceWithRaw, ShaderInvocation, TextureBufferResourceWithRaw,
+    VertexBufferResourceWithRaw,
 };
 use pm4::{convert, Command, PM4Packet};
 
@@ -123,7 +129,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
         thread_id,
         time,
         label_id,
-    );
+    ).unwrap();
 }
 
 #[no_mangle]
@@ -155,7 +161,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
         thread_id,
         time,
         label_id,
-    );
+    ).unwrap();
 }
 
 fn trace_command_buffer_submit(
@@ -165,7 +171,7 @@ fn trace_command_buffer_submit(
     thread_id: u64,
     time: u64,
     label_id: u64,
-) {
+) -> Result<(), anyhow::Error> {
     let mut shaders = ShadersCollector::new();
 
     let mut total_size = size_of::<SpanStartAdditionalData>()
@@ -175,12 +181,12 @@ fn trace_command_buffer_submit(
 
     for command_buffer in draw_command_buffers {
         total_size += command_buffer.len();
-        shaders.collect(command_buffer);
+        shaders.collect(command_buffer)?;
     }
 
     for command_buffer in compute_command_buffers {
         total_size += command_buffer.len();
-        shaders.collect(command_buffer);
+        shaders.collect(command_buffer)?;
     }
 
     total_size += size_of::<u32>(); // Shader count
@@ -188,7 +194,7 @@ fn trace_command_buffer_submit(
         total_size += size_of::<u32>() // address
             + size_of::<u8>()  // kind
             + size_of::<u32>() // length
-            + shader.shader_invocation.bytes.len() * 4
+            + shader.shader_bytes.len() * 4
         + size_of::<u32>() // vertex_buffer_references length
         + shader.vertex_buffer_references.len() * (size_of::<u32>() + size_of::<u32>())
     }
@@ -201,7 +207,7 @@ fn trace_command_buffer_submit(
     }
 
     let Some(mut res) = thread_logging_state.reserve(total_size) else {
-        return;
+        return Ok(());
     };
 
     let span_header = SpanStartAdditionalData {
@@ -243,9 +249,9 @@ fn trace_command_buffer_submit(
         let kind_u8 = shader.kind as u8;
         res.write(bytemuck::cast_slice(&[kind_u8]));
 
-        let len = shader.shader_invocation.bytes.len() as u32;
+        let len = shader.shader_bytes.len() as u32;
         res.write(bytemuck::cast_slice(&[len]));
-        res.write(bytemuck::cast_slice(shader.shader_invocation.bytes));
+        res.write(bytemuck::cast_slice(&shader.shader_bytes));
 
         res.write(bytemuck::cast_slice(&[
             shader.vertex_buffer_references.len() as u32,
@@ -274,6 +280,8 @@ fn trace_command_buffer_submit(
     // }
 
     thread_logging_state.flush(res);
+
+    Ok(())
 }
 
 #[repr(u8)]
@@ -286,8 +294,9 @@ enum ShaderKind {
 
 struct Shader {
     kind: ShaderKind,
-    shader_invocation: ShaderInvocation,
-    instructions: Option<Vec<Instruction>>,
+    has_fetch_shader: bool,
+    shader_bytes: Vec<u32>,
+    instructions: Vec<Instruction>,
     vertex_buffer_references: Vec<(u64, usize)>,
     texture_buffer_references: Vec<(u64, usize, SamplerResourceWithRaw)>,
 }
@@ -309,9 +318,9 @@ impl ShadersCollector {
 }
 
 impl ShadersCollector {
-    pub fn collect(&mut self, buffer: &[u8]) {
-        let buffer = PM4Packet::parse_all(buffer).unwrap();
-        let (commands, _ignored_packets, _ignored_registers) = convert(&buffer).unwrap();
+    pub fn collect(&mut self, buffer: &[u8]) -> Result<(), anyhow::Error> {
+        let buffer = PM4Packet::parse_all(buffer)?;
+        let (commands, _ignored_packets, _ignored_registers) = convert(&buffer)?;
         for command in commands {
             match command {
                 Command::Draw { pipeline, .. } => {
@@ -320,7 +329,7 @@ impl ShadersCollector {
                             vertex_shader,
                             ShaderKind::Vertex,
                             &pipeline.vertex_shader.user_data.0,
-                        );
+                        )?;
                     }
 
                     if let Some(pixel_shader) = pipeline.pixel_shader.address {
@@ -328,7 +337,7 @@ impl ShadersCollector {
                             pixel_shader,
                             ShaderKind::Pixel,
                             &pipeline.pixel_shader.user_data.0,
-                        );
+                        )?;
                     }
                 }
                 Command::Dispatch { pipeline, .. } => {
@@ -336,11 +345,13 @@ impl ShadersCollector {
                         pipeline.address_lo,
                         ShaderKind::Compute,
                         &pipeline.user_data.0,
-                    );
+                    )?;
                 }
                 _ => {}
             }
         }
+
+        Ok(())
     }
 
     fn collect_shader(
@@ -348,90 +359,196 @@ impl ShadersCollector {
         shader_address: u32,
         kind: ShaderKind,
         user_data: &BTreeMap<u8, u32>,
-    ) {
+    ) -> Result<(), anyhow::Error> {
         if shader_address == 0 {
-            return;
+            return Ok(());
         }
 
-        let shader = match self.shaders.entry(shader_address) {
-            Entry::Vacant(item) => {
-                let Ok(shader_invocation) =
-                    (unsafe { ShaderInvocation::decode_from_memory(shader_address) })
-                else {
-                    return;
-                };
-
-                let instructions = shader_invocation.as_flat_instructions();
-
-                if let Err(err) = &instructions {
-                    println!("extern_traces: {:?}", err);
+        let item = match self.shaders.entry(shader_address) {
+            Entry::Vacant(item) => item,
+            Entry::Occupied(item) => {
+                let value = item.get();
+                if value.has_fetch_shader {
+                    bail!("not allowed")
                 }
 
-                item.insert(Shader {
-                    shader_invocation,
-                    kind,
-                    instructions: instructions.ok(),
-                    vertex_buffer_references: vec![],
-                    texture_buffer_references: vec![],
-                })
+                return Ok(())
             }
-            Entry::Occupied(value) => value.into_mut(),
         };
 
-        if let Some(instructions) = shader.instructions.as_ref() {
-            let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
-            for vertex_buffer_usage in &buffer_usages {
-                let idx = (|| {
-                    if let Some(idx) = self
-                        .vertex_buffers
-                        .iter()
-                        .enumerate()
-                        .filter(|(idx, it)| it.resource == vertex_buffer_usage.resource.resource)
-                        .map(|(idx, _)| idx)
-                        .next()
-                    {
-                        return idx;
-                    };
+        let shader_invocation = (unsafe { ShaderInvocation::decode_from_memory(shader_address) })?;
 
-                    self.vertex_buffers
-                        .push(vertex_buffer_usage.resource.clone());
-                    self.vertex_buffers.len() - 1
-                })();
+        let shader = shader_extract(&shader_invocation, user_data)?;
 
-                shader
-                    .vertex_buffer_references
-                    .push((vertex_buffer_usage.program_counter, idx));
-            }
+        let instructions = shader.instructions;
 
-            let texture_usages =
-                pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
+        let buffer_usages = extract_buffer_usages(instructions.as_slice(), user_data);
+        let mut vertex_buffer_references = vec![];
 
-            for texture_buffer_usage in &texture_usages {
-                let idx = (|| {
-                    if let Some(idx) = self
-                        .texture_buffers
-                        .iter()
-                        .enumerate()
-                        .filter(|(idx, it)| {
-                            it.resource == texture_buffer_usage.texture_resource.resource
-                        })
-                        .map(|(idx, _)| idx)
-                        .next()
-                    {
-                        return idx;
-                    };
+        for vertex_buffer_usage in &buffer_usages {
+            let idx = (|| {
+                if let Some(idx) = self
+                    .vertex_buffers
+                    .iter()
+                    .enumerate()
+                    .filter(|(idx, it)| it.resource == vertex_buffer_usage.resource.resource)
+                    .map(|(idx, _)| idx)
+                    .next()
+                {
+                    return idx;
+                };
 
-                    self.texture_buffers
-                        .push(texture_buffer_usage.texture_resource.clone());
-                    self.texture_buffers.len() - 1
-                })();
+                self.vertex_buffers
+                    .push(vertex_buffer_usage.resource.clone());
+                self.vertex_buffers.len() - 1
+            })();
 
-                shader.texture_buffer_references.push((
-                    texture_buffer_usage.program_counter,
-                    idx,
-                    texture_buffer_usage.sampler_resource.clone(),
-                ));
-            }
+            vertex_buffer_references.push((vertex_buffer_usage.program_counter, idx));
         }
+
+        let texture_usages = pixel_shader_extract_image_usages(instructions.as_slice(), user_data);
+
+        let mut texture_buffer_references = vec![];
+
+        for texture_buffer_usage in &texture_usages {
+            let idx = (|| {
+                if let Some(idx) = self
+                    .texture_buffers
+                    .iter()
+                    .enumerate()
+                    .filter(|(idx, it)| {
+                        it.resource == texture_buffer_usage.texture_resource.resource
+                    })
+                    .map(|(idx, _)| idx)
+                    .next()
+                {
+                    return idx;
+                };
+
+                self.texture_buffers
+                    .push(texture_buffer_usage.texture_resource.clone());
+                self.texture_buffers.len() - 1
+            })();
+
+            texture_buffer_references.push((
+                texture_buffer_usage.program_counter,
+                idx,
+                texture_buffer_usage.sampler_resource.clone(),
+            ));
+        }
+
+        item.insert(Shader {
+            shader_bytes: shader.raw,
+            has_fetch_shader: shader.has_fetch_shader,
+            instructions,
+            kind,
+            vertex_buffer_references,
+            texture_buffer_references,
+        });
+
+        Ok(())
     }
+}
+
+struct ExtractedShader {
+    raw: Vec<u32>,
+    instructions: Vec<Instruction>,
+    has_fetch_shader: bool,
+}
+
+fn shader_extract(
+    shader_invocation: &ShaderInvocation,
+    user_data: &BTreeMap<u8, u32>,
+) -> Result<ExtractedShader, anyhow::Error> {
+    let original_shader_bytes = shader_invocation.bytes;
+    let mut stitched_shader_bytes = Vec::new();
+    let mut instructions = vec![];
+    let mut reader = SliceReader::new(original_shader_bytes);
+    let mut has_fetch_shader = false;
+
+    let mut analysis_state = AnalysisState::new(user_data);
+
+    while reader.has_more() {
+        let position = reader.position();
+        let program_counter = stitched_shader_bytes.len() as u64 * 4;
+
+        let instruction = Instruction::parse(&mut reader, program_counter)?;
+
+        let fetch_shader_branch = (|| -> Option<u64> {
+            let FormattedInstruction::SOP1(SOP1Instruction {
+                op: SOP1OpCode::s_swappc_b64,
+                ssrc0:
+                    ScalarSourceOperand::Destination(ScalarDestinationOperand::ScalarGPR(sgpr_base)),
+                ..
+            }) = instruction.inner
+            else {
+                return None;
+            };
+
+            let lo = analysis_state.get(sgpr_base).value()?;
+            let hi = analysis_state.get(sgpr_base + 1).value()?;
+
+            let address = (hi as u64) >> 32 | lo as u64;
+            Some(address)
+        })();
+
+        match fetch_shader_branch {
+            Some(address) => {
+                has_fetch_shader = true;
+
+                let fetch_shader_dwords = address as *const u32;
+                let fetch_shader_bytes_unsafe =
+                    unsafe { slice::from_raw_parts(fetch_shader_dwords, usize::MAX) };
+
+                let mut fetch_shader_slice_reader_unsafe =
+                    SliceReader::new(fetch_shader_bytes_unsafe);
+
+                loop {
+                    let fetch_shader_position = fetch_shader_slice_reader_unsafe.position();
+                    let program_counter = stitched_shader_bytes.len() as u64 * 4;
+
+                    let instruction =
+                        Instruction::parse(&mut fetch_shader_slice_reader_unsafe, program_counter)?;
+
+                    if let FormattedInstruction::SOP1(SOP1Instruction {
+                        op: SOP1OpCode::s_setpc_b64,
+                        ..
+                    }) = &instruction.inner
+                    {
+                        break;
+                    }
+
+                    let fetch_shader_position_end = fetch_shader_slice_reader_unsafe.position();
+
+                    instructions.push(instruction);
+                    stitched_shader_bytes.extend_from_slice(
+                        &fetch_shader_bytes_unsafe
+                            [fetch_shader_position..fetch_shader_position_end],
+                    );
+                }
+            }
+            None => {
+                let position_end = reader.position();
+                instructions.push(instruction);
+                stitched_shader_bytes
+                    .extend_from_slice(&original_shader_bytes[position..position_end]);
+
+                let instruction = &instructions[instructions.len() - 1];
+
+                if let FormattedInstruction::SOPP(SOPPInstruction {
+                    op: SOPPOpCode::s_endpgm,
+                    ..
+                }) = &instruction.inner
+                {
+                    break;
+                };
+            }
+        };
+    }
+
+    Ok(ExtractedShader {
+        instructions,
+        raw: stitched_shader_bytes,
+        has_fetch_shader,
+    })
 }
