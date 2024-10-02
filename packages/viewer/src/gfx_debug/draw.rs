@@ -65,15 +65,19 @@ pub fn process_draw_command(
     last_color_buffer: &Option<Box<[u8]>>,
     last_depth_buffer: &Option<Box<[u8]>>,
 ) -> Result<DrawShaderStageResult, anyhow::Error> {
-    let color_buffer = if pipeline_input
-        .color_buffer
-        .shader_mask
-        .as_ref()
-        .unwrap()
-        .OUTPUT0_ENABLE
-        != 0
-    {
-        let color_buffer = pipeline_input.color_buffer.color0.unwrap();
+    let color_buffer = (|| -> Result<_, anyhow::Error> {
+        let Some(it) = &pipeline_input.color_buffer.shader_mask else {
+            return Ok(None);
+        };
+
+        if it.OUTPUT0_ENABLE == 0 {
+            return Ok(None);
+        }
+
+        let Some(color_buffer) = pipeline_input.color_buffer.color0 else {
+            return Ok(None);
+        };
+
         let format = match color_buffer.info.FORMAT {
             ColorFormat::COLOR_8_8_8_8 => Format::R8G8B8A8_UNORM,
             _ => unimplemented!(),
@@ -87,10 +91,8 @@ pub fn process_draw_command(
             ImageUsage::COLOR_ATTACHMENT,
         )?;
 
-        Some((format, color_image_resource, color_buffer))
-    } else {
-        None
-    };
+        Ok(Some((format, color_image_resource, color_buffer)))
+    })()?;
 
     let color_buffer_exists = color_buffer.is_some();
 
