@@ -48,7 +48,6 @@ pub fn process_commands(
                 pipeline: pipeline_input,
             } => {
                 if let Some(it) = &pipeline_input.vertex_shader.entrypoint_gpu_address {
-                    println!("{}", *it);
                     if *it == 0xfe000f1 {
                         continue;
                     }

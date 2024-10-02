@@ -100,6 +100,39 @@ struct SpanStartAdditionalData {
 }
 
 #[no_mangle]
+extern "C" fn sceGnmSubmitCommandBuffers_trace(
+    args: *const Args,
+    thread_logging_state: *mut ThreadLoggingState,
+    time: u64,
+    label_id: u64,
+    thread_id: u64,
+) {
+    let args = unsafe { args.as_ref_unchecked() };
+    let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
+
+    let count = args.args[0] as u32;
+    let draw_buffers = args.args[1] as *const *const u8;
+    let draw_sizes = args.args[2] as *const u32;
+    let compute_buffers = args.args[3] as *const *const u8;
+    let compute_sizes = args.args[4] as *const u32;
+
+    let draw_command_buffers = unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
+
+    let compute_command_buffers =
+        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
+
+    trace_command_buffer_submit(
+        thread_logging_state,
+        &draw_command_buffers,
+        &compute_command_buffers,
+        thread_id,
+        time,
+        label_id,
+    )
+    .unwrap();
+}
+
+#[no_mangle]
 extern "C" fn sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
     args: *const Args,
     thread_logging_state: *mut ThreadLoggingState,
@@ -140,29 +173,7 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
     label_id: u64,
     thread_id: u64,
 ) {
-    let args = unsafe { args.as_ref_unchecked() };
-    let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
-
-    let count = args.args[0] as u32;
-    let draw_buffers = args.args[1] as *const *const u8;
-    let draw_sizes = args.args[2] as *const u32;
-    let compute_buffers = args.args[3] as *const *const u8;
-    let compute_sizes = args.args[4] as *const u32;
-
-    let draw_command_buffers = unsafe { command_buffers(count as _, draw_buffers, draw_sizes) };
-
-    let compute_command_buffers =
-        unsafe { command_buffers(count as _, compute_buffers, compute_sizes) };
-
-    trace_command_buffer_submit(
-        thread_logging_state,
-        &draw_command_buffers,
-        &compute_command_buffers,
-        thread_id,
-        time,
-        label_id,
-    )
-    .unwrap();
+    sceGnmSubmitCommandBuffers_trace(args, thread_logging_state, time, label_id, thread_id);
 }
 
 fn trace_command_buffer_submit(

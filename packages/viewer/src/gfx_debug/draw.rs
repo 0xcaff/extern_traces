@@ -522,8 +522,7 @@ pub fn process_draw_command(
                         src: r"
                             #version 450
 
-                            layout(location = 0) in vec4 input1;
-                            layout(location = 1) in vec4 input2;
+                            layout(location = 0) in vec2 input1;
 
                             layout(location = 0) out vec4 FragColor;
 
