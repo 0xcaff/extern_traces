@@ -366,6 +366,13 @@ impl ShadersCollector {
             return Ok(());
         }
 
+        if shader_address == 0xfe000f1 {
+            // this is an embedded vertex shader, it seems to be in a protected memory region by
+            // default. skip it as it uses rect list which requires geometry shader to emulate
+            // its probably worth shipping this information to the client rendering pipeline somehow
+            return Ok(());
+        }
+
         let item = match self.shaders.entry(shader_address) {
             Entry::Vacant(item) => item,
             Entry::Occupied(item) => {
