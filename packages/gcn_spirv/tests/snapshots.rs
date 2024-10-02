@@ -1,4 +1,4 @@
-use gcn::test_utils::GCNInstructionStream;
+use gcn::GCNInstructionStream;
 use gcn_spirv::module::construct_control_flow_graph;
 use sha2::{Digest, Sha256};
 use snapshot_test_utils::generate_snapshots;

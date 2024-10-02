@@ -558,7 +558,7 @@ fn translate_instruction(
 
                     builder.store(context.scc, execnz, None, [])?;
                 }
-                _ => unimplemented!("{:#?}", instr),
+                _ => {}
             }
         }
         unknown => unimplemented!("{:#?}", unknown),
@@ -781,7 +781,6 @@ mod tests {
     use spirv_tools::val::Validator;
 
     use crate::module::construct_control_flow_graph;
-    use gcn::test_utils::GCNInstructionStream;
     // #[test]
     // fn test() -> Result<(), anyhow::Error> {
     //     let bytes: [u8; 40] = [

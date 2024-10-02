@@ -5,6 +5,7 @@ extern crate alloc;
 pub mod instructions;
 mod reader;
 pub mod resources;
-pub mod test_utils;
+mod shader;
 
 pub use reader::SliceReader;
+pub use shader::GCNInstructionStream;

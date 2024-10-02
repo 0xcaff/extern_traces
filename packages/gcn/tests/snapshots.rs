@@ -1,4 +1,4 @@
-use gcn::test_utils::GCNInstructionStream;
+use gcn::GCNInstructionStream;
 use snapshot_test_utils::generate_snapshots;
 
 #[test]
