@@ -4,6 +4,7 @@ use crate::packet_value::acquire_memory::AcquireMemoryPacket;
 use crate::packet_value::clear_state::ClearStatePacket;
 use crate::packet_value::direct_memory_access::DirectMemoryAccessPacket;
 use crate::packet_value::dispatch_direct::DispatchDirectPacket;
+use crate::packet_value::draw_index_2::DrawIndex2Packet;
 use crate::packet_value::draw_index_auto::DrawIndexAutoPacket;
 use crate::packet_value::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
@@ -18,6 +19,7 @@ pub mod acquire_memory;
 pub mod clear_state;
 pub mod direct_memory_access;
 pub mod dispatch_direct;
+pub mod draw_index_2;
 pub mod draw_index_auto;
 pub mod event_write_end_of_pipe;
 pub mod event_write_end_of_shader;
@@ -33,6 +35,7 @@ pub enum Type3PacketValue {
     SetUConfigRegister(SetUConfigRegisterPacket),
     EventWriteEndOfPipe(EventWriteEndOfPipePacket),
     DrawIndexAuto(DrawIndexAutoPacket),
+    DrawIndex2(DrawIndex2Packet),
     DispatchDirect(DispatchDirectPacket),
     EventWriteEndOfShader(EventWriteEndOfShaderPacket),
     ClearState(ClearStatePacket),
