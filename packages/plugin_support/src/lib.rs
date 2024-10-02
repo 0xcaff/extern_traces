@@ -384,9 +384,7 @@ impl ShadersCollector {
             }
         };
 
-        let shader_invocation = (unsafe { ShaderInvocation::decode_from_memory(shader_address) })?;
-
-        let shader = shader_extract(&shader_invocation, user_data)?;
+        let shader = unsafe { shader_extract(shader_address, user_data)? };
 
         let instructions = shader.instructions;
 
@@ -466,22 +464,47 @@ struct ExtractedShader {
     read_user_data: Vec<(u8, u32)>,
 }
 
-fn shader_extract(
-    shader_invocation: &ShaderInvocation,
+unsafe fn shader_extract(
+    shader_address: u32,
     user_data: &BTreeMap<u8, u32>,
 ) -> Result<ExtractedShader, anyhow::Error> {
-    let original_shader_bytes = shader_invocation.bytes;
+    let entry_point = (shader_address as u64) << 8;
+    let original_shader_bytes = slice::from_raw_parts(entry_point as *const u32, usize::MAX);
+
     let mut stitched_shader_bytes = Vec::new();
     let mut instructions = vec![];
     let mut reader = SliceReader::new(original_shader_bytes);
     let mut has_fetch_shader = false;
     let mut read_user_data = Vec::new();
+    let mut max_position = None;
 
-    while reader.has_more() {
+    loop {
         let position = reader.position();
+        if let Some(max_position) = max_position {
+            if position >= max_position {
+                break;
+            }
+        }
+
         let program_counter = stitched_shader_bytes.len() as u64 * 4;
 
         let instruction = Instruction::parse(&mut reader, program_counter)?;
+
+        if stitched_shader_bytes.is_empty() {
+            if let Instruction {
+                inner:
+                    FormattedInstruction::SOP1(SOP1Instruction {
+                        op: SOP1OpCode::s_mov_b32,
+                        sdst: ScalarDestinationOperand::VccHi,
+                        ssrc0: ScalarSourceOperand::LiteralConstant,
+                    }),
+                literal_constant: Some(constant),
+                ..
+            } = instruction
+            {
+                max_position = Some((constant as usize + 1) * 2)
+            }
+        }
 
         let fetch_shader_branch = (|| -> Option<u64> {
             let FormattedInstruction::SOP1(SOP1Instruction {
@@ -511,7 +534,7 @@ fn shader_extract(
 
                 let fetch_shader_dwords = address as *const u32;
                 let fetch_shader_bytes_unsafe =
-                    unsafe { slice::from_raw_parts(fetch_shader_dwords, usize::MAX) };
+                    slice::from_raw_parts(fetch_shader_dwords, usize::MAX);
 
                 let mut fetch_shader_slice_reader_unsafe =
                     SliceReader::new(fetch_shader_bytes_unsafe);
