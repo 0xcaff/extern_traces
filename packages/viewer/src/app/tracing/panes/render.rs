@@ -13,7 +13,8 @@ pub fn render_frame(bytes: &[u8]) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
         .ok_or_else(|| format_err!("missing first value"))?;
     let packets = PM4Packet::parse_all(draw_command_buffer)?;
 
-    let (mut ctx, debug_handle) = GraphicsContext::init();
+    let (mut ctx, mut debug_handle) = GraphicsContext::init();
+    debug_handle.start_frame_capture();
 
     let known_shaders = extra_data
         .shaders
@@ -27,6 +28,8 @@ pub fn render_frame(bytes: &[u8]) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
         &extra_data.vertex_buffers,
         known_shaders,
     )?;
+
+    debug_handle.end_frame_capture();
 
     let Some(next_color) = next_color else {
         return Ok(None);
