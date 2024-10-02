@@ -30,7 +30,6 @@ impl ShaderInvocation {
     }
 
     pub fn as_flat_instructions(&self) -> Result<Vec<Instruction>, anyhow::Error> {
-        let bytes = self.bytes;
         let mut reader = SliceReader::new(self.bytes);
         let mut instructions = vec![];
 
@@ -38,21 +37,17 @@ impl ShaderInvocation {
             let program_counter = reader.position() as u64;
             let instruction = Instruction::parse(&mut reader, program_counter * 4)?;
 
-            let is_end_pgm = if let FormattedInstruction::SOPP(SOPPInstruction {
+            instructions.push(instruction);
+
+            let instruction = &instructions[instructions.len() - 1];
+
+            if let FormattedInstruction::SOPP(SOPPInstruction {
                 op: SOPPOpCode::s_endpgm,
                 ..
             }) = instruction.inner
             {
-                true
-            } else {
-                false
-            };
-
-            instructions.push(instruction);
-
-            if is_end_pgm {
                 break;
-            }
+            };
         }
 
         Ok(instructions)
