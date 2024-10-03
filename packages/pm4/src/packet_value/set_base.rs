@@ -2,8 +2,8 @@ use crate::op_codes::OpCode;
 use crate::packet_value::ParseType3Packet;
 use alloc::vec::Vec;
 use bits::{bitrange, Bits, TryFromBits};
-use strum::FromRepr;
 use custom_debug::Debug;
+use strum::FromRepr;
 
 #[derive(FromRepr, Debug, Clone, Eq, PartialEq)]
 #[repr(u8)]
@@ -35,8 +35,6 @@ impl ParseType3Packet for SetBasePacket {
 
         let address = body[1] as u64 | ((bitrange(15, 0).of(body[2] as _)) << 32);
 
-        Self {
-            address,
-        }
+        Self { address }
     }
 }

@@ -35730,13 +35730,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -35842,13 +35854,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -35954,13 +35978,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36066,13 +36102,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36178,13 +36226,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36290,13 +36350,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36402,13 +36474,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36514,13 +36598,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36626,13 +36722,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36738,13 +36846,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -36850,13 +36970,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38072,13 +38204,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38184,13 +38328,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38296,13 +38452,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38408,13 +38576,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38520,13 +38700,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38632,13 +38824,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38744,13 +38948,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38856,13 +39072,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -38968,13 +39196,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -39080,13 +39320,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -39192,13 +39444,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40208,13 +40472,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40320,13 +40596,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40432,13 +40720,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40544,13 +40844,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40656,13 +40968,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40768,13 +41092,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40880,13 +41216,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -40992,13 +41340,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -41104,13 +41464,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -41216,13 +41588,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -41328,13 +41712,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -41664,13 +42060,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -41776,13 +42184,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -41888,13 +42308,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42000,13 +42432,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42112,13 +42556,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42224,13 +42680,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42336,13 +42804,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42448,13 +42928,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42560,13 +43052,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42672,13 +43176,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42784,13 +43300,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42855,13 +43383,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42926,13 +43466,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -42997,13 +43549,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43068,13 +43632,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43139,13 +43715,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43210,13 +43798,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43281,13 +43881,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43352,13 +43964,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43423,13 +44047,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -43494,13 +44130,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -44344,13 +44992,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -44456,13 +45116,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -44568,13 +45240,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -44680,13 +45364,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -44792,13 +45488,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -44904,13 +45612,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -45016,13 +45736,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -45128,13 +45860,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -45240,13 +45984,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -45352,13 +46108,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -45464,13 +46232,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46221,13 +47001,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46333,13 +47125,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46445,13 +47249,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46557,13 +47373,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46669,13 +47497,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46781,13 +47621,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -46893,13 +47745,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47005,13 +47869,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47117,13 +47993,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47229,13 +48117,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47341,13 +48241,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47412,13 +48324,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47483,13 +48407,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47554,13 +48490,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47625,13 +48573,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47696,13 +48656,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47767,13 +48739,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47838,13 +48822,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47909,13 +48905,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -47980,13 +48988,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -48051,13 +49071,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49011,13 +50043,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49123,13 +50167,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49235,13 +50291,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49347,13 +50415,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49459,13 +50539,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49571,13 +50663,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49683,13 +50787,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49795,13 +50911,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -49907,13 +51035,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -50019,13 +51159,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -50131,13 +51283,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -50954,13 +52118,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51066,13 +52242,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51178,13 +52366,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51290,13 +52490,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51402,13 +52614,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51514,13 +52738,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51626,13 +52862,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51738,13 +52986,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51850,13 +53110,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -51962,13 +53234,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        9,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: true,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52074,13 +53358,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52186,13 +53482,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        64,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x40,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52298,13 +53606,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52328,13 +53648,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        32,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x20,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52358,13 +53690,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        64,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x40,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52388,13 +53732,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        96,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x60,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52418,13 +53774,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        128,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x80,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52448,13 +53816,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        160,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0xa0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52478,13 +53858,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        192,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0xc0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52508,13 +53900,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        224,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0xe0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52538,13 +53942,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        256,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x100,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52568,13 +53984,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        288,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x120,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52598,13 +54026,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        320,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x140,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52628,13 +54068,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        352,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x160,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52658,13 +54110,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        384,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x180,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52688,13 +54152,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        416,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x1a0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52718,13 +54194,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        448,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x1c0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52748,13 +54236,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        480,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x1e0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -52901,13 +54401,25 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DISPATCH_INDIRECT,
-                    body: [
-                        0,
-                        1,
-                    ],
-                },
+                value: DispatchIndirect(
+                    DispatchIndirectPacket {
+                        data_offset: 0x0,
+                        dispatch_initiator: COMPUTE_DISPATCH_INITIATOR {
+                            COMPUTE_SHADER_EN: true,
+                            PARTIAL_TG_EN: false,
+                            FORCE_START_AT_000: false,
+                            ORDERED_APPEND_ENBL: false,
+                            ORDERED_APPEND_MODE: false,
+                            USE_THREAD_DIMENSIONS: false,
+                            ORDER_MODE: false,
+                            DISPATCH_CACHE_CNTL: 0,
+                            SCALAR_L1_INV_VOL: false,
+                            VECTOR_L1_INV_VOL: false,
+                            DATA_ATC: false,
+                            RESTORE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(

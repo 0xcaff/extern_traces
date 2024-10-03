@@ -10,16 +10,18 @@ use crate::packet_value::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::packet_value::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::packet_value::register::{SetContextRegisterPacket, SetShaderRegisterPacket};
 use crate::packet_value::release_memory::ReleaseMemoryPacket;
+use crate::packet_value::set_base::SetBasePacket;
 use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use alloc::vec::Vec;
 use pm4_internal_macros::ParsePacketValue;
-use crate::packet_value::set_base::SetBasePacket;
+use crate::dispatch_indirect::DispatchIndirectPacket;
 
 pub mod acquire_memory;
 pub mod clear_state;
 pub mod direct_memory_access;
 pub mod dispatch_direct;
+pub mod dispatch_indirect;
 pub mod draw_index_2;
 pub mod draw_index_auto;
 pub mod event_write_end_of_pipe;
@@ -39,6 +41,7 @@ pub enum Type3PacketValue {
     DrawIndexAuto(DrawIndexAutoPacket),
     DrawIndex2(DrawIndex2Packet),
     DispatchDirect(DispatchDirectPacket),
+    DispatchIndirect(DispatchIndirectPacket),
     EventWriteEndOfShader(EventWriteEndOfShaderPacket),
     ClearState(ClearStatePacket),
     DirectMemoryAccess(DirectMemoryAccessPacket),
