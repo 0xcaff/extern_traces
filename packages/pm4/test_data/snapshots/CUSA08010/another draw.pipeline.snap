@@ -37205,15 +37205,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37283,15 +37280,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37361,15 +37355,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37439,15 +37430,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37517,15 +37505,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37595,15 +37580,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37673,15 +37655,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37751,15 +37730,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37829,15 +37805,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37907,15 +37880,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37985,15 +37955,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38063,15 +38030,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        0,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39722,15 +39686,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39823,15 +39784,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39924,15 +39882,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        40,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x28,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40025,15 +39980,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        60,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x3c,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40126,15 +40078,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        80,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x50,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40227,15 +40176,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        100,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x64,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40328,15 +40274,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        120,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x78,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42158,15 +42101,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        320,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x140,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42236,15 +42176,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        340,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x154,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42314,15 +42251,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        360,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x168,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42392,15 +42326,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        380,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x17c,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42470,15 +42401,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        400,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x190,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42548,15 +42476,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        420,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x1a4,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42626,15 +42551,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        440,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x1b8,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46859,15 +46781,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        79,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46978,15 +46897,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        79,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48961,15 +48877,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        60,
-                        0,
-                        79,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x3c,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51823,15 +51736,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        0,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x0,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51924,15 +51834,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        20,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x14,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52025,15 +51932,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        40,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x28,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52126,15 +52030,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        60,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x3c,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53997,15 +53898,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        80,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x50,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -54075,15 +53973,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        100,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x64,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -54153,15 +54048,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        120,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x78,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -54231,15 +54123,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_INDIRECT,
-                    body: [
-                        140,
-                        0,
-                        80,
-                        0,
-                    ],
-                },
+                value: DrawIndexIndirect(
+                    DrawIndexIndirectPacket {
+                        data_offset: 0x8c,
+                        base_vertex_location: 0,
+                    },
+                ),
             },
         ),
         Type3(

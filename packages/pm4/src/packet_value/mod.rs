@@ -1,4 +1,5 @@
 use crate::dispatch_indirect::DispatchIndirectPacket;
+use crate::draw_index_indirect::DrawIndexIndirectPacket;
 use crate::indirect_buffer::IndirectBufferPacket;
 use crate::op_codes::OpCode;
 use crate::packet_value::acquire_memory::AcquireMemoryPacket;
@@ -24,12 +25,13 @@ pub mod dispatch_direct;
 pub mod dispatch_indirect;
 pub mod draw_index_2;
 pub mod draw_index_auto;
+pub mod draw_index_indirect;
 pub mod event_write_end_of_pipe;
 pub mod event_write_end_of_shader;
 pub mod indirect_buffer;
 pub mod register;
 pub mod release_memory;
-mod set_base;
+pub mod set_base;
 pub mod wait_register_memory;
 
 #[derive(Debug, ParsePacketValue)]
@@ -39,6 +41,7 @@ pub enum Type3PacketValue {
     SetUConfigRegister(SetUConfigRegisterPacket),
     EventWriteEndOfPipe(EventWriteEndOfPipePacket),
     DrawIndexAuto(DrawIndexAutoPacket),
+    DrawIndexIndirect(DrawIndexIndirectPacket),
     DrawIndex2(DrawIndex2Packet),
     DispatchDirect(DispatchDirectPacket),
     DispatchIndirect(DispatchIndirectPacket),
