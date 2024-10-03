@@ -1,5 +1,6 @@
 use crate::dispatch_indirect::DispatchIndirectPacket;
 use crate::draw_index_indirect::DrawIndexIndirectPacket;
+use crate::event_write::EventWritePacket;
 use crate::indirect_buffer::IndirectBufferPacket;
 use crate::op_codes::OpCode;
 use crate::packet_value::acquire_memory::AcquireMemoryPacket;
@@ -26,6 +27,7 @@ pub mod dispatch_indirect;
 pub mod draw_index_2;
 pub mod draw_index_auto;
 pub mod draw_index_indirect;
+pub mod event_write;
 pub mod event_write_end_of_pipe;
 pub mod event_write_end_of_shader;
 pub mod indirect_buffer;
@@ -53,6 +55,7 @@ pub enum Type3PacketValue {
     ReleaseMemory(ReleaseMemoryPacket),
     WaitRegisterMemory(WaitRegisterMemoryPacket),
     SetBase(SetBasePacket),
+    EventWrite(EventWritePacket),
     // todo: index_type
     Unknown { op: OpCode, body: Vec<u32> },
 }

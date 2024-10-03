@@ -56331,12 +56331,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -57960,12 +57966,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -58031,12 +58043,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -58046,12 +58064,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -59865,12 +59889,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -59880,12 +59910,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -61279,12 +61315,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -61350,12 +61392,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -61365,12 +61413,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -63244,12 +63298,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -63330,12 +63390,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -63345,12 +63411,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -64983,12 +65055,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -64998,12 +65076,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1838,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -65013,12 +65097,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -65028,12 +65118,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -67314,12 +67410,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -67385,12 +67487,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -67400,12 +67508,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -69080,12 +69194,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -69095,12 +69215,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71116,12 +71242,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1838,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71146,12 +71278,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71176,12 +71314,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1838,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71329,12 +71473,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71344,12 +71494,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1838,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71359,12 +71515,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1836,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_DB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71374,12 +71536,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71512,12 +71680,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71691,12 +71865,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71706,12 +71886,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -72008,12 +72194,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -72446,12 +72638,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -72707,12 +72905,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -72722,12 +72926,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73223,12 +73433,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73238,12 +73454,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1834,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: DB_CACHE_FLUSH_AND_INV,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73335,12 +73557,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1838,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73447,12 +73675,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1841,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_PIXEL_DATA,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73462,12 +73696,18 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: EVENT_WRITE,
-                    body: [
-                        1838,
-                    ],
-                },
+                value: EventWrite(
+                    EventWritePacket {
+                        inv_l2: false,
+                        event_index: CacheFlush,
+                        event_type: VGT_EVENT_INITIATOR {
+                            EVENT_TYPE: FLUSH_AND_INV_CB_META,
+                            ADDRESS_HI: 0,
+                            EXTENDED_EVENT: false,
+                        },
+                        address: None,
+                    },
+                ),
             },
         ),
         Type3(
