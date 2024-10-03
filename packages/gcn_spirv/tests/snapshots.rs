@@ -119,6 +119,24 @@ fn parse_extra_data(data: &[u8]) -> Result<ExtraData, anyhow::Error> {
         cursor.seek(std::io::SeekFrom::Current(length as i64))?;
         let bytes = &data[start..start + length as usize];
 
+        // Read vertex buffer references
+        let mut vbr_count_bytes = [0u8; size_of::<u32>()];
+        cursor.read_exact(&mut vbr_count_bytes)?;
+        let vbr_count = u32::from_le_bytes(vbr_count_bytes);
+
+        let mut vertex_buffer_references = Vec::with_capacity(vbr_count as usize);
+        for _ in 0..vbr_count {
+            let mut pc_bytes = [0u8; size_of::<u32>()];
+            cursor.read_exact(&mut pc_bytes)?;
+            let program_counter = u64::from(u32::from_le_bytes(pc_bytes));
+
+            let mut idx_bytes = [0u8; size_of::<u32>()];
+            cursor.read_exact(&mut idx_bytes)?;
+            let idx = u32::from_le_bytes(idx_bytes) as usize;
+
+            vertex_buffer_references.push((program_counter, idx));
+        }
+
         shaders.push(ShaderInvocation {
             address,
             kind,

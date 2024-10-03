@@ -95,6 +95,7 @@ impl DisplayInstruction for MUBUFInstruction {
                         MUBUFOpCode::buffer_load_dwordx2 => 2,
                         MUBUFOpCode::buffer_load_dwordx3 => 3,
                         MUBUFOpCode::buffer_load_dwordx4 => 4,
+                        MUBUFOpCode::buffer_atomic_add => 1,
                         _ => unimplemented!(),
                     }))),
                     self.vaddr.display(&None),

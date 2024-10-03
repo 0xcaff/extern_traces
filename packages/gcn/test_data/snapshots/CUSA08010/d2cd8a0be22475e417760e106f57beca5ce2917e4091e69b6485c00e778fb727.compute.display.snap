@@ -1,0 +1,64 @@
+0x0000: s_mov_b32 vcc_hi, 0x2b
+0x0008: v_lshrrev_b32 v1, 1, v0
+0x000c: v_and_b32 v3, 21, v1
+0x0010: v_and_b32 v1, 21, v0
+0x0014: v_lshrrev_b32 v4, 1, v3
+0x0018: v_lshrrev_b32 v2, 1, v1
+0x001c: v_or_b32 v3, v4, v3
+0x0020: v_or_b32 v2, v2, v1
+0x0024: v_and_b32 v1, 19, v3
+0x0028: v_and_b32 v2, 19, v2
+0x002c: v_lshrrev_b32 v4, 2, v1
+0x0030: v_lshrrev_b32 v3, 2, v2
+0x0034: v_or_b32 v1, v4, v1
+0x0038: v_or_b32 v2, v3, v2
+0x003c: v_and_b32 v7, 7, v1
+0x0040: s_lshl_b32 vcc_hi, s3, 3
+0x0044: v_and_b32 v8, 7, v2
+0x0048: s_lshl_b32 vcc_lo, s2, 3
+0x004c: v_or_b32 v6, vcc_hi, v7
+0x0050: v_or_b32 v5, vcc_lo, v8
+0x0054: v_lshlrev_b32 v2, 1, v6
+0x0058: v_lshlrev_b32 v1, 1, v5
+0x005c: v_bcnt_u32_b32 v2, 1, v2
+0x0060: v_bcnt_u32_b32 v1, 1, v1
+0x0064: s_load_dwordx8 s[4:11], s[0:1], 0x18
+0x0068: s_load_dwordx8 s[12:19], s[0:1], 0x8
+0x006c: v_cvt_f32_u32 v2, v2
+0x0070: v_cvt_f32_u32 v1, v1
+0x0074: s_waitcnt 0x7f
+0x0078: image_gather4_lz v1, v[1:2], s[12:19], s[8:11], dmask(r), unorm
+0x0080: v_and_b32 v7, 1, v7
+0x0084: v_cmp_lg_u32 v2, 0, v7, s0
+0x008c: v_and_b32 v7, 1, v8
+0x0090: v_cmp_lg_u32 0, v7
+0x0094: v_and_b32 v0, 3, v0
+0x0098: s_waitcnt 0xf70
+0x009c: v_cndmask_b32 v7, v1, v2, vcc
+0x00a4: v_cndmask_b32 v8, v4, v3, vcc
+0x00ac: v_cndmask_b32 v7, v7, v8
+0x00b0: v_rcp_f32 v7, v7
+0x00b4: v_mul_f32 v7, 0x3a83126f, v7
+0x00bc: image_store v7, v[5:6], s[4:7], s[0:3], dmask(r), r128
+0x00c4: v_rcp_f32 v1, v1
+0x00c8: v_rcp_f32 v2, v2
+0x00cc: v_max_f32 v1, v1, v2
+0x00d0: v_rcp_f32 v2, v4
+0x00d4: v_rcp_f32 v3, v3
+0x00d8: v_max3_f32 v1, v2, v1, v3
+0x00e0: v_mul_f32 v1, 0x3a83126f, v1
+0x00e8: unknown 
+0x00f0: s_waitcnt 0x7f
+0x00f4: v_max_f32 v1, v2, v1
+0x00f8: unknown 
+0x0100: v_cmpx_eq_u32 0, v0
+0x0104: s_cbranch_execz 0xa
+0x0108: s_waitcnt 0x7f
+0x010c: v_max_f32 v0, v2, v1
+0x0110: s_load_dwordx8 s[0:7], s[0:1], 0x10
+0x0114: v_mul_f32 v2, 0x3f8020c5, v0
+0x011c: v_lshrrev_b32 v0, 1, v5
+0x0120: v_lshrrev_b32 v1, 1, v6
+0x0124: s_waitcnt 0x7f
+0x0128: image_store v2, v[0:1], s[0:7], s[0:3], dmask(r)
+0x0130: s_endpgm 0x0

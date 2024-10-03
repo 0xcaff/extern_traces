@@ -1,0 +1,23 @@
+0x0000: s_mov_b32 vcc_hi, 0x14
+0x0008: v_mov_b32 v2, 0
+0x000c: s_movk_i32 s2, 0x604
+0x0010: v_bcnt_u32_b32 v0, 0, s2, s0
+0x0018: s_bfm_b32 m0, 2, 14
+0x001c: unknown 
+0x0024: unknown 
+0x002c: s_waitcnt 0x11f
+0x0030: v_add_co_u32 v0, v0, v1
+0x0034: s_waitcnt 0x7f
+0x0038: v_min_u32 v1, 0x200000, v2
+0x0040: v_sub_co_u32 v1, v1, v0
+0x0044: v_add_co_u32 v3, 63, v1
+0x0048: s_waitcnt 0xf0f
+0x004c: v_bcnt_u32_b32 v2, 0, s2, s0
+0x0054: v_lshrrev_b32 v3, 6, v3
+0x0058: v_mov_b32 v4, 0
+0x005c: s_load_dwordx4 s[0:3], s[0:1], 0x0
+0x0060: unknown 
+0x0068: s_waitcnt 0xf
+0x006c: v_cmpx_gt_u32 exec, s2, v4, s0
+0x0074: buffer_store_dword v3, v4, s[0:3], idxen, offset=0x0, soffset=0x80
+0x007c: s_endpgm 0x0
