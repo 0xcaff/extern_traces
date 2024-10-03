@@ -26,25 +26,27 @@
             },
         ),
         Dispatch {
-            dispatch_packet: DispatchDirectPacket {
-                dim_x: 8,
-                dim_y: 8,
-                dim_z: 1,
-                initiator: COMPUTE_DISPATCH_INITIATOR {
-                    COMPUTE_SHADER_EN: true,
-                    PARTIAL_TG_EN: false,
-                    FORCE_START_AT_000: false,
-                    ORDERED_APPEND_ENBL: false,
-                    ORDERED_APPEND_MODE: false,
-                    USE_THREAD_DIMENSIONS: false,
-                    ORDER_MODE: false,
-                    DISPATCH_CACHE_CNTL: 0,
-                    SCALAR_L1_INV_VOL: false,
-                    VECTOR_L1_INV_VOL: false,
-                    DATA_ATC: false,
-                    RESTORE: false,
+            dispatch_packet: DispatchDirect(
+                DispatchDirectPacket {
+                    dim_x: 8,
+                    dim_y: 8,
+                    dim_z: 1,
+                    initiator: COMPUTE_DISPATCH_INITIATOR {
+                        COMPUTE_SHADER_EN: true,
+                        PARTIAL_TG_EN: false,
+                        FORCE_START_AT_000: false,
+                        ORDERED_APPEND_ENBL: false,
+                        ORDERED_APPEND_MODE: false,
+                        USE_THREAD_DIMENSIONS: false,
+                        ORDER_MODE: false,
+                        DISPATCH_CACHE_CNTL: 0,
+                        SCALAR_L1_INV_VOL: false,
+                        VECTOR_L1_INV_VOL: false,
+                        DATA_ATC: false,
+                        RESTORE: false,
+                    },
                 },
-            },
+            ),
             pipeline: ComputePipeline {
                 address_lo: 4678084,
                 address_hi: COMPUTE_PGM_HI {

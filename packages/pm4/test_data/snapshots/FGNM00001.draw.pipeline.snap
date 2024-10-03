@@ -1,16 +1,18 @@
 (
     [
         Draw {
-            draw_packet: DrawIndexAutoPacket {
-                index_count: 3,
-                draw_initiator: VGT_DRAW_INITIATOR {
-                    SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
-                    MAJOR_MODE: DI_MAJOR_MODE_0,
-                    SPRITE_EN_R6XX: false,
-                    NOT_EOP: false,
-                    USE_OPAQUE: false,
+            draw_packet: DrawIndexAuto(
+                DrawIndexAutoPacket {
+                    index_count: 3,
+                    draw_initiator: VGT_DRAW_INITIATOR {
+                        SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                        MAJOR_MODE: DI_MAJOR_MODE_0,
+                        SPRITE_EN_R6XX: false,
+                        NOT_EOP: false,
+                        USE_OPAQUE: false,
+                    },
                 },
-            },
+            ),
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
                     stencil: None,
@@ -412,16 +414,18 @@
             },
         },
         Draw {
-            draw_packet: DrawIndexAutoPacket {
-                index_count: 3,
-                draw_initiator: VGT_DRAW_INITIATOR {
-                    SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
-                    MAJOR_MODE: DI_MAJOR_MODE_0,
-                    SPRITE_EN_R6XX: false,
-                    NOT_EOP: false,
-                    USE_OPAQUE: false,
+            draw_packet: DrawIndexAuto(
+                DrawIndexAutoPacket {
+                    index_count: 3,
+                    draw_initiator: VGT_DRAW_INITIATOR {
+                        SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                        MAJOR_MODE: DI_MAJOR_MODE_0,
+                        SPRITE_EN_R6XX: false,
+                        NOT_EOP: false,
+                        USE_OPAQUE: false,
+                    },
                 },
-            },
+            ),
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
                     stencil: Some(
@@ -891,16 +895,18 @@
             },
         },
         Draw {
-            draw_packet: DrawIndexAutoPacket {
-                index_count: 36,
-                draw_initiator: VGT_DRAW_INITIATOR {
-                    SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
-                    MAJOR_MODE: DI_MAJOR_MODE_0,
-                    SPRITE_EN_R6XX: false,
-                    NOT_EOP: false,
-                    USE_OPAQUE: false,
+            draw_packet: DrawIndexAuto(
+                DrawIndexAutoPacket {
+                    index_count: 36,
+                    draw_initiator: VGT_DRAW_INITIATOR {
+                        SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                        MAJOR_MODE: DI_MAJOR_MODE_0,
+                        SPRITE_EN_R6XX: false,
+                        NOT_EOP: false,
+                        USE_OPAQUE: false,
+                    },
                 },
-            },
+            ),
             pipeline: GraphicsPipeline {
                 depth_buffer: DepthBuffer {
                     stencil: Some(

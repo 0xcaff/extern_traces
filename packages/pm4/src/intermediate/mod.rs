@@ -1,7 +1,10 @@
 pub mod build;
 
 use crate::dispatch_direct::DispatchDirectPacket;
+use crate::dispatch_indirect::DispatchIndirectPacket;
+use crate::draw_index_2::DrawIndex2Packet;
 use crate::draw_index_auto::DrawIndexAutoPacket;
+use crate::draw_index_indirect::DrawIndexIndirectPacket;
 use crate::event_write_end_of_pipe::EventWriteEndOfPipePacket;
 use crate::event_write_end_of_shader::EventWriteEndOfShaderPacket;
 use crate::indirect_buffer::IndirectBufferPacket;
@@ -32,13 +35,26 @@ use alloc::vec::Vec;
 use pm4_internal_macros::{Build, BuildUserData};
 
 #[derive(Debug)]
+pub enum DrawPacket {
+    DrawIndexAuto(DrawIndexAutoPacket),
+    DrawIndex2(DrawIndex2Packet),
+    DrawIndexIndirect(DrawIndexIndirectPacket),
+}
+
+#[derive(Debug)]
+pub enum DispatchPacket {
+    DispatchDirect(DispatchDirectPacket),
+    DispatchIndirect(DispatchIndirectPacket),
+}
+
+#[derive(Debug)]
 pub enum Command {
     Draw {
-        draw_packet: DrawIndexAutoPacket,
+        draw_packet: DrawPacket,
         pipeline: GraphicsPipeline,
     },
     Dispatch {
-        dispatch_packet: DispatchDirectPacket,
+        dispatch_packet: DispatchPacket,
         pipeline: ComputePipeline,
     },
     EndOfPipe(EventWriteEndOfPipePacket),
@@ -95,7 +111,33 @@ pub fn convert(
                 value: Type3PacketValue::DrawIndexAuto(draw_packet),
             }) => {
                 result.push(Command::Draw {
-                    draw_packet: draw_packet.clone(),
+                    draw_packet: DrawPacket::DrawIndexAuto(draw_packet.clone()),
+                    pipeline: graphics_pipeline_builder.clone().finalize()?,
+                });
+            }
+            PM4Packet::Type3(Type3Packet {
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Graphics,
+                        ..
+                    },
+                value: Type3PacketValue::DrawIndex2(draw_packet),
+            }) => {
+                result.push(Command::Draw {
+                    draw_packet: DrawPacket::DrawIndex2(draw_packet.clone()),
+                    pipeline: graphics_pipeline_builder.clone().finalize()?,
+                });
+            }
+            PM4Packet::Type3(Type3Packet {
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Graphics,
+                        ..
+                    },
+                value: Type3PacketValue::DrawIndexIndirect(draw_packet),
+            }) => {
+                result.push(Command::Draw {
+                    draw_packet: DrawPacket::DrawIndexIndirect(draw_packet.clone()),
                     pipeline: graphics_pipeline_builder.clone().finalize()?,
                 });
             }
@@ -108,7 +150,20 @@ pub fn convert(
                 value: Type3PacketValue::DispatchDirect(dispatch_packet),
             }) => {
                 result.push(Command::Dispatch {
-                    dispatch_packet: dispatch_packet.clone(),
+                    dispatch_packet: DispatchPacket::DispatchDirect(dispatch_packet.clone()),
+                    pipeline: compute_pipeline_builder.clone().finalize()?,
+                });
+            }
+            PM4Packet::Type3(Type3Packet {
+                header:
+                    Type3Header {
+                        shader_type: ShaderType::Compute,
+                        ..
+                    },
+                value: Type3PacketValue::DispatchIndirect(dispatch_packet),
+            }) => {
+                result.push(Command::Dispatch {
+                    dispatch_packet: DispatchPacket::DispatchIndirect(dispatch_packet.clone()),
                     pipeline: compute_pipeline_builder.clone().finalize()?,
                 });
             }
