@@ -885,7 +885,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 6,
-                        index_base: 549819515392,
+                        index_base: 0x8003cc0200,
                         index_count: 6,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,

@@ -37057,7 +37057,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -37158,7 +37158,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -37259,7 +37259,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -37360,7 +37360,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -37461,7 +37461,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -37562,7 +37562,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -37663,7 +37663,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -49158,7 +49158,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -49259,7 +49259,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -49360,7 +49360,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -49461,7 +49461,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 960,
-                        index_base: 11990800128,
+                        index_base: 0x2cab51700,
                         index_count: 960,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -55800,7 +55800,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 14,
-                        index_base: 11543602176,
+                        index_base: 0x2b00d6400,
                         index_count: 14,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
@@ -55853,7 +55853,7 @@
                 value: DrawIndex2(
                     DrawIndex2Packet {
                         max_size: 14,
-                        index_base: 11543602176,
+                        index_base: 0x2b00d6400,
                         index_count: 14,
                         draw_initiator: VGT_DRAW_INITIATOR {
                             SOURCE_SELECT: DI_SRC_SEL_DMA,
