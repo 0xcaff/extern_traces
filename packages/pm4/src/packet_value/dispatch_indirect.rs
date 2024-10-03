@@ -3,8 +3,8 @@ use crate::packet_value::ParseType3Packet;
 use crate::COMPUTE_DISPATCH_INITIATOR;
 use alloc::vec::Vec;
 use bits::{Bits, TryFromBits, TryFromBitsContainer};
-use strum::FromRepr;
 use custom_debug::Debug;
+use strum::FromRepr;
 
 #[derive(FromRepr, Debug, Clone, Eq, PartialEq)]
 #[repr(u8)]

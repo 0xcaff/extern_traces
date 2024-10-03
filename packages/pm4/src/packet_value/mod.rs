@@ -1,3 +1,4 @@
+use crate::dispatch_indirect::DispatchIndirectPacket;
 use crate::indirect_buffer::IndirectBufferPacket;
 use crate::op_codes::OpCode;
 use crate::packet_value::acquire_memory::AcquireMemoryPacket;
@@ -15,7 +16,6 @@ use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use alloc::vec::Vec;
 use pm4_internal_macros::ParsePacketValue;
-use crate::dispatch_indirect::DispatchIndirectPacket;
 
 pub mod acquire_memory;
 pub mod clear_state;
