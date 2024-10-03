@@ -3,7 +3,7 @@ use crate::gfx_debug::ctx::GraphicsContext;
 use crate::gfx_debug::draw::process_draw_command;
 use crate::gfx_debug::resources::buffers::BuffersDataContainer;
 use gcn_extract::VertexBufferResourceWithRaw;
-use pm4::{convert, Command, PM4Packet};
+use pm4::{convert, Command, DrawPacket, PM4Packet};
 use std::collections::BTreeMap;
 use std::io::{Cursor, Read, Seek};
 use std::sync::Arc;
@@ -44,7 +44,7 @@ pub fn process_commands(
             //     data.update(result);
             // }
             Command::Draw {
-                draw_packet,
+                draw_packet: DrawPacket::DrawIndexAuto(draw_packet),
                 pipeline: pipeline_input,
             } => {
                 if let Some(it) = &pipeline_input.vertex_shader.entrypoint_gpu_address {
