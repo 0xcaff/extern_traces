@@ -14,6 +14,7 @@ use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use alloc::vec::Vec;
 use pm4_internal_macros::ParsePacketValue;
+use crate::packet_value::set_base::SetBasePacket;
 
 pub mod acquire_memory;
 pub mod clear_state;
@@ -26,6 +27,7 @@ pub mod event_write_end_of_shader;
 pub mod indirect_buffer;
 pub mod register;
 pub mod release_memory;
+mod set_base;
 pub mod wait_register_memory;
 
 #[derive(Debug, ParsePacketValue)]
@@ -44,6 +46,7 @@ pub enum Type3PacketValue {
     IndirectBuffer(IndirectBufferPacket),
     ReleaseMemory(ReleaseMemoryPacket),
     WaitRegisterMemory(WaitRegisterMemoryPacket),
+    SetBase(SetBasePacket),
     // todo: index_type
     Unknown { op: OpCode, body: Vec<u32> },
 }

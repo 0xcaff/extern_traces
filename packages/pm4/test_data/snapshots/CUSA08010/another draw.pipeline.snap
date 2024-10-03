@@ -34591,14 +34591,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -34672,14 +34669,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -34753,14 +34747,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -34834,14 +34825,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -34915,14 +34903,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -34996,14 +34981,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35077,14 +35059,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35158,14 +35137,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35239,14 +35215,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35320,14 +35293,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35401,14 +35371,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35482,14 +35449,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        992940544,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b2f1200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35752,14 +35716,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35867,14 +35828,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -35982,14 +35940,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36097,14 +36052,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36212,14 +36164,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36327,14 +36276,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36442,14 +36388,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36557,14 +36500,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36672,14 +36612,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36787,14 +36724,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36902,14 +36836,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -36991,16 +36922,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37041,14 +36976,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37091,16 +37023,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37141,14 +37077,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37191,16 +37124,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37241,14 +37178,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37291,16 +37225,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37341,14 +37279,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37391,16 +37326,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37441,14 +37380,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37491,16 +37427,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37541,14 +37481,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -37591,16 +37528,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -37641,14 +37582,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38120,14 +38058,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38235,14 +38170,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38350,14 +38282,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38465,14 +38394,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38580,14 +38506,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38695,14 +38618,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38810,14 +38730,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -38925,14 +38842,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39040,14 +38954,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39155,14 +39066,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39270,14 +39178,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300096,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531300,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39375,14 +39280,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39456,14 +39358,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39537,14 +39436,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39618,14 +39514,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39699,14 +39592,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39780,14 +39670,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -39861,14 +39748,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995300352,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b531400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40310,14 +40194,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40425,14 +40306,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40540,14 +40418,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40655,14 +40530,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40770,14 +40642,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -40885,14 +40754,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41000,14 +40866,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41115,14 +40978,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41230,14 +41090,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41345,14 +41202,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41460,14 +41314,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159808,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ef00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41799,14 +41650,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -41914,14 +41762,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42029,14 +41874,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42144,14 +41986,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42259,14 +42098,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42374,14 +42210,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42489,14 +42322,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42604,14 +42434,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42719,14 +42546,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42834,14 +42658,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -42949,14 +42770,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43023,14 +42841,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43097,14 +42912,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43171,14 +42983,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43245,14 +43054,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43319,14 +43125,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43393,14 +43196,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43467,14 +43267,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43541,14 +43338,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43615,14 +43409,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43689,14 +43480,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43809,14 +43597,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092992,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fea00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -43931,14 +43716,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092992,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fea00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -44548,14 +44330,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -44663,14 +44442,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -44778,14 +44554,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -44893,14 +44666,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45008,14 +44778,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45123,14 +44890,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45238,14 +45002,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45353,14 +45114,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45468,14 +45226,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45583,14 +45338,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45698,14 +45450,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092736,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fe900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -45818,14 +45567,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995092992,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b4fea00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46461,14 +46207,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46576,14 +46319,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46691,14 +46431,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46806,14 +46543,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -46921,14 +46655,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47036,14 +46767,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47151,14 +46879,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47266,14 +46991,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47381,14 +47103,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47496,14 +47215,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47611,14 +47327,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47685,14 +47398,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47759,14 +47469,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47833,14 +47540,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47907,14 +47611,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -47981,14 +47682,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48055,14 +47753,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48129,14 +47824,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48203,14 +47895,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48277,14 +47966,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48351,14 +48037,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48440,16 +48123,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -48490,14 +48177,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48540,16 +48224,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -48590,14 +48278,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48640,16 +48325,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -48690,14 +48379,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -48740,16 +48426,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        960,
-                        3400865536,
-                        2,
-                        960,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 960,
+                        index_base: 11990800128,
+                        index_count: 960,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -48790,14 +48480,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -49310,14 +48997,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -49425,14 +49109,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -49540,14 +49221,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -49655,14 +49333,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -49770,14 +49445,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -49885,14 +49557,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50000,14 +49669,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50115,14 +49781,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50230,14 +49893,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50345,14 +50005,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50460,14 +50117,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159040,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ec00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50565,14 +50219,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50646,14 +50297,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50727,14 +50375,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -50808,14 +50453,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995159296,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50ed00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51298,14 +50940,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51413,14 +51052,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51528,14 +51164,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51643,14 +51276,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51758,14 +51388,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51873,14 +51500,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -51988,14 +51612,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52103,14 +51724,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52218,14 +51836,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52333,14 +51948,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52448,14 +52060,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52563,14 +52172,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995233280,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b520e00,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52678,14 +52284,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52711,14 +52314,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52744,14 +52344,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52777,14 +52374,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52810,14 +52404,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52843,14 +52434,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52876,14 +52464,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52909,14 +52494,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52942,14 +52524,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -52975,14 +52554,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53008,14 +52584,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53041,14 +52614,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53074,14 +52644,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53107,14 +52674,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53140,14 +52704,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53173,14 +52734,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        924186880,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23715f900,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53329,14 +52887,11 @@
                     shader_type: Compute,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995160576,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50f200,
+                    },
+                ),
             },
         ),
         Type3(
@@ -53434,14 +52989,11 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: SET_BASE,
-                    body: [
-                        1,
-                        995161088,
-                        2,
-                    ],
-                },
+                value: SetBase(
+                    SetBasePacket {
+                        address: 0x23b50f400,
+                    },
+                ),
             },
         ),
         Type3(
@@ -54733,16 +54285,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        14,
-                        2953667584,
-                        2,
-                        14,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 14,
+                        index_base: 11543602176,
+                        index_count: 14,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(
@@ -54782,16 +54338,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        14,
-                        2953667584,
-                        2,
-                        14,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 14,
+                        index_base: 11543602176,
+                        index_count: 14,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
         Type3(

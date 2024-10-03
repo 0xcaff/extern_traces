@@ -882,16 +882,20 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: DRAW_INDEX_2,
-                    body: [
-                        6,
-                        63701504,
-                        128,
-                        6,
-                        0,
-                    ],
-                },
+                value: DrawIndex2(
+                    DrawIndex2Packet {
+                        max_size: 6,
+                        index_base: 549819515392,
+                        index_count: 6,
+                        draw_initiator: VGT_DRAW_INITIATOR {
+                            SOURCE_SELECT: DI_SRC_SEL_DMA,
+                            MAJOR_MODE: DI_MAJOR_MODE_0,
+                            SPRITE_EN_R6XX: false,
+                            NOT_EOP: false,
+                            USE_OPAQUE: false,
+                        },
+                    },
+                ),
             },
         ),
     ],
