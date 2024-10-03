@@ -10,14 +10,14 @@ use strum::FromRepr;
 pub struct WaitRegisterMemoryPacket {
     pub fields: Fields,
 
-    #[debug(format = "0x{:x}")]
+    #[debug(format = "{:#x}")]
     pub poll_address_lo: u32,
 
-    #[debug(format = "0x{:x}")]
+    #[debug(format = "{:#x}")]
     pub poll_address_hi: u32,
     pub reference: u32,
 
-    #[debug(format = "0x{:x}")]
+    #[debug(format = "{:#x}")]
     pub mask: u32,
     pub poll_interval: u32,
 }

@@ -212,7 +212,7 @@ impl ScalarSourceOperand {
                 unimplemented!()
             }
             ScalarSourceOperand::LiteralConstant => {
-                format!("0x{:x}", literal_constant.unwrap())
+                format!("{:#x}", literal_constant.unwrap())
             }
         }
     }

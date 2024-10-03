@@ -63,7 +63,7 @@ impl DisplayInstruction for SMEMInstruction {
                         _ => unimplemented!(),
                     }),
                 )),
-                format!("0x{:x}", self.offset),
+                format!("{:#x}", self.offset),
             ],
         }
     }

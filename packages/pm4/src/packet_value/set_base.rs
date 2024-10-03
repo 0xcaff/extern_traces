@@ -22,7 +22,7 @@ impl TryFromBits<4> for BaseIndex {
 
 #[derive(Debug, Clone)]
 pub struct SetBasePacket {
-    #[debug(format = "0x{:x}")]
+    #[debug(format = "{:#x}")]
     pub address: u64,
 }
 

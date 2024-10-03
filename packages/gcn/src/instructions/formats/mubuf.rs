@@ -129,8 +129,8 @@ impl DisplayInstruction for MUBUFInstruction {
                     args.push("tfe".to_string());
                 }
 
-                args.push(format!("offset=0x{:x}", self.offset.0));
-                args.push(format!("soffset=0x{:x}", self.soffset));
+                args.push(format!("offset={:#x}", self.offset.0));
+                args.push(format!("soffset={:#x}", self.soffset));
 
                 args
             },

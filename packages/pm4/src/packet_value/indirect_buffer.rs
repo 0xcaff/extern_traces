@@ -6,7 +6,7 @@ use custom_debug::Debug;
 
 #[derive(Debug, Clone)]
 pub struct IndirectBufferPacket {
-    #[debug(format = "0x{:x}")]
+    #[debug(format = "{:#x}")]
     pub virtual_address: u64,
     pub vmid: u32,
     pub command_buffer_size_dwords: u32,

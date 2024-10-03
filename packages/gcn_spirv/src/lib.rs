@@ -238,7 +238,7 @@ fn translate_instruction(
 
                     context.logger.log(
                         builder,
-                        &format!("sgpr[{}] = %x (address 0x{:x})", register_idx, address),
+                        &format!("sgpr[{}] = %x (address {:#x})", register_idx, address),
                         &[memory_value],
                     )?;
 

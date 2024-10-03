@@ -11,7 +11,7 @@ use strum::FromRepr;
 pub struct ReleaseMemoryPacket {
     pub op: RELEASE_MEM_OP,
     pub selector: Selectors,
-    #[debug(format = "0x{:x}")]
+    #[debug(format = "{:#x}")]
     pub virtual_address: u64,
     pub immediate_data: u64,
 }

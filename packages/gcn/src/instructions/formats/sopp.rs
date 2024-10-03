@@ -25,9 +25,9 @@ impl DisplayInstruction for SOPPInstruction {
         DisplayableInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![if self.simm16 < 0 {
-                format!("-0x{:x}", self.simm16.abs())
+                format!("-{:#x}", self.simm16.abs())
             } else {
-                format!("0x{:x}", self.simm16)
+                format!("{:#x}", self.simm16)
             }],
         }
     }

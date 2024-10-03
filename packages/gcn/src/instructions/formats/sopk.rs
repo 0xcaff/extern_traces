@@ -31,7 +31,7 @@ impl DisplayInstruction for SOPKInstruction {
             op: self.op.as_ref().to_string(),
             args: vec![
                 self.sdst.display(&op_info.definitions[0]),
-                format!("0x{:x}", self.simm16),
+                format!("{:#x}", self.simm16),
             ],
         }
     }
