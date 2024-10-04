@@ -1,5 +1,5 @@
-use core::panic::PanicInfo;
 use crate::println;
+use core::panic::PanicInfo;
 
 #[lang = "eh_personality"]
 extern "C" fn eh_personality() {}
@@ -19,4 +19,3 @@ fn panic(info: &PanicInfo) -> ! {
 
     core::intrinsics::abort();
 }
-

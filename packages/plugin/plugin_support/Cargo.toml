@@ -10,6 +10,7 @@ crate-type = ["staticlib"]
 libc = "0.2.159"
 bytemuck = { version = "1.18.0", features = ["derive"] }
 anyhow = { version = "1.0.89", default-features = false }
+bitflags = "2.6.0"
 
 [profile.release]
 panic = "abort"

@@ -26,4 +26,3 @@ macro_rules! println {
         $crate::platform::stdio::println(core::format_args!($($arg)*));
     };
 }
-
