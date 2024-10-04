@@ -61,8 +61,11 @@ ifeq ($(UNAME_S),Darwin)
         CDIR    := macos
 endif
 
-$(TARGET): $(INTDIR) $(OBJS)
-	$(LD) $(GH_SDK)/build/crtprx.o $(INTDIR)/*.o -o $(TARGET_ELF).elf $(LDFLAGS)
+./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a:
+	cargo -Z unstable-options -C plugin_support build --target x86_64-unknown-freebsd --release
+
+$(TARGET): $(INTDIR) $(OBJS) ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
+	$(LD) $(GH_SDK)/build/crtprx.o $(INTDIR)/*.o ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a -o $(TARGET_ELF).elf $(LDFLAGS)
 	$(TOOLCHAIN)/bin/$(CDIR)/create-fself -in=$(TARGET_ELF).elf -out=$(TARGET_ELF).oelf --lib=$(TARGET).prx --paid 0x3800000000000011
 
 $(TARGETSTUB): $(INTDIR) $(STUBOBJS)
@@ -92,7 +95,7 @@ build-info:
 config:
 	curl -T config.ini ftp://192.168.1.123:2121/data/extern_traces.ini
 
-.PHONY: clean config
+.PHONY: clean config ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
 .DEFAULT_GOAL := all
 
 all: build-info plugin_common $(TARGET)
