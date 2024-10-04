@@ -55417,12 +55417,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -55473,12 +55473,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        1024,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -57490,12 +57490,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -57987,12 +57987,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -61336,12 +61336,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -63081,12 +63081,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        1024,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -63319,12 +63319,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -63334,12 +63334,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -64857,12 +64857,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        1024,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -67114,12 +67114,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -67431,12 +67431,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71263,12 +71263,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71299,12 +71299,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -71335,12 +71335,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73070,12 +73070,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        1024,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73085,12 +73085,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(
@@ -73578,12 +73578,12 @@
                     shader_type: Graphics,
                     predicate: false,
                 },
-                value: Unknown {
-                    op: INDEX_TYPE,
-                    body: [
-                        0,
-                    ],
-                },
+                value: IndexType(
+                    IndexTypePacket {
+                        index_type: U16,
+                        swap_mode: 0,
+                    },
+                ),
             },
         ),
         Type3(

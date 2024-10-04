@@ -18,6 +18,7 @@ use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use alloc::vec::Vec;
 use pm4_internal_macros::ParsePacketValue;
+use crate::index_type::IndexTypePacket;
 
 pub mod acquire_memory;
 pub mod clear_state;
@@ -35,6 +36,7 @@ pub mod register;
 pub mod release_memory;
 pub mod set_base;
 pub mod wait_register_memory;
+pub mod index_type;
 
 #[derive(Debug, ParsePacketValue)]
 pub enum Type3PacketValue {
@@ -56,7 +58,7 @@ pub enum Type3PacketValue {
     WaitRegisterMemory(WaitRegisterMemoryPacket),
     SetBase(SetBasePacket),
     EventWrite(EventWritePacket),
-    // todo: index_type
+    IndexType(IndexTypePacket),
     Unknown { op: OpCode, body: Vec<u32> },
 }
 
