@@ -6,5 +6,6 @@
 
 extern crate alloc;
 mod hook;
+mod logger;
 mod mapped_memory;
 mod platform;

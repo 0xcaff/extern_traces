@@ -23,37 +23,6 @@ void unsafe_write_atomic(volatile _Atomic(struct ThreadLoggingState *) *atomic_p
     *regular_ptr = new_value;
 }
 
-struct BufferState* new_buffer_state(uint64_t size) {
-    if (size > 67108864) {
-        // fail allocation, drop the remaining messages
-        return NULL;
-    }
-
-    final_printf("allocating new buffer state @ %lu\n", size);
-
-    void *addr = NULL;
-    int ret = ((int (*)())sceKernelMapNamedSystemFlexibleMemory)(
-        &addr,
-        size,
-        0x02,
-        0,
-        "BufferState"
-    );
-    if (ret != 0)
-    {
-        final_printf("sceKernelMapFlexibleMemory failed: 0x%x\n", ret);
-        return NULL;
-    }
-
-    struct BufferState* buffer_state = (struct BufferState*)addr;
-    buffer_state->write_idx = 0;
-    buffer_state->read_idx = 0;
-    buffer_state->last_buffer = NULL;
-    buffer_state->size = size;
-
-    return buffer_state;
-}
-
 static int64_t thread_logging_base = 0;
 static int64_t thread_logging_computed_offset = -8;
 
@@ -80,126 +49,6 @@ void write_thread_logging_state_slow(uint64_t new_value)
         :
         : "r"(new_value), "r"(thread_logging_computed_offset)
         : "memory");
-}
-
-uint64_t buffer_state_free_space(struct BufferState *state) {
-    uint64_t free_space;
-    uint64_t read_idx = state->read_idx;
-    uint64_t size = state->size - sizeof(struct BufferState);
-
-    if (state->write_idx >= read_idx)
-    {
-        free_space = size - (state->write_idx - read_idx);
-    }
-    else
-    {
-        free_space = read_idx - state->write_idx;
-    }
-
-    return free_space;
-}
-
-uint64_t max(uint64_t a, uint64_t b) {
-    if (a > b) {
-        return a;
-    }
-
-    return b;
-}
-
-struct BufferReservation thread_logging_state_reserve_space(
-    struct ThreadLoggingState* thread_state,
-    size_t length
-) {
-    struct BufferState* current_buffer = thread_state->current_buffer;
-    uint64_t buffer_free_space = buffer_state_free_space(thread_state->current_buffer);
-    if (buffer_free_space > length) {
-        struct BufferReservation value = {
-            .buffer = current_buffer,
-            .write_idx = current_buffer->write_idx,
-            .available_bytes = buffer_free_space - 1,
-            .is_new = false,
-        };
-
-        return value;
-    }
-
-    uint64_t next_size = (((length * 2) + (INITIAL_ALLOCATION_SIZE - 1)) / INITIAL_ALLOCATION_SIZE) * INITIAL_ALLOCATION_SIZE;
-    uint64_t resolved_size = max(next_size, current_buffer->size * 2);
-    struct BufferState* next_buffer = new_buffer_state(resolved_size);
-    if (!next_buffer) {
-        thread_state->dropped_packets_count += 1;
-
-        struct BufferReservation value = {
-            .buffer = NULL,
-            .write_idx = 0,
-            .available_bytes = 0,
-            .is_new = false,
-        };
-
-        return value;
-    }
-
-    next_buffer->last_buffer = current_buffer;
-    struct BufferReservation value = {
-        .buffer = next_buffer,
-        .write_idx = next_buffer->write_idx,
-        .available_bytes = resolved_size - 1,
-        .is_new = true,
-    };
-
-    return value;
-}
-
-void buffer_reservation_write(
-    struct BufferReservation* reservation,
-    const uint8_t *data,
-    size_t length
-) {
-    if (length > reservation->available_bytes) {
-        final_printf("invariant violated, exceeded reserved space!\n");
-        return;
-    }
-
-    uint64_t size = reservation->buffer->size - sizeof(struct BufferState);
-    size_t end_pos = (reservation->write_idx + length) % size;
-    if (end_pos < reservation->write_idx)
-    {
-        size_t first_chunk = size - reservation->write_idx;
-        memcpy(&reservation->buffer->buffer[reservation->write_idx], data, first_chunk);
-        memcpy(&reservation->buffer->buffer, data + first_chunk, end_pos);
-    }
-    else
-    {
-        memcpy(&reservation->buffer->buffer[reservation->write_idx], data, length);
-    }
-
-    reservation->write_idx = end_pos;
-    reservation->available_bytes -= length;
-}
-
-void thread_logging_state_flush_reservation(
-    struct ThreadLoggingState* thread_state,
-    struct BufferReservation reservation
-) {
-    reservation.buffer->write_idx = reservation.write_idx;
-    if (reservation.is_new) {
-        thread_state->current_buffer = reservation.buffer;
-    }
-}
-
-void write_to_buffer(
-    struct ThreadLoggingState* thread_state,
-    const uint8_t *data,
-    size_t length
-) {
-    struct BufferReservation reservation = thread_logging_state_reserve_space(thread_state, length);
-    if (reservation.buffer == NULL) {
-        return;
-    }
-
-    buffer_reservation_write(&reservation, data, length);
-    thread_logging_state_flush_reservation(thread_state, reservation);
 }
 
 ssize_t send_all(int sock, const uint8_t *buffer, size_t length)
@@ -503,31 +352,6 @@ void fini_thread_local_state()
 
 struct ThreadLoggingState *init_thread_local_state()
 {
-    OrbisPthread thread = scePthreadSelf();
-    uint64_t thread_id = (uint64_t)thread;
-
-    final_printf("init_thread_local_state\n");
-
-    struct ThreadLoggingState* thread_logging_state = (struct ThreadLoggingState*)malloc(sizeof(struct ThreadLoggingState));
-    if (thread_logging_state == NULL)
-    {
-        final_printf("allocation failed\n");
-        return NULL;
-    }
-
-    thread_logging_state->is_finished = false;
-    thread_logging_state->thread_id = thread_id;
-    thread_logging_state->dropped_packets_count = 0;
-    thread_logging_state->last_dropped_packets_count = 0;
-    thread_logging_state->last_counter_flush_time = 0;
-
-    struct BufferState* buffer_state = new_buffer_state(INITIAL_ALLOCATION_SIZE);
-    if (!buffer_state) {
-        return NULL;
-    }
-
-    thread_logging_state->current_buffer = buffer_state;
-
     for (size_t i = 0; i < 256; ++i)
     {
         struct ThreadLoggingState *expected = NULL;
