@@ -37,8 +37,8 @@ impl ThreadLoggingState {
         let free_space = current_buffer.free_space();
         if free_space > reservation_size {
             return Some(BufferReservation {
-                buffer_state: BufferReservationRef::Existing(current_buffer),
                 write_idx: current_buffer.write_idx,
+                buffer_state: BufferReservationRef::Existing(current_buffer),
                 available_bytes: reservation_size,
             });
         }
@@ -49,7 +49,7 @@ impl ThreadLoggingState {
             current_buffer.total_size * 2,
         );
 
-        let Some(next_buffer) = BufferState::try_create(next_size) else {
+        let Some(mut next_buffer) = BufferState::try_create(next_size) else {
             self.failed_reservations_count += 1;
             return None;
         };
@@ -94,10 +94,9 @@ impl<'a> DerefMut for BufferReservationRef<'a> {
     }
 }
 
-const INITIAL_ALLOCATION_SIZE: usize = (16 * 1024);
+const INITIAL_ALLOCATION_SIZE: usize = 16 * 1024;
 
-
-impl BufferReservation {
+impl BufferReservation<'_> {
     pub fn write(&mut self, input: &[u8]) {
         let input_len = input.len();
 
@@ -122,7 +121,7 @@ impl BufferReservation {
 }
 
 impl ThreadLoggingState {
-    pub fn flush(&mut self, reservation: BufferReservation) {
+    pub fn commit(&mut self, mut reservation: BufferReservation) {
         reservation.buffer_state.write_idx = reservation.write_idx;
         if let BufferReservationRef::New(new_buffer) = reservation.buffer_state {
             self.current_buffer = new_buffer;
@@ -147,7 +146,7 @@ impl BufferState {
         let ret = unsafe {
             sceKernelMapNamedSystemFlexibleMemory(
                 &mut addr,
-                total_size as _,
+                total_size,
                 libc::PROT_WRITE | libc::PROT_READ,
                 0,
                 c"BufferState".as_ptr(),
@@ -158,7 +157,9 @@ impl BufferState {
             return None;
         }
 
-        let buffer_state = BufferState { inner: unsafe { NonNull::new_unchecked(addr as _) } };
+        let mut buffer_state = BufferState {
+            inner: unsafe { NonNull::new_unchecked(addr as _) },
+        };
         buffer_state.write_idx = 0;
         buffer_state.read_idx = 0;
         buffer_state.last_buffer = None;
@@ -182,6 +183,30 @@ impl DerefMut for BufferState {
     }
 }
 
+/// A ring buffer, consisting of:
+/// * a slab of memory (`bytes`)
+/// * a read index (`read_idx`)
+/// * a write index (`write_idx`)
+///
+/// We interpret the read index as always being behind the write index. If they
+/// overlap, this means there is nothing to read (rather than the full buffer
+/// is available for writing).
+///
+/// ## Invariants
+/// * the write index (`write_idx`) will be updated by a single thread but can
+///   be read from multiple threads. the `write_idx` will be updated after
+///   stuff has been written into the buffer.
+///
+/// * the read index (`read_idx`) will be updated by a single thread but can be
+///   read from multiple threads. the `read_idx` will be updated after stuff
+///   has been consumed from the buffer and is safe to overwrite.
+///
+/// * we rely on x86_64 TSO to ensure ordering
+///     * between buffer writes and `write_idx` (the buffer writes will never
+///       be visible before the `write_idx` has been updated)
+///
+///     * between buffer reads and `read_idx` (the buffer `read_idx` will never
+///       be visible before the buffer contents has been consumed)
 struct BufferStateInner {
     write_idx: usize,
     read_idx: usize,
@@ -201,29 +226,78 @@ impl BufferStateInner {
         unsafe { slice::from_raw_parts_mut(self.bytes.as_mut_ptr(), len) }
     }
 
+    fn bytes(&self) -> &[u8] {
+        let len = self.bytes_len();
+        unsafe { slice::from_raw_parts(self.bytes.as_ptr(), len) }
+    }
+
     fn free_space(&self) -> usize {
         let read_idx = self.read_idx;
         let write_idx = self.write_idx;
         let size = self.bytes_len();
 
-        if (write_idx >= read_idx) {
+        if write_idx >= read_idx {
             size - (write_idx - read_idx)
         } else {
             read_idx - write_idx
         }
     }
-}
 
+    fn available_read(&self) -> (&[u8], Option<&[u8]>) {
+        let write_idx = self.write_idx;
+
+        let bytes = self.bytes();
+        if write_idx >= self.read_idx {
+            (&bytes[self.read_idx..write_idx], None)
+        } else {
+            (&bytes[self.read_idx..], Some(&bytes[..self.write_idx]))
+        }
+    }
+
+    fn advance_read(&mut self, len: usize) {
+        self.read_idx = (self.read_idx + len) % self.bytes_len();
+    }
+}
 
 extern "C" {
     fn sceKernelMapNamedSystemFlexibleMemory(
         addr: *mut *mut libc::c_void,
-        len: isize,
+        len: usize,
         prot: libc::c_int,
         flags: libc::c_int,
         name: *const libc::c_char,
     ) -> libc::c_int;
 
+    fn sceKernelMunmap(addr: *mut libc::c_void, len: usize) -> libc::c_int;
+
     fn scePthreadSelf() -> u64;
 }
 
+impl ThreadLoggingState {
+    pub fn flush(&mut self, writer: &mut impl Write) -> Result<(), ()> {
+        Ok(self.current_buffer.flush(writer)?)
+    }
+}
+
+impl BufferStateInner {
+    pub fn flush(&mut self, writer: &mut impl Write) -> Result<(), ()> {
+        if let Some(mut it) = self.last_buffer.take() {
+            unsafe {
+                it.as_mut().flush(writer)?;
+
+                sceKernelMunmap(it.as_ptr() as _, it.as_ref().total_size);
+            }
+        }
+
+        let (head, tail) = self.available_read();
+        writer.write_ring_slice((head, tail))?;
+        let available_read_len = head.len() + tail.as_ref().map_or(0, |it| it.len());
+        self.advance_read(available_read_len);
+
+        Ok(())
+    }
+}
+
+trait Write {
+    fn write_ring_slice(&mut self, bytes: (&[u8], Option<&[u8]>)) -> Result<(), ()>;
+}
