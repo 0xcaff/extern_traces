@@ -4,6 +4,6 @@ members = [
     "packages/ps4libdoc"
 ]
 exclude = [
-    "packages/plugin_support"
+    "packages/plugin/plugin_support"
 ]
 resolver = "2"

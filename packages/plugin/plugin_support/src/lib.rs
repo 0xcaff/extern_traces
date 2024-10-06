@@ -4,8 +4,9 @@
 #![feature(ptr_as_ref_unchecked)]
 extern crate alloc;
 
+mod platform;
+
 mod ffi;
-mod io;
 
 use crate::ffi::{Args, ThreadLoggingState};
 use alloc::collections::btree_map::Entry;
@@ -14,8 +15,6 @@ use alloc::vec;
 use alloc::vec::Vec;
 use anyhow::bail;
 use bytemuck::{Pod, Zeroable};
-use core::alloc::{GlobalAlloc, Layout};
-use core::panic::PanicInfo;
 use core::slice;
 use gcn::instructions::formats::{FormattedInstruction, SOP1Instruction, SOPPInstruction};
 use gcn::instructions::operands::{ScalarDestinationOperand, ScalarSourceOperand};
@@ -27,40 +26,6 @@ use gcn_extract::{
     ShaderInvocation, TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
 };
 use pm4::{convert, Command, PM4Packet};
-
-#[lang = "eh_personality"]
-extern "C" fn eh_personality() {}
-
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    if let Some(location) = info.location() {
-        println!(
-            "panic occurred at {}:{}: {}",
-            location.file(),
-            location.line(),
-            info.message()
-        );
-    } else {
-        println!("panic occurred: {}", info.message());
-    }
-
-    core::intrinsics::abort();
-}
-
-struct MyAllocator;
-
-unsafe impl GlobalAlloc for MyAllocator {
-    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        libc::malloc(layout.size()) as *mut u8
-    }
-
-    unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
-        libc::free(ptr as *mut libc::c_void)
-    }
-}
-
-#[global_allocator]
-static GLOBAL: MyAllocator = MyAllocator;
 
 unsafe fn command_buffers<'a>(
     count: usize,

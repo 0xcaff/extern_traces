@@ -1,4 +1,5 @@
-use core::fmt::{self, Write};
+use core::fmt;
+use core::fmt::Write;
 
 const STDOUT: libc::c_int = 1;
 
@@ -22,6 +23,6 @@ pub fn println(args: fmt::Arguments) {
 #[macro_export]
 macro_rules! println {
     ($($arg:tt)*) => {
-        $crate::io::println(core::format_args!($($arg)*));
+        $crate::platform::stdio::println(core::format_args!($($arg)*));
     };
 }
