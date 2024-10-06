@@ -66,6 +66,7 @@ endif
 
 $(TARGET): $(INTDIR) $(OBJS) ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
 	$(LD) $(GH_SDK)/build/crtprx.o $(INTDIR)/*.o ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a -o $(TARGET_ELF).elf $(LDFLAGS)
+	$(TOOLCHAIN)/bin/$(CDIR)/create-fself -in=$(TARGET_ELF).elf -out=$(TARGET_ELF).oelf --lib=$(TARGET).prx --paid 0x3800000000000011
 
 $(TARGETSTUB): $(INTDIR) $(STUBOBJS)
 	$(CC) $(INTDIR)/*.o.stub -o $(TARGETSTUB) -target x86_64-pc-linux-gnu -shared -fuse-ld=lld -ffreestanding -nostdlib -fno-builtin -L$(TOOLCHAIN)/lib $(LIBS)
@@ -94,12 +95,13 @@ build-info:
 config:
 	curl -T config.ini ftp://192.168.1.123:2121/data/extern_traces.ini
 
-.PHONY: clean config ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
+.PHONY: clean config # ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
 .DEFAULT_GOAL := all
 
 all: build-info plugin_common $(TARGET)
 
 deploy: all config
+	echo $(TARGET)
 	curl -T target/prx_final/extern_traces.prx ftp://192.168.1.123:2121/data/GoldHEN/plugins/extern_traces.prx
 
 clean:
