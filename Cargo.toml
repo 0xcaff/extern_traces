@@ -1,7 +1,18 @@
 [workspace]
 members = [
     "packages/extern_traces_viewer",
-    "packages/ps4libdoc"
+    "packages/ps4libdoc",
+    "packages/gcn",
+    "packages/gcn_internal_macros",
+    "packages/macro_utils",
+    "packages/bits",
+    "packages/bits_macros",
+    "packages/pm4",
+    "packages/pm4_internal_macros",
+    "packages/ps4libdoc",
+    "packages/snapshot_test_utils",
+    "packages/gcn_spirv",
+    "packages/gcn_extract"
 ]
 exclude = [
     "packages/extern_traces_plugin/plugin_support"

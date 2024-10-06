@@ -1,6 +1,6 @@
 {
   "build": { "dockerfile": "Dockerfile" },
-  "postCreateCommand": "cargo build",
+  "postCreateCommand": "rustup show",
   "customizations": {
     "vscode": {
       "extensions": [

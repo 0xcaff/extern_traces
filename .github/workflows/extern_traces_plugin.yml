@@ -11,6 +11,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.12
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install
+
+      - name: Codegen regs.rs
+        run: |
+          cd packages/pm4/src/registers/generated
+          pipenv run python regs_rs.py
+
+      - name: Codegen pkt3.rs
+        run: |
+          cd packages/pm4/src/registers/generated
+          pipenv run python pkt3_rs.py
+
       - name: Run make in Docker
         uses: docker://ghcr.io/0xcaff/ps4-sdk-images/goldhen:edge
         with:

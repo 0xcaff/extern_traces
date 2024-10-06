@@ -101,7 +101,10 @@ impl SpanDetailPane {
                                 |it| Ok(it.ok_or_else(|| format_err!("missing value color"))?),
                             ) {
                             Ok(value) => {
-                                self.last_image.replace((value, self.last_image.as_ref().map(|it| it.1).unwrap_or(0) + 1));
+                                self.last_image.replace((
+                                    value,
+                                    self.last_image.as_ref().map(|it| it.1).unwrap_or(0) + 1,
+                                ));
                             }
                             Err(err) => {
                                 println!("{:?}", err);

@@ -27,6 +27,27 @@ jobs:
         with:
           submodules: true
 
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.12
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install
+
+      - name: Codegen regs.rs
+        run: |
+          cd packages/pm4/src/registers/generated
+          pipenv run python regs_rs.py
+
+      - name: Codegen pkt3.rs
+        run: |
+          cd packages/pm4/src/registers/generated
+          pipenv run python pkt3_rs.py
+
       - run: cargo build --target ${{ matrix.target }} --release
 
       - name: save artifacts
