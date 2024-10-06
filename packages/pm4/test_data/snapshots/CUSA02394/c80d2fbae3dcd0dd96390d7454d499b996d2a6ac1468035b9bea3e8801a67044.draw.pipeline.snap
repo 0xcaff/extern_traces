@@ -1,0 +1,2233 @@
+(
+    [
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0x10c0a0,
+                poll_address_hi: 0x2,
+                reference: 0,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 8592032592,
+                immediate: 0,
+            },
+        ),
+        Dispatch {
+            dispatch_packet: DispatchDirect(
+                DispatchDirectPacket {
+                    dim_x: 32640,
+                    dim_y: 1,
+                    dim_z: 1,
+                    initiator: COMPUTE_DISPATCH_INITIATOR {
+                        COMPUTE_SHADER_EN: true,
+                        PARTIAL_TG_EN: false,
+                        FORCE_START_AT_000: false,
+                        ORDERED_APPEND_ENBL: false,
+                        ORDERED_APPEND_MODE: false,
+                        USE_THREAD_DIMENSIONS: false,
+                        ORDER_MODE: false,
+                        DISPATCH_CACHE_CNTL: 0,
+                        SCALAR_L1_INV_VOL: false,
+                        VECTOR_L1_INV_VOL: false,
+                        DATA_ATC: false,
+                        RESTORE: false,
+                    },
+                },
+            ),
+            pipeline: ComputePipeline {
+                address_lo: 34611209,
+                address_hi: COMPUTE_PGM_HI {
+                    DATA: 0,
+                    INST_ATC: false,
+                },
+                resource1: COMPUTE_PGM_RSRC1 {
+                    VGPRS: 0,
+                    SGPRS: 2,
+                    PRIORITY: 0,
+                    FLOAT_MODE: FP_16_64_DENORMS,
+                    PRIV: false,
+                    DX10_CLAMP: false,
+                    DEBUG_MODE: false,
+                    IEEE_MODE: false,
+                    BULKY: false,
+                    CDBG_USER: false,
+                },
+                resource2: COMPUTE_PGM_RSRC2 {
+                    SCRATCH_EN: false,
+                    USER_SGPR: 16,
+                    TRAP_PRESENT: false,
+                    TGID_X_EN: true,
+                    TGID_Y_EN: false,
+                    TGID_Z_EN: false,
+                    TG_SIZE_EN: false,
+                    TIDIG_COMP_CNT: 0,
+                    EXCP_EN_MSB: 0,
+                    LDS_SIZE: 0,
+                },
+                thread_x: COMPUTE_NUM_THREAD_X {
+                    NUM_THREAD_FULL: 64,
+                    NUM_THREAD_PARTIAL: 0,
+                },
+                thread_y: COMPUTE_NUM_THREAD_X {
+                    NUM_THREAD_FULL: 1,
+                    NUM_THREAD_PARTIAL: 0,
+                },
+                thread_z: COMPUTE_NUM_THREAD_X {
+                    NUM_THREAD_FULL: 1,
+                    NUM_THREAD_PARTIAL: 0,
+                },
+                user_data: ComputeUserData(
+                    {
+                        4: 2277124,
+                        5: 262146,
+                        6: 1,
+                        7: 537018372,
+                        8: 270565376,
+                        9: 290818,
+                        10: 2088960,
+                        11: 402800644,
+                        12: 2277248,
+                        13: 1048578,
+                        14: 1,
+                        15: 537362348,
+                    },
+                ),
+            },
+        },
+        EndOfShader(
+            EventWriteEndOfShaderPacket {
+                event_type: CS_DONE,
+                address: 8591073300,
+                data: StorePacketData {
+                    data: 1,
+                },
+            },
+        ),
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0x22c028,
+                poll_address_hi: 0x2,
+                reference: 1,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
+        Draw {
+            draw_packet: DrawIndexAuto(
+                DrawIndexAutoPacket {
+                    index_count: 6,
+                    draw_initiator: VGT_DRAW_INITIATOR {
+                        SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                        MAJOR_MODE: DI_MAJOR_MODE_0,
+                        SPRITE_EN_R6XX: false,
+                        NOT_EOP: false,
+                        USE_OPAQUE: false,
+                    },
+                },
+            ),
+            pipeline: GraphicsPipeline {
+                depth_buffer: DepthBuffer {
+                    stencil: None,
+                    z: None,
+                    depth: Depth {
+                        control: Some(
+                            DB_DEPTH_CONTROL {
+                                STENCIL_ENABLE: false,
+                                Z_ENABLE: false,
+                                Z_WRITE_ENABLE: false,
+                                DEPTH_BOUNDS_ENABLE: false,
+                                ZFUNC: FRAG_NEVER,
+                                BACKFACE_ENABLE: false,
+                                STENCILFUNC: FRAG_NEVER,
+                                STENCILFUNC_BF: FRAG_NEVER,
+                                ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
+                                DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
+                            },
+                        ),
+                        clear: None,
+                        size: None,
+                        slice: None,
+                        info: None,
+                        view: None,
+                    },
+                    render_control: None,
+                    shader_control: Some(
+                        DB_SHADER_CONTROL {
+                            Z_EXPORT_ENABLE: false,
+                            STENCIL_TEST_VAL_EXPORT_ENABLE: false,
+                            STENCIL_OP_VAL_EXPORT_ENABLE: false,
+                            Z_ORDER: EARLY_Z_THEN_LATE_Z,
+                            KILL_ENABLE: false,
+                            COVERAGE_TO_MASK_ENABLE: false,
+                            MASK_EXPORT_ENABLE: false,
+                            EXEC_ON_HIER_FAIL: false,
+                            EXEC_ON_NOOP: false,
+                            ALPHA_TO_MASK_DISABLE: false,
+                            DEPTH_BEFORE_SHADER: false,
+                            CONSERVATIVE_Z_EXPORT: EXPORT_ANY_Z,
+                        },
+                    ),
+                    htile: None,
+                },
+                primitive_assembly: Some(
+                    PrimitiveAssembly {
+                        clip: Clip {
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
+                            vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
+                                CLIP_DIST_ENA_0: false,
+                                CLIP_DIST_ENA_1: false,
+                                CLIP_DIST_ENA_2: false,
+                                CLIP_DIST_ENA_3: false,
+                                CLIP_DIST_ENA_4: false,
+                                CLIP_DIST_ENA_5: false,
+                                CLIP_DIST_ENA_6: false,
+                                CLIP_DIST_ENA_7: false,
+                                CULL_DIST_ENA_0: false,
+                                CULL_DIST_ENA_1: false,
+                                CULL_DIST_ENA_2: false,
+                                CULL_DIST_ENA_3: false,
+                                CULL_DIST_ENA_4: false,
+                                CULL_DIST_ENA_5: false,
+                                CULL_DIST_ENA_6: false,
+                                CULL_DIST_ENA_7: false,
+                                USE_VTX_POINT_SIZE: false,
+                                USE_VTX_EDGE_FLAG: false,
+                                USE_VTX_RENDER_TARGET_INDX: false,
+                                USE_VTX_VIEWPORT_INDX: false,
+                                USE_VTX_KILL_FLAG: false,
+                                VS_OUT_MISC_VEC_ENA: false,
+                                VS_OUT_CCDIST0_VEC_ENA: false,
+                                VS_OUT_CCDIST1_VEC_ENA: false,
+                                VS_OUT_MISC_SIDE_BUS_ENA: false,
+                                USE_VTX_GS_CUT_FLAG: false,
+                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
+                        },
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
+                            },
+                        ),
+                        shader_unit: ShaderUnit {
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
+                            control: Some(
+                                PA_SU_SC_MODE_CNTL {
+                                    CULL_FRONT: false,
+                                    CULL_BACK: false,
+                                    FACE: false,
+                                    POLY_MODE: X_DISABLE_POLY_MODE,
+                                    POLYMODE_FRONT_PTYPE: X_DRAW_TRIANGLES,
+                                    POLYMODE_BACK_PTYPE: X_DRAW_TRIANGLES,
+                                    POLY_OFFSET_FRONT_ENABLE: false,
+                                    POLY_OFFSET_BACK_ENABLE: false,
+                                    POLY_OFFSET_PARA_ENABLE: false,
+                                    VTX_WINDOW_OFFSET_ENABLE: false,
+                                    PROVOKING_VTX_LAST: false,
+                                    PERSP_CORR_DIS: false,
+                                    MULTI_PRIM_IB_ENA: false,
+                                },
+                            ),
+                        },
+                    },
+                ),
+                color_buffer: ColorBuffer {
+                    color0: Some(
+                        ColorBufferInstance {
+                            base: 34611328,
+                            pitch: CB_COLOR0_PITCH {
+                                TILE_MAX: 239,
+                                FMASK_TILE_MAX: 239,
+                            },
+                            slice: CB_COLOR0_SLICE {
+                                TILE_MAX: 32639,
+                            },
+                            view: CB_COLOR0_VIEW {
+                                SLICE_START: 0,
+                                SLICE_MAX: 0,
+                            },
+                            info: CB_COLOR0_INFO {
+                                ENDIAN: ENDIAN_NONE,
+                                FORMAT: COLOR_8_8_8_8,
+                                LINEAR_GENERAL: false,
+                                NUMBER_TYPE: NUMBER_SRGB,
+                                COMP_SWAP: SWAP_ALT,
+                                FAST_CLEAR: false,
+                                COMPRESSION: false,
+                                BLEND_CLAMP: true,
+                                BLEND_BYPASS: false,
+                                SIMPLE_FLOAT: true,
+                                ROUND_MODE: false,
+                                CMASK_IS_LINEAR: false,
+                                BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                FMASK_COMPRESSION_DISABLE: false,
+                            },
+                            attrib: CB_COLOR0_ATTRIB {
+                                TILE_MODE_INDEX: 10,
+                                FMASK_TILE_MODE_INDEX: 10,
+                                FMASK_BANK_HEIGHT: 0,
+                                NUM_SAMPLES: 0,
+                                NUM_FRAGMENTS: 0,
+                                FORCE_DST_ALPHA_1: false,
+                            },
+                            mask: 0,
+                            mask_slice: CB_COLOR0_CMASK_SLICE {
+                                TILE_MAX: 0,
+                            },
+                            fmask: 0,
+                            fmask_slice: CB_COLOR0_SLICE {
+                                TILE_MAX: 0,
+                            },
+                            clear_word_0: None,
+                            clear_word_1: None,
+                            blend: Some(
+                                CB_BLEND0_CONTROL {
+                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                    ALPHA_SRCBLEND: BLEND_ZERO,
+                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    ALPHA_DESTBLEND: BLEND_ZERO,
+                                    SEPARATE_ALPHA_BLEND: false,
+                                    ENABLE: true,
+                                    DISABLE_ROP3: false,
+                                },
+                            ),
+                        },
+                    ),
+                    target_mask: Some(
+                        CB_TARGET_MASK {
+                            TARGET0_ENABLE: 15,
+                            TARGET1_ENABLE: 0,
+                            TARGET2_ENABLE: 0,
+                            TARGET3_ENABLE: 0,
+                            TARGET4_ENABLE: 0,
+                            TARGET5_ENABLE: 0,
+                            TARGET6_ENABLE: 0,
+                            TARGET7_ENABLE: 0,
+                        },
+                    ),
+                    shader_mask: Some(
+                        CB_SHADER_MASK {
+                            OUTPUT0_ENABLE: 15,
+                            OUTPUT1_ENABLE: 0,
+                            OUTPUT2_ENABLE: 0,
+                            OUTPUT3_ENABLE: 0,
+                            OUTPUT4_ENABLE: 0,
+                            OUTPUT5_ENABLE: 0,
+                            OUTPUT6_ENABLE: 0,
+                            OUTPUT7_ENABLE: 0,
+                        },
+                    ),
+                },
+                vertex_grouper_tesselator: VertexGrouperTesselator {
+                    primitive_type: Some(
+                        VGT_PRIMITIVE_TYPE {
+                            PRIM_TYPE: DI_PT_TRILIST,
+                        },
+                    ),
+                },
+                shader: Shader {
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    pos_format: Some(
+                        SPI_SHADER_POS_FORMAT {
+                            POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
+                            POS1_EXPORT_FORMAT: SPI_SHADER_NONE,
+                            POS2_EXPORT_FORMAT: SPI_SHADER_NONE,
+                            POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
+                        },
+                    ),
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
+                },
+                pixel_shader: PixelShader {
+                    address: Some(
+                        34852049,
+                    ),
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
+                    input: Some(
+                        SPI_PS_INPUT_ENA {
+                            PERSP_SAMPLE_ENA: false,
+                            PERSP_CENTER_ENA: true,
+                            PERSP_CENTROID_ENA: false,
+                            PERSP_PULL_MODEL_ENA: false,
+                            LINEAR_SAMPLE_ENA: false,
+                            LINEAR_CENTER_ENA: false,
+                            LINEAR_CENTROID_ENA: false,
+                            LINE_STIPPLE_TEX_ENA: false,
+                            POS_X_FLOAT_ENA: false,
+                            POS_Y_FLOAT_ENA: false,
+                            POS_Z_FLOAT_ENA: false,
+                            POS_W_FLOAT_ENA: false,
+                            FRONT_FACE_ENA: false,
+                            ANCILLARY_ENA: false,
+                            SAMPLE_COVERAGE_ENA: false,
+                            POS_FIXED_PT_ENA: false,
+                        },
+                    ),
+                    input_address: Some(
+                        SPI_PS_INPUT_ENA {
+                            PERSP_SAMPLE_ENA: false,
+                            PERSP_CENTER_ENA: true,
+                            PERSP_CENTROID_ENA: false,
+                            PERSP_PULL_MODEL_ENA: false,
+                            LINEAR_SAMPLE_ENA: false,
+                            LINEAR_CENTER_ENA: false,
+                            LINEAR_CENTROID_ENA: false,
+                            LINE_STIPPLE_TEX_ENA: false,
+                            POS_X_FLOAT_ENA: false,
+                            POS_Y_FLOAT_ENA: false,
+                            POS_Z_FLOAT_ENA: false,
+                            POS_W_FLOAT_ENA: false,
+                            FRONT_FACE_ENA: false,
+                            ANCILLARY_ENA: false,
+                            SAMPLE_COVERAGE_ENA: false,
+                            POS_FIXED_PT_ENA: false,
+                        },
+                    ),
+                    in_control: Some(
+                        SPI_PS_IN_CONTROL {
+                            NUM_INTERP: 2,
+                            PARAM_GEN: false,
+                            BC_OPTIMIZE_DISABLE: false,
+                        },
+                    ),
+                    input_control: Some(
+                        SPI_PS_INPUT_CNTL_0 {
+                            OFFSET: 0,
+                            DEFAULT_VAL: 0,
+                            FLAT_SHADE: false,
+                            CYL_WRAP: 0,
+                            PT_SPRITE_TEX: false,
+                            DUP: false,
+                        },
+                    ),
+                    user_data: PixelShaderUserData(
+                        {
+                            4: 34852051,
+                            5: 10485760,
+                            6: 114695,
+                            7: 2496663468,
+                            8: 57344,
+                            9: 0,
+                            10: 0,
+                            11: 0,
+                            12: 0,
+                            13: 16773120,
+                            14: 16777216,
+                            15: 0,
+                        },
+                    ),
+                },
+                vertex_shader: VertexShader {
+                    entrypoint_gpu_address: Some(
+                        34852048,
+                    ),
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_VS {
+                            VGPRS: 3,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            VGPR_COMP_CNT: 0,
+                            CU_GROUP_ENABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_VS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 12,
+                            TRAP_PRESENT: false,
+                            OC_LDS_EN: false,
+                            SO_BASE0_EN: false,
+                            SO_BASE1_EN: false,
+                            SO_BASE2_EN: false,
+                            SO_BASE3_EN: false,
+                            SO_EN: false,
+                        },
+                    ),
+                    out_config: Some(
+                        SPI_VS_OUT_CONFIG {
+                            VS_EXPORT_COUNT: 1,
+                            VS_HALF_PACK: false,
+                        },
+                    ),
+                    user_data: VertexShaderUserData(
+                        {
+                            0: 332189884,
+                            1: 2,
+                            2: 7519996,
+                            3: 2,
+                            8: 2278080,
+                            9: 1048578,
+                            10: 4,
+                            11: 537362348,
+                        },
+                    ),
+                },
+            },
+        },
+        Draw {
+            draw_packet: DrawIndexAuto(
+                DrawIndexAutoPacket {
+                    index_count: 1824,
+                    draw_initiator: VGT_DRAW_INITIATOR {
+                        SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                        MAJOR_MODE: DI_MAJOR_MODE_0,
+                        SPRITE_EN_R6XX: false,
+                        NOT_EOP: false,
+                        USE_OPAQUE: false,
+                    },
+                },
+            ),
+            pipeline: GraphicsPipeline {
+                depth_buffer: DepthBuffer {
+                    stencil: None,
+                    z: None,
+                    depth: Depth {
+                        control: Some(
+                            DB_DEPTH_CONTROL {
+                                STENCIL_ENABLE: false,
+                                Z_ENABLE: false,
+                                Z_WRITE_ENABLE: false,
+                                DEPTH_BOUNDS_ENABLE: false,
+                                ZFUNC: FRAG_NEVER,
+                                BACKFACE_ENABLE: false,
+                                STENCILFUNC: FRAG_NEVER,
+                                STENCILFUNC_BF: FRAG_NEVER,
+                                ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
+                                DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
+                            },
+                        ),
+                        clear: None,
+                        size: None,
+                        slice: None,
+                        info: None,
+                        view: None,
+                    },
+                    render_control: None,
+                    shader_control: Some(
+                        DB_SHADER_CONTROL {
+                            Z_EXPORT_ENABLE: false,
+                            STENCIL_TEST_VAL_EXPORT_ENABLE: false,
+                            STENCIL_OP_VAL_EXPORT_ENABLE: false,
+                            Z_ORDER: EARLY_Z_THEN_LATE_Z,
+                            KILL_ENABLE: false,
+                            COVERAGE_TO_MASK_ENABLE: false,
+                            MASK_EXPORT_ENABLE: false,
+                            EXEC_ON_HIER_FAIL: false,
+                            EXEC_ON_NOOP: false,
+                            ALPHA_TO_MASK_DISABLE: false,
+                            DEPTH_BEFORE_SHADER: false,
+                            CONSERVATIVE_Z_EXPORT: EXPORT_ANY_Z,
+                        },
+                    ),
+                    htile: None,
+                },
+                primitive_assembly: Some(
+                    PrimitiveAssembly {
+                        clip: Clip {
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
+                            vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
+                                CLIP_DIST_ENA_0: false,
+                                CLIP_DIST_ENA_1: false,
+                                CLIP_DIST_ENA_2: false,
+                                CLIP_DIST_ENA_3: false,
+                                CLIP_DIST_ENA_4: false,
+                                CLIP_DIST_ENA_5: false,
+                                CLIP_DIST_ENA_6: false,
+                                CLIP_DIST_ENA_7: false,
+                                CULL_DIST_ENA_0: false,
+                                CULL_DIST_ENA_1: false,
+                                CULL_DIST_ENA_2: false,
+                                CULL_DIST_ENA_3: false,
+                                CULL_DIST_ENA_4: false,
+                                CULL_DIST_ENA_5: false,
+                                CULL_DIST_ENA_6: false,
+                                CULL_DIST_ENA_7: false,
+                                USE_VTX_POINT_SIZE: false,
+                                USE_VTX_EDGE_FLAG: false,
+                                USE_VTX_RENDER_TARGET_INDX: false,
+                                USE_VTX_VIEWPORT_INDX: false,
+                                USE_VTX_KILL_FLAG: false,
+                                VS_OUT_MISC_VEC_ENA: false,
+                                VS_OUT_CCDIST0_VEC_ENA: false,
+                                VS_OUT_CCDIST1_VEC_ENA: false,
+                                VS_OUT_MISC_SIDE_BUS_ENA: false,
+                                USE_VTX_GS_CUT_FLAG: false,
+                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
+                        },
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
+                            },
+                        ),
+                        shader_unit: ShaderUnit {
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
+                            control: Some(
+                                PA_SU_SC_MODE_CNTL {
+                                    CULL_FRONT: false,
+                                    CULL_BACK: false,
+                                    FACE: false,
+                                    POLY_MODE: X_DISABLE_POLY_MODE,
+                                    POLYMODE_FRONT_PTYPE: X_DRAW_TRIANGLES,
+                                    POLYMODE_BACK_PTYPE: X_DRAW_TRIANGLES,
+                                    POLY_OFFSET_FRONT_ENABLE: false,
+                                    POLY_OFFSET_BACK_ENABLE: false,
+                                    POLY_OFFSET_PARA_ENABLE: false,
+                                    VTX_WINDOW_OFFSET_ENABLE: false,
+                                    PROVOKING_VTX_LAST: false,
+                                    PERSP_CORR_DIS: false,
+                                    MULTI_PRIM_IB_ENA: false,
+                                },
+                            ),
+                        },
+                    },
+                ),
+                color_buffer: ColorBuffer {
+                    color0: Some(
+                        ColorBufferInstance {
+                            base: 34611328,
+                            pitch: CB_COLOR0_PITCH {
+                                TILE_MAX: 239,
+                                FMASK_TILE_MAX: 239,
+                            },
+                            slice: CB_COLOR0_SLICE {
+                                TILE_MAX: 32639,
+                            },
+                            view: CB_COLOR0_VIEW {
+                                SLICE_START: 0,
+                                SLICE_MAX: 0,
+                            },
+                            info: CB_COLOR0_INFO {
+                                ENDIAN: ENDIAN_NONE,
+                                FORMAT: COLOR_8_8_8_8,
+                                LINEAR_GENERAL: false,
+                                NUMBER_TYPE: NUMBER_SRGB,
+                                COMP_SWAP: SWAP_ALT,
+                                FAST_CLEAR: false,
+                                COMPRESSION: false,
+                                BLEND_CLAMP: true,
+                                BLEND_BYPASS: false,
+                                SIMPLE_FLOAT: true,
+                                ROUND_MODE: false,
+                                CMASK_IS_LINEAR: false,
+                                BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                FMASK_COMPRESSION_DISABLE: false,
+                            },
+                            attrib: CB_COLOR0_ATTRIB {
+                                TILE_MODE_INDEX: 10,
+                                FMASK_TILE_MODE_INDEX: 10,
+                                FMASK_BANK_HEIGHT: 0,
+                                NUM_SAMPLES: 0,
+                                NUM_FRAGMENTS: 0,
+                                FORCE_DST_ALPHA_1: false,
+                            },
+                            mask: 0,
+                            mask_slice: CB_COLOR0_CMASK_SLICE {
+                                TILE_MAX: 0,
+                            },
+                            fmask: 0,
+                            fmask_slice: CB_COLOR0_SLICE {
+                                TILE_MAX: 0,
+                            },
+                            clear_word_0: None,
+                            clear_word_1: None,
+                            blend: Some(
+                                CB_BLEND0_CONTROL {
+                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                    ALPHA_SRCBLEND: BLEND_ZERO,
+                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    ALPHA_DESTBLEND: BLEND_ZERO,
+                                    SEPARATE_ALPHA_BLEND: false,
+                                    ENABLE: true,
+                                    DISABLE_ROP3: false,
+                                },
+                            ),
+                        },
+                    ),
+                    target_mask: Some(
+                        CB_TARGET_MASK {
+                            TARGET0_ENABLE: 15,
+                            TARGET1_ENABLE: 0,
+                            TARGET2_ENABLE: 0,
+                            TARGET3_ENABLE: 0,
+                            TARGET4_ENABLE: 0,
+                            TARGET5_ENABLE: 0,
+                            TARGET6_ENABLE: 0,
+                            TARGET7_ENABLE: 0,
+                        },
+                    ),
+                    shader_mask: Some(
+                        CB_SHADER_MASK {
+                            OUTPUT0_ENABLE: 15,
+                            OUTPUT1_ENABLE: 0,
+                            OUTPUT2_ENABLE: 0,
+                            OUTPUT3_ENABLE: 0,
+                            OUTPUT4_ENABLE: 0,
+                            OUTPUT5_ENABLE: 0,
+                            OUTPUT6_ENABLE: 0,
+                            OUTPUT7_ENABLE: 0,
+                        },
+                    ),
+                },
+                vertex_grouper_tesselator: VertexGrouperTesselator {
+                    primitive_type: Some(
+                        VGT_PRIMITIVE_TYPE {
+                            PRIM_TYPE: DI_PT_TRILIST,
+                        },
+                    ),
+                },
+                shader: Shader {
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    pos_format: Some(
+                        SPI_SHADER_POS_FORMAT {
+                            POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
+                            POS1_EXPORT_FORMAT: SPI_SHADER_NONE,
+                            POS2_EXPORT_FORMAT: SPI_SHADER_NONE,
+                            POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
+                        },
+                    ),
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
+                },
+                pixel_shader: PixelShader {
+                    address: Some(
+                        34852049,
+                    ),
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
+                    input: Some(
+                        SPI_PS_INPUT_ENA {
+                            PERSP_SAMPLE_ENA: false,
+                            PERSP_CENTER_ENA: true,
+                            PERSP_CENTROID_ENA: false,
+                            PERSP_PULL_MODEL_ENA: false,
+                            LINEAR_SAMPLE_ENA: false,
+                            LINEAR_CENTER_ENA: false,
+                            LINEAR_CENTROID_ENA: false,
+                            LINE_STIPPLE_TEX_ENA: false,
+                            POS_X_FLOAT_ENA: false,
+                            POS_Y_FLOAT_ENA: false,
+                            POS_Z_FLOAT_ENA: false,
+                            POS_W_FLOAT_ENA: false,
+                            FRONT_FACE_ENA: false,
+                            ANCILLARY_ENA: false,
+                            SAMPLE_COVERAGE_ENA: false,
+                            POS_FIXED_PT_ENA: false,
+                        },
+                    ),
+                    input_address: Some(
+                        SPI_PS_INPUT_ENA {
+                            PERSP_SAMPLE_ENA: false,
+                            PERSP_CENTER_ENA: true,
+                            PERSP_CENTROID_ENA: false,
+                            PERSP_PULL_MODEL_ENA: false,
+                            LINEAR_SAMPLE_ENA: false,
+                            LINEAR_CENTER_ENA: false,
+                            LINEAR_CENTROID_ENA: false,
+                            LINE_STIPPLE_TEX_ENA: false,
+                            POS_X_FLOAT_ENA: false,
+                            POS_Y_FLOAT_ENA: false,
+                            POS_Z_FLOAT_ENA: false,
+                            POS_W_FLOAT_ENA: false,
+                            FRONT_FACE_ENA: false,
+                            ANCILLARY_ENA: false,
+                            SAMPLE_COVERAGE_ENA: false,
+                            POS_FIXED_PT_ENA: false,
+                        },
+                    ),
+                    in_control: Some(
+                        SPI_PS_IN_CONTROL {
+                            NUM_INTERP: 2,
+                            PARAM_GEN: false,
+                            BC_OPTIMIZE_DISABLE: false,
+                        },
+                    ),
+                    input_control: Some(
+                        SPI_PS_INPUT_CNTL_0 {
+                            OFFSET: 0,
+                            DEFAULT_VAL: 0,
+                            FLAT_SHADE: false,
+                            CYL_WRAP: 0,
+                            PT_SPRITE_TEX: false,
+                            DUP: false,
+                        },
+                    ),
+                    user_data: PixelShaderUserData(
+                        {
+                            4: 34860244,
+                            5: 10485760,
+                            6: 4178175,
+                            7: 2496663468,
+                            8: 2088960,
+                            9: 0,
+                            10: 0,
+                            11: 0,
+                            12: 0,
+                            13: 16773120,
+                            14: 16777216,
+                            15: 0,
+                        },
+                    ),
+                },
+                vertex_shader: VertexShader {
+                    entrypoint_gpu_address: Some(
+                        34852048,
+                    ),
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_VS {
+                            VGPRS: 3,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            VGPR_COMP_CNT: 0,
+                            CU_GROUP_ENABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_VS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 12,
+                            TRAP_PRESENT: false,
+                            OC_LDS_EN: false,
+                            SO_BASE0_EN: false,
+                            SO_BASE1_EN: false,
+                            SO_BASE2_EN: false,
+                            SO_BASE3_EN: false,
+                            SO_EN: false,
+                        },
+                    ),
+                    out_config: Some(
+                        SPI_VS_OUT_CONFIG {
+                            VS_EXPORT_COUNT: 1,
+                            VS_HALF_PACK: false,
+                        },
+                    ),
+                    user_data: VertexShaderUserData(
+                        {
+                            0: 332189884,
+                            1: 2,
+                            2: 7520812,
+                            3: 2,
+                            8: 2278700,
+                            9: 1048578,
+                            10: 4,
+                            11: 537362348,
+                        },
+                    ),
+                },
+            },
+        },
+        Draw {
+            draw_packet: DrawIndexAuto(
+                DrawIndexAutoPacket {
+                    index_count: 12,
+                    draw_initiator: VGT_DRAW_INITIATOR {
+                        SOURCE_SELECT: DI_SRC_SEL_AUTO_INDEX,
+                        MAJOR_MODE: DI_MAJOR_MODE_0,
+                        SPRITE_EN_R6XX: false,
+                        NOT_EOP: false,
+                        USE_OPAQUE: false,
+                    },
+                },
+            ),
+            pipeline: GraphicsPipeline {
+                depth_buffer: DepthBuffer {
+                    stencil: None,
+                    z: None,
+                    depth: Depth {
+                        control: Some(
+                            DB_DEPTH_CONTROL {
+                                STENCIL_ENABLE: false,
+                                Z_ENABLE: false,
+                                Z_WRITE_ENABLE: false,
+                                DEPTH_BOUNDS_ENABLE: false,
+                                ZFUNC: FRAG_NEVER,
+                                BACKFACE_ENABLE: false,
+                                STENCILFUNC: FRAG_NEVER,
+                                STENCILFUNC_BF: FRAG_NEVER,
+                                ENABLE_COLOR_WRITES_ON_DEPTH_FAIL: false,
+                                DISABLE_COLOR_WRITES_ON_DEPTH_PASS: false,
+                            },
+                        ),
+                        clear: None,
+                        size: None,
+                        slice: None,
+                        info: None,
+                        view: None,
+                    },
+                    render_control: None,
+                    shader_control: Some(
+                        DB_SHADER_CONTROL {
+                            Z_EXPORT_ENABLE: false,
+                            STENCIL_TEST_VAL_EXPORT_ENABLE: false,
+                            STENCIL_OP_VAL_EXPORT_ENABLE: false,
+                            Z_ORDER: EARLY_Z_THEN_LATE_Z,
+                            KILL_ENABLE: false,
+                            COVERAGE_TO_MASK_ENABLE: false,
+                            MASK_EXPORT_ENABLE: false,
+                            EXEC_ON_HIER_FAIL: false,
+                            EXEC_ON_NOOP: false,
+                            ALPHA_TO_MASK_DISABLE: false,
+                            DEPTH_BEFORE_SHADER: false,
+                            CONSERVATIVE_Z_EXPORT: EXPORT_ANY_Z,
+                        },
+                    ),
+                    htile: None,
+                },
+                primitive_assembly: Some(
+                    PrimitiveAssembly {
+                        clip: Clip {
+                            viewport: Some(
+                                ClipViewport {
+                                    xscale: 1148190720,
+                                    xoffset: 1148190720,
+                                    yscale: 3288793088,
+                                    yoffset: 1141309440,
+                                    zscale: 1056964608,
+                                    zoffset: 1056964608,
+                                },
+                            ),
+                            viewport_transform_engine_control: Some(
+                                PA_CL_VTE_CNTL {
+                                    VPORT_X_SCALE_ENA: true,
+                                    VPORT_X_OFFSET_ENA: true,
+                                    VPORT_Y_SCALE_ENA: true,
+                                    VPORT_Y_OFFSET_ENA: true,
+                                    VPORT_Z_SCALE_ENA: true,
+                                    VPORT_Z_OFFSET_ENA: true,
+                                    VTX_XY_FMT: false,
+                                    VTX_Z_FMT: false,
+                                    VTX_W0_FMT: true,
+                                    PERFCOUNTER_REF: false,
+                                },
+                            ),
+                            vertex_shader_out_control: PA_CL_VS_OUT_CNTL {
+                                CLIP_DIST_ENA_0: false,
+                                CLIP_DIST_ENA_1: false,
+                                CLIP_DIST_ENA_2: false,
+                                CLIP_DIST_ENA_3: false,
+                                CLIP_DIST_ENA_4: false,
+                                CLIP_DIST_ENA_5: false,
+                                CLIP_DIST_ENA_6: false,
+                                CLIP_DIST_ENA_7: false,
+                                CULL_DIST_ENA_0: false,
+                                CULL_DIST_ENA_1: false,
+                                CULL_DIST_ENA_2: false,
+                                CULL_DIST_ENA_3: false,
+                                CULL_DIST_ENA_4: false,
+                                CULL_DIST_ENA_5: false,
+                                CULL_DIST_ENA_6: false,
+                                CULL_DIST_ENA_7: false,
+                                USE_VTX_POINT_SIZE: false,
+                                USE_VTX_EDGE_FLAG: false,
+                                USE_VTX_RENDER_TARGET_INDX: false,
+                                USE_VTX_VIEWPORT_INDX: false,
+                                USE_VTX_KILL_FLAG: false,
+                                VS_OUT_MISC_VEC_ENA: false,
+                                VS_OUT_CCDIST0_VEC_ENA: false,
+                                VS_OUT_CCDIST1_VEC_ENA: false,
+                                VS_OUT_MISC_SIDE_BUS_ENA: false,
+                                USE_VTX_GS_CUT_FLAG: false,
+                            },
+                            guard_band: Some(
+                                GuardBand {
+                                    vertical_clip: 1114550848,
+                                    vertical_discard: 1065353216,
+                                    horizontal_clip: 1107593351,
+                                    horizontal_discard: 1065353216,
+                                },
+                            ),
+                        },
+                        scissor_clip: Some(
+                            ScissorClip {
+                                viewport_zmin0: 0,
+                                viewport_zmax0: 1065353216,
+                                screen_scissor_top_left: PA_SC_SCREEN_SCISSOR_TL {
+                                    TL_X: 0,
+                                    TL_Y: 0,
+                                },
+                                screen_scissor_bottom_right: PA_SC_SCREEN_SCISSOR_BR {
+                                    BR_X: 1920,
+                                    BR_Y: 1080,
+                                },
+                            },
+                        ),
+                        shader_unit: ShaderUnit {
+                            hardware_screen_offset: Some(
+                                PA_SU_HARDWARE_SCREEN_OFFSET {
+                                    HW_SCREEN_OFFSET_X: 60,
+                                    HW_SCREEN_OFFSET_Y: 32,
+                                },
+                            ),
+                            control: Some(
+                                PA_SU_SC_MODE_CNTL {
+                                    CULL_FRONT: false,
+                                    CULL_BACK: false,
+                                    FACE: false,
+                                    POLY_MODE: X_DISABLE_POLY_MODE,
+                                    POLYMODE_FRONT_PTYPE: X_DRAW_TRIANGLES,
+                                    POLYMODE_BACK_PTYPE: X_DRAW_TRIANGLES,
+                                    POLY_OFFSET_FRONT_ENABLE: false,
+                                    POLY_OFFSET_BACK_ENABLE: false,
+                                    POLY_OFFSET_PARA_ENABLE: false,
+                                    VTX_WINDOW_OFFSET_ENABLE: false,
+                                    PROVOKING_VTX_LAST: false,
+                                    PERSP_CORR_DIS: false,
+                                    MULTI_PRIM_IB_ENA: false,
+                                },
+                            ),
+                        },
+                    },
+                ),
+                color_buffer: ColorBuffer {
+                    color0: Some(
+                        ColorBufferInstance {
+                            base: 34611328,
+                            pitch: CB_COLOR0_PITCH {
+                                TILE_MAX: 239,
+                                FMASK_TILE_MAX: 239,
+                            },
+                            slice: CB_COLOR0_SLICE {
+                                TILE_MAX: 32639,
+                            },
+                            view: CB_COLOR0_VIEW {
+                                SLICE_START: 0,
+                                SLICE_MAX: 0,
+                            },
+                            info: CB_COLOR0_INFO {
+                                ENDIAN: ENDIAN_NONE,
+                                FORMAT: COLOR_8_8_8_8,
+                                LINEAR_GENERAL: false,
+                                NUMBER_TYPE: NUMBER_SRGB,
+                                COMP_SWAP: SWAP_ALT,
+                                FAST_CLEAR: false,
+                                COMPRESSION: false,
+                                BLEND_CLAMP: true,
+                                BLEND_BYPASS: false,
+                                SIMPLE_FLOAT: true,
+                                ROUND_MODE: false,
+                                CMASK_IS_LINEAR: false,
+                                BLEND_OPT_DONT_RD_DST: FORCE_OPT_AUTO,
+                                BLEND_OPT_DISCARD_PIXEL: FORCE_OPT_AUTO,
+                                FMASK_COMPRESSION_DISABLE: false,
+                            },
+                            attrib: CB_COLOR0_ATTRIB {
+                                TILE_MODE_INDEX: 10,
+                                FMASK_TILE_MODE_INDEX: 10,
+                                FMASK_BANK_HEIGHT: 0,
+                                NUM_SAMPLES: 0,
+                                NUM_FRAGMENTS: 0,
+                                FORCE_DST_ALPHA_1: false,
+                            },
+                            mask: 0,
+                            mask_slice: CB_COLOR0_CMASK_SLICE {
+                                TILE_MAX: 0,
+                            },
+                            fmask: 0,
+                            fmask_slice: CB_COLOR0_SLICE {
+                                TILE_MAX: 0,
+                            },
+                            clear_word_0: None,
+                            clear_word_1: None,
+                            blend: Some(
+                                CB_BLEND0_CONTROL {
+                                    COLOR_SRCBLEND: BLEND_SRC_ALPHA,
+                                    COLOR_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    COLOR_DESTBLEND: BLEND_ONE_MINUS_SRC_ALPHA,
+                                    ALPHA_SRCBLEND: BLEND_ZERO,
+                                    ALPHA_COMB_FCN: COMB_DST_PLUS_SRC,
+                                    ALPHA_DESTBLEND: BLEND_ZERO,
+                                    SEPARATE_ALPHA_BLEND: false,
+                                    ENABLE: true,
+                                    DISABLE_ROP3: false,
+                                },
+                            ),
+                        },
+                    ),
+                    target_mask: Some(
+                        CB_TARGET_MASK {
+                            TARGET0_ENABLE: 15,
+                            TARGET1_ENABLE: 0,
+                            TARGET2_ENABLE: 0,
+                            TARGET3_ENABLE: 0,
+                            TARGET4_ENABLE: 0,
+                            TARGET5_ENABLE: 0,
+                            TARGET6_ENABLE: 0,
+                            TARGET7_ENABLE: 0,
+                        },
+                    ),
+                    shader_mask: Some(
+                        CB_SHADER_MASK {
+                            OUTPUT0_ENABLE: 15,
+                            OUTPUT1_ENABLE: 0,
+                            OUTPUT2_ENABLE: 0,
+                            OUTPUT3_ENABLE: 0,
+                            OUTPUT4_ENABLE: 0,
+                            OUTPUT5_ENABLE: 0,
+                            OUTPUT6_ENABLE: 0,
+                            OUTPUT7_ENABLE: 0,
+                        },
+                    ),
+                },
+                vertex_grouper_tesselator: VertexGrouperTesselator {
+                    primitive_type: Some(
+                        VGT_PRIMITIVE_TYPE {
+                            PRIM_TYPE: DI_PT_TRILIST,
+                        },
+                    ),
+                },
+                shader: Shader {
+                    z_format: Some(
+                        SPI_SHADER_Z_FORMAT {
+                            Z_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    col_format: Some(
+                        SPI_SHADER_COL_FORMAT {
+                            COL0_EXPORT_FORMAT: SPI_SHADER_FP16_ABGR,
+                            COL1_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL2_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL3_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL4_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL5_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL6_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                            COL7_EXPORT_FORMAT: SPI_SHADER_ZERO,
+                        },
+                    ),
+                    pos_format: Some(
+                        SPI_SHADER_POS_FORMAT {
+                            POS0_EXPORT_FORMAT: SPI_SHADER_4COMP,
+                            POS1_EXPORT_FORMAT: SPI_SHADER_NONE,
+                            POS2_EXPORT_FORMAT: SPI_SHADER_NONE,
+                            POS3_EXPORT_FORMAT: SPI_SHADER_NONE,
+                        },
+                    ),
+                    barycentric_control: Some(
+                        SPI_BARYC_CNTL {
+                            PERSP_CENTER_CNTL: false,
+                            PERSP_CENTROID_CNTL: false,
+                            LINEAR_CENTER_CNTL: false,
+                            LINEAR_CENTROID_CNTL: false,
+                            POS_FLOAT_LOCATION: 0,
+                            POS_FLOAT_ULC: false,
+                            FRONT_FACE_ALL_BITS: false,
+                        },
+                    ),
+                },
+                pixel_shader: PixelShader {
+                    address: Some(
+                        34852049,
+                    ),
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_PS {
+                            VGPRS: 2,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            CU_GROUP_DISABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_PS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 16,
+                            TRAP_PRESENT: false,
+                            WAVE_CNT_EN: false,
+                            EXTRA_LDS_SIZE: 0,
+                        },
+                    ),
+                    input: Some(
+                        SPI_PS_INPUT_ENA {
+                            PERSP_SAMPLE_ENA: false,
+                            PERSP_CENTER_ENA: true,
+                            PERSP_CENTROID_ENA: false,
+                            PERSP_PULL_MODEL_ENA: false,
+                            LINEAR_SAMPLE_ENA: false,
+                            LINEAR_CENTER_ENA: false,
+                            LINEAR_CENTROID_ENA: false,
+                            LINE_STIPPLE_TEX_ENA: false,
+                            POS_X_FLOAT_ENA: false,
+                            POS_Y_FLOAT_ENA: false,
+                            POS_Z_FLOAT_ENA: false,
+                            POS_W_FLOAT_ENA: false,
+                            FRONT_FACE_ENA: false,
+                            ANCILLARY_ENA: false,
+                            SAMPLE_COVERAGE_ENA: false,
+                            POS_FIXED_PT_ENA: false,
+                        },
+                    ),
+                    input_address: Some(
+                        SPI_PS_INPUT_ENA {
+                            PERSP_SAMPLE_ENA: false,
+                            PERSP_CENTER_ENA: true,
+                            PERSP_CENTROID_ENA: false,
+                            PERSP_PULL_MODEL_ENA: false,
+                            LINEAR_SAMPLE_ENA: false,
+                            LINEAR_CENTER_ENA: false,
+                            LINEAR_CENTROID_ENA: false,
+                            LINE_STIPPLE_TEX_ENA: false,
+                            POS_X_FLOAT_ENA: false,
+                            POS_Y_FLOAT_ENA: false,
+                            POS_Z_FLOAT_ENA: false,
+                            POS_W_FLOAT_ENA: false,
+                            FRONT_FACE_ENA: false,
+                            ANCILLARY_ENA: false,
+                            SAMPLE_COVERAGE_ENA: false,
+                            POS_FIXED_PT_ENA: false,
+                        },
+                    ),
+                    in_control: Some(
+                        SPI_PS_IN_CONTROL {
+                            NUM_INTERP: 2,
+                            PARAM_GEN: false,
+                            BC_OPTIMIZE_DISABLE: false,
+                        },
+                    ),
+                    input_control: Some(
+                        SPI_PS_INPUT_CNTL_0 {
+                            OFFSET: 0,
+                            DEFAULT_VAL: 0,
+                            FLAT_SHADE: false,
+                            CYL_WRAP: 0,
+                            PT_SPRITE_TEX: false,
+                            DUP: false,
+                        },
+                    ),
+                    user_data: PixelShaderUserData(
+                        {
+                            4: 34852052,
+                            5: 10485760,
+                            6: 8373247,
+                            7: 2496663468,
+                            8: 8380416,
+                            9: 0,
+                            10: 0,
+                            11: 0,
+                            12: 0,
+                            13: 16773120,
+                            14: 156237824,
+                            15: 0,
+                        },
+                    ),
+                },
+                vertex_shader: VertexShader {
+                    entrypoint_gpu_address: Some(
+                        34852048,
+                    ),
+                    resource1: Some(
+                        SPI_SHADER_PGM_RSRC1_VS {
+                            VGPRS: 3,
+                            SGPRS: 2,
+                            PRIORITY: 0,
+                            FLOAT_MODE: FP_16_64_DENORMS,
+                            PRIV: false,
+                            DX10_CLAMP: false,
+                            DEBUG_MODE: false,
+                            IEEE_MODE: false,
+                            VGPR_COMP_CNT: 0,
+                            CU_GROUP_ENABLE: false,
+                            CACHE_CTL: 0,
+                            CDBG_USER: false,
+                        },
+                    ),
+                    resource2: Some(
+                        SPI_SHADER_PGM_RSRC2_VS {
+                            SCRATCH_EN: false,
+                            USER_SGPR: 12,
+                            TRAP_PRESENT: false,
+                            OC_LDS_EN: false,
+                            SO_BASE0_EN: false,
+                            SO_BASE1_EN: false,
+                            SO_BASE2_EN: false,
+                            SO_BASE3_EN: false,
+                            SO_EN: false,
+                        },
+                    ),
+                    out_config: Some(
+                        SPI_VS_OUT_CONFIG {
+                            VS_EXPORT_COUNT: 1,
+                            VS_HALF_PACK: false,
+                        },
+                    ),
+                    user_data: VertexShaderUserData(
+                        {
+                            0: 332189884,
+                            1: 2,
+                            2: 7521228,
+                            3: 2,
+                            8: 2279320,
+                            9: 1048578,
+                            10: 4,
+                            11: 537362348,
+                        },
+                    ),
+                },
+            },
+        },
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 8932873216,
+                immediate: 4294967295,
+            },
+        ),
+        EndOfShader(
+            EventWriteEndOfShaderPacket {
+                event_type: CS_DONE,
+                address: 8591074412,
+                data: StorePacketData {
+                    data: 1,
+                },
+            },
+        ),
+        WaitRegisterMemory(
+            WaitRegisterMemoryPacket {
+                fields: Fields {
+                    engine: Memory,
+                    memory_space: Memory,
+                    function: Equal,
+                },
+                poll_address_lo: 0x22c8d8,
+                poll_address_hi: 0x2,
+                reference: 1,
+                mask: 0xffffffff,
+                poll_interval: 10,
+            },
+        ),
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 8592032600,
+                immediate: 0,
+            },
+        ),
+        EndOfPipe(
+            EventWriteEndOfPipePacket {
+                invalidate_writeback_l2: false,
+                event_index: 5,
+                event_type: CACHE_FLUSH_TS,
+                address: 8592032640,
+                immediate: 0,
+            },
+        ),
+    ],
+    [
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: CONTEXT_CONTROL,
+                    body: [
+                        2147483648,
+                        2147483648,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: AcquireMemory(
+                    AcquireMemoryPacket {
+                        command_processor_cache_coherence_control: CP_COHER_CNTL {
+                            DEST_BASE_0_ENA: false,
+                            DEST_BASE_1_ENA: false,
+                            CB0_DEST_BASE_ENA: true,
+                            CB1_DEST_BASE_ENA: true,
+                            CB2_DEST_BASE_ENA: true,
+                            CB3_DEST_BASE_ENA: true,
+                            CB4_DEST_BASE_ENA: true,
+                            CB5_DEST_BASE_ENA: true,
+                            CB6_DEST_BASE_ENA: true,
+                            CB7_DEST_BASE_ENA: true,
+                            DB_DEST_BASE_ENA: true,
+                            TCL1_VOL_ACTION_ENA: false,
+                            TC_VOL_ACTION_ENA: false,
+                            TC_WB_ACTION_ENA: true,
+                            DEST_BASE_2_ENA: false,
+                            DEST_BASE_3_ENA: false,
+                            TCL1_ACTION_ENA: true,
+                            TC_ACTION_ENA: true,
+                            CB_ACTION_ENA: true,
+                            DB_ACTION_ENA: true,
+                            SH_KCACHE_ACTION_ENA: true,
+                            SH_KCACHE_VOL_ACTION_ENA: false,
+                            SH_ICACHE_ACTION_ENA: true,
+                        },
+                        command_processor_cache_coherence_size: 4294967295,
+                        command_processor_cache_coherence_base: 0,
+                        poll_interval: 10,
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: Unknown {
+                    op: NUM_INSTANCES,
+                    body: [
+                        1,
+                    ],
+                },
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8860469504,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 124,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: AcquireMemory(
+                    AcquireMemoryPacket {
+                        command_processor_cache_coherence_control: CP_COHER_CNTL {
+                            DEST_BASE_0_ENA: false,
+                            DEST_BASE_1_ENA: false,
+                            CB0_DEST_BASE_ENA: false,
+                            CB1_DEST_BASE_ENA: false,
+                            CB2_DEST_BASE_ENA: false,
+                            CB3_DEST_BASE_ENA: false,
+                            CB4_DEST_BASE_ENA: false,
+                            CB5_DEST_BASE_ENA: false,
+                            CB6_DEST_BASE_ENA: false,
+                            CB7_DEST_BASE_ENA: false,
+                            DB_DEST_BASE_ENA: false,
+                            TCL1_VOL_ACTION_ENA: false,
+                            TC_VOL_ACTION_ENA: false,
+                            TC_WB_ACTION_ENA: true,
+                            DEST_BASE_2_ENA: false,
+                            DEST_BASE_3_ENA: false,
+                            TCL1_ACTION_ENA: true,
+                            TC_ACTION_ENA: true,
+                            CB_ACTION_ENA: false,
+                            DB_ACTION_ENA: false,
+                            SH_KCACHE_ACTION_ENA: false,
+                            SH_KCACHE_VOL_ACTION_ENA: false,
+                            SH_ICACHE_ACTION_ENA: false,
+                        },
+                        command_processor_cache_coherence_size: 1,
+                        command_processor_cache_coherence_base: 0,
+                        poll_interval: 10,
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8922124544,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 164,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8922124288,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 188,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8922124544,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 164,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8922124288,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 188,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8922124544,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 164,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+        Type3(
+            Type3Packet {
+                header: Type3Header {
+                    reserved: 0,
+                    shader_type: Graphics,
+                    predicate: false,
+                },
+                value: DirectMemoryAccess(
+                    DirectMemoryAccessPacket {
+                        fields: DMA_DATA_WORD0_cik {
+                            ENGINE: ME,
+                            SRC_CACHE_POLICY: 0,
+                            DST_SEL: DST_ADDR,
+                            DST_CACHE_POLICY: 0,
+                            SRC_SEL: SRC_ADDR_TC_L2,
+                            CP_SYNC: false,
+                        },
+                        src_address: 8922124288,
+                        dst_address: 197164,
+                        command: COMMAND {
+                            BYTE_COUNT: 188,
+                            DISABLE_WR_CONFIRM: true,
+                            SRC_SWAP: NONE,
+                            DST_SWAP: NONE,
+                            SAS: MEMORY,
+                            DAS: REGISTER,
+                            SAIC: INCREMENT,
+                            DAIC: NO_INCREMENT,
+                            RAW_WAIT: false,
+                        },
+                    },
+                ),
+            },
+        ),
+    ],
+    [
+        COMPUTE_STATIC_THREAD_MGMT_SE0(
+            COMPUTE_STATIC_THREAD_MGMT_SE0 {
+                SH0_CU_EN: 65535,
+                SH1_CU_EN: 65535,
+            },
+        ),
+        COMPUTE_STATIC_THREAD_MGMT_SE1(
+            COMPUTE_STATIC_THREAD_MGMT_SE0 {
+                SH0_CU_EN: 65535,
+                SH1_CU_EN: 65535,
+            },
+        ),
+        COMPUTE_RESOURCE_LIMITS(
+            COMPUTE_RESOURCE_LIMITS {
+                WAVES_PER_SH: 0,
+                TG_PER_CU: 0,
+                LOCK_THRESHOLD: 0,
+                SIMD_DEST_CNTL: false,
+                FORCE_SIMD_DIST: false,
+                CU_GROUP_COUNT: 0,
+            },
+        ),
+        PA_SU_VTX_CNTL(
+            PA_SU_VTX_CNTL {
+                PIX_CENTER: true,
+                ROUND_MODE: X_ROUND_TO_EVEN,
+                QUANT_MODE: X_16_8_FIXED_POINT_1_256TH,
+            },
+        ),
+        PA_SU_LINE_CNTL(
+            PA_SU_LINE_CNTL {
+                WIDTH: 8,
+            },
+        ),
+        PA_SU_POINT_SIZE(
+            PA_SU_POINT_SIZE {
+                HEIGHT: 8,
+                WIDTH: 8,
+            },
+        ),
+        PA_SU_POINT_MINMAX(
+            PA_SU_POINT_MINMAX {
+                MIN_SIZE: 0,
+                MAX_SIZE: 65535,
+            },
+        ),
+        PA_CL_CLIP_CNTL(
+            PA_CL_CLIP_CNTL {
+                UCP_ENA_0: false,
+                UCP_ENA_1: false,
+                UCP_ENA_2: false,
+                UCP_ENA_3: false,
+                UCP_ENA_4: false,
+                UCP_ENA_5: false,
+                PS_UCP_Y_SCALE_NEG: false,
+                PS_UCP_MODE: 0,
+                CLIP_DISABLE: false,
+                UCP_CULL_ONLY_ENA: false,
+                BOUNDARY_EDGE_FLAG_ENA: false,
+                DX_CLIP_SPACE_DEF: false,
+                DIS_CLIP_ERR_DETECT: false,
+                VTX_KILL_OR: false,
+                DX_RASTERIZATION_KILL: false,
+                DX_LINEAR_ATTR_CLIP_ENA: false,
+                VTE_VPORT_PROVOKE_DISABLE: false,
+                ZCLIP_NEAR_DISABLE: false,
+                ZCLIP_FAR_DISABLE: false,
+            },
+        ),
+        PA_SC_CLIPRECT_RULE(
+            PA_SC_CLIPRECT_RULE,
+        ),
+        VGT_OUT_DEALLOC_CNTL(
+            VGT_OUT_DEALLOC_CNTL {
+                DEALLOC_DIST: 16,
+            },
+        ),
+        CB_COLOR_CONTROL(
+            CB_COLOR_CONTROL {
+                DEGAMMA_ENABLE: false,
+                MODE: CB_NORMAL,
+                ROP3: ROP3_COPY,
+            },
+        ),
+        PA_SC_AA_MASK_X0Y0_X1Y0(
+            PA_SC_AA_MASK_X0Y0_X1Y0 {
+                AA_MASK_X0Y0: 65535,
+                AA_MASK_X1Y0: 65535,
+            },
+        ),
+        PA_SC_AA_MASK_X0Y1_X1Y1(
+            PA_SC_AA_MASK_X0Y1_X1Y1 {
+                AA_MASK_X0Y1: 65535,
+                AA_MASK_X1Y1: 65535,
+            },
+        ),
+        SPI_SHADER_PGM_RSRC3_PS(
+            SPI_SHADER_PGM_RSRC3_PS {
+                CU_EN: 511,
+                WAVE_LIMIT: 23,
+                LOCK_LOW_THRESHOLD: 0,
+            },
+        ),
+        SPI_SHADER_PGM_RSRC3_VS(
+            SPI_SHADER_PGM_RSRC3_PS {
+                CU_EN: 509,
+                WAVE_LIMIT: 23,
+                LOCK_LOW_THRESHOLD: 0,
+            },
+        ),
+        SPI_SHADER_PGM_RSRC3_GS(
+            SPI_SHADER_PGM_RSRC3_PS {
+                CU_EN: 511,
+                WAVE_LIMIT: 23,
+                LOCK_LOW_THRESHOLD: 0,
+            },
+        ),
+        SPI_SHADER_PGM_RSRC3_ES(
+            SPI_SHADER_PGM_RSRC3_PS {
+                CU_EN: 509,
+                WAVE_LIMIT: 23,
+                LOCK_LOW_THRESHOLD: 0,
+            },
+        ),
+        SPI_SHADER_PGM_RSRC3_HS(
+            SPI_SHADER_PGM_RSRC3_HS {
+                WAVE_LIMIT: 23,
+                LOCK_LOW_THRESHOLD: 0,
+            },
+        ),
+        SPI_SHADER_PGM_RSRC3_LS(
+            SPI_SHADER_PGM_RSRC3_PS {
+                CU_EN: 509,
+                WAVE_LIMIT: 23,
+                LOCK_LOW_THRESHOLD: 0,
+            },
+        ),
+        SPI_SHADER_LATE_ALLOC_VS(
+            SPI_SHADER_LATE_ALLOC_VS {
+                LIMIT: 28,
+            },
+        ),
+        VGT_MIN_VTX_INDX(
+            0,
+        ),
+        VGT_MAX_VTX_INDX(
+            4294967295,
+        ),
+        VGT_MULTI_PRIM_IB_RESET_INDX(
+            0,
+        ),
+        VGT_OUTPUT_PATH_CNTL(
+            VGT_OUTPUT_PATH_CNTL {
+                PATH_SELECT: 0,
+            },
+        ),
+        VGT_GS_MODE(
+            VGT_GS_MODE {
+                MODE: GS_OFF,
+                RESERVED_0: false,
+                CUT_MODE: GS_CUT_1024,
+                RESERVED_1: 0,
+                GS_C_PACK_EN: false,
+                RESERVED_2: false,
+                ES_PASSTHRU: false,
+                COMPUTE_MODE: false,
+                FAST_COMPUTE_MODE: false,
+                ELEMENT_INFO_EN: false,
+                PARTIAL_THD_AT_EOI: false,
+                SUPPRESS_CUTS: false,
+                ES_WRITE_OPTIMIZE: false,
+                GS_WRITE_OPTIMIZE: false,
+                ONCHIP: 0,
+            },
+        ),
+        VGT_VTX_CNT_EN(
+            VGT_VTX_CNT_EN {
+                VTX_CNT_EN: false,
+            },
+        ),
+        PA_SC_MODE_CNTL_0(
+            PA_SC_MODE_CNTL_0 {
+                MSAA_ENABLE: false,
+                VPORT_SCISSOR_ENABLE: false,
+                LINE_STIPPLE_ENABLE: false,
+                SEND_UNLIT_STILES_TO_PKR: false,
+            },
+        ),
+        PA_SC_MODE_CNTL_1(
+            PA_SC_MODE_CNTL_1 {
+                WALK_SIZE: false,
+                WALK_ALIGNMENT: false,
+                WALK_ALIGN8_PRIM_FITS_ST: false,
+                WALK_FENCE_ENABLE: false,
+                WALK_FENCE_SIZE: 0,
+                SUPERTILE_WALK_ORDER_ENABLE: false,
+                TILE_WALK_ORDER_ENABLE: false,
+                TILE_COVER_DISABLE: false,
+                TILE_COVER_NO_SCISSOR: false,
+                ZMM_LINE_EXTENT: false,
+                ZMM_LINE_OFFSET: false,
+                ZMM_RECT_EXTENT: false,
+                KILL_PIX_POST_HI_Z: false,
+                KILL_PIX_POST_DETAIL_MASK: false,
+                PS_ITER_SAMPLE: false,
+                MULTI_SHADER_ENGINE_PRIM_DISCARD_ENABLE: true,
+                MULTI_GPU_SUPERTILE_ENABLE: false,
+                GPU_ID_OVERRIDE_ENABLE: false,
+                GPU_ID_OVERRIDE: 0,
+                MULTI_GPU_PRIM_DISCARD_ENABLE: false,
+                FORCE_EOV_CNTDWN_ENABLE: true,
+                FORCE_EOV_REZ_ENABLE: true,
+                OUT_OF_ORDER_PRIMITIVE_ENABLE: false,
+                OUT_OF_ORDER_WATER_MARK: 0,
+            },
+        ),
+        PA_SC_AA_CONFIG(
+            PA_SC_AA_CONFIG {
+                MSAA_NUM_SAMPLES: 0,
+                AA_MASK_CENTROID_DTMN: false,
+                MAX_SAMPLE_DIST: 0,
+                MSAA_EXPOSED_SAMPLES: 0,
+                DETAIL_TO_EXPOSED_MODE: 0,
+            },
+        ),
+        PA_SU_POLY_OFFSET_DB_FMT_CNTL(
+            PA_SU_POLY_OFFSET_DB_FMT_CNTL {
+                POLY_OFFSET_NEG_NUM_DB_BITS: 233,
+                POLY_OFFSET_DB_IS_FLOAT_FMT: true,
+            },
+        ),
+        VGT_GS_PER_ES(
+            VGT_GS_PER_ES {
+                GS_PER_ES: 256,
+            },
+        ),
+        VGT_ES_PER_GS(
+            VGT_ES_PER_GS {
+                ES_PER_GS: 256,
+            },
+        ),
+        VGT_GS_PER_VS(
+            VGT_GS_PER_VS {
+                GS_PER_VS: 4,
+            },
+        ),
+        GRBM_GFX_INDEX(
+            GRBM_GFX_INDEX {
+                INSTANCE_INDEX: 0,
+                SH_INDEX: 0,
+                SE_INDEX: 0,
+                SH_BROADCAST_WRITES: true,
+                INSTANCE_BROADCAST_WRITES: true,
+                SE_BROADCAST_WRITES: true,
+            },
+        ),
+        VGT_SHADER_STAGES_EN(
+            VGT_SHADER_STAGES_EN {
+                HS_EN: HS_STAGE_OFF,
+                DYNAMIC_HS: false,
+            },
+        ),
+        PA_SU_LINE_CNTL(
+            PA_SU_LINE_CNTL {
+                WIDTH: 16,
+            },
+        ),
+        SPI_SHADER_PGM_HI_VS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_PS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_PS_INPUT_CNTL_1(
+            SPI_PS_INPUT_CNTL_0 {
+                OFFSET: 1,
+                DEFAULT_VAL: 0,
+                FLAT_SHADE: false,
+                CYL_WRAP: 0,
+                PT_SPRITE_TEX: false,
+                DUP: false,
+            },
+        ),
+        PA_SU_LINE_CNTL(
+            PA_SU_LINE_CNTL {
+                WIDTH: 16,
+            },
+        ),
+        SPI_SHADER_PGM_HI_VS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_PS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_PS_INPUT_CNTL_1(
+            SPI_PS_INPUT_CNTL_0 {
+                OFFSET: 1,
+                DEFAULT_VAL: 0,
+                FLAT_SHADE: false,
+                CYL_WRAP: 0,
+                PT_SPRITE_TEX: false,
+                DUP: false,
+            },
+        ),
+        PA_SU_LINE_CNTL(
+            PA_SU_LINE_CNTL {
+                WIDTH: 16,
+            },
+        ),
+        SPI_SHADER_PGM_HI_VS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_SHADER_PGM_HI_PS(
+            SPI_SHADER_TBA_HI_PS {
+                MEM_BASE: 0,
+            },
+        ),
+        SPI_PS_INPUT_CNTL_1(
+            SPI_PS_INPUT_CNTL_0 {
+                OFFSET: 1,
+                DEFAULT_VAL: 0,
+                FLAT_SHADE: false,
+                CYL_WRAP: 0,
+                PT_SPRITE_TEX: false,
+                DUP: false,
+            },
+        ),
+    ],
+)

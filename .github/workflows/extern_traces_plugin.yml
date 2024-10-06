@@ -1,0 +1,61 @@
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.12
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install
+
+      - name: Codegen regs.rs
+        run: |
+          cd packages/pm4/src/registers/generated
+          pipenv run python regs_rs.py
+
+      - name: Codegen pkt3.rs
+        run: |
+          cd packages/pm4/src/registers/generated
+          pipenv run python pkt3_rs.py
+
+      - name: Run make in Docker
+        uses: docker://ghcr.io/0xcaff/ps4-sdk-images/goldhen:edge
+        with:
+          args: packages/extern_traces_plugin/scripts/ci.sh
+
+      - name: save artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: packages/extern_traces_plugin/target/**/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - run: |
+          mkdir release
+          mv build-artifacts/prx_final/extern_traces.prx release/extern_traces.prx
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*

@@ -1,0 +1,20 @@
+[package]
+name = "gcn"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+byteorder = "1.5.0"
+anyhow = { version = "1.0.76", default-features = false }
+strum = { version = "0.25.0", features = ["derive"], default-features = false }
+gcn_internal_macros = { path = "../gcn_internal_macros" }
+bits = { path = "../bits" }
+bits_macros = { path = "../bits_macros" }
+snafu = { version = "0.8.5", default-features = false, features = ["rust_1_81"] }
+bytemuck = "1.18.0"
+
+[dev-dependencies]
+insta = { version = "1.33.0" }
+snapshot_test_utils = { path = "../snapshot_test_utils" }

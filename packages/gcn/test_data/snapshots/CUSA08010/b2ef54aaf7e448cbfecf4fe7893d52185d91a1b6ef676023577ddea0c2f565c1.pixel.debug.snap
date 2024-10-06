@@ -1,0 +1,70 @@
+[
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: LiteralConstant,
+                sdst: VccHi,
+            },
+        ),
+        literal_constant: Some(
+            3,
+        ),
+        program_counter: 0,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    IntegerConstant(
+                        InlineIntegerConstant(
+                            0,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 8,
+    },
+    Instruction {
+        inner: EXP(
+            ExpInstruction {
+                target: RenderTarget(
+                    0,
+                ),
+                compress: true,
+                done: true,
+                valid_mask: true,
+                vsrc0: Some(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: Some(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc2: None,
+                vsrc3: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 12,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_endpgm,
+                simm16: 0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 20,
+    },
+]

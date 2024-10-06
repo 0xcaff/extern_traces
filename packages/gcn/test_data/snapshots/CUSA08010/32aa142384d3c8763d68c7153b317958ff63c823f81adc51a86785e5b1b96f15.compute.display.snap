@@ -1,0 +1,560 @@
+0x0000: s_mov_b32 vcc_hi, 0x18b
+0x0008: s_lshl_b32 vcc_lo, s2, 3
+0x000c: s_lshl_b32 s4, s3, 3
+0x0010: s_load_dwordx2 s[2:3], s[0:1], 0x1c
+0x0014: v_add_co_u32 v16, vcc_lo, v0
+0x0018: v_sad_u32 v17, s4, 0, v1
+0x0020: s_waitcnt 0x7f
+0x0024: v_cmp_le_u32 v4, s3, v17, s0
+0x002c: v_cmp_le_u32 s2, v16
+0x0030: s_nor_b64 vcc, vcc, s[4:5]
+0x0034: s_and_saveexec_b64 vcc, vcc
+0x0038: s_cbranch_execz 0x2f5
+0x003c: v_cvt_f32_u32 v24, v16
+0x0040: s_load_dwordx2 s[2:3], s[0:1], 0x20
+0x0044: v_cvt_f32_u32 v23, v17
+0x0048: s_load_dword s24, s[0:1], 0x13
+0x004c: v_add_f32 v1, 0.5.f, v24
+0x0050: v_add_f32 v0, 0.5.f, v23
+0x0054: s_waitcnt 0x7f
+0x0058: v_mul_f32 v19, s2, v1
+0x005c: v_mul_f32 v18, s3, v0
+0x0060: v_cmp_gt_f32 v106, s24, 0, s0
+0x0068: v_mov_b32 v8, v19
+0x006c: v_mov_b32 v9, v18
+0x0070: v_mov_b32 v20, 1.f
+0x0074: v_mov_b32 v28, 0
+0x0078: v_mov_b32 v21, 0
+0x007c: v_mov_b32 v22, 0
+0x0080: s_cbranch_vccz 0xca
+0x0084: v_mov_b32 v2, 0
+0x0088: s_mov_b32 vcc_lo, 0x3dcccccd
+0x0090: v_mov_b32 v0, vcc_lo
+0x0094: s_load_dword s2, s[0:1], 0x5d
+0x0098: v_cmp_lt_f32 s24, v0
+0x009c: s_waitcnt 0x7f
+0x00a0: s_mov_b64 vcc, vcc
+0x00a4: s_cbranch_vccnz 0x54
+0x00a8: v_mov_b32 v3, s2
+0x00ac: s_mov_b32 vcc_lo, 0x3c23d70a
+0x00b4: s_load_dwordx4 s[12:15], s[0:1], 0x4e
+0x00b8: s_load_dwordx8 s[4:11], s[0:1], 0x42
+0x00bc: v_mac_f32 v3, vcc_lo, v18
+0x00c0: v_mul_f32 v0, 0x3b09a027, v3
+0x00c8: v_mov_b32 v1, 0x3f666666
+0x00d0: s_waitcnt 0x7f
+0x00d4: image_sample_lz v2, v[0:1], s[4:11], s[12:15], dmask(r)
+0x00dc: v_mul_f32 v0, 0x3c9c779a, v3
+0x00e4: v_mov_b32 v1, 0x3eb33333
+0x00ec: image_sample_lz v0, v[0:1], s[4:11], s[12:15], dmask(r)
+0x00f4: s_mov_b32 vcc_lo, 0x3d23d70b
+0x00fc: v_mul_f32 v5, 0x3ed75efa, v3
+0x0104: v_mul_f32 v6, 0x3dc391d1, v3
+0x010c: v_mov_b32 v1, 0xbecccccd
+0x0114: v_mov_b32 v4, vcc_lo
+0x0118: v_fract_f32 v5, v5
+0x011c: v_fract_f32 v6, v6
+0x0120: v_fma_f32 v4, s24, v1, v4
+0x0128: v_sin_f32 v5, v5
+0x012c: v_sin_f32 v6, v6
+0x0130: v_mul_f32 v7, 0x3f2147ae, v3
+0x0138: v_add_f32 v1, 1.f, v4
+0x013c: v_add_f32 v5, v5, v3
+0x0140: v_madmk_f32 v6, v6, v7
+0x0148: v_mul_f32 v7, 0x3c3f65be, v3
+0x0150: v_sub_f32 v8, v4, v1
+0x0154: s_mov_b32 vcc_lo, 0x3ca3d70b
+0x015c: v_mul_f32 v4, 0x3e22f983, v5
+0x0164: v_mul_f32 v3, 0x3e22f983, v6
+0x016c: v_fract_f32 v5, v7
+0x0170: v_add_f32 v6, 0x3f8ccccd, v8
+0x0178: v_mov_b32 v7, 0xbe4ccccd
+0x0180: v_mov_b32 v8, vcc_lo
+0x0184: v_fract_f32 v4, v4
+0x0188: v_fma_f32 v7, s24, v7, v8
+0x0190: v_fract_f32 v8, v3
+0x0194: v_sin_f32 v5, v5
+0x0198: v_rcp_f32 v3, v6
+0x019c: v_mov_b32 v6, 0x3f4ccccd
+0x01a4: v_sin_f32 v9, v4
+0x01a8: v_add_f32 v4, 1.f, v7
+0x01ac: v_sin_f32 v7, v8
+0x01b0: v_madak_f32 v6, v6, v5
+0x01b8: v_add_f32 v5, 0x3f333333, v9
+0x01c0: v_mul_f32 v6, v7, v6
+0x01c4: s_waitcnt 0xf71
+0x01c8: v_sub_f32 v1, v2, v1
+0x01cc: v_mul_f32 v1, v3, v1, s0, clamp
+0x01d4: v_mul_f32 v2, v1, v1
+0x01d8: s_waitcnt 0xf70
+0x01dc: v_cmp_ge_f32 v0, v4
+0x01e0: v_cndmask_b32 v0, 0, v5
+0x01e4: v_mul_f32 v2, v6, v2
+0x01e8: v_madak_f32 v1, -2.f, v1
+0x01f0: v_mac_f32 v0, v1, v2
+0x01f4: v_fract_f32 v2, v0
+0x01f8: v_mov_b32 v8, s2
+0x01fc: v_mul_f32 v0, 0x3e22f983, v8
+0x0204: v_add_f32 v7, v2, v18
+0x0208: v_fract_f32 v0, v0
+0x020c: v_fract_f32 v9, v7
+0x0210: v_mov_b32 v4, 0x3f19999a
+0x0218: v_sin_f32 v0, v0
+0x021c: v_madak_f32 v1, v4, v9
+0x0224: s_load_dwordx4 s[20:23], s[0:1], 0x4e
+0x0228: s_load_dwordx8 s[4:11], s[0:1], 0x32
+0x022c: v_mov_b32 v3, 0x3e4ccccd
+0x0234: v_madak_f32 v0, v3, v0
+0x023c: s_waitcnt 0x7f
+0x0240: image_sample_lz v3, v[0:1], s[4:11], s[20:23], dmask(r)
+0x0248: v_madak_f32 v1, v4, v9
+0x0250: image_sample_lz v4, v[0:1], s[4:11], s[20:23], dmask(r)
+0x0258: v_mul_f32 v5, 0x40400000, v9
+0x0260: s_load_dwordx8 s[12:19], s[0:1], 0x42
+0x0264: v_madmk_f32 v1, v8, v5
+0x026c: v_mul_f32 v0, 0x3d50e560, v8
+0x0274: v_mul_f32 v6, 0x3e71a9fc, v9
+0x027c: s_waitcnt 0x7f
+0x0280: image_sample_lz v5, v[0:1], s[12:19], s[20:23], dmask(r)
+0x0288: v_madmk_f32 v1, v8, v6
+0x0290: v_mul_f32 v0, 0x3ba3d70a, v8
+0x0298: image_sample_lz v6, v[0:1], s[12:19], s[20:23], dmask(r)
+0x02a0: s_mov_b32 vcc_lo, 0x40400000
+0x02a8: s_mov_b32 vcc_hi, 0x3e4ccccd
+0x02b0: v_mad_f32 v1, vcc_lo, v9, v8
+0x02b8: v_mad_f32 v0, vcc_hi, v19, v8
+0x02c0: image_sample_lz v0, v[0:1], s[12:19], s[20:23], dmask(r)
+0x02c8: v_add_f32 v1, 0x3efae148, v7
+0x02d0: v_fract_f32 v1, v1
+0x02d4: v_add_f32 v1, -0.5.f, v1
+0x02d8: s_mov_b32 vcc_lo, 0xc2055556
+0x02e0: v_mad_f32 v7, vcc_lo, abs(v1), 1.f, clamp
+0x02e8: s_brev_b32 s2, 1
+0x02ec: v_madak_f32 v1, -2.f, v7
+0x02f4: v_mul_f32 v7, v7, v7
+0x02f8: v_mul_f32 v8, v7, v1
+0x02fc: s_mov_b32 vcc_lo, 0xbeaaaaab
+0x0304: s_mov_b32 vcc_hi, 0xbf400002
+0x030c: s_mov_b32 s25, 0x42855556
+0x0314: v_mov_b32 v7, vcc_lo
+0x0318: s_mov_b32 s26, 0x40200001
+0x0320: v_mov_b32 v10, vcc_hi
+0x0324: v_cmp_lt_f32 0.5.f, v2
+0x0328: v_cndmask_b32 v20, 1.f, 0, vcc
+0x0330: s_waitcnt 0xf73
+0x0334: v_sub_f32 v2, v4, v3
+0x0338: v_mul_f32 v3, v2, v2
+0x033c: v_bfi_b32 v2, s2, v2, v3
+0x0344: s_waitcnt 0xf72
+0x0348: v_mul_f32 v3, 0x3ac49ba6, v5
+0x0350: s_waitcnt 0xf71
+0x0354: v_madmk_f32 v3, v6, v3
+0x035c: v_madmk_f32 v2, v2, v3
+0x0364: v_madmk_f32 v2, v8, v2
+0x036c: v_mul_f32 v28, s24, v2
+0x0370: v_mac_f32 v7, s25, v28, s0, clamp
+0x0378: s_waitcnt 0xf70
+0x037c: v_mac_f32 v10, s26, v0, s0, clamp
+0x0384: v_madak_f32 v1, -2.f, v7
+0x038c: v_mul_f32 v5, v7, v7
+0x0390: v_madak_f32 v0, -2.f, v10
+0x0398: v_mul_f32 v3, v10, v10
+0x039c: v_mul_f32 v21, v5, v1
+0x03a0: v_mad_f32 v8, s24, v2, v19
+0x03a8: v_mul_f32 v22, v3, v0
+0x03ac: s_load_dword s2, s[0:1], 0x5e
+0x03b0: s_waitcnt 0x7f
+0x03b4: unknown_1 s13, 0x8002
+0x03b8: s_cbranch_scc0 0x7
+0x03bc: s_load_dword s4, s[0:1], 0xb
+0x03c0: s_load_dword s5, s[0:1], 0x1e
+0x03c4: s_waitcnt 0x7f
+0x03c8: v_mul_f32 v0, s4, v8
+0x03cc: v_floor_f32 v0, v0
+0x03d0: v_add_f32 v0, 0.5.f, v0
+0x03d4: v_mul_f32 v8, s5, v0
+0x03d8: unknown_1 s13, 0x8102
+0x03dc: s_cbranch_scc0 0x7
+0x03e0: s_load_dword s2, s[0:1], 0xc
+0x03e4: s_load_dword s4, s[0:1], 0x1f
+0x03e8: s_waitcnt 0x7f
+0x03ec: v_mul_f32 v0, s2, v9
+0x03f0: v_floor_f32 v0, v0
+0x03f4: v_add_f32 v0, 0.5.f, v0
+0x03f8: v_mul_f32 v9, s4, v0
+0x03fc: s_load_dword s2, s[0:1], 0x5f
+0x0400: s_waitcnt 0x7f
+0x0404: v_cmp_neq_f32 v106, 0, s2, s0
+0x040c: s_cbranch_vccz 0x44
+0x0410: s_load_dword s4, s[0:1], 0x60
+0x0414: s_mov_b32 vcc_lo, 0x3e4ccccd
+0x041c: s_waitcnt 0x7f
+0x0420: v_mov_b32 v1, s4
+0x0424: v_mac_f32 v1, 4.f, v1
+0x0428: v_madmk_f32 v0, v9, v1
+0x0430: v_madmk_f32 v1, v8, v1
+0x0438: v_mul_f32 v0, 0x3e22f983, v0
+0x0440: v_mul_f32 v1, 0x3e22f983, v1
+0x0448: v_fract_f32 v0, v0
+0x044c: v_fract_f32 v1, v1
+0x0450: v_sin_f32 v0, v0
+0x0454: v_cos_f32 v1, v1
+0x0458: v_mul_f32 v0, s2, v0
+0x045c: v_mul_f32 v2, s2, v1
+0x0460: v_madmk_f32 v1, v0, v8
+0x0468: v_madmk_f32 v0, v2, v9
+0x0470: v_sub_f32 v3, vcc_lo, v1
+0x0474: v_sub_f32 v2, vcc_lo, v0
+0x0478: v_mul_f32 v4, v3, v3
+0x047c: v_mul_f32 v3, v2, v2
+0x0480: s_mov_b32 s6, 0x3e4ccccd
+0x0488: v_madmk_f32 v2, v4, v1
+0x0490: v_cmp_ge_f32 v4, v1, s6, abs(s0)
+0x0498: v_max_f32 v1, 0, v1
+0x049c: v_madmk_f32 v3, v3, v0
+0x04a4: v_cmp_ge_f32 v106, v0, s6, abs(s0)
+0x04ac: v_max_f32 v4, 0, v0
+0x04b0: v_cndmask_b32 v0, v2, v1, vcc
+0x04b8: v_cndmask_b32 v1, v3, v4
+0x04bc: v_sub_f32 v2, 1.f, v0
+0x04c0: s_mov_b32 s7, 0x3f4ccccd
+0x04c8: v_sub_f32 v4, s7, v0
+0x04cc: v_sub_f32 v3, s7, v1
+0x04d0: v_mul_f32 v4, v4, v4
+0x04d4: v_mul_f32 v5, v3, v3
+0x04d8: v_sub_f32 v3, 1.f, v1
+0x04dc: v_madmk_f32 v4, v4, v0
+0x04e4: v_cmp_ge_f32 v4, v2, s6, abs(s0)
+0x04ec: v_min_f32 v0, 1.f, v0
+0x04f0: v_madmk_f32 v2, v5, v1
+0x04f8: v_cmp_ge_f32 v106, v3, s6, abs(s0)
+0x0500: v_min_f32 v1, 1.f, v1
+0x0504: v_cndmask_b32 v0, v4, v0, vcc
+0x050c: v_cndmask_b32 v1, v2, v1
+0x0510: v_sub_f32 v0, v0, v8
+0x0514: v_sub_f32 v1, v1, v9
+0x0518: v_mac_f32 v9, s2, v1
+0x051c: v_mac_f32 v8, s2, v0
+0x0520: s_load_dwordx4 s[20:23], s[0:1], 0x4e
+0x0524: s_load_dwordx8 s[4:11], s[0:1], 0x32
+0x0528: s_load_dword s2, s[0:1], 0x6
+0x052c: s_waitcnt 0x7f
+0x0530: image_sample_lz v[0:3], v[8:9], s[4:11], s[20:23], dmask(rgba)
+0x0538: v_cmp_lt_f32 v106, s2, 0, s0
+0x0540: s_waitcnt 0xf70
+0x0544: v_add_f32 v4, 1.f, -abs(v0), s0
+0x054c: v_max_f32 v4, 0x38d1b717, v4
+0x0554: v_rcp_f32 v4, v4
+0x0558: v_mul_f32 v7, v2, v4
+0x055c: v_mad_f32 v25, -v0, v4, v7
+0x0564: v_mad_f32 v7, -v1, v4, -v7
+0x056c: v_mul_f32 v27, v0, v4
+0x0570: v_mad_f32 v26, v0, v4, v7
+0x0578: v_mac_f32 v25, v4, v1
+0x057c: v_mac_f32 v27, v4, v2
+0x0580: s_cbranch_vccz 0x80
+0x0584: v_mov_b32 v7, 1
+0x0588: s_load_dwordx4 s[12:15], s[0:1], 0x4a
+0x058c: v_mov_b32 v10, 0x3f00
+0x0594: v_mov_b32 v11, v8
+0x0598: v_mov_b32 v12, v9
+0x059c: s_waitcnt 0x7f
+0x05a0: image_sample_lz_o v[13:15], v[7:8], s[4:11], s[12:15], dmask(rgb)
+0x05a8: image_sample_lz_o v[0:2], v[10:11], s[4:11], s[12:15], dmask(rgb)
+0x05b0: v_mov_b32 v10, 63
+0x05b4: image_sample_lz_o v[4:6], v[10:11], s[4:11], s[12:15], dmask(rgb)
+0x05bc: v_mov_b32 v10, 0x100
+0x05c4: image_sample_lz_o v[10:12], v[10:11], s[4:11], s[12:15], dmask(rgb)
+0x05cc: s_waitcnt 0xf73
+0x05d0: v_add_f32 v7, 1.f, -abs(v13), s0
+0x05d8: s_waitcnt 0xf72
+0x05dc: v_add_f32 v29, 1.f, -abs(v0), s0
+0x05e4: v_max_f32 v7, 0x38d1b717, v7
+0x05ec: v_rcp_f32 v7, v7
+0x05f0: v_mul_f32 v34, v15, v7
+0x05f4: v_max_f32 v30, 0x38d1b717, v29
+0x05fc: s_waitcnt 0xf71
+0x0600: v_add_f32 v29, 1.f, -abs(v4), s0
+0x0608: v_max_f32 v29, 0x38d1b717, v29
+0x0610: v_rcp_f32 v29, v29
+0x0614: v_mul_f32 v32, v13, v7
+0x0618: v_mad_f32 v15, v15, v7, v32
+0x0620: v_mad_f32 v33, -v14, v7, -v34
+0x0628: v_mad_f32 v34, -v6, v29, -v34
+0x0630: v_mac_f32 v15, v29, v4
+0x0634: v_mac_f32 v33, v29, -v6, s0
+0x063c: v_mad_f32 v32, v6, v29, v15
+0x0644: s_waitcnt 0xf70
+0x0648: v_add_f32 v6, 1.f, -abs(v10), s0
+0x0650: v_max_f32 v6, 0x38d1b717, v6
+0x0658: v_rcp_f32 v6, v6
+0x065c: v_mac_f32 v34, v6, -v12, s0
+0x0664: v_mad_f32 v15, v5, v29, -v33
+0x066c: v_mac_f32 v15, v6, -v12, s0
+0x0674: v_mac_f32 v15, v6, -v11, s0
+0x067c: v_mac_f32 v32, v6, v10
+0x0680: v_mac_f32 v32, v6, v12
+0x0684: v_rcp_f32 v12, v30
+0x0688: v_mac_f32 v34, v12, -v2, s0
+0x0690: v_mac_f32 v34, v7, v13
+0x0694: v_mac_f32 v34, v7, v14
+0x0698: v_mac_f32 v34, v29, v4
+0x069c: v_mac_f32 v34, v29, v5
+0x06a0: v_mac_f32 v34, v6, v10
+0x06a4: v_mac_f32 v15, v12, -v2, s0
+0x06ac: v_mac_f32 v34, v6, v11
+0x06b0: v_mac_f32 v15, v12, -v1, s0
+0x06b8: v_mac_f32 v34, v12, v0
+0x06bc: v_mac_f32 v15, v7, v13
+0x06c0: v_mac_f32 v34, v12, v1
+0x06c4: v_mac_f32 v32, v12, v0
+0x06c8: v_mac_f32 v15, v29, v4
+0x06cc: v_mac_f32 v32, v12, v2
+0x06d0: v_mac_f32 v15, v6, v10
+0x06d4: v_mac_f32 v15, v12, v0
+0x06d8: v_add_f32 v0, v25, v34
+0x06dc: v_mad_f32 v34, -4.f, v25, v34
+0x06e4: v_mul_f32 v5, 0x3e59b3d0, v34
+0x06ec: v_mul_f32 v6, 0x3e59b3d0, v0
+0x06f4: v_add_f32 v7, v27, v32
+0x06f8: v_mad_f32 v32, -4.f, v27, v32
+0x0700: v_madmk_f32 v5, v32, v5
+0x0708: v_madmk_f32 v6, v7, v6
+0x0710: v_add_f32 v7, v26, v15
+0x0714: v_mad_f32 v15, -4.f, v26, v15
+0x071c: v_madmk_f32 v4, v15, v5
+0x0724: v_sub_f32 v5, v4, v34
+0x0728: v_madmk_f32 v6, v7, v6
+0x0730: v_add_f32 v6, 2.f, v6
+0x0734: v_sub_f32 v7, v4, v15
+0x0738: v_mac_f32 v34, 0.5.f, v5
+0x073c: v_sub_f32 v5, v4, v32
+0x0740: v_max_f32 v4, 1.f, v6
+0x0744: v_mac_f32 v32, 0.5.f, v5
+0x0748: v_mac_f32 v15, 0.5.f, v7
+0x074c: v_mul_f32 v5, s2, v34, -s0
+0x0754: v_rcp_f32 v1, v4, s0, s0, mul:4
+0x075c: v_mul_f32 v0, s2, v32, -s0
+0x0764: v_mul_f32 v2, s2, v15, -s0
+0x076c: v_mac_f32 v25, v1, v5
+0x0770: v_mac_f32 v27, v1, v0
+0x0774: v_mac_f32 v26, v1, v2
+0x0778: v_max_f32 v25, 0, v25
+0x077c: v_max_f32 v27, 0, v27
+0x0780: v_max_f32 v26, 0, v26
+0x0784: s_load_dword s2, s[0:1], 0x57
+0x0788: s_waitcnt 0x7f
+0x078c: unknown_1 s13, 0x8302
+0x0790: s_cbranch_scc0 0x14
+0x0794: s_load_dwordx4 s[24:27], s[0:1], 0x18
+0x0798: s_load_dwordx4 s[28:31], s[0:1], 0x4a
+0x079c: s_load_dwordx8 s[12:19], s[0:1], 0x3a
+0x07a0: s_waitcnt 0x7f
+0x07a4: v_mov_b32 v0, s26
+0x07a8: v_mov_b32 v1, s27
+0x07ac: v_mac_f32 v0, s24, v24
+0x07b0: v_mac_f32 v1, s25, v23
+0x07b4: image_sample_lz v[4:7], v[0:1], s[12:19], s[28:31], dmask(rgba)
+0x07bc: s_waitcnt 0xf70
+0x07c0: v_sub_f32 v0, 1.f, v7
+0x07c4: v_mad_f32 v25, v25, v0, v4
+0x07cc: v_mad_f32 v27, v27, v0, v5
+0x07d4: v_mad_f32 v26, v26, v0, v6
+0x07dc: v_mad_f32 v3, v3, v0, v7
+0x07e4: v_mov_b32 v23, 1.f
+0x07e8: s_load_dword s2, s[0:1], 0x12
+0x07ec: s_waitcnt 0x7f
+0x07f0: v_cmp_gt_f32 v24, s2, 0, s0
+0x07f8: s_mov_b64 vcc, s[24:25]
+0x07fc: s_cbranch_vccz 0x27
+0x0800: v_mul_f32 v0, 0x3c23d70a, v9
+0x0808: s_load_dword s26, s[0:1], 0x5d
+0x080c: s_load_dwordx8 s[12:19], s[0:1], 0x42
+0x0810: s_mov_b32 vcc_hi, 0xc0800001
+0x0818: s_waitcnt 0x7f
+0x081c: v_mov_b32 v4, s26
+0x0820: v_madmk_f32 v1, v4, v0
+0x0828: v_mul_f32 v0, 0x38fba882, v4
+0x0830: image_sample_lz v2, v[0:1], s[12:19], s[20:23], dmask(r)
+0x0838: v_mul_f32 v0, 0x3cf5c28f, v4
+0x0840: v_mov_b32 v1, 0x3dcccccd
+0x0848: image_sample_lz v0, v[0:1], s[12:19], s[20:23], dmask(r)
+0x0850: s_mov_b32 vcc_lo, 0x41200001
+0x0858: v_mov_b32 v4, vcc_hi
+0x085c: s_waitcnt 0xf71
+0x0860: v_mac_f32 v4, vcc_lo, v2, s0, clamp
+0x0868: v_madak_f32 v1, -2.f, v4
+0x0870: v_mul_f32 v1, 0x3ecccccd, v1
+0x0878: v_mul_f32 v2, v4, v4
+0x087c: s_waitcnt 0xf70
+0x0880: v_mul_f32 v0, 0x3f19999a, v0
+0x0888: v_mac_f32 v0, v2, v1
+0x088c: v_add_f32 v0, 0xbe99999a, v0
+0x0894: v_mad_f32 v23, s2, v0, 1.f
+0x089c: s_and_b64 vcc, exec, s[24:25]
+0x08a0: s_cbranch_vccz 0x66
+0x08a4: v_mov_b32 v0, 0x3cac0831
+0x08ac: v_madak_f32 v13, v0, v28
+0x08b4: v_add_f32 v4, 0xbc800000, v8
+0x08bc: s_load_dwordx4 s[12:15], s[0:1], 0x4a
+0x08c0: v_add_f32 v7, v4, v13
+0x08c4: v_mov_b32 v8, v9
+0x08c8: v_mov_b32 v5, v9
+0x08cc: s_waitcnt 0x7f
+0x08d0: image_sample_lz v[0:2], v[7:8], s[4:11], s[12:15], dmask(rgb)
+0x08d8: image_sample_lz v[4:6], v[4:5], s[4:11], s[12:15], dmask(rgb)
+0x08e0: v_add_f32 v10, v7, v13
+0x08e4: v_mov_b32 v11, v9
+0x08e8: v_add_f32 v7, v10, v13
+0x08ec: v_add_f32 v13, v7, v13
+0x08f0: v_mov_b32 v14, v9
+0x08f4: image_sample_lz v[10:12], v[10:11], s[4:11], s[12:15], dmask(rgb)
+0x08fc: image_sample_lz v[7:9], v[7:8], s[4:11], s[12:15], dmask(rgb)
+0x0904: image_sample_lz v[13:15], v[13:14], s[4:11], s[12:15], dmask(rgb)
+0x090c: s_mov_b32 vcc_hi, 0x3e4ccccd
+0x0914: v_mul_f32 v24, 0x3e99999a, v25
+0x091c: v_madmk_f32 v24, v27, v24
+0x0924: v_madmk_f32 v29, v26, v24
+0x092c: v_sub_f32 v31, v29, v25
+0x0930: v_add_f32 v24, 1.f, s2, s0
+0x0938: v_sub_f32 v28, v29, v27
+0x093c: v_sub_f32 v29, v29, v26
+0x0940: s_mov_b32 vcc_lo, 0x41200000
+0x0948: v_mov_b32 v30, s2
+0x094c: v_mul_f32 v30, vcc_lo, v30, s0, clamp
+0x0954: s_waitcnt 0xf73
+0x0958: v_add_f32 v0, v4, v0
+0x095c: v_add_f32 v1, v5, v1
+0x0960: v_add_f32 v2, v6, v2
+0x0964: s_waitcnt 0xf72
+0x0968: v_add_f32 v0, v0, v10
+0x096c: s_waitcnt 0xf71
+0x0970: v_add_f32 v0, v0, v7
+0x0974: v_add_f32 v1, v1, v11
+0x0978: s_waitcnt 0xf70
+0x097c: v_add_f32 v0, v0, v13
+0x0980: v_add_f32 v1, v1, v8
+0x0984: v_add_f32 v2, v2, v12
+0x0988: v_add_f32 v4, v2, v9
+0x098c: v_add_f32 v4, v4, v15
+0x0990: v_mul_f32 v5, 0x3e4ccccd, v0
+0x0998: v_add_f32 v2, v1, v14
+0x099c: v_mad_f32 v1, vcc_hi, -abs(v0), 1.f
+0x09a4: v_max_f32 v1, 0x38d1b717, v1
+0x09ac: v_rcp_f32 v1, v1
+0x09b0: v_mul_f32 v6, v1, v4
+0x09b4: v_mul_f32 v4, 0x3e4ccccd, v6
+0x09bc: v_mul_f32 v2, v1, v2
+0x09c0: v_mul_f32 v0, v1, v5
+0x09c4: v_madmk_f32 v0, v6, v0
+0x09cc: v_mad_f32 v6, -v1, v5, v4
+0x09d4: v_mad_f32 v7, -vcc_hi, -v2, v4
+0x09dc: v_madmk_f32 v2, v2, v6
+0x09e4: v_mul_f32 v4, v20, v2
+0x09e8: v_mul_f32 v4, 0x3e99999a, v4
+0x09f0: v_mac_f32 v7, v5, v1
+0x09f4: v_mul_f32 v5, v20, v0
+0x09f8: v_madmk_f32 v4, v5, v4
+0x0a00: v_mul_f32 v5, v20, v7
+0x0a04: v_madmk_f32 v4, v5, v4
+0x0a0c: v_mad_f32 v2, -v20, v2, v4
+0x0a14: v_mad_f32 v1, -v20, v7, v4
+0x0a1c: v_mad_f32 v4, -v20, v0, v4
+0x0a24: v_mac_f32 v31, v24, v2
+0x0a28: v_mac_f32 v28, v24, v4
+0x0a2c: v_mac_f32 v29, v24, v1
+0x0a30: v_mac_f32 v25, v31, v30
+0x0a34: v_mac_f32 v27, v28, v30
+0x0a38: v_mac_f32 v26, v29, v30
+0x0a3c: s_load_dword s2, s[0:1], 0x11
+0x0a40: s_waitcnt 0x7f
+0x0a44: v_cmp_neq_f32 v106, 0, s2, s0
+0x0a4c: s_cbranch_vccz 0xb
+0x0a50: v_mul_f32 v0, s2, v25
+0x0a54: s_load_dword s4, s[0:1], 0x5a
+0x0a58: v_mul_f32 v1, s2, v27
+0x0a5c: v_mul_f32 v2, s2, v26
+0x0a60: v_rndne_f32 v0, v0
+0x0a64: v_rndne_f32 v1, v1
+0x0a68: v_rndne_f32 v2, v2
+0x0a6c: s_waitcnt 0x7f
+0x0a70: v_mul_f32 v25, s4, v0
+0x0a74: v_mul_f32 v27, s4, v1
+0x0a78: v_mul_f32 v26, s4, v2
+0x0a7c: v_cmp_lt_f32 v22, v21
+0x0a80: s_and_saveexec_b64 vcc, vcc
+0x0a84: s_cbranch_execz 0x7
+0x0a88: v_mac_f32 v22, 2.f, v22
+0x0a8c: v_fract_f32 v0, v22
+0x0a90: v_mad_f32 v0, -2.f, v0, 2.f
+0x0a98: v_mul_f32 v25, v25, v0
+0x0a9c: v_mul_f32 v27, v27, v0
+0x0aa0: v_mul_f32 v26, v26, v0
+0x0aa4: s_load_dword s2, s[0:1], 0xe
+0x0aa8: s_mov_b64 exec, vcc
+0x0aac: s_waitcnt 0x7f
+0x0ab0: v_cmp_gt_f32 v106, s2, 0, s0
+0x0ab8: s_cbranch_vccz 0x37
+0x0abc: s_load_dword s4, s[0:1], 0x5b
+0x0ac0: s_mov_b32 vcc_lo, 0x3e800000
+0x0ac8: s_waitcnt 0x7f
+0x0acc: v_mov_b32 v0, s4
+0x0ad0: v_madak_f32 v1, v0, v19
+0x0ad8: v_fract_f32 v1, v1
+0x0adc: v_madak_f32 v2, v0, v19
+0x0ae4: v_add_f32 v0, -0.5.f, v1
+0x0ae8: v_fract_f32 v1, v2
+0x0aec: v_mul_f32 v2, s4, v19
+0x0af0: v_add_f32 v0, vcc_lo, -abs(v0), s0
+0x0af8: v_add_f32 v1, -0.5.f, v1
+0x0afc: v_fract_f32 v2, v2
+0x0b00: v_max_f32 v0, 0, v0
+0x0b04: v_add_f32 v1, vcc_lo, -abs(v1), s0
+0x0b0c: v_add_f32 v2, -0.5.f, v2
+0x0b10: v_mul_f32 v0, v0, v0
+0x0b14: v_max_f32 v1, 0, v1
+0x0b18: v_add_f32 v2, vcc_lo, -abs(v2), s0
+0x0b20: v_mul_f32 v0, v0, v25
+0x0b24: v_mul_f32 v1, v1, v1
+0x0b28: v_max_f32 v4, 0, v2
+0x0b2c: s_mov_b32 s5, 0x42400000
+0x0b34: s_mov_b32 vcc_hi, 0x4099999a
+0x0b3c: v_mad_f32 v2, -s5, v0, v25
+0x0b44: v_mul_f32 v1, v1, v27
+0x0b48: v_mul_f32 v6, v4, v4
+0x0b4c: v_mad_f32 v5, -vcc_hi, v0, v26
+0x0b54: v_madmk_f32 v4, v1, v2
+0x0b5c: v_mul_f32 v2, v6, v26
+0x0b60: v_madmk_f32 v5, v1, v5
+0x0b68: v_mad_f32 v1, -s5, v1, v27
+0x0b70: v_mac_f32 v0, v26, v6
+0x0b74: v_madmk_f32 v4, v2, v4
+0x0b7c: v_madmk_f32 v2, v2, v5
+0x0b84: v_madmk_f32 v0, v0, v1
+0x0b8c: v_mac_f32 v25, s2, v4
+0x0b90: v_mac_f32 v27, s2, v0
+0x0b94: v_mac_f32 v26, s2, v2
+0x0b98: s_load_dword s2, s[0:1], 0xd
+0x0b9c: s_waitcnt 0x7f
+0x0ba0: v_cmp_gt_f32 v106, s2, 0, s0
+0x0ba8: s_cbranch_vccz 0x12
+0x0bac: v_mad_f32 v18, -0.5.f, s3, v18
+0x0bb4: s_load_dword s4, s[0:1], 0x5c
+0x0bb8: s_mov_b32 vcc_lo, 0x40400000
+0x0bc0: s_waitcnt 0x7f
+0x0bc4: v_mul_f32 v0, s4, v18
+0x0bc8: v_fract_f32 v0, v0
+0x0bcc: v_sub_f32 v1, 1.f, v0
+0x0bd0: v_min_f32 v1, v0, v1, s0, clamp, mul:2
+0x0bd8: v_mad_f32 v0, -2.f, v1, vcc_lo, mul:2
+0x0be0: v_mul_f32 v1, v1, v1
+0x0be4: v_mad_f32 v0, v0, v1, -1.f
+0x0bec: v_mul_f32 v1, s2, v23
+0x0bf0: v_mac_f32 v23, v0, v1
+0x0bf4: v_mul_f32 v0, v23, v25
+0x0bf8: s_load_dwordx8 s[0:7], s[0:1], 0x2a
+0x0bfc: v_mul_f32 v2, v23, v26
+0x0c00: v_mul_f32 v1, v23, v27
+0x0c04: s_waitcnt 0x7f
+0x0c08: image_store v[0:3], v[16:17], s[0:7], s[0:3], dmask(rgba)
+0x0c10: s_endpgm 0x0

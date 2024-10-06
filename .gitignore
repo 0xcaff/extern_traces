@@ -1,2 +1,6 @@
 target
 build
+
+packages/pm4/src/registers/generated/pkt3.rs
+packages/pm4/src/registers/generated/regs.rs
+packages/gcn/src/instructions/generated/ops.rs

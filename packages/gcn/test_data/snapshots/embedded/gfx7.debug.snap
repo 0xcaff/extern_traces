@@ -1,0 +1,22 @@
+[
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_readlane_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 1,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 2,
+                },
+                vdst: VectorGPR {
+                    register_idx: 5,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 0,
+    },
+]
