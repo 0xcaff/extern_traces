@@ -3,6 +3,11 @@ use std::io;
 use std::io::{ErrorKind, Read};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+#[repr(u8)]
+pub enum TraceCommand {
+    CaptureFrame = 0x0,
+}
+
 pub enum TraceEvent {
     Start(InitialMessage),
     Span(SpanEvent),

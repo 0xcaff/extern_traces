@@ -9,7 +9,7 @@ use crate::app::tracing::view_state::{
     SelectedSpanMetadata, ThreadSpan, ViewState, ViewStateContainer,
 };
 use crate::app::Scene;
-use crate::proto::{InitialMessage, LibraryInfo, ModuleInfo, TraceEvent};
+use crate::proto::{InitialMessage, LibraryInfo, ModuleInfo, TraceCommand, TraceEvent};
 use eframe::egui::scroll_area::ScrollBarVisibility;
 use eframe::egui::{
     pos2, vec2, Align, Align2, CentralPanel, Color32, Context, FontFamily, FontId, Frame, Id,
@@ -20,7 +20,7 @@ use eframe::{egui, emath};
 use egui_tiles::{Tile, Tree};
 use ps4libdoc::{LoadedDocumentation, SymbolDocumentation};
 use std::fs::File;
-use std::io::Read;
+use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpListener};
 use std::path::PathBuf;
 use std::sync::mpsc::{channel, Receiver, Sender};
@@ -33,19 +33,22 @@ pub struct TracingScene {
     receiver: Receiver<TraceEvent>,
     tree: Tree<Pane>,
     loading_thread_handle: JoinHandle<io::Result<()>>,
+    sender_commands: Option<Sender<TraceCommand>>,
 }
 
 impl TracingScene {
     pub fn from_network(ctx: Context, socket_addr: SocketAddr) -> TracingScene {
         let (sender, receiver) = channel();
+        let (sender_commands, receiver_commands) = channel();
 
         let loading_thread_handle =
-            thread::spawn(move || run_server(ctx, socket_addr, sender.clone()));
+            thread::spawn(move || run_server(ctx, socket_addr, sender.clone(), receiver_commands));
 
         TracingScene {
             last_width: None,
             state: ViewStateContainer::new(),
             receiver,
+            sender_commands: Some(sender_commands),
             tree: create_tree(),
             loading_thread_handle,
         }
@@ -68,6 +71,7 @@ impl TracingScene {
             receiver,
             tree: create_tree(),
             loading_thread_handle,
+            sender_commands: None,
         }
     }
 
@@ -113,6 +117,7 @@ impl TracingScene {
                         last_width: self.last_width,
                         view_state,
                         docs: &docs,
+                        commands: self.sender_commands.as_mut(),
                     },
                     pane_response: None,
                 };
@@ -224,25 +229,33 @@ fn read_stream(ctx: Context, mut stream: impl Read, sender: Sender<TraceEvent>) 
     }
 }
 
-fn run_server(ctx: Context, addr: SocketAddr, sender: Sender<TraceEvent>) -> io::Result<()> {
+fn run_server(
+    ctx: Context,
+    addr: SocketAddr,
+    sender: Sender<TraceEvent>,
+    receiver: Receiver<TraceCommand>,
+) -> io::Result<()> {
     let listener = TcpListener::bind(addr)?;
 
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                let sender_clone = sender.clone();
-                let ctx_clone = ctx.clone();
-                thread::spawn(move || {
-                    if let Err(e) = read_stream(ctx_clone, stream, sender_clone) {
-                        eprintln!("error handling client: {}", e);
-                    }
-                });
-            }
-            Err(e) => {
-                eprintln!("error accepting client: {}", e);
-            }
+    let Some(connection) = listener.incoming().next() else {
+        return Ok(());
+    };
+
+    let stream = connection?;
+    let mut stream_clone = stream.try_clone()?;
+
+    let sender_clone = sender.clone();
+    let ctx_clone = ctx.clone();
+    thread::spawn(move || {
+        if let Err(e) = read_stream(ctx_clone, stream, sender_clone) {
+            eprintln!("error handling client: {}", e);
         }
+    });
+
+    for command in receiver.into_iter() {
+        stream_clone.write_all(&[command as u8])?;
     }
+
     Ok(())
 }
 

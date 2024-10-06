@@ -1,8 +1,11 @@
+mod gfx;
 mod render;
 mod search;
 mod span_detail;
 mod symbol_detail;
 
+use std::sync::mpsc::Sender;
+use crate::app::tracing::panes::gfx::GraphicsCapturePane;
 use crate::app::tracing::panes::search::SearchPane;
 use crate::app::tracing::panes::span_detail::SpanDetailPane;
 use crate::app::tracing::panes::symbol_detail::SymbolDetailPane;
@@ -11,11 +14,13 @@ use eframe::egui;
 use eframe::egui::{vec2, Align2, Color32, Frame, Id, Response, Sense, Stroke, TextStyle, Ui};
 use egui_tiles::{SimplificationOptions, TabState, Tabs, TileId, Tiles, Tree};
 use ps4libdoc::LoadedDocumentation;
+use crate::proto::TraceCommand;
 
 pub struct TreeBehaviorArgs<'a> {
     pub view_state: &'a mut ViewState,
     pub docs: &'a LoadedDocumentation,
     pub last_width: Option<f32>,
+    pub commands: Option<&'a mut Sender<TraceCommand>>,
 }
 
 pub struct TreeBehavior<'a> {
@@ -27,6 +32,7 @@ pub enum Pane {
     CurrentlySelectedSpanDetail(SpanDetailPane),
     SearchPane(SearchPane),
     CurrentSymbolDetailsPane(SymbolDetailPane),
+    GraphicsCapturePane(GraphicsCapturePane),
 }
 
 impl Pane {
@@ -35,6 +41,7 @@ impl Pane {
             Pane::CurrentlySelectedSpanDetail(_) => PaneKey::CurrentlySelectedSpanDetail,
             Pane::SearchPane(_) => PaneKey::SearchPane,
             Pane::CurrentSymbolDetailsPane(_) => PaneKey::CurrentSymbolDetailsPane,
+            Pane::GraphicsCapturePane(_) => PaneKey::GraphicsCapturePane,
         }
     }
 }
@@ -44,6 +51,7 @@ pub enum PaneKey {
     CurrentlySelectedSpanDetail,
     SearchPane,
     CurrentSymbolDetailsPane,
+    GraphicsCapturePane,
 }
 
 pub enum PaneResponse {
@@ -65,6 +73,7 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
                 Pane::CurrentlySelectedSpanDetail(pane) => pane.pane_ui(&mut self.args, ui),
                 Pane::SearchPane(pane) => pane.pane_ui(&mut self.args, ui),
                 Pane::CurrentSymbolDetailsPane(pane) => pane.pane_ui(&mut self.args, ui),
+                Pane::GraphicsCapturePane(pane) => pane.pane_ui(&mut self.args, ui),
             };
         });
 
@@ -76,6 +85,7 @@ impl<'a> egui_tiles::Behavior<Pane> for TreeBehavior<'a> {
             Pane::CurrentlySelectedSpanDetail(pane) => pane.title(),
             Pane::SearchPane(pane) => pane.title(),
             Pane::CurrentSymbolDetailsPane(pane) => pane.title(),
+            Pane::GraphicsCapturePane(pane) => pane.title(),
         }
     }
 
@@ -144,10 +154,14 @@ pub fn create_tree() -> Tree<Pane> {
         last_matching: None,
     }));
 
+    let graphics_capture_pane =
+        tiles.insert_pane(Pane::GraphicsCapturePane(GraphicsCapturePane {}));
+
     let root = tiles.insert_container(Tabs::new(vec![
         currently_selected_span_detail_pane,
         symbol_pane,
         search_pane,
+        graphics_capture_pane,
     ]));
 
     Tree::new("detail_tree", root, tiles)
