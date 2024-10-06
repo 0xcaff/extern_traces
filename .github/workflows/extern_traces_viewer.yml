@@ -53,6 +53,10 @@ jobs:
           cd packages/gcn/src/instructions/generated
           pipenv run python ops_rs.py
 
+      - name: Install Ninja (Windows only)
+        if: runner.os == 'Windows'
+        run: choco install ninja
+
       - run: cargo build --target ${{ matrix.target }} --release
 
       - name: save artifacts
