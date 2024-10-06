@@ -5,9 +5,7 @@ mod view_state;
 
 use crate::app::tracing::panes::{create_tree, Pane, PaneResponse, TreeBehavior, TreeBehaviorArgs};
 use crate::app::tracing::utils::{format_time, human_readable_size};
-use crate::app::tracing::view_state::{
-    SelectedSpanMetadata, ThreadSpan, ViewState, ViewStateContainer,
-};
+use crate::app::tracing::view_state::{SpanRef, ThreadSpan, ViewState, ViewStateContainer};
 use crate::app::Scene;
 use crate::proto::{InitialMessage, LibraryInfo, ModuleInfo, TraceCommand, TraceEvent};
 use eframe::egui::scroll_area::ScrollBarVisibility;
@@ -377,7 +375,7 @@ fn render_central_panel_contents(
                             .map_or(false, |it| it == (span.label_id as usize));
 
                         if is_hovered && is_clicked {
-                            let selected_span_metadata = SelectedSpanMetadata {
+                            let selected_span_metadata = SpanRef {
                                 thread_id: *thread_id,
                                 span_idx: *start_idx,
                             };

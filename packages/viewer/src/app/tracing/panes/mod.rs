@@ -4,17 +4,17 @@ mod search;
 mod span_detail;
 mod symbol_detail;
 
-use std::sync::mpsc::Sender;
 use crate::app::tracing::panes::gfx::GraphicsCapturePane;
 use crate::app::tracing::panes::search::SearchPane;
 use crate::app::tracing::panes::span_detail::SpanDetailPane;
 use crate::app::tracing::panes::symbol_detail::SymbolDetailPane;
 use crate::app::tracing::view_state::ViewState;
+use crate::proto::TraceCommand;
 use eframe::egui;
 use eframe::egui::{vec2, Align2, Color32, Frame, Id, Response, Sense, Stroke, TextStyle, Ui};
 use egui_tiles::{SimplificationOptions, TabState, Tabs, TileId, Tiles, Tree};
 use ps4libdoc::LoadedDocumentation;
-use crate::proto::TraceCommand;
+use std::sync::mpsc::Sender;
 
 pub struct TreeBehaviorArgs<'a> {
     pub view_state: &'a mut ViewState,

@@ -10,7 +10,7 @@ use std::borrow::Cow;
 use std::sync::Arc;
 
 pub struct SpanDetailPane {
-    last_image: Option<Arc<[u8]>>,
+    last_image: Option<(Arc<[u8]>, usize)>,
     debug_handle: DebugHandle,
     ctx: GraphicsContext,
 }
@@ -70,9 +70,9 @@ impl SpanDetailPane {
                 ui.label(format_time(duration_seconds));
             });
 
-            if let Some(it) = &self.last_image {
+            if let Some((it, name)) = &self.last_image {
                 ui.image(ImageSource::Bytes {
-                    uri: Cow::Borrowed("bytes://image.png"),
+                    uri: format!("image://image-{}.png", *name).into(),
                     bytes: Bytes::Shared(it.clone()),
                 });
             }
@@ -101,7 +101,7 @@ impl SpanDetailPane {
                                 |it| Ok(it.ok_or_else(|| format_err!("missing value color"))?),
                             ) {
                             Ok(value) => {
-                                self.last_image.replace(value);
+                                self.last_image.replace((value, self.last_image.as_ref().map(|it| it.1).unwrap_or(0) + 1));
                             }
                             Err(err) => {
                                 println!("{:?}", err);

@@ -89,7 +89,7 @@ impl FoldSpansState {
 }
 
 #[derive(Clone)]
-pub struct SelectedSpanMetadata {
+pub struct SpanRef {
     pub thread_id: u64,
     pub span_idx: usize,
 }
@@ -102,8 +102,9 @@ pub enum ViewStateContainer {
 pub struct ViewState {
     pub initial_message: InitialMessage,
     pub threads: BTreeMap<u64, ThreadState>,
-    pub selected_span: Option<SelectedSpanMetadata>,
+    pub selected_span: Option<SpanRef>,
     pub current_symbol_detail: Option<usize>,
+    pub extra_data_messages: Vec<SpanRef>,
 
     pub timeline_position_state: TimelinePositionState,
 }
@@ -120,6 +121,7 @@ impl ViewStateContainer {
             threads: BTreeMap::new(),
             selected_span: None,
             current_symbol_detail: None,
+            extra_data_messages: vec![],
         })
     }
 }
@@ -161,7 +163,16 @@ impl ViewState {
                         }
                     }
 
-                    state.spans.push(ThreadSpan::from_events(start, end));
+                    let span_ref = SpanRef {
+                        span_idx: state.spans.len(),
+                        thread_id: end.thread_id,
+                    };
+                    let span = ThreadSpan::from_events(start, end);
+                    if span.extra_data.is_some() {
+                        self.extra_data_messages.push(span_ref);
+                    }
+
+                    state.spans.push(span);
                 };
             }
         }

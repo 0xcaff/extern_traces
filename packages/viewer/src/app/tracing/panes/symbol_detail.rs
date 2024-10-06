@@ -1,11 +1,11 @@
 use crate::app::tracing::panes::{PaneKey, PaneResponse, TreeBehaviorArgs};
 use crate::app::tracing::utils::render_symbol_info;
-use crate::app::tracing::view_state::SelectedSpanMetadata;
+use crate::app::tracing::view_state::SpanRef;
 use eframe::egui;
 use eframe::egui::{vec2, ScrollArea, TextStyle, Ui};
 
 pub struct SymbolDetailPane {
-    pub last_matching: Option<(usize, Vec<SelectedSpanMetadata>)>,
+    pub last_matching: Option<(usize, Vec<SpanRef>)>,
 }
 
 impl SymbolDetailPane {
@@ -38,7 +38,7 @@ impl SymbolDetailPane {
                             .map(|(span_idx, span)| (*thread_id, span_idx, span))
                     })
                     .filter(|(_thread_id, _span_idx, span)| (span.label_id as usize) == symbol_idx)
-                    .map(|(thread_id, span_idx, _)| SelectedSpanMetadata {
+                    .map(|(thread_id, span_idx, _)| SpanRef {
                         span_idx,
                         thread_id,
                     })

@@ -23,7 +23,8 @@ pub struct GraphicsContext {
 impl GraphicsContext {
     pub fn init() -> (GraphicsContext, DebugHandle) {
         let loader = unsafe {
-            DynamicLibraryLoader::new("/opt/homebrew/Cellar/molten-vk/1.2.10/lib/libMoltenVK.dylib").unwrap()
+            DynamicLibraryLoader::new("/opt/homebrew/Cellar/molten-vk/1.2.10/lib/libMoltenVK.dylib")
+                .unwrap()
         };
 
         let library = VulkanLibrary::with_loader(loader).unwrap();
