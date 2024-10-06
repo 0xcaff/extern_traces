@@ -1,9 +1,9 @@
 [workspace]
 members = [
-    "packages/viewer",
+    "packages/extern_traces_viewer",
     "packages/ps4libdoc"
 ]
 exclude = [
-    "packages/plugin/plugin_support"
+    "packages/extern_traces_plugin/plugin_support"
 ]
 resolver = "2"

@@ -112,4 +112,4 @@ from you, my email and X DMs are open.
 * LightningMods for explaining libc memory allocation constraints
 
 [releases]: https://github.com/0xcaff/extern_traces/releases
-[patch_self.py]: https://github.com/0xcaff/extern_traces/blob/main/patch_self.py
+[patch_self.py]: https://github.com/0xcaff/extern_traces/blob/main/packages/trace_plugin/patch_self.py

@@ -14,14 +14,14 @@ jobs:
       - name: Run make in Docker
         uses: docker://ghcr.io/0xcaff/ps4-sdk-images/goldhen:edge
         with:
-          args: make -C packages/plugin
+          args: packages/extern_traces_plugin/scripts/ci.sh
 
       - name: save artifacts
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: packages/plugin/target/**/*
+          path: packages/extern_traces_plugin/target/**/*
 
   release:
     needs: build

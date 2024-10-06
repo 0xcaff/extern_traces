@@ -1,5 +1,5 @@
 [package]
-name = "extern_traces_viewer"
+name = "trace_viewer"
 version = "0.0.1"
 edition = "2021"
 
