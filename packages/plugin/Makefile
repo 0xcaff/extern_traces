@@ -95,7 +95,7 @@ build-info:
 config:
 	curl -T config.ini ftp://192.168.1.123:2121/data/extern_traces.ini
 
-.PHONY: clean config # ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
+.PHONY: clean config ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
 .DEFAULT_GOAL := all
 
 all: build-info plugin_common $(TARGET)
