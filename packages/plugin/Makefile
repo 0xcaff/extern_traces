@@ -101,7 +101,6 @@ config:
 all: build-info plugin_common $(TARGET)
 
 deploy: all config
-	echo $(TARGET)
 	curl -T target/prx_final/extern_traces.prx ftp://192.168.1.123:2121/data/GoldHEN/plugins/extern_traces.prx
 
 clean:
