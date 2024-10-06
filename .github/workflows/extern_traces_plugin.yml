@@ -32,6 +32,11 @@ jobs:
           cd packages/pm4/src/registers/generated
           pipenv run python pkt3_rs.py
 
+      - name: Codegen ops.rs
+        run: |
+          cd packages/gcn/src/instructions/generated
+          pipenv run python ops_rs.py
+
       - name: Run make in Docker
         uses: docker://ghcr.io/0xcaff/ps4-sdk-images/goldhen:edge
         with:
