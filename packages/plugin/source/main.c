@@ -30,13 +30,14 @@ struct ListenCommandsThreadArgs {
 
 void *listen_commands_thread(void *arg) {
     struct ListenCommandsThreadArgs* args = arg;
+    int sock = args->sock;
     args->is_ready = true;
 
     ssize_t bytes_read;
     uint8_t byte;
 
     while (true) {
-        bytes_read = recv(args->sock, &byte, 1, 0);
+        bytes_read = recv(sock, &byte, 1, 0);
 
         if (bytes_read == -1) {
             final_printf("error reading from socket\n");
