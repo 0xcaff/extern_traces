@@ -1,5 +1,6 @@
 {
   "build": { "dockerfile": "Dockerfile" },
+  "postCreateCommand": "cargo build",
   "customizations": {
     "vscode": {
       "extensions": [
