@@ -1,0 +1,13 @@
+0x0000: s_mov_b32 vcc_hi, 0xd
+0x0008: s_lshl_b32 vcc_lo, s4, 6
+0x000c: v_add_co_u32 v0, vcc_lo, v0
+0x0010: v_cmpx_gt_u32 s2, v0
+0x0014: s_cbranch_execz 0xa
+0x0018: v_and_b32 v1, s3, v0
+0x001c: s_load_dwordx8 s[4:11], s[0:1], 0x0
+0x0020: s_waitcnt 0x7f
+0x0024: buffer_load_dword v1, v1, s[8:11], idxen, offset=0x0, soffset=0x80
+0x002c: v_cmpx_gt_u32 exec, s6, v0, s0
+0x0034: s_waitcnt 0xf70
+0x0038: buffer_store_dword v1, v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0040: s_endpgm 0x0

@@ -1,0 +1,5051 @@
+[
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: LiteralConstant,
+                sdst: VccHi,
+            },
+        ),
+        literal_constant: Some(
+            141,
+        ),
+        program_counter: 0,
+    },
+    Instruction {
+        inner: SOP2(
+            SOP2Instruction {
+                op: s_lshl_b32,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                ssrc1: IntegerConstant(
+                    InlineIntegerConstant(
+                        3,
+                    ),
+                ),
+                sdst: VccLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 8,
+    },
+    Instruction {
+        inner: SOP2(
+            SOP2Instruction {
+                op: s_lshl_b32,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        3,
+                    ),
+                ),
+                ssrc1: IntegerConstant(
+                    InlineIntegerConstant(
+                        3,
+                    ),
+                ),
+                sdst: ScalarGPR(
+                    4,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 12,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx2,
+                offset: 36,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 16,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_co_u32,
+                src0: Scalar(
+                    Destination(
+                        VccLo,
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 26,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 20,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_sad_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 27,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 1,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 24,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 32,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmp_lt_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 4,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                3,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 27,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 36,
+    },
+    Instruction {
+        inner: VOPC(
+            VOPCInstruction {
+                op: v_cmp_lt_u32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            2,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 26,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 44,
+    },
+    Instruction {
+        inner: SOP2(
+            SOP2Instruction {
+                op: s_nor_b64,
+                ssrc0: Destination(
+                    VccLo,
+                ),
+                ssrc1: Destination(
+                    ScalarGPR(
+                        4,
+                    ),
+                ),
+                sdst: VccLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 48,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_and_saveexec_b64,
+                ssrc0: Destination(
+                    VccLo,
+                ),
+                sdst: VccLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 52,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_cbranch_execz,
+                simm16: 254,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 56,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_cvt_f32_u32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 26,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 60,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx16,
+                offset: 0,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    4,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 64,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_cvt_f32_u32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 27,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 68,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 72,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 26,
+                },
+                vdata: VectorGPR {
+                    register_idx: 0,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 76,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx4,
+                offset: 24,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    20,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 84,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    FloatConstant(
+                        InlineFloatConstant {
+                            value: 240,
+                        },
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 4,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 88,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    FloatConstant(
+                        InlineFloatConstant {
+                            value: 240,
+                        },
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 5,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 92,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 96,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_sample_lz,
+                dmask: dmask(rgba),
+                unorm: true,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 4,
+                },
+                vdata: VectorGPR {
+                    register_idx: 4,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 5,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 100,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx4,
+                offset: 42,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    24,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 108,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    FloatConstant(
+                        InlineFloatConstant {
+                            value: 240,
+                        },
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 112,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 116,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            26,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 11,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 120,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    FloatConstant(
+                        InlineFloatConstant {
+                            value: 240,
+                        },
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 124,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            27,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 10,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 128,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            24,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 11,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 132,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 11,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 11,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 136,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx2,
+                offset: 52,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 140,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            25,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 10,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 144,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 10,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 10,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 148,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_sqrt_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 152,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 156,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP2(
+                    v_add_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                3,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 160,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                2,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 168,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_rcp_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 176,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP2(
+                    v_mul_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 180,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_madak_f32,
+                src0: Scalar(
+                    FloatConstant(
+                        InlineFloatConstant {
+                            value: 245,
+                        },
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1077936128,
+        ),
+        program_counter: 188,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 196,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 200,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx2,
+                offset: 60,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    28,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 208,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_brev_b32,
+                ssrc0: IntegerConstant(
+                    InlineIntegerConstant(
+                        1,
+                    ),
+                ),
+                sdst: VccHi,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 212,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: LiteralConstant,
+                sdst: VccLo,
+            },
+        ),
+        literal_constant: Some(
+            1065185444,
+        ),
+        program_counter: 216,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dword,
+                offset: 46,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    30,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 224,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 228,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 33,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                30,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 242,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 232,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3953,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 240,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 3,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 244,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 252,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 260,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            VccHi,
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 268,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            29,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 276,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_max3_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                28,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 280,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3952,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 288,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_max_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 7,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 34,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 292,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_max_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            28,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 35,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 296,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmp_gt_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            VccLo,
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 34,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 300,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOPC(
+                    v_cmp_gt_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 106,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 35,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 240,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 308,
+    },
+    Instruction {
+        inner: SOP2(
+            SOP2Instruction {
+                op: s_and_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                ssrc1: Destination(
+                    VccLo,
+                ),
+                sdst: VccLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 316,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_and_saveexec_b64,
+                ssrc0: Destination(
+                    VccLo,
+                ),
+                sdst: ScalarGPR(
+                    2,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 320,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_cbranch_execz,
+                simm16: 173,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 324,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_sad_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 15,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                -1,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 27,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 328,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 26,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 14,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 336,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_sad_u32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                -1,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        IntegerConstant(
+                            InlineIntegerConstant(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 26,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 340,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 27,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 32,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 348,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 14,
+                },
+                vdata: VectorGPR {
+                    register_idx: 21,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 352,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 31,
+                },
+                vdata: VectorGPR {
+                    register_idx: 17,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 360,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_bcnt_u32_b32,
+                src0: Scalar(
+                    IntegerConstant(
+                        InlineIntegerConstant(
+                            1,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 26,
+                },
+                vdst: VectorGPR {
+                    register_idx: 28,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 368,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 27,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 29,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 372,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 28,
+                },
+                vdata: VectorGPR {
+                    register_idx: 11,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 376,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_bcnt_u32_b32,
+                src0: Scalar(
+                    IntegerConstant(
+                        InlineIntegerConstant(
+                            1,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 27,
+                },
+                vdst: VectorGPR {
+                    register_idx: 30,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 384,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 26,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 29,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 388,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 29,
+                },
+                vdata: VectorGPR {
+                    register_idx: 7,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 392,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_brev_b32,
+                ssrc0: IntegerConstant(
+                    InlineIntegerConstant(
+                        1,
+                    ),
+                ),
+                sdst: ScalarGPR(
+                    4,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 400,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 15,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 32,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 404,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 15,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 29,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 408,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: LiteralConstant,
+                sdst: VccLo,
+            },
+        ),
+        literal_constant: Some(
+            3216309748,
+        ),
+        program_counter: 412,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3955,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 420,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 15,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 24,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 424,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 16,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 15,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 432,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 16,
+                },
+                vdst: VectorGPR {
+                    register_idx: 16,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 440,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 16,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 15,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 16,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 448,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3954,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 456,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 15,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 20,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 460,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 16,
+                },
+                vdst: VectorGPR {
+                    register_idx: 16,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 468,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3953,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 472,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 20,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 14,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 476,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 14,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 16,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 484,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 22,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 22,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 14,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 1,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 492,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 15,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 500,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 508,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 15,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 1,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 516,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 524,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 24,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 21,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 14,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 0,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 528,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 21,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 1,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 536,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 21,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 18,
+                },
+                vdst: VectorGPR {
+                    register_idx: 22,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 544,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 21,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 17,
+                },
+                vdst: VectorGPR {
+                    register_idx: 24,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 548,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 14,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 23,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 552,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 21,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 19,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 556,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 19,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 20,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 560,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 19,
+                },
+                vdst: VectorGPR {
+                    register_idx: 19,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 568,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 20,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 20,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 19,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 576,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3952,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 584,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 19,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 10,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 588,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 20,
+                },
+                vdst: VectorGPR {
+                    register_idx: 10,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 596,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 20,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 19,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 600,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 10,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 10,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 608,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 20,
+                },
+                vdst: VectorGPR {
+                    register_idx: 20,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 616,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 20,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 19,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 20,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 624,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 10,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 12,
+                },
+                vdst: VectorGPR {
+                    register_idx: 22,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 632,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 20,
+                },
+                vdst: VectorGPR {
+                    register_idx: 12,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 636,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 20,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 11,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 10,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 24,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 640,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 18,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 12,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 243,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 648,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 14,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 21,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 656,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 31,
+                },
+                vdata: VectorGPR {
+                    register_idx: 14,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 660,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 30,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 32,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 668,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 21,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 13,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 10,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 2,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 672,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 10,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 680,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 31,
+                },
+                vdata: VectorGPR {
+                    register_idx: 10,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 684,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 18,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 692,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 7,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 18,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 20,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 696,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 18,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 22,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 704,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 28,
+                },
+                vdata: VectorGPR {
+                    register_idx: 22,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 712,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 30,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 29,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 720,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 18,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 21,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 724,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_load,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 28,
+                },
+                vdata: VectorGPR {
+                    register_idx: 18,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 732,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3955,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 740,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 17,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 744,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 752,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 760,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 768,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 776,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            VccLo,
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 780,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 788,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 14,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 792,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3953,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 796,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 25,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 800,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 15,
+                },
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 808,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 16,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 812,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 13,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 816,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 13,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 7,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 824,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 13,
+                },
+                vdst: VectorGPR {
+                    register_idx: 13,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 832,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 840,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 13,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 7,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 13,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 848,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3952,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 856,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP1(
+                    v_frexp_mant_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 21,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                0,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: Mul2,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 860,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 868,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 13,
+                },
+                vdst: VectorGPR {
+                    register_idx: 13,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 876,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 9,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 880,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 14,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 13,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            VccLo,
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 888,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 896,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            VccLo,
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 900,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 14,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 908,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 912,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 24,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 14,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 2,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 916,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 14,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 22,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 924,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 14,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 23,
+                },
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 928,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+                src0: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 12,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 8,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 0,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 932,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 10,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 940,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 10,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 7,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 245,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 944,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    LiteralConstant,
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 10,
+                },
+                vdst: VectorGPR {
+                    register_idx: 10,
+                },
+            },
+        ),
+        literal_constant: Some(
+            1098907648,
+        ),
+        program_counter: 952,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_bfi_b32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            ScalarGPR(
+                                4,
+                            ),
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 7,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 10,
+                        },
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: false,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 960,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_min_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 35,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 7,
+                },
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 968,
+    },
+    Instruction {
+        inner: VOP3(
+            VOP3Instruction {
+                op: VOP3(
+                    v_mad_f32,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+                src0: TransformedOperand {
+                    operand: Scalar(
+                        FloatConstant(
+                            InlineFloatConstant {
+                                value: 244,
+                            },
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                src1: TransformedOperand {
+                    operand: VectorGPR(
+                        VectorGPR {
+                            register_idx: 7,
+                        },
+                    ),
+                    abs: true,
+                    neg: false,
+                },
+                src2: TransformedOperand {
+                    operand: Scalar(
+                        Destination(
+                            VccLo,
+                        ),
+                    ),
+                    abs: false,
+                    neg: false,
+                },
+                clamp: true,
+                output_modifier: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 972,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 7,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 980,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    FloatConstant(
+                        InlineFloatConstant {
+                            value: 242,
+                        },
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 9,
+                },
+                vdst: VectorGPR {
+                    register_idx: 9,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 984,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 11,
+                },
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 988,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_rcp_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 992,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 7,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 18,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 996,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 7,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 19,
+                },
+                vdst: VectorGPR {
+                    register_idx: 31,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1000,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 7,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 20,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1004,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1008,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 31,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1012,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 2,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1016,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        2,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1020,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_sub_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 4,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 4,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1024,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_sub_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 6,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 2,
+                },
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1028,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_sub_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 5,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 5,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1032,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx8,
+                offset: 16,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    0,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1036,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 4,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 34,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1040,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 6,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 34,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1044,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 5,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 34,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1048,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 33,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1052,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 33,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 2,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1056,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 33,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1060,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1064,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_store,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 26,
+                },
+                vdata: VectorGPR {
+                    register_idx: 0,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1068,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_endpgm,
+                simm16: 0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 1076,
+    },
+]

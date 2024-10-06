@@ -1,0 +1,17 @@
+[
+    ControlFlowBlock {
+        start_instruction_idx: 0,
+        end_instruction_idx: 6,
+        last_instruction_branch: true,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 7,
+        end_instruction_idx: 13,
+        last_instruction_branch: false,
+    },
+    ControlFlowBlock {
+        start_instruction_idx: 14,
+        end_instruction_idx: 14,
+        last_instruction_branch: true,
+    },
+]

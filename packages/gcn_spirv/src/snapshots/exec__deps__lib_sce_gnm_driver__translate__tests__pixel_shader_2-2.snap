@@ -1,0 +1,500 @@
+---
+source: packages/exec/src/deps/lib_sce_gnm_driver/translate/mod.rs
+expression: shader.debug()
+---
+[
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: LiteralConstant,
+                sdst: VccHi,
+            },
+        ),
+        literal_constant: Some(
+            16,
+        ),
+        program_counter: 0,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ScalarGPR(
+                    0,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 8,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_wqm_b64,
+                ssrc0: Destination(
+                    ExecLo,
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 12,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        16,
+                    ),
+                ),
+                sdst: M0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 16,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p1_f32,
+                vsrc: VectorGPR {
+                    register_idx: 0,
+                },
+                attribute_channel: X,
+                attr: Attr(
+                    1,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 20,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p2_f32,
+                vsrc: VectorGPR {
+                    register_idx: 1,
+                },
+                attribute_channel: X,
+                attr: Attr(
+                    1,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 24,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p1_f32,
+                vsrc: VectorGPR {
+                    register_idx: 0,
+                },
+                attribute_channel: Y,
+                attr: Attr(
+                    1,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 3,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 28,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p2_f32,
+                vsrc: VectorGPR {
+                    register_idx: 1,
+                },
+                attribute_channel: Y,
+                attr: Attr(
+                    1,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 3,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 32,
+    },
+    Instruction {
+        inner: MIMG(
+            MIMGInstruction {
+                op: image_sample,
+                dmask: dmask(rgba),
+                unorm: false,
+                glc: false,
+                da: false,
+                r128: false,
+                tfe: false,
+                lwe: false,
+                slc: false,
+                vaddr: VectorGPR {
+                    register_idx: 2,
+                },
+                vdata: VectorGPR {
+                    register_idx: 2,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 1,
+                },
+                ssamp: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 36,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p1_f32,
+                vsrc: VectorGPR {
+                    register_idx: 0,
+                },
+                attribute_channel: X,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 44,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p2_f32,
+                vsrc: VectorGPR {
+                    register_idx: 1,
+                },
+                attribute_channel: X,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 48,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p1_f32,
+                vsrc: VectorGPR {
+                    register_idx: 0,
+                },
+                attribute_channel: Y,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 52,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p2_f32,
+                vsrc: VectorGPR {
+                    register_idx: 1,
+                },
+                attribute_channel: Y,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 56,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p1_f32,
+                vsrc: VectorGPR {
+                    register_idx: 0,
+                },
+                attribute_channel: Z,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 60,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p2_f32,
+                vsrc: VectorGPR {
+                    register_idx: 1,
+                },
+                attribute_channel: Z,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 8,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 64,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p1_f32,
+                vsrc: VectorGPR {
+                    register_idx: 0,
+                },
+                attribute_channel: W,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 68,
+    },
+    Instruction {
+        inner: VINTRP(
+            VINTRPInstruction {
+                op: v_interp_p2_f32,
+                vsrc: VectorGPR {
+                    register_idx: 1,
+                },
+                attribute_channel: W,
+                attr: Attr(
+                    0,
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 72,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 3952,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 76,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 2,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 6,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 80,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 3,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 7,
+                },
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 84,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 4,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 8,
+                },
+                vdst: VectorGPR {
+                    register_idx: 3,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 88,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 5,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 92,
+    },
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b64,
+                ssrc0: Destination(
+                    ScalarGPR(
+                        0,
+                    ),
+                ),
+                sdst: ExecLo,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 96,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_cvt_pkrtz_f16_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 1,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 2,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 100,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_cvt_pkrtz_f16_f32,
+                src0: VectorGPR(
+                    VectorGPR {
+                        register_idx: 3,
+                    },
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 104,
+    },
+    Instruction {
+        inner: EXP(
+            ExpInstruction {
+                target: RenderTarget(
+                    0,
+                ),
+                compress: true,
+                done: true,
+                valid_mask: true,
+                vsrc0: Some(
+                    VectorGPR {
+                        register_idx: 1,
+                    },
+                ),
+                vsrc1: Some(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc2: None,
+                vsrc3: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 108,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_endpgm,
+                simm16: 0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 116,
+    },
+]

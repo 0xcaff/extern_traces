@@ -1,0 +1,4 @@
+0x0000: s_mov_b32 vcc_hi, 0x3
+0x0008: v_mov_b32 v0, 0
+0x000c: exp mrt_color0, v0, v0, off, off, compress, done, vm
+0x0014: s_endpgm 0x0

@@ -1,0 +1,61 @@
+0x0000: s_mov_b32 vcc_hi, 0x30
+0x0008: v_mov_b32 v5, 0
+0x000c: s_bfm_b32 m0, 2, 14
+0x0010: s_load_dwordx8 s[0:7], s[0:1], 0x0
+0x0014: unknown 
+0x001c: v_mov_b32 v7, 1
+0x0020: v_mov_b32 v4, 21
+0x0024: v_mov_b32 v6, 0
+0x0028: unknown 
+0x0030: s_waitcnt 0xf
+0x0034: v_min_u32 v8, 0x100000, v8
+0x003c: v_sad_u32 v8, 63, 0, v8
+0x0044: v_lshrrev_b32 v8, 6, v8
+0x0048: s_mov_b64 s[10:11], exec
+0x004c: v_cmpx_gt_u32 exec, s2, v7, s0
+0x0054: buffer_store_dword v8, v7, s[0:3], idxen, offset=0x0, soffset=0x80
+0x005c: s_mov_b64 exec, s[10:11]
+0x0060: v_mov_b32 v7, 24
+0x0064: s_mov_b64 s[2:3], exec
+0x0068: v_cmpx_gt_u32 exec, s6, v4, s0
+0x0070: buffer_store_dword v0, v4, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0078: s_mov_b64 exec, s[2:3]
+0x007c: v_mov_b32 v4, 26
+0x0080: s_mov_b64 s[2:3], exec
+0x0084: v_cmpx_gt_u32 exec, s6, v7, s0
+0x008c: buffer_store_dword v6, v7, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0094: s_mov_b64 exec, s[2:3]
+0x0098: s_mov_b64 s[2:3], exec
+0x009c: v_cmpx_gt_u32 exec, s6, v4, s0
+0x00a4: buffer_store_dword v1, v4, s[4:7], idxen, offset=0x0, soffset=0x80
+0x00ac: s_mov_b64 exec, s[2:3]
+0x00b0: v_mov_b32 v4, 29
+0x00b4: s_mov_b64 s[2:3], exec
+0x00b8: v_cmpx_gt_u32 exec, s6, v4, s0
+0x00c0: buffer_store_dword v0, v4, s[4:7], idxen, offset=0x0, soffset=0x80
+0x00c8: s_mov_b64 exec, s[2:3]
+0x00cc: v_sad_u32 v1, v0, 0, v1
+0x00d4: v_mov_b32 v4, v0
+0x00d8: v_mov_b32 v0, 31
+0x00dc: s_mov_b64 s[2:3], exec
+0x00e0: v_cmpx_gt_u32 exec, s6, v0, s0
+0x00e8: buffer_store_dword v2, v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x00f0: s_mov_b64 exec, s[2:3]
+0x00f4: v_mov_b32 v0, 34
+0x00f8: v_sad_u32 v2, v2, 0, v1
+0x0100: s_mov_b64 s[2:3], exec
+0x0104: v_cmpx_gt_u32 exec, s6, v0, s0
+0x010c: buffer_store_dword v1, v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0114: s_mov_b64 exec, s[2:3]
+0x0118: v_mov_b32 v0, 36
+0x011c: s_mov_b64 s[2:3], exec
+0x0120: v_cmpx_gt_u32 exec, s6, v0, s0
+0x0128: buffer_store_dword v3, v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0130: s_mov_b64 exec, s[2:3]
+0x0134: v_mov_b32 v3, 0
+0x0138: v_mov_b32 v0, 39
+0x013c: unknown 
+0x0144: s_waitcnt 0xf0f
+0x0148: v_cmpx_gt_u32 exec, s6, v0, s0
+0x0150: buffer_store_dword v2, v0, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0158: s_endpgm 0x0

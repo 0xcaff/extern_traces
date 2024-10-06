@@ -1,0 +1,76 @@
+0x0000: s_mov_b32 vcc_hi, 0x32
+0x0008: v_mov_b32 v1, 0
+0x000c: s_bfm_b32 m0, 2, 14
+0x0010: unknown 
+0x0018: s_lshl_b32 vcc_lo, s2, 6
+0x001c: v_add_co_u32 v4, vcc_lo, v0
+0x0020: s_waitcnt 0x7f
+0x0024: v_min_u32 v5, 0x100000, v1
+0x002c: v_cmp_lt_u32 v2, v4, v5, s0
+0x0034: s_waitcnt 0xf0f
+0x0038: v_mov_b32 v1, 0
+0x003c: v_mov_b32 v2, 0
+0x0040: s_and_saveexec_b64 vcc, s[2:3]
+0x0044: s_cbranch_execz 0x4
+0x0048: s_load_dwordx4 s[4:7], s[0:1], 0x4
+0x004c: s_waitcnt 0x7f
+0x0050: buffer_load_dwordx2 v[1:2], v4, s[4:7], idxen, offset=0x0, soffset=0x80
+0x0058: s_mov_b64 exec, vcc
+0x005c: s_waitcnt 0xf70
+0x0060: v_lshrrev_b32 v3, 24, v2
+0x0064: v_lshl_b32 v6, 1, v3
+0x0068: v_cmp_lt_u32 v4, v5
+0x006c: v_cndmask_b32 v5, 0, v6
+0x0070: unknown 
+0x0078: v_mov_b32 v4, 0
+0x007c: s_waitcnt 0x7f
+0x0080: v_or_b32 v5, v6, v5
+0x0084: unknown 
+0x008c: s_waitcnt 0x7f
+0x0090: v_or_b32 v5, v6, v5
+0x0094: unknown 
+0x009c: s_waitcnt 0x7f
+0x00a0: v_or_b32 v5, v6, v5
+0x00a4: unknown 
+0x00ac: s_waitcnt 0x7f
+0x00b0: v_or_b32 v5, v6, v5
+0x00b4: unknown 
+0x00bc: s_waitcnt 0x7f
+0x00c0: v_or_b32 v5, v6, v5
+0x00c4: v_readlane_b32 v107, v5, v128
+0x00c8: v_readlane_b32 v106, v5, v160
+0x00cc: s_or_b32 s8, vcc_hi, vcc_lo
+0x00d0: s_ff1_i32_b32 s9, s8
+0x00d4: unknown_1 s4, 0x8009
+0x00d8: s_cbranch_scc1 0x1d
+0x00dc: v_cmp_eq_u32 s9, v3
+0x00e0: v_cmp_eq_u32 v4, 0, v0, s0
+0x00e8: v_mov_b32 v6, 0
+0x00ec: s_and_b64 s[6:7], s[2:3], vcc
+0x00f0: s_bcnt1_i32_b64 s10, s[6:7]
+0x00f4: unknown_1 s8, 0x800a
+0x00f8: s_cselect_b64 vcc, exec, 0
+0x00fc: s_and_b64 vcc, s[4:5], vcc
+0x0100: v_cndmask_b32 v5, 0, 1, vcc
+0x0108: s_and_saveexec_b64 vcc, vcc
+0x010c: s_cbranch_execz 0x5
+0x0110: v_lshlrev_b32 v6, 2, s9, s0
+0x0118: v_mov_b32 v7, s10
+0x011c: unknown 
+0x0124: s_waitcnt 0xf0f
+0x0128: s_mov_b64 exec, vcc
+0x012c: s_waitcnt 0x7f
+0x0130: v_readlane_b32 v106, v6, v128
+0x0134: v_mov_b32 v6, vcc_lo
+0x0138: v_mbcnt_lo_u32_b32 v6, s6, v6
+0x013c: v_mbcnt_hi_u32_b32 v6, s7, v6
+0x0140: v_cmp_lg_u32 0, v5
+0x0144: v_cndmask_b32 v4, v4, v6
+0x0148: s_bitset0_b32 s8, s9
+0x014c: s_branch -0x20
+0x0150: s_and_saveexec_b64 vcc, s[2:3]
+0x0154: s_cbranch_execz 0x4
+0x0158: s_load_dwordx4 s[0:3], s[0:1], 0x0
+0x015c: s_waitcnt 0x7f
+0x0160: buffer_store_dwordx2 v[1:2], v4, s[0:3], idxen, offset=0x0, soffset=0x80
+0x0168: s_endpgm 0x0

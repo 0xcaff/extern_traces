@@ -1,0 +1,7 @@
+[
+    ControlFlowBlock {
+        start_instruction_idx: 0,
+        end_instruction_idx: 32,
+        last_instruction_branch: true,
+    },
+]

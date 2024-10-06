@@ -1,0 +1,637 @@
+[
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx4,
+                offset: 0,
+                imm: true,
+                sbase: 1,
+                sdst: ScalarGPR(
+                    12,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 0,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx4,
+                offset: 4,
+                imm: true,
+                sbase: 1,
+                sdst: ScalarGPR(
+                    16,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 4,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 8,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_load_format_xyzw,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 0,
+                },
+                vdata: VectorGPR {
+                    register_idx: 4,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 3,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 12,
+    },
+    Instruction {
+        inner: MUBUF(
+            MUBUFInstruction {
+                op: buffer_load_format_xyzw,
+                offset: Offset(
+                    0,
+                ),
+                offen: false,
+                idxen: true,
+                glc: false,
+                addr64: false,
+                lds: false,
+                vaddr: VectorGPR {
+                    register_idx: 0,
+                },
+                vdata: VectorGPR {
+                    register_idx: 8,
+                },
+                srsrc: ScalarGeneralPurposeRegisterGroup {
+                    value: 4,
+                },
+                slc: false,
+                tfe: false,
+                soffset: 128,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 20,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 28,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_load_dwordx4,
+                offset: 0,
+                imm: true,
+                sbase: 3,
+                sdst: ScalarGPR(
+                    0,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 32,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: -16257,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 36,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_buffer_load_dwordx4,
+                offset: 8,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    4,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 40,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_buffer_load_dwordx4,
+                offset: 12,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    8,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 44,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_buffer_load_dwordx4,
+                offset: 4,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    12,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 48,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_buffer_load_dwordx4,
+                offset: 0,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    0,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 52,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 113,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 56,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            4,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 6,
+                },
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 60,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            5,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 6,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 64,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            6,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 6,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 68,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mul_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            7,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 6,
+                },
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 72,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            8,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 7,
+                },
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 76,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            9,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 0,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 80,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            10,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 1,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 84,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_add_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            11,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 6,
+                },
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 88,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            12,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 5,
+                },
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 92,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            13,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 5,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 96,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            14,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 5,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 100,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            15,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 5,
+                },
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 104,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            0,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 4,
+                },
+                vdst: VectorGPR {
+                    register_idx: 7,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 108,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            1,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 4,
+                },
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 112,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            2,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 4,
+                },
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 116,
+    },
+    Instruction {
+        inner: VOP2(
+            VOP2Instruction {
+                op: v_mac_f32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            3,
+                        ),
+                    ),
+                ),
+                vsrc1: VectorGPR {
+                    register_idx: 4,
+                },
+                vdst: VectorGPR {
+                    register_idx: 6,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 120,
+    },
+    Instruction {
+        inner: EXP(
+            ExpInstruction {
+                target: Position(
+                    0,
+                ),
+                compress: false,
+                done: true,
+                valid_mask: false,
+                vsrc0: Some(
+                    VectorGPR {
+                        register_idx: 7,
+                    },
+                ),
+                vsrc1: Some(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc2: Some(
+                    VectorGPR {
+                        register_idx: 1,
+                    },
+                ),
+                vsrc3: Some(
+                    VectorGPR {
+                        register_idx: 6,
+                    },
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 124,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 16240,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 132,
+    },
+    Instruction {
+        inner: EXP(
+            ExpInstruction {
+                target: Parameter(
+                    0,
+                ),
+                compress: false,
+                done: false,
+                valid_mask: false,
+                vsrc0: Some(
+                    VectorGPR {
+                        register_idx: 8,
+                    },
+                ),
+                vsrc1: Some(
+                    VectorGPR {
+                        register_idx: 9,
+                    },
+                ),
+                vsrc2: None,
+                vsrc3: None,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 136,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_endpgm,
+                simm16: 0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 144,
+    },
+]

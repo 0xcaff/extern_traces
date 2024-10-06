@@ -1,0 +1,160 @@
+[
+    Instruction {
+        inner: SOP1(
+            SOP1Instruction {
+                op: s_mov_b32,
+                ssrc0: LiteralConstant,
+                sdst: VccHi,
+            },
+        ),
+        literal_constant: Some(
+            7,
+        ),
+        program_counter: 0,
+    },
+    Instruction {
+        inner: SMEM(
+            SMEMInstruction {
+                op: s_buffer_load_dwordx4,
+                offset: 0,
+                imm: true,
+                sbase: 0,
+                sdst: ScalarGPR(
+                    0,
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 8,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_waitcnt,
+                simm16: 127,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 12,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            0,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 0,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 16,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            1,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 1,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 20,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            2,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 2,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 24,
+    },
+    Instruction {
+        inner: VOP1(
+            VOP1Instruction {
+                op: v_mov_b32,
+                src0: Scalar(
+                    Destination(
+                        ScalarGPR(
+                            3,
+                        ),
+                    ),
+                ),
+                vdst: VectorGPR {
+                    register_idx: 3,
+                },
+            },
+        ),
+        literal_constant: None,
+        program_counter: 28,
+    },
+    Instruction {
+        inner: EXP(
+            ExpInstruction {
+                target: RenderTarget(
+                    0,
+                ),
+                compress: false,
+                done: true,
+                valid_mask: true,
+                vsrc0: Some(
+                    VectorGPR {
+                        register_idx: 0,
+                    },
+                ),
+                vsrc1: Some(
+                    VectorGPR {
+                        register_idx: 1,
+                    },
+                ),
+                vsrc2: Some(
+                    VectorGPR {
+                        register_idx: 2,
+                    },
+                ),
+                vsrc3: Some(
+                    VectorGPR {
+                        register_idx: 3,
+                    },
+                ),
+            },
+        ),
+        literal_constant: None,
+        program_counter: 32,
+    },
+    Instruction {
+        inner: SOPP(
+            SOPPInstruction {
+                op: s_endpgm,
+                simm16: 0,
+            },
+        ),
+        literal_constant: None,
+        program_counter: 40,
+    },
+]

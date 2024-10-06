@@ -1,0 +1,140 @@
+---
+source: packages/exec/src/deps/lib_sce_gnm_driver/translate/mod.rs
+expression: module.disassemble()
+---
+; SPIR-V
+; Version: 1.4
+; Generator: rspirv
+; Bound: 63
+OpCapability Int64
+OpCapability Shader
+OpExtension "SPV_KHR_non_semantic_info"
+%61 = OpExtInstImport "NonSemantic.DebugPrintf"
+OpMemoryModel Logical GLSL450
+OpEntryPoint Fragment %22 "main" %6 %16 %19 %8
+OpExecutionMode %22 OriginUpperLeft
+%62 = OpString "fragment_shader.sb"
+OpName %1 "u32"
+OpName %2 "u64"
+OpName %3 "f32"
+OpName %10 "u32[253]"
+OpName %12 "u32[104]"
+OpName %13 "u32[]"
+OpName %14 "MemoryInput"
+OpMemberName %14 0 "memory"
+OpName %16 "memory_input"
+OpName %17 "UniformInput"
+OpMemberName %17 0 "sgpr"
+OpMemberName %17 1 "memory_offset"
+OpName %19 "uniform_input"
+OpName %27 "bool"
+OpName %29 "vgpr"
+OpName %30 "vgpr_idx"
+OpName %32 "sgpr"
+OpName %33 "sgpr_idx"
+OpName %34 "loop_header"
+OpName %35 "merge_block"
+OpName %36 "continue_target"
+OpName %44 "input.sgpr"
+OpName %33 "idx"
+OpName %45 "loop_header"
+OpName %46 "merge_block"
+OpName %47 "continue_target"
+OpName %58 "base_address"
+OpName %60 "memory"
+OpDecorate %6 Location 0
+OpDecorate %8 Location 0
+OpDecorate %12 ArrayStride 4
+OpDecorate %13 ArrayStride 4
+OpDecorate %14 Block
+OpMemberDecorate %14 0 NonWritable
+OpMemberDecorate %14 0 Offset 0
+OpDecorate %16 DescriptorSet 0
+OpDecorate %16 Binding 1
+OpDecorate %17 Block
+OpMemberDecorate %17 0 NonWritable
+OpMemberDecorate %17 0 Offset 0
+OpMemberDecorate %17 1 NonWritable
+OpMemberDecorate %17 1 Offset 416
+OpDecorate %19 DescriptorSet 0
+OpDecorate %19 Binding 0
+%1 = OpTypeInt 32 0
+%2 = OpTypeInt 64 0
+%3 = OpTypeFloat 32
+%4 = OpTypeVector %3 4
+%5 = OpTypePointer Input %4
+%6 = OpVariable  %5  Input
+%7 = OpTypePointer Output %4
+%8 = OpVariable  %7  Output
+%9 = OpConstant  %1  253
+%10 = OpTypeArray %1 %9
+%11 = OpConstant  %1  104
+%12 = OpTypeArray %1 %11
+%13 = OpTypeRuntimeArray %1
+%14 = OpTypeStruct %13
+%15 = OpTypePointer Uniform %14
+%16 = OpVariable  %15  Uniform
+%17 = OpTypeStruct %12 %2
+%18 = OpTypePointer Uniform %17
+%19 = OpVariable  %18  Uniform
+%20 = OpTypeVoid
+%21 = OpTypeFunction %20
+%24 = OpTypePointer Function %1
+%25 = OpConstant  %1  0
+%26 = OpConstant  %1  1
+%27 = OpTypeBool
+%28 = OpTypePointer Function %10
+%31 = OpTypePointer Function %12
+%43 = OpTypePointer Uniform %12
+%52 = OpTypePointer Uniform %1
+%57 = OpTypePointer Uniform %2
+%59 = OpTypePointer Uniform %13
+%22 = OpFunction  %20  None %21
+%23 = OpLabel
+%29 = OpVariable  %28  Function
+%30 = OpVariable  %24  Function
+%32 = OpVariable  %31  Function
+%33 = OpVariable  %24  Function
+OpStore %30 %25
+OpBranch %34
+%34 = OpLabel
+OpLoopMerge %35 %36 None
+OpBranch %37
+%37 = OpLabel
+%38 = OpLoad  %1  %30
+%39 = OpULessThan  %27  %38 %9
+OpBranchConditional %39 %40 %35
+%40 = OpLabel
+%41 = OpAccessChain  %24  %29 %38
+OpStore %41 %25
+OpBranch %36
+%36 = OpLabel
+%42 = OpIAdd  %1  %38 %26
+OpStore %30 %42
+OpBranch %34
+%35 = OpLabel
+OpStore %33 %25
+%44 = OpAccessChain  %43  %19 %25
+OpBranch %45
+%45 = OpLabel
+OpLoopMerge %46 %47 None
+OpBranch %48
+%48 = OpLabel
+%49 = OpLoad  %1  %33
+%50 = OpULessThan  %27  %49 %11
+OpBranchConditional %50 %51 %46
+%51 = OpLabel
+%53 = OpAccessChain  %52  %44 %49
+%54 = OpLoad  %1  %53
+%55 = OpAccessChain  %24  %32 %49
+OpStore %55 %54
+OpBranch %47
+%47 = OpLabel
+%56 = OpIAdd  %1  %49 %26
+OpStore %33 %56
+OpBranch %45
+%46 = OpLabel
+%58 = OpAccessChain  %57  %19 %26
+%60 = OpAccessChain  %59  %16 %25
+OpReturn
+OpFunctionEnd

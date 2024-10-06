@@ -1,0 +1,34 @@
+---
+source: packages/exec/src/deps/lib_sce_gnm_driver/translate/mod.rs
+expression: exports
+---
+[
+    (
+        Position(
+            0,
+        ),
+        ExportAttributes {
+            compress: false,
+            done: true,
+            valid_mask: false,
+            src0: true,
+            src1: true,
+            src2: true,
+            src3: true,
+        },
+    ),
+    (
+        Parameter(
+            0,
+        ),
+        ExportAttributes {
+            compress: false,
+            done: false,
+            valid_mask: false,
+            src0: true,
+            src1: true,
+            src2: true,
+            src3: true,
+        },
+    ),
+]
