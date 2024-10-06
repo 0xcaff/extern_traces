@@ -13,6 +13,10 @@ gcn = { path = "../../../../ps4-tools/packages/gcn" }
 libc = "0.2.159"
 bytemuck = { version = "1.18.0", features = ["derive"] }
 anyhow = { version = "1.0.89", default-features = false }
+serde = { version = "1.0.210", default-features = false, features = ["derive", "alloc"] }
+rmp = { version = "0.8", default-features = false }
+rmp-serde = { version = "1.3.0", default-features = false }
+serde_bytes = { version = "0.11.15", default-features = false, features = ["alloc"] }
 
 [profile.release]
 panic = "abort"

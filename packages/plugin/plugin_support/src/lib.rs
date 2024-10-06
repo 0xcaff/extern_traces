@@ -9,6 +9,7 @@ mod platform;
 mod ffi;
 
 use crate::ffi::{Args, ThreadLoggingState};
+use alloc::borrow::Cow;
 use alloc::collections::btree_map::Entry;
 use alloc::collections::BTreeMap;
 use alloc::vec;
@@ -22,10 +23,11 @@ use gcn::instructions::ops::{SOP1OpCode, SOPPOpCode};
 use gcn::instructions::Instruction;
 use gcn::SliceReader;
 use gcn_extract::{
-    extract_buffer_usages, pixel_shader_extract_image_usages, SamplerResourceWithRaw,
-    ShaderInvocation, TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
+    extract_buffer_usages, pixel_shader_extract_image_usages, SamplerResourceWithRaw
+    , TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
 };
 use pm4::{convert, Command, PM4Packet};
+use serde::Serialize;
 
 unsafe fn command_buffers<'a>(
     count: usize,
@@ -141,6 +143,35 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
     sceGnmSubmitCommandBuffers_trace(args, thread_logging_state, time, label_id, thread_id);
 }
 
+#[derive(Serialize)]
+struct SubmitCommandBuffersExtraData<'a> {
+    #[serde(with = "serde_bytes")]
+    draw_command_buffers: Vec<Cow<'a, [u8]>>,
+
+    #[serde(with = "serde_bytes")]
+    compute_command_buffers: Vec<Cow<'a, [u8]>>,
+    shaders: Vec<EncodedShader<'a>>,
+    vertex_buffers: Vec<EncodedVertexBuffer<'a>>,
+}
+
+#[derive(Serialize)]
+struct EncodedShader<'a> {
+    address: u32,
+    kind: ShaderKind,
+
+    #[serde(with = "serde_bytes")]
+    shader: Cow<'a, [u8]>,
+    vertex_buffer_references: Cow<'a, [(u64, usize)]>,
+    // texture_buffer_references: Cow<'a, [(u64, usize, [u32; 4])]>,
+}
+
+#[derive(Serialize)]
+struct EncodedVertexBuffer<'a> {
+    #[serde(with = "serde_bytes")]
+    bytes: Cow<'a, [u8]>,
+    raw_resource: [u32; 4],
+}
+
 fn trace_command_buffer_submit(
     thread_logging_state: &mut ThreadLoggingState,
     draw_command_buffers: &[&[u8]],
@@ -150,6 +181,35 @@ fn trace_command_buffer_submit(
     label_id: u64,
 ) -> Result<(), anyhow::Error> {
     let mut shaders = ShadersCollector::new();
+
+    let extra_data = SubmitCommandBuffersExtraData {
+        draw_command_buffers: draw_command_buffers
+            .iter()
+            .map(|it| Cow::Borrowed(it))
+            .collect(),
+        compute_command_buffers: compute_command_buffers
+            .iter()
+            .map(|it| Cow::Borrowed(it))
+            .collect(),
+        shaders: shaders
+            .shaders
+            .iter()
+            .map(|(address, value)| EncodedShader {
+                address: *address,
+                kind: value.kind,
+                shader: Cow::Borrowed(bytemuck::cast_slice(&value.shader_bytes)),
+                vertex_buffer_references: Cow::Borrowed(value.vertex_buffer_references.as_slice()),
+            })
+            .collect(),
+        vertex_buffers: shaders
+            .vertex_buffers
+            .iter()
+            .map(|it| EncodedVertexBuffer {
+                raw_resource: it.raw,
+                bytes: Cow::Borrowed(unsafe { it.resource.bytes() }),
+            })
+            .collect(),
+    };
 
     let mut total_size = size_of::<SpanStartAdditionalData>()
         + size_of::<u32>()
