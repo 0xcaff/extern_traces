@@ -30,3 +30,4 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState *initial_state
 void emit_span_end(struct ThreadLoggingState *initial_state);
 
 void initialize_specific_symbols_table(struct SpecificSymbolsTable* table);
+void capture_next_submit();

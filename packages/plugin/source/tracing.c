@@ -33,20 +33,31 @@ struct SpanEnd
     uint64_t time;
 };
 
+static bool should_capture_next_submit = false;
+
+void capture_next_submit() {
+    should_capture_next_submit = true;
+}
+
 void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state, struct Args* args) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
     uint64_t time = get_current_time_rdtscp();
+    if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffersForWorkload && should_capture_next_submit) {
+        should_capture_next_submit = false;
 
-    if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffersForWorkload) {
         sceGnmSubmitAndFlipCommandBuffersForWorkload_trace(
             args, state, time, label_id, state->thread_id
         );
-    } else if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffers) {
+    } else if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffers && should_capture_next_submit) {
+        should_capture_next_submit = false;
+
         sceGnmSubmitAndFlipCommandBuffers_trace(
             args, state, time, label_id, state->thread_id
         );
 
-    } else if (label_id == sharedTable.sceGnmSubmitCommandBuffers) {
+    } else if (label_id == sharedTable.sceGnmSubmitCommandBuffers && should_capture_next_submit) {
+        should_capture_next_submit = false;
+
         sceGnmSubmitCommandBuffers_trace(
             args, state, time, label_id, state->thread_id
         );

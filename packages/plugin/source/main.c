@@ -23,6 +23,39 @@ attr_public uint32_t g_pluginVersion = 0x00000100; // 1.00
 #define N_BYTES 256
 #define PT_SCE_DYNLIBDATA 0x61000000
 
+struct ListenCommandsThreadArgs {
+    bool is_ready;
+    int sock;
+};
+
+void *listen_commands_thread(void *arg) {
+    struct ListenCommandsThreadArgs* args = arg;
+    args->is_ready = true;
+
+    ssize_t bytes_read;
+    uint8_t byte;
+
+    while (true) {
+        bytes_read = recv(args->sock, &byte, 1, 0);
+
+        if (bytes_read == -1) {
+            final_printf("error reading from socket\n");
+            return NULL;
+        } else if (bytes_read == 0) {
+            final_printf("connection closed by peer\n");
+            return NULL;
+        }
+
+        if (byte == 0x0) {
+            capture_next_submit();
+        } else {
+            final_printf("unknown message received %d\n", byte);
+            return NULL;
+        }
+    }
+}
+
+
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
     final_printf("[GoldHEN] %s Plugin Started.\n", g_pluginName);
@@ -157,15 +190,35 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         .sock = sock,
     };
 
-    OrbisPthread thread;
-    int ret = scePthreadCreate(&thread, NULL, flush_thread, &flush_thread_args, STRINGIFY(flush_thread_start_routine));
+    OrbisPthread flush_thread_thread;
+    int ret = scePthreadCreate(&flush_thread_thread, NULL, flush_thread, &flush_thread_args, STRINGIFY(flush_thread_start_routine));
     if (ret)
     {
-        final_printf("thread create failed %x\n", ret);
+        final_printf("flush thread create failed %x\n", ret);
+        return 1;
+    }
+
+    struct ListenCommandsThreadArgs listen_commands_thread_args = {
+        .is_ready = false,
+        .sock = sock,
+    };
+
+    OrbisPthread listen_thread;
+    ret = scePthreadCreate(&listen_thread, NULL, listen_commands_thread, &listen_commands_thread_args, STRINGIFY(listen_commands_thread));
+    if (ret)
+    {
+        final_printf("listen thread create failed %x\n", ret);
+        return 1;
     }
 
     // spin lock
     while (!flush_thread_args.is_ready) {
+        // once every 100ms
+        sceKernelUsleep(100000);
+    }
+
+    // spin lock
+    while (!listen_commands_thread_args.is_ready) {
         // once every 100ms
         sceKernelUsleep(100000);
     }
