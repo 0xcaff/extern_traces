@@ -79,7 +79,7 @@ pub struct ExtraData<'a> {
     pub compute_command_buffers: Vec<&'a [u8]>,
     pub shaders: Vec<EncodedShader<'a>>,
     pub vertex_buffers: Vec<VertexBuffer<'a>>,
-    pub texture_buffers: Vec<TextureBuffer<'a>>,
+    pub texture_buffers: Vec<TextureBuffer>,
 }
 
 pub struct EncodedShader<'a> {
@@ -94,7 +94,7 @@ pub struct VertexBuffer<'a> {
     pub bytes: &'a [u8],
 }
 
-pub struct TextureBuffer<'a> {
+pub struct TextureBuffer {
     pub texture_buffer: TextureBufferResourceWithRaw,
 }
 
