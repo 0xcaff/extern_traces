@@ -1,6 +1,8 @@
+use crate::gfx_debug::process::TextureBuffer;
 use crate::gfx_debug::{process_commands, DebugHandle, ExtraData, GraphicsContext};
 use anyhow::{format_err, Result};
 use bytemuck;
+use gcn::resources::TextureBufferResource;
 use pm4::PM4Packet;
 use std::io::Cursor;
 use std::sync::Arc;
@@ -8,9 +10,8 @@ use std::sync::Arc;
 pub fn render_frame(
     ctx: &GraphicsContext,
     debug_handle: &mut DebugHandle,
-    bytes: &[u8],
+    extra_data: &ExtraData,
 ) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
-    let extra_data = ExtraData::parse(bytes)?;
     let draw_command_buffer = extra_data
         .draw_command_buffers
         .first()
@@ -21,7 +22,7 @@ pub fn render_frame(
 
     let known_shaders = extra_data
         .shaders
-        .into_iter()
+        .iter()
         .map(|it| (it.address, it))
         .collect();
 

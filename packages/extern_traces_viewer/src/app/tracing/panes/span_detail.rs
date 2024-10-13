@@ -1,18 +1,20 @@
 use crate::app::tracing::panes::render::render_frame;
 use crate::app::tracing::panes::{PaneResponse, TreeBehaviorArgs};
 use crate::app::tracing::utils::{format_time, render_symbol_info};
-use crate::gfx_debug::{DebugHandle, GraphicsContext};
+use crate::gfx_debug::{DebugHandle, ExtraData, GraphicsContext};
 use anyhow::format_err;
 use eframe::egui;
 use eframe::egui::load::Bytes;
 use eframe::egui::{vec2, Align, ImageSource, Layout, Ui};
 use std::borrow::Cow;
 use std::sync::Arc;
+use crate::gfx_debug::process::TextureBuffer;
 
 pub struct SpanDetailPane {
     last_image: Option<(Arc<[u8]>, usize)>,
     debug_handle: DebugHandle,
     ctx: GraphicsContext,
+    textures: Option<Vec<TextureBuffer>>
 }
 
 impl SpanDetailPane {
@@ -23,6 +25,7 @@ impl SpanDetailPane {
             last_image: None,
             ctx,
             debug_handle,
+            textures: None,
         }
     }
 }
@@ -86,6 +89,12 @@ impl SpanDetailPane {
                 }
             }
 
+            if let Some(textures) = &self.textures {
+                for texture in textures {
+                    ui.label(format!("{:#?}", texture.texture_buffer.resource));
+                }
+            }
+
             if let Some(extra_data) = &span.extra_data {
                 let button_response = ui.button("copy raw data");
                 if button_response.clicked() {
@@ -96,15 +105,25 @@ impl SpanDetailPane {
                 {
                     let button_response = ui.button("render frame");
                     if button_response.clicked() {
-                        match render_frame(&self.ctx, &mut self.debug_handle, extra_data.as_slice())
-                            .and_then(
-                                |it| Ok(it.ok_or_else(|| format_err!("missing value color"))?),
-                            ) {
-                            Ok(value) => {
-                                self.last_image.replace((
-                                    value,
-                                    self.last_image.as_ref().map(|it| it.1).unwrap_or(0) + 1,
-                                ));
+                        let result = (|| -> Result<_, anyhow::Error> {
+                            let extra_data = ExtraData::parse(extra_data.as_slice())?;
+                            let frame = render_frame(&self.ctx, &mut self.debug_handle, &extra_data)?;
+
+                            Ok((frame, extra_data.texture_buffers))
+                        })();
+
+                        match result {
+                            Ok((color, textures)) => {
+                                if let Some(value) = color {
+                                    self.last_image.replace((
+                                        value,
+                                        self.last_image.as_ref().map(|it| it.1).unwrap_or(0) + 1,
+                                    ));
+                                } else {
+                                    println!("missing value for color")
+                                };
+
+                                self.textures = Some(textures);
                             }
                             Err(err) => {
                                 println!("{:?}", err);

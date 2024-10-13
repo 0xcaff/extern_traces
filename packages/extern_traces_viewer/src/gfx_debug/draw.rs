@@ -61,7 +61,7 @@ pub fn process_draw_command(
     pipeline_input: pm4::GraphicsPipeline,
     vertex_buffers: &[VertexBuffer],
     data: &BuffersDataContainer,
-    known_shaders: &BTreeMap<u32, EncodedShader>,
+    known_shaders: &BTreeMap<u32, &EncodedShader>,
     last_color_buffer: &Option<Box<[u8]>>,
     last_depth_buffer: &Option<Box<[u8]>>,
 ) -> Result<DrawShaderStageResult, anyhow::Error> {

@@ -18,7 +18,7 @@ pub fn process_commands(
     graphics_context: &GraphicsContext,
     commands: &[PM4Packet],
     initial_vertex_buffers: &[VertexBuffer],
-    known_shaders: BTreeMap<u32, EncodedShader>,
+    known_shaders: BTreeMap<u32, &EncodedShader>,
 ) -> Result<(Option<Box<[u8]>>, Option<Box<[u8]>>), anyhow::Error> {
     let mut data = BuffersDataContainer::new(initial_vertex_buffers);
     let mut color_buffer = None;

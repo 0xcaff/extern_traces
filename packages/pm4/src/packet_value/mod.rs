@@ -1,6 +1,7 @@
 use crate::dispatch_indirect::DispatchIndirectPacket;
 use crate::draw_index_indirect::DrawIndexIndirectPacket;
 use crate::event_write::EventWritePacket;
+use crate::index_type::IndexTypePacket;
 use crate::indirect_buffer::IndirectBufferPacket;
 use crate::op_codes::OpCode;
 use crate::packet_value::acquire_memory::AcquireMemoryPacket;
@@ -18,7 +19,6 @@ use crate::packet_value::wait_register_memory::WaitRegisterMemoryPacket;
 use crate::register::SetUConfigRegisterPacket;
 use alloc::vec::Vec;
 use pm4_internal_macros::ParsePacketValue;
-use crate::index_type::IndexTypePacket;
 
 pub mod acquire_memory;
 pub mod clear_state;
@@ -31,12 +31,12 @@ pub mod draw_index_indirect;
 pub mod event_write;
 pub mod event_write_end_of_pipe;
 pub mod event_write_end_of_shader;
+pub mod index_type;
 pub mod indirect_buffer;
 pub mod register;
 pub mod release_memory;
 pub mod set_base;
 pub mod wait_register_memory;
-pub mod index_type;
 
 #[derive(Debug, ParsePacketValue)]
 pub enum Type3PacketValue {
