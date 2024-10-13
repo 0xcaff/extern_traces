@@ -1,8 +1,7 @@
-use crate::gfx_debug::compute::process_dispatch_command;
 use crate::gfx_debug::ctx::GraphicsContext;
 use crate::gfx_debug::draw::process_draw_command;
 use crate::gfx_debug::resources::buffers::BuffersDataContainer;
-use gcn_extract::VertexBufferResourceWithRaw;
+use gcn_extract::{TextureBufferResourceWithRaw, VertexBufferResourceWithRaw};
 use pm4::{convert, Command, DrawPacket, PM4Packet};
 use std::collections::BTreeMap;
 use std::io::{Cursor, Read, Seek};
@@ -80,6 +79,7 @@ pub struct ExtraData<'a> {
     pub compute_command_buffers: Vec<&'a [u8]>,
     pub shaders: Vec<EncodedShader<'a>>,
     pub vertex_buffers: Vec<VertexBuffer<'a>>,
+    pub texture_buffers: Vec<TextureBuffer<'a>>,
 }
 
 pub struct EncodedShader<'a> {
@@ -92,6 +92,10 @@ pub struct EncodedShader<'a> {
 pub struct VertexBuffer<'a> {
     pub vertex_buffer: VertexBufferResourceWithRaw,
     pub bytes: &'a [u8],
+}
+
+pub struct TextureBuffer<'a> {
+    pub texture_buffer: TextureBufferResourceWithRaw,
 }
 
 pub enum ShaderKind {
@@ -218,11 +222,33 @@ impl ExtraData<'_> {
             });
         }
 
+        let mut texture_buffer_count_bytes = [0u8; size_of::<u32>()];
+        cursor.read_exact(&mut texture_buffer_count_bytes)?;
+        let texture_buffer_count = u32::from_le_bytes(texture_buffer_count_bytes);
+
+        let mut texture_buffers = Vec::with_capacity(texture_buffer_count as usize);
+        for _ in 0..texture_buffer_count {
+            let mut raw_values = [0u32; 8];
+            cursor.read_exact(bytemuck::cast_slice_mut(&mut raw_values))?;
+            let texture_buffer = TextureBufferResourceWithRaw::from_bits(&raw_values);
+
+            // let mut length_bytes = [0u8; size_of::<u32>()];
+            // cursor.read_exact(&mut length_bytes)?;
+            // let length = u32::from_le_bytes(length_bytes) as usize;
+
+            // let start = cursor.position() as usize;
+            // cursor.seek(std::io::SeekFrom::Current(length as i64))?;
+            // let bytes = &data[start..start + length as usize];
+
+            texture_buffers.push(TextureBuffer { texture_buffer });
+        }
+
         Ok(ExtraData {
             draw_command_buffers,
             compute_command_buffers,
             shaders,
             vertex_buffers,
+            texture_buffers,
         })
     }
 }

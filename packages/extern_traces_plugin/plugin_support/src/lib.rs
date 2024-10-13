@@ -247,14 +247,13 @@ fn trace_command_buffer_submit(
         res.write(unsafe { vertex_buffer.resource.bytes() });
     }
 
-    // todo: detile and send texture buffers
-    // res.write(bytemuck::cast_slice(&[shaders.texture_buffers.len() as u32]));
-    // for texture_buffer in &shaders.texture_buffers {
-    //     res.write(bytemuck::cast_slice(&texture_buffer.raw));
-    //
-    //     res.write(bytemuck::cast_slice(&[vertex_buffer.resource.len() as u32]));
-    //     res.write(unsafe { vertex_buffer.resource.bytes() });
-    // }
+    res.write(bytemuck::cast_slice(&[shaders.texture_buffers.len() as u32]));
+    for texture_buffer in &shaders.texture_buffers {
+        res.write(bytemuck::cast_slice(&texture_buffer.raw));
+
+        // res.write(bytemuck::cast_slice(&[vertex_buffer.resource.len() as u32]));
+        // res.write(unsafe { vertex_buffer.resource.bytes() });
+    }
 
     thread_logging_state.flush(res);
 
