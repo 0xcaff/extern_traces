@@ -183,6 +183,11 @@ fn trace_command_buffer_submit(
             (size_of::<u32>() * 4) + size_of::<u32>() + vertex_buffer.resource.len() as usize
     }
 
+    total_size += size_of::<u32>();
+    for _ in &shaders.texture_buffers {
+        total_size += size_of::<u32>() * 8;
+    }
+
     let Some(mut res) = thread_logging_state.reserve(total_size) else {
         return Ok(());
     };
@@ -247,7 +252,9 @@ fn trace_command_buffer_submit(
         res.write(unsafe { vertex_buffer.resource.bytes() });
     }
 
-    res.write(bytemuck::cast_slice(&[shaders.texture_buffers.len() as u32]));
+    res.write(bytemuck::cast_slice(
+        &[shaders.texture_buffers.len() as u32],
+    ));
     for texture_buffer in &shaders.texture_buffers {
         res.write(bytemuck::cast_slice(&texture_buffer.raw));
 
