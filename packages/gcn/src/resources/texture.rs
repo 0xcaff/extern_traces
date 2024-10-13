@@ -85,6 +85,10 @@ pub struct TextureBufferResource {
 
     #[bits(212, 212)]
     pub lod_hdw_cnt_en: bool,
+
+    // From https://github.com/Inori/GPCS4/blob/1466ffc418e73a2df8408a16fc8d2f8077519cbb/GPCS4/Graphics/Gnm/GnmTexture.h#L633-L637
+    #[bits(216, 216)]
+    pub minimum_gpu_mode_is_neo: bool,
 }
 
 impl TextureBufferResource {
