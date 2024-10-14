@@ -8,9 +8,8 @@ use std::sync::Arc;
 pub fn render_frame(
     ctx: &GraphicsContext,
     debug_handle: &mut DebugHandle,
-    bytes: &[u8],
+    extra_data: &ExtraData,
 ) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
-    let extra_data = ExtraData::parse(bytes)?;
     let draw_command_buffer = extra_data
         .draw_command_buffers
         .first()
@@ -21,7 +20,7 @@ pub fn render_frame(
 
     let known_shaders = extra_data
         .shaders
-        .into_iter()
+        .iter()
         .map(|it| (it.address, it))
         .collect();
 
@@ -29,6 +28,7 @@ pub fn render_frame(
         ctx,
         packets.as_slice(),
         &extra_data.vertex_buffers,
+        &extra_data.texture_buffers,
         known_shaders,
     )?;
 

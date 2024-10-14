@@ -1,17 +1,18 @@
 use crate::gfx_debug::ctx::GraphicsContext;
-use crate::gfx_debug::process::{EncodedShader, VertexBuffer};
+use crate::gfx_debug::process::{EncodedShader, TextureBuffer, VertexBuffer};
 use crate::gfx_debug::resources::buffers::{
     BufferShaderStageResult, BuffersDataContainer, SharedDescriptorSet,
 };
-use crate::gfx_debug::resources::images::ImageBufferResourceMemory;
+use crate::gfx_debug::resources::images::{image_descriptors, ImageBufferResourceMemory};
 use anyhow::format_err;
 use gcn::resources::VertexBufferResource;
 use gcn::GCNInstructionStream;
 use gcn_spirv::execution_state_input::{
-    shader_user_data_layout_binding, vertex_shader_user_data_descriptor,
+    pixel_shader_user_data_descriptor, shader_user_data_layout_binding,
+    vertex_shader_user_data_descriptor, PIXEL_SHADER_DESCRIPTOR_SET_IDX,
     VERTEX_SHADER_DESCRIPTOR_SET_IDX,
 };
-use gcn_spirv::module::translate_vertex_shader;
+use gcn_spirv::module::{translate_pixel_shader, translate_vertex_shader};
 use itertools::Itertools;
 use pm4::draw_index_auto::DrawIndexAutoPacket;
 use pm4::{BlendOp, ColorFormat, CombFunc, CompareFrag, VertexShader, ZFormat, VGT_DI_PRIM_TYPE};
@@ -21,10 +22,12 @@ use std::iter;
 use std::sync::Arc;
 use vulkano::command_buffer::allocator::StandardCommandBufferAllocator;
 use vulkano::command_buffer::{
-    AutoCommandBufferBuilder, CommandBufferUsage, PrimaryCommandBufferAbstract,
-    RenderPassBeginInfo, SubpassBeginInfo, SubpassContents,
+    AutoCommandBufferBuilder, CommandBufferUsage, CopyBufferToImageInfo,
+    PrimaryCommandBufferAbstract, RenderPassBeginInfo, SubpassBeginInfo, SubpassContents,
 };
-use vulkano::descriptor_set::layout::{DescriptorSetLayout, DescriptorSetLayoutCreateInfo};
+use vulkano::descriptor_set::layout::{
+    DescriptorSetLayout, DescriptorSetLayoutBinding, DescriptorSetLayoutCreateInfo, DescriptorType,
+};
 use vulkano::descriptor_set::{DescriptorSet, PersistentDescriptorSet};
 use vulkano::format::{ClearValue, Format};
 use vulkano::image::{ImageLayout, ImageUsage};
@@ -60,8 +63,9 @@ pub fn process_draw_command(
     draw_packet: DrawIndexAutoPacket,
     pipeline_input: pm4::GraphicsPipeline,
     vertex_buffers: &[VertexBuffer],
+    texture_buffers: &[TextureBuffer],
     data: &BuffersDataContainer,
-    known_shaders: &BTreeMap<u32, EncodedShader>,
+    known_shaders: &BTreeMap<u32, &EncodedShader>,
     last_color_buffer: &Option<Box<[u8]>>,
     last_depth_buffer: &Option<Box<[u8]>>,
 ) -> Result<DrawShaderStageResult, anyhow::Error> {
@@ -191,109 +195,119 @@ pub fn process_draw_command(
         (entry_point, user_data, exports, descriptor_set)
     };
 
-    // let (
-    //     pixel_shader,
-    //     image_descriptors,
-    //     pixel_buffers_descriptor_set_layout_bindings,
-    //     pixel_buffers_write_descriptor_set,
-    //     stage_pixel_input_shared_memory,
-    //     stage_pixel_output_shared_memory,
-    //     flush_pixel_shared_writes,
-    // ) = {
-    //     let pixel_shader = &pipeline_input.pixel_shader;
+    let (pixel_shader, image_descriptors, pixel_shader_descriptor_set) = {
+        let pixel_shader = &pipeline_input.pixel_shader;
 
-    //     let analysis_state = AnalysisState::new(&pixel_shader.user_data.0);
+        let shader = known_shaders.get(&pixel_shader.address.unwrap()).unwrap();
 
-    //     let shader_invocation =
-    //         unsafe { ShaderInvocation::decode_from_memory(pixel_shader.address.unwrap()) }?;
+        let images = shader
+            .texture_buffer_references
+            .iter()
+            .map(|(_program_counter, buffer_idx, sampler)| {
+                (
+                    texture_buffers[*buffer_idx].texture_buffer.clone(),
+                    *buffer_idx,
+                    sampler.clone(),
+                )
+            })
+            .unique()
+            .collect::<Vec<_>>();
 
-    //     let instructions = shader_invocation.as_flat_instructions()?;
+        let image_sample_instances = shader
+            .texture_buffer_references
+            .iter()
+            .map(|(program_counter, buffer_idx, sampler)| {
+                (
+                    *program_counter,
+                    (
+                        texture_buffers[*buffer_idx].texture_buffer.raw.clone(),
+                        sampler.raw.clone(),
+                    ),
+                )
+            })
+            .collect::<BTreeMap<_, _>>();
 
-    //     let image_sample_instances =
-    //         pixel_shader_extract_image_usages(instructions.as_slice(), &pixel_shader.user_data.0);
+        let base_descriptor_offset = 1;
 
-    //     let image_sample_instances = image_sample_instances
-    //         .into_iter()
-    //         .map(
-    //             |ImageSamplerUsage {
-    //                  texture_resource,
-    //                  sampler_resource,
-    //                  program_counter,
-    //              }| {
-    //                 (
-    //                     program_counter,
-    //                     (
-    //                         (texture_resource.raw, texture_resource.resource.clone()),
-    //                         sampler_resource.resource.clone(),
-    //                     ),
-    //                 )
-    //             },
-    //         )
-    //         .unique()
-    //         .collect::<BTreeMap<_, _>>();
+        let image_descriptors = image_descriptors(
+            images
+                .iter()
+                .map(|(texture_resource, texture_idx, sampler_resource)| {
+                    (
+                        &texture_resource.resource,
+                        *texture_idx,
+                        &sampler_resource.resource,
+                    )
+                }),
+            graphics_context,
+            base_descriptor_offset,
+            texture_buffers,
+        )?;
 
-    //     let images = image_sample_instances
-    //         .values()
-    //         .cloned()
-    //         .unique()
-    //         .collect::<Vec<_>>();
+        let buffer_usage_instances = shader
+            .vertex_buffer_references
+            .iter()
+            .map(|(program_counter, buffer_idx)| {
+                (
+                    *program_counter,
+                    vertex_buffers[*buffer_idx].vertex_buffer.resource.clone(),
+                )
+            })
+            .collect::<BTreeMap<u64, VertexBufferResource>>();
 
-    //     let image_descriptors = image_descriptors(images.as_slice(), graphics_context).unwrap();
+        let buffer_resources = shader
+            .vertex_buffer_references
+            .iter()
+            .map(|(program_counter, buffer_idx)| *buffer_idx)
+            .unique()
+            .into_iter()
+            .collect::<Vec<_>>();
 
-    //     let buffer_usages =
-    //         extract_buffer_usages(instructions.as_slice(), &pixel_shader.user_data.0);
+        let bytes = shader.bytes.to_vec();
+        let instructions = GCNInstructionStream::new(&bytes)?;
 
-    //     let buffer_usage_instances = buffer_usages
-    //         .into_iter()
-    //         .map(|it| (it.program_counter, it.resource.resource))
-    //         .collect::<BTreeMap<u64, VertexBufferResource>>();
+        let image_descriptor_offset = base_descriptor_offset + images.len();
 
-    //     let buffer_resources = buffer_usage_instances
-    //         .values()
-    //         .unique()
-    //         .cloned()
-    //         .enumerate()
-    //         .map(|(idx, it)| ((idx + images.len()) as u32 + 1, it))
-    //         .collect::<Vec<_>>();
+        let module = translate_pixel_shader(
+            &instructions.instructions,
+            vertex_shader_exports.as_slice(),
+            &image_sample_instances,
+            images.iter().enumerate().map(
+                |(idx, (texture_resource, _texture_idx, sampler_resource))| {
+                    (
+                        (idx + base_descriptor_offset) as u32,
+                        (texture_resource.raw.clone(), sampler_resource.raw.clone()),
+                    )
+                },
+            ),
+            &buffer_usage_instances,
+            buffer_resources.iter().enumerate().map(|(idx, it)| {
+                (
+                    (idx + image_descriptor_offset) as u32,
+                    &vertex_buffers[*it].vertex_buffer.resource,
+                )
+            }),
+        )?;
+        let code = module.assemble();
 
-    //     let (
-    //         descriptor_set_layout_bindings,
-    //         write_descriptor_set,
-    //         stage_input_shared_memory,
-    //         stage_output_shared_memory,
-    //         flush_shared_writes,
-    //     ) = make_shared_descriptor_set(graphics_context, buffer_resources.as_slice()).unwrap();
+        let shader = unsafe {
+            ShaderModule::new(
+                graphics_context.device.clone(),
+                ShaderModuleCreateInfo::new(&code),
+            )
+        }?;
 
-    //     let module = translate_pixel_shader(
-    //         instructions.as_slice(),
-    //         vertex_shader_exports.as_slice(),
-    //         images
-    //             .iter()
-    //             .enumerate()
-    //             .map(|(idx, it)| ((idx + 1) as u32, it)),
-    //         image_sample_instances,
-    //         &buffer_usage_instances,
-    //         buffer_resources.iter().map(|(idx, it)| (*idx, it)),
-    //     )?;
-    //     let code = module.assemble();
+        let entry_point = shader.entry_point("main").unwrap();
 
-    //     let shader = unsafe {
-    //         ShaderModule::new(
-    //             graphics_context.device.clone(),
-    //             ShaderModuleCreateInfo::new(&code),
-    //         )
-    //     }?;
+        let descriptor_set = SharedDescriptorSet::new(
+            graphics_context,
+            image_descriptor_offset as u32,
+            buffer_resources.as_slice(),
+            data,
+        )?;
 
-    //     (
-    //         shader.entry_point("main").unwrap(),
-    //         image_descriptors,
-    //         descriptor_set_layout_bindings,
-    //         write_descriptor_set,
-    //         stage_input_shared_memory,
-    //         stage_output_shared_memory,
-    //         flush_shared_writes,
-    //     )
-    // };
+        (entry_point, image_descriptors, descriptor_set)
+    };
 
     let render_pass = {
         let mut attachments = vec![];
@@ -418,64 +432,61 @@ pub fn process_draw_command(
         CommandBufferUsage::OneTimeSubmit,
     )?;
 
-    // let pixel_descriptor_set = {
-    //     let image_descriptors = {
-    //         let mut results = vec![];
+    let pixel_descriptor_set = {
+        let image_descriptors = {
+            let mut results = vec![];
 
-    //         for descriptor in image_descriptors {
-    //             builder
-    //                 .copy_buffer_to_image(CopyBufferToImageInfo::buffer_image(
-    //                     descriptor.upload_buffer,
-    //                     descriptor.image,
-    //                 ))?;
+            for descriptor in image_descriptors {
+                builder.copy_buffer_to_image(CopyBufferToImageInfo::buffer_image(
+                    descriptor.upload_buffer,
+                    descriptor.image,
+                ))?;
 
-    //             results.push(descriptor.descriptor);
-    //         }
+                results.push(descriptor.descriptor);
+            }
 
-    //         results
-    //     };
+            results
+        };
 
-    //     PersistentDescriptorSet::new(
-    //         &graphics_context.descriptor_set_allocator,
-    //         DescriptorSetLayout::new(
-    //             graphics_context.device.clone(),
-    //             DescriptorSetLayoutCreateInfo {
-    //                 bindings: shader_user_data_layout_binding(ShaderStages::FRAGMENT)
-    //                     .chain((0..image_descriptors.len()).map(|it| {
-    //                         (
-    //                             (it + 1) as u32,
-    //                             DescriptorSetLayoutBinding {
-    //                                 stages: ShaderStages::FRAGMENT,
-    //                                 ..DescriptorSetLayoutBinding::descriptor_type(
-    //                                     DescriptorType::CombinedImageSampler,
-    //                                 )
-    //                             },
-    //                         )
-    //                     }))
-    //                     .chain(pixel_buffers_descriptor_set_layout_bindings)
-    //                     .collect(),
-    //                 ..Default::default()
-    //             },
-    //         )?,
-    //         {
-    //             let mut result = vec![];
+        PersistentDescriptorSet::new(
+            &graphics_context.descriptor_set_allocator,
+            DescriptorSetLayout::new(
+                graphics_context.device.clone(),
+                DescriptorSetLayoutCreateInfo {
+                    bindings: shader_user_data_layout_binding(ShaderStages::FRAGMENT)
+                        .chain((0..image_descriptors.len()).map(|it| {
+                            (
+                                (it + 1) as u32,
+                                DescriptorSetLayoutBinding {
+                                    stages: ShaderStages::FRAGMENT,
+                                    ..DescriptorSetLayoutBinding::descriptor_type(
+                                        DescriptorType::CombinedImageSampler,
+                                    )
+                                },
+                            )
+                        }))
+                        .chain(pixel_shader_descriptor_set.bindings())
+                        .collect(),
+                    ..Default::default()
+                },
+            )?,
+            {
+                let mut result = vec![];
 
-    //             result.push(
-    //                 pixel_shader_user_data_descriptor(
-    //                     graphics_context.allocator.clone(),
-    //                     &pipeline_input.pixel_shader.user_data,
-    //                 )?,
-    //             );
+                result.push(pixel_shader_user_data_descriptor(
+                    graphics_context.allocator.clone(),
+                    &pipeline_input.pixel_shader.user_data,
+                )?);
 
-    //             result.extend(image_descriptors);
+                result.extend(image_descriptors);
 
-    //             result.extend(pixel_buffers_write_descriptor_set);
+                result.extend(pixel_shader_descriptor_set.write_descriptor_set());
 
-    //             result
-    //         },
-    //         [],
-    //     )?
-    // };
+                result
+            },
+            [],
+        )?
+    };
 
     let (pipeline, pipeline_layout) = {
         let stages = {
@@ -513,50 +524,19 @@ pub fn process_draw_command(
                 _ => unimplemented!(),
             };
 
-            {
-                // todo: use real pixel shader
-
-                mod ps {
-                    vulkano_shaders::shader! {
-                        ty: "fragment",
-                        src: r"
-                            #version 450
-
-                            layout(location = 0) in vec2 input1;
-
-                            layout(location = 0) out vec4 FragColor;
-
-                            void main()
-                            {
-                                // Emit a fixed color (in this case, a shade of blue)
-                                vec3 fixedColor = vec3(0.2, 0.4, 0.8);
-
-                                // Set the output color (fully opaque)
-                                FragColor = vec4(fixedColor, 1.0);
-                            }
-                        ",
-                    }
-                }
-
-                let pixel_shader = ps::load(graphics_context.device.clone())
-                    .unwrap()
-                    .entry_point("main")
-                    .unwrap();
-
-                stages.push(PipelineShaderStageCreateInfo::new(pixel_shader));
-            }
+            stages.push(PipelineShaderStageCreateInfo::new(pixel_shader));
 
             stages
         };
 
         let layout = PipelineLayout::new(graphics_context.device.clone(), {
-            let mut set_layouts = vec![DescriptorSetLayoutCreateInfo::default(); 1];
+            let mut set_layouts = vec![DescriptorSetLayoutCreateInfo::default(); 2];
 
             set_layouts[VERTEX_SHADER_DESCRIPTOR_SET_IDX as usize].bindings =
                 vertex_descriptor_set.layout().bindings().clone();
 
-            // set_layouts[PIXEL_SHADER_DESCRIPTOR_SET_IDX as usize].bindings =
-            //     pixel_descriptor_set.layout().bindings().clone();
+            set_layouts[PIXEL_SHADER_DESCRIPTOR_SET_IDX as usize].bindings =
+                pixel_descriptor_set.layout().bindings().clone();
 
             PipelineLayoutCreateInfo {
                 set_layouts: set_layouts
@@ -639,7 +619,7 @@ pub fn process_draw_command(
     }
 
     vertex_descriptor_set_ttt.stage_input(&mut builder)?;
-    // stage_pixel_input_shared_memory(&mut builder).unwrap();
+    pixel_shader_descriptor_set.stage_input(&mut builder)?;
 
     builder
         .begin_render_pass(
@@ -680,20 +660,19 @@ pub fn process_draw_command(
         vec![vertex_descriptor_set],
     )?;
 
-    // builder
-    //     .bind_descriptor_sets(
-    //         PipelineBindPoint::Graphics,
-    //         pipeline_layout.clone(),
-    //         PIXEL_SHADER_DESCRIPTOR_SET_IDX,
-    //         vec![pixel_descriptor_set],
-    //     )?;
+    builder.bind_descriptor_sets(
+        PipelineBindPoint::Graphics,
+        pipeline_layout.clone(),
+        PIXEL_SHADER_DESCRIPTOR_SET_IDX,
+        vec![pixel_descriptor_set],
+    )?;
 
     builder.draw(draw_packet.index_count, 1, 0, 0)?;
 
     builder.end_render_pass(Default::default())?;
 
     vertex_descriptor_set_ttt.stage_output(&mut builder)?;
-    // stage_pixel_output_shared_memory(&mut builder).unwrap();
+    pixel_shader_descriptor_set.stage_output(&mut builder)?;
 
     if let Some((_, it, _)) = &color_buffer {
         it.stage_output(&mut builder)?;
@@ -710,7 +689,8 @@ pub fn process_draw_command(
     finished.then_signal_fence_and_flush()?.wait(None)?;
 
     let buffers = vertex_descriptor_set_ttt.flush_output_memory()?;
-    // flush_pixel_shared_writes().unwrap();
+    // todo: merge buffers somehow
+    pixel_shader_descriptor_set.flush_output_memory()?;
 
     Ok(DrawShaderStageResult {
         color_buffer: if let Some((_, image_buffer, _)) = &color_buffer {

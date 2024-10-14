@@ -70,11 +70,8 @@ pub struct ExternStorageInfo {
 fn translate_instruction(
     builder: &mut Builder,
     imports: &BTreeMap<u8, ExternStorageInfo>,
-    image_sample_instances: &BTreeMap<u64, (([u32; 8], TextureBufferResource), SamplerResource)>,
-    image_imports: &HashMap<
-        (([u32; 8], TextureBufferResource), SamplerResource),
-        ExternStorageInfo,
-    >,
+    image_sample_instances: &BTreeMap<u64, ([u32; 8], [u32; 4])>,
+    image_imports: &HashMap<([u32; 8], [u32; 4]), ExternStorageInfo>,
     buffer_usage_instances: &BTreeMap<u64, VertexBufferResource>,
     exports: &BTreeMap<ExportTarget, ExternStorageInfo>,
     instruction: &Instruction,
