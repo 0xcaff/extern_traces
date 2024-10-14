@@ -99,11 +99,11 @@ impl SpanDetailPane {
                             let frame =
                                 render_frame(&self.ctx, &mut self.debug_handle, &extra_data)?;
 
-                            Ok((frame, extra_data.texture_buffers))
+                            Ok(frame)
                         })();
 
                         match result {
-                            Ok((color, textures)) => {
+                            Ok(color) => {
                                 if let Some(value) = color {
                                     self.last_image.replace((
                                         value,
