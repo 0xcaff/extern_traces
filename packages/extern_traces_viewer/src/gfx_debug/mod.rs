@@ -2,7 +2,7 @@ mod compute;
 mod ctx;
 mod debug_handle;
 mod draw;
-pub mod process;
+mod process;
 mod resources;
 
 pub use ctx::GraphicsContext;

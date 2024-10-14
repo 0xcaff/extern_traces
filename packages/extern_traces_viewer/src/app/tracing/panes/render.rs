@@ -1,8 +1,6 @@
-use crate::gfx_debug::process::TextureBuffer;
 use crate::gfx_debug::{process_commands, DebugHandle, ExtraData, GraphicsContext};
 use anyhow::{format_err, Result};
 use bytemuck;
-use gcn::resources::TextureBufferResource;
 use pm4::PM4Packet;
 use std::io::Cursor;
 use std::sync::Arc;
