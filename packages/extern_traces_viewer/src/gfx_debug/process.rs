@@ -79,7 +79,7 @@ pub struct ExtraData<'a> {
     pub compute_command_buffers: Vec<&'a [u8]>,
     pub shaders: Vec<EncodedShader<'a>>,
     pub vertex_buffers: Vec<VertexBuffer<'a>>,
-    pub texture_buffers: Vec<TextureBuffer>,
+    pub texture_buffers: Vec<TextureBuffer<'a>>,
 }
 
 pub struct EncodedShader<'a> {
@@ -94,8 +94,9 @@ pub struct VertexBuffer<'a> {
     pub bytes: &'a [u8],
 }
 
-pub struct TextureBuffer {
+pub struct TextureBuffer<'a> {
     pub texture_buffer: TextureBufferResourceWithRaw,
+    pub bytes: &'a [u8],
 }
 
 pub enum ShaderKind {
@@ -232,15 +233,15 @@ impl ExtraData<'_> {
             cursor.read_exact(bytemuck::cast_slice_mut(&mut raw_values))?;
             let texture_buffer = TextureBufferResourceWithRaw::from_bits(&raw_values);
 
-            // let mut length_bytes = [0u8; size_of::<u32>()];
-            // cursor.read_exact(&mut length_bytes)?;
-            // let length = u32::from_le_bytes(length_bytes) as usize;
+            let mut length_bytes = [0u8; size_of::<u32>()];
+            cursor.read_exact(&mut length_bytes)?;
+            let length = u32::from_le_bytes(length_bytes) as usize;
 
-            // let start = cursor.position() as usize;
-            // cursor.seek(std::io::SeekFrom::Current(length as i64))?;
-            // let bytes = &data[start..start + length as usize];
+            let start = cursor.position() as usize;
+            cursor.seek(std::io::SeekFrom::Current(length as i64))?;
+            let bytes = &data[start..start + length];
 
-            texture_buffers.push(TextureBuffer { texture_buffer });
+            texture_buffers.push(TextureBuffer { texture_buffer, bytes });
         }
 
         Ok(ExtraData {

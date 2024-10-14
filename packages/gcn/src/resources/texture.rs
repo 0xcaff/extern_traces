@@ -96,6 +96,14 @@ impl TextureBufferResource {
         // drop the top 6 bits, shift the remaining 32 bits into a 40-bit address
         (self.base_addr_256 & u32::MAX as u64) << 8
     }
+
+    pub fn bytes_len(&self) -> usize {
+        self.width as usize * self.height as usize * self.depth as usize * self.dfmt.bytes_len()
+    }
+
+    pub unsafe fn bytes<'a>(&self) -> &'a [u8] {
+        core::slice::from_raw_parts(self.base_address() as *const u8, self.bytes_len() as _)
+    }
 }
 
 // From GPCS4
@@ -202,6 +210,29 @@ pub enum SurfaceFormat {
     Format1 = 0x3B,
     ///< One 1-bit channel. 8 pixels per byte, with pixel index increasing from MSB to LSB.
     Format1Reversed = 0x3C,
+}
+
+impl SurfaceFormat {
+    pub fn bytes_len(&self) -> usize {
+        match self {
+            SurfaceFormat::Format8 => 1,
+            SurfaceFormat::Format16 => 2,
+            SurfaceFormat::Format8_8 => 2,
+            SurfaceFormat::Format32 => 4,
+            SurfaceFormat::Format16_16 => 4,
+            SurfaceFormat::Format10_11_11 =>4,
+            SurfaceFormat::Format11_11_10 => 4,
+            SurfaceFormat::Format10_10_10_2 => 4,
+            SurfaceFormat::Format2_10_10_10 => 4,
+            SurfaceFormat::Format8_8_8_8 => 4,
+            SurfaceFormat::Format32_32 => 8,
+            SurfaceFormat::Format16_16_16_16 => 8,
+            SurfaceFormat::Format32_32_32 => 12,
+            SurfaceFormat::Format32_32_32_32 => 16,
+            SurfaceFormat::Format5_6_5 => 2,
+            _ => unimplemented!()
+        }
+    }
 }
 
 impl TryFromBits<6> for SurfaceFormat {
