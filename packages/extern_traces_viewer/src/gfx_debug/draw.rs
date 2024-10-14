@@ -255,7 +255,8 @@ pub fn process_draw_command(
             .into_iter()
             .collect::<Vec<_>>();
 
-        let instructions = GCNInstructionStream::new(&shader.bytes)?;
+        let bytes = shader.bytes.to_vec();
+        let instructions = GCNInstructionStream::new(&bytes)?;
 
         let image_descriptor_offset = base_descriptor_offset + images.len();
 
@@ -521,7 +522,7 @@ pub fn process_draw_command(
         };
 
         let layout = PipelineLayout::new(graphics_context.device.clone(), {
-            let mut set_layouts = vec![DescriptorSetLayoutCreateInfo::default(); 1];
+            let mut set_layouts = vec![DescriptorSetLayoutCreateInfo::default(); 2];
 
             set_layouts[VERTEX_SHADER_DESCRIPTOR_SET_IDX as usize].bindings =
                 vertex_descriptor_set.layout().bindings().clone();
