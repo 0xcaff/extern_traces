@@ -230,7 +230,15 @@ pub fn process_draw_command(
         let base_descriptor_offset = 1;
 
         let image_descriptors = image_descriptors(
-            images.iter().map(|(texture_resource, texture_idx, sampler_resource)| (&texture_resource.resource, *texture_idx, &sampler_resource.resource)),
+            images
+                .iter()
+                .map(|(texture_resource, texture_idx, sampler_resource)| {
+                    (
+                        &texture_resource.resource,
+                        *texture_idx,
+                        &sampler_resource.resource,
+                    )
+                }),
             graphics_context,
             base_descriptor_offset,
             texture_buffers,

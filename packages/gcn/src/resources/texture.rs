@@ -98,7 +98,10 @@ impl TextureBufferResource {
     }
 
     pub fn bytes_len(&self) -> usize {
-        (self.width as usize + 1) * (self.height as usize + 1) * (self.depth as usize + 1) * self.dfmt.bytes_len()
+        (self.width as usize + 1)
+            * (self.height as usize + 1)
+            * (self.depth as usize + 1)
+            * self.dfmt.bytes_len()
     }
 
     pub unsafe fn bytes<'a>(&self) -> &'a [u8] {
