@@ -30,6 +30,7 @@ pub fn render_frame(
         ctx,
         packets.as_slice(),
         &extra_data.vertex_buffers,
+        &extra_data.texture_buffers,
         known_shaders,
     )?;
 

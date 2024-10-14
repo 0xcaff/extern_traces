@@ -87,7 +87,7 @@ pub fn extract_buffer_usages(
     usages
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct TextureBufferResourceWithRaw {
     pub raw: [u32; 8],
     pub resource: TextureBufferResource,
@@ -103,7 +103,7 @@ impl TextureBufferResourceWithRaw {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct SamplerResourceWithRaw {
     pub raw: [u32; 4],
     pub resource: SamplerResource,

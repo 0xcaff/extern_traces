@@ -644,13 +644,8 @@ pub fn translate_vertex_shader<'a>(
 pub fn translate_pixel_shader<'a>(
     instructions: &[Instruction],
     vertex_shader_exports: &[(ExportTarget, ExportAttributes)],
-    image_imports: impl Iterator<
-        Item = (
-            u32,
-            &'a (([u32; 8], TextureBufferResource), SamplerResource),
-        ),
-    >,
-    image_sample_instances: BTreeMap<u64, (([u32; 8], TextureBufferResource), SamplerResource)>,
+    image_sample_instances: &BTreeMap<u64, ([u32; 8], [u32; 4])>,
+    image_imports: impl Iterator<Item = (u32, ([u32; 8], [u32; 4]))>,
     buffer_usage_instances: &BTreeMap<u64, VertexBufferResource>,
     buffer_resources: impl Iterator<Item = (u32, &'a VertexBufferResource)>,
 ) -> Result<rspirv::dr::Module, anyhow::Error> {
@@ -731,7 +726,7 @@ pub fn translate_pixel_shader<'a>(
             builder.decorate(image, Decoration::Binding, [Operand::LiteralBit32(idx)]);
 
             (
-                image_import.clone(),
+                image_import,
                 ExternStorageInfo {
                     value_pointer: image,
                     value_type: sampled_image_type,
@@ -805,7 +800,7 @@ pub fn translate_pixel_shader<'a>(
         translate_instruction(
             &mut builder,
             &imports,
-            &image_sample_instances,
+            image_sample_instances,
             &image_imports,
             &buffer_usage_instances,
             &exports,

@@ -1,7 +1,9 @@
 use crate::gfx_debug::ctx::GraphicsContext;
 use crate::gfx_debug::draw::process_draw_command;
 use crate::gfx_debug::resources::buffers::BuffersDataContainer;
-use gcn_extract::{TextureBufferResourceWithRaw, VertexBufferResourceWithRaw};
+use gcn_extract::{
+    SamplerResourceWithRaw, TextureBufferResourceWithRaw, VertexBufferResourceWithRaw,
+};
 use pm4::{convert, Command, DrawPacket, PM4Packet};
 use std::collections::BTreeMap;
 use std::io::{Cursor, Read, Seek};
@@ -18,6 +20,7 @@ pub fn process_commands(
     graphics_context: &GraphicsContext,
     commands: &[PM4Packet],
     initial_vertex_buffers: &[VertexBuffer],
+    texture_buffers: &[TextureBuffer],
     known_shaders: BTreeMap<u32, &EncodedShader>,
 ) -> Result<(Option<Box<[u8]>>, Option<Box<[u8]>>), anyhow::Error> {
     let mut data = BuffersDataContainer::new(initial_vertex_buffers);
@@ -57,6 +60,7 @@ pub fn process_commands(
                     draw_packet,
                     pipeline_input,
                     initial_vertex_buffers,
+                    texture_buffers,
                     &data,
                     &known_shaders,
                     &color_buffer,
@@ -87,6 +91,7 @@ pub struct EncodedShader<'a> {
     pub kind: ShaderKind,
     pub bytes: &'a [u8],
     pub vertex_buffer_references: Vec<(u64, usize)>,
+    pub texture_buffer_references: Vec<(u64, usize, SamplerResourceWithRaw)>,
 }
 
 pub struct VertexBuffer<'a> {
@@ -189,11 +194,33 @@ impl ExtraData<'_> {
                 vertex_buffer_references.push((program_counter, idx));
             }
 
+            let mut tbr_count_bytes = [0u8; size_of::<u32>()];
+            cursor.read_exact(&mut tbr_count_bytes)?;
+            let tbr_count = u32::from_le_bytes(tbr_count_bytes);
+
+            let mut texture_buffer_references = Vec::with_capacity(tbr_count as usize);
+            for _ in 0..tbr_count {
+                let mut pc_bytes = [0u8; size_of::<u32>()];
+                cursor.read_exact(&mut pc_bytes)?;
+                let program_counter = u64::from(u32::from_le_bytes(pc_bytes));
+
+                let mut idx_bytes = [0u8; size_of::<u32>()];
+                cursor.read_exact(&mut idx_bytes)?;
+                let idx = u32::from_le_bytes(idx_bytes) as usize;
+
+                let mut raw_values = [0u32; 4];
+                cursor.read_exact(bytemuck::cast_slice_mut(&mut raw_values))?;
+                let sampler = SamplerResourceWithRaw::from_bits(&raw_values);
+
+                texture_buffer_references.push((program_counter, idx, sampler));
+            }
+
             shaders.push(EncodedShader {
                 address,
                 kind,
                 bytes,
                 vertex_buffer_references,
+                texture_buffer_references,
             });
         }
 
@@ -241,7 +268,10 @@ impl ExtraData<'_> {
             cursor.seek(std::io::SeekFrom::Current(length as i64))?;
             let bytes = &data[start..start + length];
 
-            texture_buffers.push(TextureBuffer { texture_buffer, bytes });
+            texture_buffers.push(TextureBuffer {
+                texture_buffer,
+                bytes,
+            });
         }
 
         Ok(ExtraData {

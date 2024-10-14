@@ -220,7 +220,7 @@ impl SurfaceFormat {
             SurfaceFormat::Format8_8 => 2,
             SurfaceFormat::Format32 => 4,
             SurfaceFormat::Format16_16 => 4,
-            SurfaceFormat::Format10_11_11 =>4,
+            SurfaceFormat::Format10_11_11 => 4,
             SurfaceFormat::Format11_11_10 => 4,
             SurfaceFormat::Format10_10_10_2 => 4,
             SurfaceFormat::Format2_10_10_10 => 4,
@@ -230,7 +230,7 @@ impl SurfaceFormat {
             SurfaceFormat::Format32_32_32 => 12,
             SurfaceFormat::Format32_32_32_32 => 16,
             SurfaceFormat::Format5_6_5 => 2,
-            _ => unimplemented!()
+            _ => unimplemented!(),
         }
     }
 }
