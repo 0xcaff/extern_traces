@@ -4,11 +4,13 @@
 #![feature(ptr_as_ref_unchecked)]
 extern crate alloc;
 
+mod module_ids;
 mod platform;
 
 mod ffi;
 
 use crate::ffi::{Args, ThreadLoggingState};
+use crate::module_ids::ModuleId;
 use alloc::collections::btree_map::Entry;
 use alloc::collections::BTreeMap;
 use alloc::vec;
@@ -142,13 +144,11 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
 }
 
 #[no_mangle]
-extern "C" fn sceSysmoduleLoadModule_trace(
-    args: *const Args,
-) {
+extern "C" fn sceSysmoduleLoadModule_trace(args: *const Args) {
     let args = unsafe { args.as_ref_unchecked() };
-    let module_id = args.args[0];
+    let module_id = ModuleId::from_repr(args.args[0] as u16);
 
-    println!("module id: {:x}", module_id);
+    println!("module id: {:?}", module_id);
 }
 
 fn trace_command_buffer_submit(

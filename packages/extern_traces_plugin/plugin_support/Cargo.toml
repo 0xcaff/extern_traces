@@ -13,6 +13,7 @@ gcn = { path = "../../gcn" }
 libc = "0.2.159"
 bytemuck = { version = "1.18.0", features = ["derive"] }
 anyhow = { version = "1.0.89", default-features = false }
+strum = { version = "0.26.3", features = ["derive"], default-features = false }
 
 [profile.release]
 panic = "abort"
