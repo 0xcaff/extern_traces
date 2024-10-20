@@ -22,6 +22,7 @@ struct ThreadLoggingState
     uint64_t thread_id;
     bool is_finished;
     struct BufferState* current_buffer;
+    uint64_t last_label_id;
 
     uint64_t dropped_packets_count;
     uint64_t last_dropped_packets_count;

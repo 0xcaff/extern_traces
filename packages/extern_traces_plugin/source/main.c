@@ -56,6 +56,7 @@ void *listen_commands_thread(void *arg) {
     }
 }
 
+static JumpSlotRelocationList jump_slot_relocations;
 
 s32 attr_module_hidden module_start(s64 argc, const void *args)
 {
@@ -162,7 +163,6 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
 
     DynamicInfo info = parse_dynamic_section(dynlib_segment + offset, dynamic_segment_size, dynlib_segment, dynlib_segment_size);
 
-    JumpSlotRelocationList jump_slot_relocations;
     find_jump_slot_relocations(&info, &jump_slot_relocations);
     
     struct SpecificSymbolsTable specific_symbols_table;
@@ -223,11 +223,6 @@ s32 attr_module_hidden module_start(s64 argc, const void *args)
         // once every 100ms
         sceKernelUsleep(100000);
     }
-
-    cleanup_jump_slot_relocation_list(&jump_slot_relocations);
-    cleanup_dynamic_info(&info);
-
-    free(dynlib_segment);
 
     return 0;
 }

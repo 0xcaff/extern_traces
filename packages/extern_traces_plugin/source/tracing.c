@@ -2,6 +2,7 @@
 #include "time.h"
 #include "tracing.h"
 #include "plugin_common.h"
+#include "hook.h"
 
 static struct SpecificSymbolsTable sharedTable;
 
@@ -41,6 +42,7 @@ void capture_next_submit() {
 
 void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state, struct Args* args) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
+    state->last_label_id = label_id;
     uint64_t time = get_current_time_rdtscp();
     if (label_id == sharedTable.sceGnmSubmitAndFlipCommandBuffersForWorkload && should_capture_next_submit) {
         should_capture_next_submit = false;
@@ -87,6 +89,10 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
 void emit_span_end(struct ThreadLoggingState* initial_state) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
     uint64_t time = get_current_time_rdtscp();
+
+    if (state->last_label_id == sharedTable.sceSysmoduleLoadModule) {
+        reregister_hooks();
+    }
 
     struct SpanEnd span = {
         .message_tag = 1,

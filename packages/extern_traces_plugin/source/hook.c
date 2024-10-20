@@ -163,31 +163,65 @@ void* build_hook_fn(uint16_t static_tls_base) {
     return new_mem;
 }
 
+unsigned char template_code[] = {
+    // mov dword ptr fs:-32, <immediate_value>
+    0x64, 0xC7, 0x04, 0x25, 0xE0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
+
+    // mov r11, qword ptr [rip + 0xF]
+    0x4C, 0x8B, 0x1D, 0x0F, 0x00, 0x00, 0x00,
+
+    // mov qword ptr fs:-24, r11
+    0x64, 0x4C, 0x89, 0x1C, 0x25, 0xE8, 0xFF, 0xFF, 0xFF,
+
+    // jmp [rip + 0x8]
+    0xFF, 0x25, 0x08, 0x00, 0x00, 0x00,
+
+    // <placeholder for address_value> (mov instruction)
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+
+    // <placeholder for target_function address> (jump instruction)
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+static JumpSlotRelocationList* saved_relocs;
+static void* saved_hooks;
+
+void register_hooks_impl(JumpSlotRelocationList* relocs, void* hooks) {
+    size_t total_size = relocs->count * sizeof(template_code);
+    sceKernelMprotect((void *)hooks, total_size, VM_PROT_READ | VM_PROT_EXECUTE | VM_PROT_WRITE);
+    for (unsigned int label_idx = 0; label_idx < relocs->count; label_idx++) {
+        JumpSlotRelocation* reloc = &relocs->items[label_idx];
+
+        void* func_mem = (char*)hooks + label_idx * sizeof(template_code);
+
+        void** function_ptr = (void**)(reloc->relocation_offset + 0x0000000000400000);
+        sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
+        void* initial_function_ptr_value = *function_ptr;
+        if ((uint64_t)initial_function_ptr_value >= 0xeffffffe00000000) {
+            continue;
+        }
+
+        if (initial_function_ptr_value >= hooks && initial_function_ptr_value < (hooks + total_size)) {
+            continue;
+        }
+
+        final_printf("label_id = %u, offset = %lx, addr = %lx, symbol = %s\n", label_idx, reloc->relocation_offset, (uint64_t)*function_ptr, reloc->symbol_info->data.parsed.name);
+
+        *(void**)((char*)func_mem + 34) = initial_function_ptr_value;
+
+        *function_ptr = (void*)func_mem;
+    }
+
+    sceKernelMprotect((void *)hooks, total_size, VM_PROT_READ | VM_PROT_EXECUTE);
+
+    final_printf("trampolines installed\n");
+}
+
 bool register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     void* hook = build_hook_fn(static_tls_base);
     if (!hook) {
         return false;
     }
-
-    unsigned char template_code[] = {
-        // mov dword ptr fs:-32, <immediate_value>
-        0x64, 0xC7, 0x04, 0x25, 0xE0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
-
-        // mov r11, qword ptr [rip + 0xF]
-        0x4C, 0x8B, 0x1D, 0x0F, 0x00, 0x00, 0x00,
-
-        // mov qword ptr fs:-24, r11
-        0x64, 0x4C, 0x89, 0x1C, 0x25, 0xE8, 0xFF, 0xFF, 0xFF,
-
-        // jmp [rip + 0x8]
-        0xFF, 0x25, 0x08, 0x00, 0x00, 0x00,
-
-        // <placeholder for address_value> (mov instruction)
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-        // <placeholder for target_function address> (jump instruction)
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    };
 
     *(int32_t*)((char*)template_code + 4 ) = -(int32_t)static_tls_base - 32;
     *(int32_t*)((char*)template_code + 24) = -(int32_t)static_tls_base - 24;
@@ -208,27 +242,20 @@ bool register_hooks(JumpSlotRelocationList* relocs, uint16_t static_tls_base) {
     final_printf("setting up tramplines for %lu items\n", relocs->count);
 
     for (unsigned int label_idx = 0; label_idx < relocs->count; label_idx++) {
-        JumpSlotRelocation* reloc = &relocs->items[label_idx];
-
         void* func_mem = (char*)mem + label_idx * sizeof(template_code);
         memcpy(func_mem, template_code, sizeof(template_code));
 
-        void** function_ptr = (void**)(reloc->relocation_offset + 0x0000000000400000);
-        sceKernelMprotect((void *)function_ptr, sizeof(uint64_t), VM_PROT_ALL);
-        final_printf("label_id = %u, offset = %lx, addr = %lx, symbol = %s\n", label_idx, reloc->relocation_offset, (uint64_t)*function_ptr, reloc->symbol_info->data.parsed.name);
-
         *(uint32_t*)((char*)func_mem + 8) = label_idx;
-        *(void**)((char*)func_mem + 34) = *function_ptr;
         *(void**)((char*)func_mem + 42) = hook;
-
-        *function_ptr = (void*)func_mem;
     }
-    
-    final_printf("trampolines installed\n");
-    
-    // hex_dump(mem, total_size);
 
-    sceKernelMprotect((void *)mem, total_size, VM_PROT_READ | VM_PROT_EXECUTE);
+    register_hooks_impl(relocs, mem);
 
+    saved_relocs = relocs;
+    saved_hooks = mem;
     return true;
+}
+
+void reregister_hooks() {
+    register_hooks_impl(saved_relocs, saved_hooks);
 }
