@@ -141,6 +141,16 @@ extern "C" fn sceGnmSubmitAndFlipCommandBuffers_trace(
     sceGnmSubmitCommandBuffers_trace(args, thread_logging_state, time, label_id, thread_id);
 }
 
+#[no_mangle]
+extern "C" fn sceSysmoduleLoadModule_trace(
+    args: *const Args,
+) {
+    let args = unsafe { args.as_ref_unchecked() };
+    let module_id = args.args[0];
+
+    println!("module id: {:x}", module_id);
+}
+
 fn trace_command_buffer_submit(
     thread_logging_state: &mut ThreadLoggingState,
     draw_command_buffers: &[&[u8]],

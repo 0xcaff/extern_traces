@@ -61,6 +61,17 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
         sceGnmSubmitCommandBuffers_trace(
             args, state, time, label_id, state->thread_id
         );
+    } else if (label_id == sharedTable.sceSysmoduleLoadModule) {
+        sceSysmoduleLoadModule_trace(args);
+
+        struct SpanStart span = {
+            .message_tag = 0,
+            .thread_id = state->thread_id,
+            .time = time,
+            .label_id = label_id,
+        };
+
+        write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
     } else {
         struct SpanStart span = {
             .message_tag = 0,

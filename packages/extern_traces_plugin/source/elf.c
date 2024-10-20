@@ -449,6 +449,7 @@ void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct Spec
     table->sceGnmSubmitAndFlipCommandBuffersForWorkload = -1;
     table->sceGnmSubmitAndFlipCommandBuffers = -1;
     table->sceGnmSubmitCommandBuffers = -1;
+    table->sceSysmoduleLoadModule = -1;
 
     for (size_t i = 0; i < list->count; i++) {
         const SymbolInfo* symbol_info = list->items[i].symbol_info;
@@ -481,6 +482,16 @@ void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct Spec
             ) == 0
         ) {
             table->sceGnmSubmitCommandBuffers = i;
+        }
+
+        if (
+            strncmp(
+                symbol_info->data.parsed.name,
+                "g8cM39EUZ6o",
+                sizeof(symbol_info->data.parsed.name) - 1
+            ) == 0
+        ) {
+            table->sceSysmoduleLoadModule = i;
         }
     }
 }
