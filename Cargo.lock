@@ -1542,8 +1542,10 @@ dependencies = [
  "renderdoc",
  "rfd",
  "rspirv",
+ "strum",
  "vulkano",
  "vulkano-shaders",
+ "zorder",
 ]
 
 [[package]]
@@ -4843,6 +4845,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.77",
+]
+
+[[package]]
+name = "zorder"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1ea8734a87d9de83816351d459ad98e276a9f60adc993f524504606cc126fb01"
+dependencies = [
+ "num-traits",
 ]
 
 [[package]]
