@@ -30,5 +30,3 @@ itertools = "0.11.0"
 bytemuck = { version = "1.14.0", features = ["derive"] }
 anyhow = { version = "1.0.71", features = ["backtrace"] }
 libc = "0.2.158"
-zorder = "0.2.2"
-strum = { version = "0.25.0", features = ["derive"] }
