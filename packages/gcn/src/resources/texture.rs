@@ -1,6 +1,6 @@
 use bits::{Bits, FromBits, TryFromBits};
 use bits_macros::TryFromBitsContainer;
-use strum::FromRepr;
+use strum::{EnumIter, FromRepr};
 
 #[derive(TryFromBitsContainer, Debug, Hash, Eq, PartialEq, Clone)]
 #[bits(256)]
@@ -345,7 +345,7 @@ impl TryFromBits<4> for TextureType {
 }
 
 // From https://github.com/Inori/GPCS4/blob/8a4376bb7908f406b80d56f5d3f5ca9da51a7478/GPCS4/Graphics/Gnm/GnmConstant.h#L1542-L1574
-#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone)]
+#[derive(FromRepr, Debug, Hash, Eq, PartialEq, Clone, EnumIter, Copy)]
 #[repr(u8)]
 pub enum TileMode {
     // Depth modes (for depth buffers)

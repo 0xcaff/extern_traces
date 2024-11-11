@@ -1,5 +1,6 @@
 use crate::gfx_debug::ctx::{CommandBufferBuilder, GraphicsContext};
 use crate::gfx_debug::process::TextureBuffer;
+use crate::gfx_debug::tiling::detile;
 use gcn::resources::{
     DestinationChannelSelect, SamplerResource, SurfaceFormat, TextureBufferResource,
     TextureChannelType, TextureType,
@@ -190,7 +191,12 @@ pub fn image_descriptors<'a>(
         {
             let mut upload_buffer_bytes = upload_buffer.write()?;
             let texture_buffer = &texture_buffers[texture_buffer_idx];
-            upload_buffer_bytes.copy_from_slice(texture_buffer.bytes);
+            let bytes = texture_buffer.bytes.to_vec();
+            detile(
+                texture_resource,
+                bytemuck::cast_slice(&bytes),
+                bytemuck::cast_slice_mut(upload_buffer_bytes.as_mut()),
+            );
         }
 
         let image_view = ImageView::new(
