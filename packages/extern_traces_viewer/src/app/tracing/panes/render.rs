@@ -1,15 +1,14 @@
 use crate::gfx_debug::{process_commands, DebugHandle, ExtraData, GraphicsContext};
 use anyhow::{format_err, Result};
 use bytemuck;
+use eframe::egui::ColorImage;
 use pm4::PM4Packet;
-use std::io::Cursor;
-use std::sync::Arc;
 
 pub fn render_frame(
     ctx: &GraphicsContext,
     debug_handle: &mut DebugHandle,
     extra_data: &ExtraData,
-) -> Result<Option<Arc<[u8]>>, anyhow::Error> {
+) -> Result<Option<ColorImage>, anyhow::Error> {
     let draw_command_buffer = extra_data
         .draw_command_buffers
         .first()
@@ -38,15 +37,7 @@ pub fn render_frame(
         return Ok(None);
     };
 
-    let mut encoded_writer = Cursor::new(Vec::new());
+    let image = ColorImage::from_rgba_unmultiplied([1920, 1080], next_color.as_ref());
 
-    {
-        let mut encoder = png::Encoder::new(&mut encoded_writer, 1920, 1080);
-        encoder.set_color(png::ColorType::Rgba);
-        encoder.set_depth(png::BitDepth::Eight);
-        let mut writer = encoder.write_header()?;
-        writer.write_image_data(&next_color)?;
-    }
-
-    Ok(Some(Arc::from(encoded_writer.into_inner())))
+    Ok(Some(image))
 }

@@ -2,13 +2,15 @@ use crate::app::tracing::panes::render::render_frame;
 use crate::app::tracing::panes::{PaneResponse, TreeBehaviorArgs};
 use crate::app::tracing::utils::{format_time, render_symbol_info};
 use crate::gfx_debug::{DebugHandle, ExtraData, GraphicsContext};
+use anyhow::bail;
 use eframe::egui;
-use eframe::egui::load::Bytes;
-use eframe::egui::{vec2, Align, ImageSource, Layout, Ui};
-use std::sync::Arc;
+use eframe::egui::load::SizedTexture;
+use eframe::egui::{
+    vec2, Align, Image, ImageSource, Layout, TextureHandle, TextureOptions, Ui, Widget,
+};
 
 pub struct SpanDetailPane {
-    last_image: Option<(Arc<[u8]>, usize)>,
+    last_image: Option<TextureHandle>,
     debug_handle: DebugHandle,
     ctx: GraphicsContext,
 }
@@ -68,11 +70,10 @@ impl SpanDetailPane {
                 ui.label(format_time(duration_seconds));
             });
 
-            if let Some((it, name)) = &self.last_image {
-                ui.image(ImageSource::Bytes {
-                    uri: format!("image://image-{}.png", *name).into(),
-                    bytes: Bytes::Shared(it.clone()),
-                });
+            if let Some(it) = &self.last_image {
+                Image::new(ImageSource::Texture(SizedTexture::from_handle(it)))
+                    .max_width(ui.available_width())
+                    .ui(ui);
             }
 
             let button_response = ui.button("zoom");
@@ -96,22 +97,24 @@ impl SpanDetailPane {
                     if button_response.clicked() {
                         let result = (|| -> Result<_, anyhow::Error> {
                             let extra_data = ExtraData::parse(extra_data.as_slice())?;
-                            let frame =
-                                render_frame(&self.ctx, &mut self.debug_handle, &extra_data)?;
+                            let Some(image) =
+                                render_frame(&self.ctx, &mut self.debug_handle, &extra_data)?
+                            else {
+                                bail!("missing image");
+                            };
 
-                            Ok(frame)
+                            Ok(image)
                         })();
 
                         match result {
-                            Ok(color) => {
-                                if let Some(value) = color {
-                                    self.last_image.replace((
-                                        value,
-                                        self.last_image.as_ref().map(|it| it.1).unwrap_or(0) + 1,
-                                    ));
-                                } else {
-                                    println!("missing value for color")
-                                };
+                            Ok(image) => {
+                                let texture = ui.ctx().load_texture(
+                                    "frame",
+                                    image,
+                                    TextureOptions::default(),
+                                );
+
+                                self.last_image.replace(texture);
                             }
                             Err(err) => {
                                 println!("{:?}", err);

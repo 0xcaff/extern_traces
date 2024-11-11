@@ -34,8 +34,6 @@ fn main() -> Result<(), eframe::Error> {
         "extern_traces",
         options,
         Box::new(|cc| {
-            egui_extras::install_image_loaders(&cc.egui_ctx);
-
             let ctx = cc.egui_ctx.clone();
 
             let scene = match args.command {
