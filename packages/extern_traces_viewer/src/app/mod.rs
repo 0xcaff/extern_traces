@@ -3,6 +3,7 @@ use crate::app::tracing::TracingScene;
 use eframe::egui::Context;
 use ps4libdoc::LoadedDocumentation;
 
+mod layout;
 pub mod start;
 pub mod tracing;
 
