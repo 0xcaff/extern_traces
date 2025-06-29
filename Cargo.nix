@@ -5776,21 +5776,12 @@ rec {
             packageId = "rspirv";
           }
           {
-            name = "strum";
-            packageId = "strum";
-            features = [ "derive" ];
-          }
-          {
             name = "vulkano";
             packageId = "vulkano";
           }
           {
             name = "vulkano-shaders";
             packageId = "vulkano-shaders";
-          }
-          {
-            name = "zorder";
-            packageId = "zorder";
           }
         ];
         features = {
@@ -20254,9 +20245,7 @@ rec {
           "strum_macros" = [ "dep:strum_macros" ];
         };
         resolvedDefaultFeatures = [
-          "default"
           "derive"
-          "std"
           "strum_macros"
         ];
       };
@@ -29703,29 +29692,6 @@ rec {
           }
         ];
 
-      };
-      "zorder" = rec {
-        crateName = "zorder";
-        version = "0.2.2";
-        edition = "2021";
-        sha256 = "00gv4v0nqq048m93z6fw1bvajxp2k2nmkm2icf0q7pnrhx577a0y";
-        authors = [
-          "Elias Kauppi"
-        ];
-        dependencies = [
-          {
-            name = "num-traits";
-            packageId = "num-traits";
-            usesDefaultFeatures = false;
-          }
-        ];
-        features = {
-          "default" = [ "std" ];
-        };
-        resolvedDefaultFeatures = [
-          "default"
-          "std"
-        ];
       };
       "zvariant 3.15.2" = rec {
         crateName = "zvariant";

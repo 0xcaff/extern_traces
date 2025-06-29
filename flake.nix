@@ -140,6 +140,7 @@
             };
 
             extern_traces_viewer = attrs: {
+              GIT_SHA_SHORT = self.rev or "unknown";
               nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
                 pkgs.pkg-config
                 pkgs.cmake

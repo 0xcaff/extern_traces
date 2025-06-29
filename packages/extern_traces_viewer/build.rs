@@ -1,10 +1,12 @@
 use std::process::Command;
 
 fn main() {
-    let output = Command::new("git")
+    let Ok(output) = Command::new("git")
         .args(&["rev-parse", "--short", "HEAD"])
         .output()
-        .expect("failed to get git short commit sha");
+    else {
+        return;
+    };
 
     let git_short_hash = String::from_utf8(output.stdout).unwrap();
 
