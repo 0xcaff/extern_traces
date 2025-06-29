@@ -58,38 +58,35 @@
           ];
         };
 
-        # uv2nix Python environment setup
-        uvWorkspace = uv2nix.lib.workspace.loadWorkspace {
-          workspaceRoot = ./.;
-        };
+        pythonCodegenEnv =
+          let
+            uvWorkspace = uv2nix.lib.workspace.loadWorkspace {
+              workspaceRoot = ./.;
+            };
 
-        # Create package overlay from workspace
-        overlay = uvWorkspace.mkPyprojectOverlay {
-          sourcePreference = "wheel";
-        };
+            overlay = uvWorkspace.mkPyprojectOverlay {
+              sourcePreference = "wheel";
+            };
 
-        # Extend generated overlay with build fixups if needed
-        pyprojectOverrides = _final: prev: {
-          # mako should work out of the box, but add overrides here if needed
-        };
+            pyprojectOverrides = _final: prev: {
+              # mako should work out of the box, but add overrides here if needed
+            };
 
-        # Python package set
-        pythonSet =
-          (pkgs.callPackage pyproject-nix.build.packages {
-            python = pkgs.python312;
-          }).overrideScope
-            (
-              pkgs.lib.composeManyExtensions [
-                pyproject-build-systems.overlays.default
-                overlay
-                pyprojectOverrides
-              ]
-            );
+            pythonSet =
+              (pkgs.callPackage pyproject-nix.build.packages {
+                python = pkgs.python312;
+              }).overrideScope
+                (
+                  pkgs.lib.composeManyExtensions [
+                    pyproject-build-systems.overlays.default
+                    overlay
+                    pyprojectOverrides
+                  ]
+                );
 
-        # Create virtual environment for codegen
-        pythonEnv = pythonSet.mkVirtualEnv "extern-traces-codegen" uvWorkspace.deps.all;
+          in
+          pythonSet.mkVirtualEnv "extern-traces-codegen" uvWorkspace.deps.all;
 
-        # Rust toolchain (specific nightly version from rust-toolchain.toml)
         rustToolchain = pkgs.rust-bin.nightly."2024-09-27".default.override {
           extensions = [ "rustfmt" ];
           targets = [
@@ -102,8 +99,8 @@
             pm4 = _: {
               prePatch = ''
                 pushd src/registers/generated
-                ${pythonEnv}/bin/python regs_rs.py
-                ${pythonEnv}/bin/python pkt3_rs.py
+                ${pythonCodegenEnv}/bin/python regs_rs.py
+                ${pythonCodegenEnv}/bin/python pkt3_rs.py
                 popd
               '';
             };
@@ -111,7 +108,7 @@
             gcn = _: {
               prePatch = ''
                 pushd src/instructions/generated
-                ${pythonEnv}/bin/python ops_rs.py
+                ${pythonCodegenEnv}/bin/python ops_rs.py
                 popd
               '';
             };
@@ -171,7 +168,6 @@
                 ];
             };
 
-            # Vulkan-related crates
             vulkano = attrs: {
               nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
                 pkgs.vulkan-headers
@@ -189,7 +185,6 @@
               ];
             };
           };
-
         };
 
         # treefmt configuration
