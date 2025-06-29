@@ -4,7 +4,6 @@ mod debug_handle;
 mod draw;
 mod process;
 mod resources;
-pub mod tiling;
 
 pub use ctx::GraphicsContext;
 pub use debug_handle::DebugHandle;
