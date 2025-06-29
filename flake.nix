@@ -1,0 +1,221 @@
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    flake-utils.url = "github:numtide/flake-utils";
+    crate2nix.url = "github:nix-community/crate2nix";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+
+    pyproject-nix = {
+      url = "github:pyproject-nix/pyproject.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    uv2nix = {
+      url = "github:pyproject-nix/uv2nix";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pyproject-build-systems = {
+      url = "github:pyproject-nix/build-system-pkgs";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+      inputs.uv2nix.follows = "uv2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    ps-nix.url = "github:0xcaff/ps-nix";
+  };
+
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      crate2nix,
+      rust-overlay,
+      treefmt-nix,
+      pyproject-nix,
+      uv2nix,
+      pyproject-build-systems,
+      ...
+    }:
+    let
+      supported-systems = with flake-utils.lib.system; [
+        x86_64-linux
+        x86_64-darwin
+        aarch64-darwin
+      ];
+    in
+    flake-utils.lib.eachSystem supported-systems (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            rust-overlay.overlays.default
+            crate2nix.overlays.default
+          ];
+        };
+
+        # uv2nix Python environment setup
+        uvWorkspace = uv2nix.lib.workspace.loadWorkspace {
+          workspaceRoot = ./.;
+        };
+
+        # Create package overlay from workspace
+        overlay = uvWorkspace.mkPyprojectOverlay {
+          sourcePreference = "wheel";
+        };
+
+        # Extend generated overlay with build fixups if needed
+        pyprojectOverrides = _final: prev: {
+          # mako should work out of the box, but add overrides here if needed
+        };
+
+        # Python package set
+        pythonSet =
+          (pkgs.callPackage pyproject-nix.build.packages {
+            python = pkgs.python312;
+          }).overrideScope
+            (
+              pkgs.lib.composeManyExtensions [
+                pyproject-build-systems.overlays.default
+                overlay
+                pyprojectOverrides
+              ]
+            );
+
+        # Create virtual environment for codegen
+        pythonEnv = pythonSet.mkVirtualEnv "extern-traces-codegen" uvWorkspace.deps.all;
+
+        # Rust toolchain (specific nightly version from rust-toolchain.toml)
+        rustToolchain = pkgs.rust-bin.nightly."2024-09-27".default.override {
+          extensions = [ "rustfmt" ];
+          targets = [
+
+          ];
+        };
+
+        cargoProject = pkgs.callPackage ./Cargo.nix {
+          defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+            pm4 = _: {
+              buildInputs = [ pythonEnv ];
+              prePatch = ''
+                cd src/registers/generated
+                python regs_rs.py
+                python pkt3_rs.py
+              '';
+            };
+
+            gcn = _: {
+              buildInputs = [ pythonEnv ];
+              prePatch = ''
+                cd src/instructions/generated
+                python ops_rs.py
+              '';
+            };
+
+            ps4libdoc = _: {
+              prePatch = ''
+                substituteInPlace src/lib.rs \
+                  --replace-fail "defs" "${
+                    pkgs.fetchFromGitHub {
+                      owner = "idc";
+                      repo = "ps4libdoc";
+                      rev = "a71315e7f36e312ae71e9e3a92982e9ffbfc725f";
+                      sha256 = "sha256-33wVp2eBsPf42k25dGKMHGMFqnSwXthoF5Bg/o30e/M=";
+                    }
+                  }"
+              '';
+            };
+
+            shaderc-sys = _: {
+              buildInputs = [
+                pkgs.cmake
+                pkgs.git
+                pkgs.python312
+              ];
+            };
+
+            extern_traces_viewer = attrs: {
+              nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+                pkgs.pkg-config
+                pkgs.cmake
+                pkgs.ninja
+              ];
+              buildInputs =
+                (attrs.buildInputs or [ ])
+                ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+                  pkgs.vulkan-loader
+                  pkgs.vulkan-headers
+                  pkgs.vulkan-validation-layers
+                  pkgs.xorg.libX11
+                  pkgs.xorg.libXcursor
+                  pkgs.xorg.libXi
+                  pkgs.xorg.libXrandr
+                  pkgs.libGL
+                  pkgs.fontconfig
+                  pkgs.freetype
+                  pkgs.libxkbcommon
+                  pkgs.wayland
+                ]
+                ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+                  pkgs.darwin.apple_sdk.frameworks.Metal
+                  pkgs.darwin.apple_sdk.frameworks.QuartzCore
+                  pkgs.darwin.apple_sdk.frameworks.Cocoa
+                  pkgs.darwin.apple_sdk.frameworks.AppKit
+                  pkgs.darwin.apple_sdk.frameworks.CoreGraphics
+                ];
+            };
+
+            # Vulkan-related crates
+            vulkano = attrs: {
+              nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+                pkgs.vulkan-headers
+              ];
+              buildInputs =
+                (attrs.buildInputs or [ ])
+                ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+                  pkgs.vulkan-loader
+                ];
+            };
+
+            vulkano-shaders = attrs: {
+              nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+                pkgs.vulkan-headers
+              ];
+            };
+          };
+
+        };
+
+        # treefmt configuration
+        treefmtConfig = {
+          # Used to find the project root
+          projectRootFile = "flake.nix";
+          programs = {
+            nixfmt.enable = true;
+            rustfmt.enable = true;
+            black.enable = true;
+          };
+        };
+        treefmtEval = treefmt-nix.lib.evalModule pkgs treefmtConfig;
+
+      in
+      {
+        packages = {
+          extern_traces_viewer = cargoProject.workspaceMembers.extern_traces_viewer.build;
+        };
+
+        formatter = treefmtEval.config.build.wrapper;
+
+        devShells.default = pkgs.mkShell {
+          buildInputs = [
+            rustToolchain
+            pkgs.crate2nix
+          ];
+        };
+      }
+    );
+}
