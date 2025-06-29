@@ -100,19 +100,19 @@
         cargoProject = pkgs.callPackage ./Cargo.nix {
           defaultCrateOverrides = pkgs.defaultCrateOverrides // {
             pm4 = _: {
-              buildInputs = [ pythonEnv ];
               prePatch = ''
-                cd src/registers/generated
-                python regs_rs.py
-                python pkt3_rs.py
+                pushd src/registers/generated
+                ${pythonEnv}/bin/python regs_rs.py
+                ${pythonEnv}/bin/python pkt3_rs.py
+                popd
               '';
             };
 
             gcn = _: {
-              buildInputs = [ pythonEnv ];
               prePatch = ''
-                cd src/instructions/generated
-                python ops_rs.py
+                pushd src/instructions/generated
+                ${pythonEnv}/bin/python ops_rs.py
+                popd
               '';
             };
 
@@ -135,6 +135,7 @@
                 pkgs.cmake
                 pkgs.git
                 pkgs.python312
+                pkgs.darwin.cctools
               ];
             };
 
