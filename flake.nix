@@ -87,12 +87,15 @@
           in
           pythonSet.mkVirtualEnv "extern-traces-codegen" uvWorkspace.deps.all;
 
-        rustToolchain = pkgs.rust-bin.nightly."2024-09-27".default.override {
-          extensions = [ "rustfmt" ];
-          targets = [
-            "x86_64-unknown-freebsd"
-          ];
-        };
+        rustToolchainForPkgs = (
+          pkgs:
+          pkgs.rust-bin.nightly."2024-09-27".default.override {
+            extensions = [ "rustfmt" ];
+            targets = [
+              "x86_64-unknown-freebsd"
+            ];
+          }
+        );
 
         sharedCrateOverrides = pkgs.defaultCrateOverrides // {
           pm4 = _: {
@@ -219,6 +222,13 @@
           pkgsFbsd.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix
             {
               defaultCrateOverrides = sharedCrateOverrides;
+              buildRustCrateForPkgs = (
+                pkgs:
+                pkgs.buildRustCrate.override {
+                  rustc = (rustToolchainForPkgs pkgs);
+                  cargo = (rustToolchainForPkgs pkgs);
+                }
+              );
             };
 
         treefmtConfig = {
@@ -242,7 +252,7 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            rustToolchain
+            (rustToolchainForPkgs pkgs)
             pkgs.crate2nix
           ];
         };
