@@ -189,38 +189,37 @@
           defaultCrateOverrides = sharedCrateOverrides;
         };
 
-        pluginSupportProject = pkgs.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix {
-          defaultCrateOverrides = sharedCrateOverrides;
+        pkgsFbsd = import nixpkgs {
+          inherit system;
+          crossSystem = {
+            config = "x86_64-unknown-freebsd";
+          };
+          overlays = [
+            rust-overlay.overlays.default
+            crate2nix.overlays.default
+            (final: prev: {
+              bmake = prev.bmake.overrideAttrs (old: {
+                preConfigure =
+                  (old.preConfigure or "")
+                  + ''
+                    # expose wchar_t and use a modern C dialect
+                    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -std=gnu99 -D_DARWIN_C_SOURCE"
 
-          buildRustCrateForPkgs =
-            pkgs:
-            let
-              lib = pkgs.lib;
+                    # the autodetection on Apple silicon picks MACHINE_ARCH=arm (wrong)
+                    export MACHINE_ARCH=arm64
+                    export MACHINE=arm64        # keeps bmake’s paths consistent
+                  '';
+              });
+            })
 
-              buildRustCrate = pkgs.buildRustCrate.override {
-                rustc = rustToolchain;
-                cargo = rustToolchain;
-              };
-
-              wrapped = args: buildRustCrate args;
-            in
-            lib.makeOverridable (
-              args: innerArgs:
-              let
-                inner = buildRustCrate.override args;
-              in
-              inner (
-                innerArgs
-                // {
-                  extraRustcOpts =
-                    (innerArgs.extraRustcOpts or [ ])
-                    ++ lib.optionals (!(innerArgs.procMacro or false)) [
-                      "--target=x86_64-unknown-freebsd"
-                    ];
-                }
-              )
-            ) { };
+          ];
         };
+
+        pluginSupportProject =
+          pkgsFbsd.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix
+            {
+              defaultCrateOverrides = sharedCrateOverrides;
+            };
 
         treefmtConfig = {
           projectRootFile = "flake.nix";
