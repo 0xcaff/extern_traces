@@ -43,7 +43,6 @@
     let
       supported-systems = with flake-utils.lib.system; [
         x86_64-linux
-        x86_64-darwin
         aarch64-darwin
       ];
     in
@@ -132,6 +131,7 @@
               pkgs.cmake
               pkgs.git
               pkgs.python312
+            ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
               pkgs.darwin.cctools
             ];
           };
