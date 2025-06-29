@@ -19,7 +19,7 @@ TARGETSTUB   := $(OUTPUT_PRX).so
 LIBS := -lSceLibcInternal -lGoldHEN_Hook -lkernel
 
 
-EXTRAFLAGS := $(DEBUG_FLAGS) $(LOG_TYPE) -fcolor-diagnostics -Wall
+EXTRAFLAGS := $(DEBUG_FLAGS) $(LOG_TYPE) -fcolor-diagnostics -Wall -Wno-implicit-function-declaration
 
 # You likely won't need to touch anything below this point.
 # Root vars
@@ -86,23 +86,16 @@ $(INTDIR)/%.o.stub: $(PROJDIR)/%.cpp
 plugin_common:
 	$(CC) $(CFLAGS) -o $(INTDIR)/plugin_common.o $(COMMON_DIR)/plugin_common.c
 
-build-info:
-	$(shell echo "#define GIT_COMMIT \"$(shell git rev-parse HEAD)\"" > $(COMMON_DIR)/git_ver.h)
-	$(shell echo "#define GIT_VER \"$(shell git branch --show-current)\"" >> $(COMMON_DIR)/git_ver.h)
-	$(shell echo "#define GIT_NUM $(shell git rev-list HEAD --count)" >> $(COMMON_DIR)/git_ver.h)
-	$(shell echo "#define BUILD_DATE \"$(shell date '+%b %d %Y @ %T')\"" >> $(COMMON_DIR)/git_ver.h)
-
 config:
 	curl -T config.ini ftp://192.168.1.123:2121/data/extern_traces.ini
 
-.PHONY: clean config ./plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
+.PHONY: clean config
 .DEFAULT_GOAL := all
 
-all: build-info plugin_common $(TARGET)
+all: plugin_common $(TARGET)
 
 deploy: all config
 	curl -T target/prx_final/extern_traces.prx ftp://192.168.1.123:2121/data/GoldHEN/plugins/extern_traces.prx
 
 clean:
 	rm -rf $(TARGET) $(TARGETSTUB) $(INTDIR) $(OBJS)
-

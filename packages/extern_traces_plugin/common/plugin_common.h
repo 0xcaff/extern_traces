@@ -1,4 +1,3 @@
-#include "git_ver.h"
 #include <Common.h>
 
 #define GOLDHEN_PATH "/data/GoldHEN"
@@ -29,7 +28,6 @@
 
 #define final_printf(a, args...) klog("(%s:%d) " a, __FILE__, __LINE__, ##args)
 #define boot_ver() {\
-    final_printf("Commit: %s Branch: %s Build: %i %s\n", GIT_COMMIT, GIT_VER, GIT_NUM, BUILD_TYPE);\
     final_printf("Built: %s\n", BUILD_DATE);\
     final_printf("GoldHEN SDK Ver: 0x%08x\n", GOLDHEN_SDK_VERSION);\
     final_printf("GoldHEN System SDK Ver: 0x%08x\n", sys_sdk_version());\

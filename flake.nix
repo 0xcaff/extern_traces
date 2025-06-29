@@ -38,6 +38,7 @@
       pyproject-nix,
       uv2nix,
       pyproject-build-systems,
+      ps-nix,
       ...
     }:
     let
@@ -229,6 +230,46 @@
               );
             };
 
+        extern_traces_plugin = pkgs.clangStdenv.mkDerivation {
+          pname = "extern_traces_plugin";
+          version = "1.0.0";
+
+          src = ./packages/extern_traces_plugin;
+
+          nativeBuildInputs = [
+            pkgs.gnumake
+            pkgs.git
+            pkgs.coreutils
+            pkgs.lld
+          ];
+
+          buildInputs = [
+            ps-nix.packages.${system}.goldhen-sdk
+            ps-nix.packages.${system}.toolchain
+          ];
+
+          preBuild = ''
+            mkdir -p plugin_support/target/x86_64-unknown-freebsd/release
+            cp ${pluginSupportProject.rootCrate.build.lib}/lib/libplugin_support-*.a \
+               plugin_support/target/x86_64-unknown-freebsd/release/libplugin_support.a
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir -p $out
+            cp target $out
+
+            runHook postInstall
+          '';
+
+          meta = {
+            description = "PlayStation 4 extern traces plugin";
+            license = pkgs.lib.licenses.mit;
+            platforms = [ "x86_64-linux" "aarch64-darwin" ];
+          };
+        };
+
         treefmtConfig = {
           projectRootFile = "flake.nix";
           programs = {
@@ -243,7 +284,7 @@
       {
         packages = {
           extern_traces_viewer = cargoProject.workspaceMembers.extern_traces_viewer.build;
-          plugin_support = pluginSupportProject.rootCrate.build;
+          extern_traces_plugin = extern_traces_plugin;
         };
 
         formatter = treefmtEval.config.build.wrapper;
