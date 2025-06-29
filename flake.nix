@@ -189,19 +189,62 @@
           defaultCrateOverrides = sharedCrateOverrides;
         };
 
-        pluginSupportProject = pkgs.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix {
-          defaultCrateOverrides = sharedCrateOverrides;
-          buildRustCrateForPkgs =
-            pkgs:
-            pkgs.buildRustCrate.override {
-              rustc = rustToolchain;
-              cargo = rustToolchain;
-            };
+        pkgsFbsd = import nixpkgs {
+          inherit system; # your mac build host
+          crossSystem = {
+            config = "x86_64-unknown-freebsd";
+          };
+          overlays = [
+            rust-overlay.overlays.default
+            crate2nix.overlays.default
+            (final: prev: {
+              bmake = prev.bmake.overrideAttrs (old: {
+                preConfigure = (old.preConfigure or "") + ''
+                  # expose wchar_t and use a modern C dialect
+                  export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -std=gnu99 -D_DARWIN_C_SOURCE"
+
+                  # the autodetection on Apple silicon picks MACHINE_ARCH=arm (wrong)
+                  export MACHINE_ARCH=arm64
+                  export MACHINE=arm64        # keeps bmake’s paths consistent
+                '';
+              });
+            })
+          ];
         };
 
-        # treefmt configuration
+        pluginSupportProject = pkgs.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix {
+          defaultCrateOverrides = sharedCrateOverrides;
+
+          buildRustCrateForPkgs =
+            pkgs:
+            let
+              lib = pkgs.lib;
+
+              buildRustCrate = pkgs.buildRustCrate.override {
+                rustc = rustToolchain;
+                cargo = rustToolchain;
+              };
+
+              wrapped = args: buildRustCrate args;
+            in
+            lib.makeOverridable (
+              args: innerArgs:
+              let
+                inner = buildRustCrate.override args;
+              in
+              inner (
+                innerArgs
+                // {
+                  extraRustcOpts = innerArgs.extraRustcOpts ++ [
+                    "--target x86_64-unknown-freebsd"
+                    "-Clinker=${pkgsFbsd.llvmPackages_16.bintools}/bin/ld.lld"
+                  ];
+                }
+              )
+            ) { };
+        };
+
         treefmtConfig = {
-          # Used to find the project root
           projectRootFile = "flake.nix";
           programs = {
             nixfmt.enable = true;
