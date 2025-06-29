@@ -189,29 +189,6 @@
           defaultCrateOverrides = sharedCrateOverrides;
         };
 
-        pkgsFbsd = import nixpkgs {
-          inherit system; # your mac build host
-          crossSystem = {
-            config = "x86_64-unknown-freebsd";
-          };
-          overlays = [
-            rust-overlay.overlays.default
-            crate2nix.overlays.default
-            (final: prev: {
-              bmake = prev.bmake.overrideAttrs (old: {
-                preConfigure = (old.preConfigure or "") + ''
-                  # expose wchar_t and use a modern C dialect
-                  export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -std=gnu99 -D_DARWIN_C_SOURCE"
-
-                  # the autodetection on Apple silicon picks MACHINE_ARCH=arm (wrong)
-                  export MACHINE_ARCH=arm64
-                  export MACHINE=arm64        # keeps bmake’s paths consistent
-                '';
-              });
-            })
-          ];
-        };
-
         pluginSupportProject = pkgs.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix {
           defaultCrateOverrides = sharedCrateOverrides;
 
@@ -235,10 +212,11 @@
               inner (
                 innerArgs
                 // {
-                  extraRustcOpts = innerArgs.extraRustcOpts ++ [
-                    "--target x86_64-unknown-freebsd"
-                    "-Clinker=${pkgsFbsd.llvmPackages_16.bintools}/bin/ld.lld"
-                  ];
+                  extraRustcOpts =
+                    (innerArgs.extraRustcOpts or [ ])
+                    ++ lib.optionals (!(innerArgs.procMacro or false)) [
+                      "--target=x86_64-unknown-freebsd"
+                    ];
                 }
               )
             ) { };
