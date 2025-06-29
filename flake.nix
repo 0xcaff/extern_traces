@@ -90,101 +90,113 @@
         rustToolchain = pkgs.rust-bin.nightly."2024-09-27".default.override {
           extensions = [ "rustfmt" ];
           targets = [
-
+            "x86_64-unknown-freebsd"
           ];
         };
 
-        cargoProject = pkgs.callPackage ./Cargo.nix {
-          defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-            pm4 = _: {
-              prePatch = ''
-                pushd src/registers/generated
-                ${pythonCodegenEnv}/bin/python regs_rs.py
-                ${pythonCodegenEnv}/bin/python pkt3_rs.py
-                popd
-              '';
-            };
-
-            gcn = _: {
-              prePatch = ''
-                pushd src/instructions/generated
-                ${pythonCodegenEnv}/bin/python ops_rs.py
-                popd
-              '';
-            };
-
-            ps4libdoc = _: {
-              prePatch = ''
-                substituteInPlace src/lib.rs \
-                  --replace-fail "defs" "${
-                    pkgs.fetchFromGitHub {
-                      owner = "idc";
-                      repo = "ps4libdoc";
-                      rev = "a71315e7f36e312ae71e9e3a92982e9ffbfc725f";
-                      sha256 = "sha256-33wVp2eBsPf42k25dGKMHGMFqnSwXthoF5Bg/o30e/M=";
-                    }
-                  }"
-              '';
-            };
-
-            shaderc-sys = _: {
-              buildInputs = [
-                pkgs.cmake
-                pkgs.git
-                pkgs.python312
-                pkgs.darwin.cctools
-              ];
-            };
-
-            extern_traces_viewer = attrs: {
-              GIT_SHA_SHORT = self.rev or "unknown";
-              nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
-                pkgs.pkg-config
-                pkgs.cmake
-                pkgs.ninja
-              ];
-              buildInputs =
-                (attrs.buildInputs or [ ])
-                ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
-                  pkgs.vulkan-loader
-                  pkgs.vulkan-headers
-                  pkgs.vulkan-validation-layers
-                  pkgs.xorg.libX11
-                  pkgs.xorg.libXcursor
-                  pkgs.xorg.libXi
-                  pkgs.xorg.libXrandr
-                  pkgs.libGL
-                  pkgs.fontconfig
-                  pkgs.freetype
-                  pkgs.libxkbcommon
-                  pkgs.wayland
-                ]
-                ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-                  pkgs.darwin.apple_sdk.frameworks.Metal
-                  pkgs.darwin.apple_sdk.frameworks.QuartzCore
-                  pkgs.darwin.apple_sdk.frameworks.Cocoa
-                  pkgs.darwin.apple_sdk.frameworks.AppKit
-                  pkgs.darwin.apple_sdk.frameworks.CoreGraphics
-                ];
-            };
-
-            vulkano = attrs: {
-              nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
-                pkgs.vulkan-headers
-              ];
-              buildInputs =
-                (attrs.buildInputs or [ ])
-                ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
-                  pkgs.vulkan-loader
-                ];
-            };
-
-            vulkano-shaders = attrs: {
-              nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
-                pkgs.vulkan-headers
-              ];
-            };
+        sharedCrateOverrides = pkgs.defaultCrateOverrides // {
+          pm4 = _: {
+            prePatch = ''
+              pushd src/registers/generated
+              ${pythonCodegenEnv}/bin/python regs_rs.py
+              ${pythonCodegenEnv}/bin/python pkt3_rs.py
+              popd
+            '';
           };
+
+          gcn = _: {
+            prePatch = ''
+              pushd src/instructions/generated
+              ${pythonCodegenEnv}/bin/python ops_rs.py
+              popd
+            '';
+          };
+
+          ps4libdoc = _: {
+            prePatch = ''
+              substituteInPlace src/lib.rs \
+                --replace-fail "defs" "${
+                  pkgs.fetchFromGitHub {
+                    owner = "idc";
+                    repo = "ps4libdoc";
+                    rev = "a71315e7f36e312ae71e9e3a92982e9ffbfc725f";
+                    sha256 = "sha256-33wVp2eBsPf42k25dGKMHGMFqnSwXthoF5Bg/o30e/M=";
+                  }
+                }"
+            '';
+          };
+
+          shaderc-sys = _: {
+            buildInputs = [
+              pkgs.cmake
+              pkgs.git
+              pkgs.python312
+              pkgs.darwin.cctools
+            ];
+          };
+
+          extern_traces_viewer = attrs: {
+            GIT_SHA_SHORT = self.rev or "unknown";
+            nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+              pkgs.pkg-config
+              pkgs.cmake
+              pkgs.ninja
+            ];
+            buildInputs =
+              (attrs.buildInputs or [ ])
+              ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+                pkgs.vulkan-loader
+                pkgs.vulkan-headers
+                pkgs.vulkan-validation-layers
+                pkgs.xorg.libX11
+                pkgs.xorg.libXcursor
+                pkgs.xorg.libXi
+                pkgs.xorg.libXrandr
+                pkgs.libGL
+                pkgs.fontconfig
+                pkgs.freetype
+                pkgs.libxkbcommon
+                pkgs.wayland
+              ]
+              ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+                pkgs.darwin.apple_sdk.frameworks.Metal
+                pkgs.darwin.apple_sdk.frameworks.QuartzCore
+                pkgs.darwin.apple_sdk.frameworks.Cocoa
+                pkgs.darwin.apple_sdk.frameworks.AppKit
+                pkgs.darwin.apple_sdk.frameworks.CoreGraphics
+              ];
+          };
+
+          vulkano = attrs: {
+            nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+              pkgs.vulkan-headers
+            ];
+            buildInputs =
+              (attrs.buildInputs or [ ])
+              ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+                pkgs.vulkan-loader
+              ];
+          };
+
+          vulkano-shaders = attrs: {
+            nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+              pkgs.vulkan-headers
+            ];
+          };
+        };
+
+        cargoProject = pkgs.callPackage ./Cargo.nix {
+          defaultCrateOverrides = sharedCrateOverrides;
+        };
+
+        pluginSupportProject = pkgs.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix {
+          defaultCrateOverrides = sharedCrateOverrides;
+          buildRustCrateForPkgs =
+            pkgs:
+            pkgs.buildRustCrate.override {
+              rustc = rustToolchain;
+              cargo = rustToolchain;
+            };
         };
 
         # treefmt configuration
@@ -203,6 +215,7 @@
       {
         packages = {
           extern_traces_viewer = cargoProject.workspaceMembers.extern_traces_viewer.build;
+          plugin_support = pluginSupportProject.rootCrate.build;
         };
 
         formatter = treefmtEval.config.build.wrapper;
