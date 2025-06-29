@@ -3,7 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
     crate2nix.url = "github:nix-community/crate2nix";
-    rust-overlay.url = "github:oxalica/rust-overlay";
+    fenix.url = "github:nix-community/fenix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
 
     pyproject-nix = {
@@ -33,7 +33,7 @@
       nixpkgs,
       flake-utils,
       crate2nix,
-      rust-overlay,
+      fenix,
       treefmt-nix,
       pyproject-nix,
       uv2nix,
@@ -53,7 +53,7 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            rust-overlay.overlays.default
+            fenix.overlays.default
             crate2nix.overlays.default
           ];
         };
@@ -89,11 +89,9 @@
 
         rustToolchainForPkgs = (
           pkgs:
-          pkgs.rust-bin.nightly."2024-09-27".default.override {
-            extensions = [ "rustfmt" ];
-            targets = [
-              "x86_64-unknown-freebsd"
-            ];
+          fenix.packages.${system}.fromToolchainFile {
+            file = ./rust-toolchain.toml;
+            sha256 = "sha256-SdELfyScVKtHr4qEIxY59QFcFR8tolVWN8rkc8YLyOw=";
           }
         );
 
@@ -198,7 +196,7 @@
             config = "x86_64-unknown-freebsd";
           };
           overlays = [
-            rust-overlay.overlays.default
+            fenix.overlays.default
             crate2nix.overlays.default
             (final: prev: {
               bmake = prev.bmake.overrideAttrs (old: {
