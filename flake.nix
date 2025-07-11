@@ -128,13 +128,15 @@
           };
 
           shaderc-sys = _: {
-            buildInputs = [
-              pkgs.cmake
-              pkgs.git
-              pkgs.python312
-            ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-              pkgs.darwin.cctools
-            ];
+            buildInputs =
+              [
+                pkgs.cmake
+                pkgs.git
+                pkgs.python312
+              ]
+              ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+                pkgs.darwin.cctools
+              ];
           };
 
           extern_traces_viewer = attrs: {
@@ -223,9 +225,12 @@
               defaultCrateOverrides = sharedCrateOverrides;
               buildRustCrateForPkgs = (
                 pkgs:
+                let
+                  toolchain = (rustToolchainForPkgs pkgs);
+                in
                 pkgs.buildRustCrate.override {
-                  rustc = (rustToolchainForPkgs pkgs);
-                  cargo = (rustToolchainForPkgs pkgs);
+                  rustc = toolchain;
+                  cargo = toolchain;
                 }
               );
             };
@@ -266,7 +271,10 @@
           meta = {
             description = "PlayStation 4 extern traces plugin";
             license = pkgs.lib.licenses.mit;
-            platforms = [ "x86_64-linux" "aarch64-darwin" ];
+            platforms = [
+              "x86_64-linux"
+              "aarch64-darwin"
+            ];
           };
         };
 
