@@ -74,6 +74,8 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
         };
 
         write_to_buffer(state, (const uint8_t *)&span, sizeof(span));
+    } else if (label_id == sharedTable.sceAjmBatchJobRunBufferRa) {
+        sceAjmBatchJobRunBufferRa_trace(args, state, time, label_id, state->thread_id);
     } else {
         struct SpanStart span = {
             .message_tag = 0,

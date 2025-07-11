@@ -151,6 +151,46 @@ extern "C" fn sceSysmoduleLoadModule_trace(args: *const Args) {
     println!("module id: {:?}", module_id);
 }
 
+#[no_mangle]
+extern "C" fn sceAjmBatchJobRunBufferRa_trace(
+    args: *const Args,
+    thread_logging_state: *mut ThreadLoggingState,
+    time: u64,
+    label_id: u64,
+    thread_id: u64,
+) {
+    let args = unsafe { args.as_ref_unchecked() };
+    let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
+
+    let p_data_input = args.args[3] as *const u8;
+    let data_input_size = args.args[4] as usize;
+
+    if p_data_input.is_null() || data_input_size == 0 {
+        return;
+    }
+
+    let input_data = unsafe { slice::from_raw_parts(p_data_input, data_input_size) };
+
+    let total_size = size_of::<SpanStartAdditionalData>() + data_input_size;
+
+    let Some(mut res) = thread_logging_state.reserve(total_size) else {
+        return;
+    };
+
+    let span_header = SpanStartAdditionalData {
+        message_tag: 3,
+        thread_id,
+        time,
+        label_id,
+        extra_data_length: data_input_size as u64,
+    };
+
+    res.write(bytemuck::cast_slice(&[span_header]));
+    res.write(input_data);
+
+    thread_logging_state.flush(res);
+}
+
 fn trace_command_buffer_submit(
     thread_logging_state: &mut ThreadLoggingState,
     draw_command_buffers: &[&[u8]],
