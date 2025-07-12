@@ -235,7 +235,7 @@
               );
             };
 
-        extern_traces_plugin = pkgs.clangStdenv.mkDerivation {
+        plugin = pkgs.clangStdenv.mkDerivation {
           pname = "extern_traces_plugin";
           version = "1.0.0";
 
@@ -278,6 +278,8 @@
           };
         };
 
+        viewer = cargoProject.workspaceMembers.extern_traces_viewer.build;
+
         treefmtConfig = {
           projectRootFile = "flake.nix";
           programs = {
@@ -291,8 +293,7 @@
       in
       {
         packages = {
-          extern_traces_viewer = cargoProject.workspaceMembers.extern_traces_viewer.build;
-          extern_traces_plugin = extern_traces_plugin;
+          inherit plugin viewer;
         };
 
         formatter = treefmtEval.config.build.wrapper;
