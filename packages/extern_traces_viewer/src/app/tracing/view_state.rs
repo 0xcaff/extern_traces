@@ -8,7 +8,8 @@ pub struct ThreadSpan {
     pub start_time: u64,
     pub end_time: u64,
     pub label_id: u64,
-    pub extra_data: Option<Vec<u8>>,
+    pub start_extra_data: Option<Vec<u8>>,
+    pub end_extra_data: Option<Vec<u8>>,
 }
 
 impl ThreadSpan {
@@ -17,7 +18,8 @@ impl ThreadSpan {
             start_time: start.time,
             end_time: end.time,
             label_id: start.label_id,
-            extra_data: start.extra_data,
+            start_extra_data: start.extra_data,
+            end_extra_data: end.extra_data,
         }
     }
 }
@@ -168,7 +170,7 @@ impl ViewState {
                         thread_id: end.thread_id,
                     };
                     let span = ThreadSpan::from_events(start, end);
-                    if span.extra_data.is_some() {
+                    if span.start_extra_data.is_some() || span.end_extra_data.is_some() {
                         self.extra_data_messages.push(span_ref);
                     }
 

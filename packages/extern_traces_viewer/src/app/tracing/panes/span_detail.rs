@@ -85,18 +85,19 @@ impl SpanDetailPane {
                 }
             }
 
-            if let Some(extra_data) = &span.extra_data {
-                let button_response = ui.button("copy raw data");
-                if button_response.clicked() {
-                    let encoded = hex::encode(extra_data.as_slice());
-                    ui.output_mut(|it| it.copied_text = encoded);
-                }
+            if let Some(start_extra_data) = &span.start_extra_data {
+                ui.label("Start Extra Data:");
+                ui.horizontal(|ui| {
+                    let button_response = ui.button("copy raw data");
+                    if button_response.clicked() {
+                        let encoded = hex::encode(start_extra_data.as_slice());
+                        ui.output_mut(|it| it.copied_text = encoded);
+                    }
 
-                {
                     let button_response = ui.button("render frame");
                     if button_response.clicked() {
                         let result = (|| -> Result<_, anyhow::Error> {
-                            let extra_data = ExtraData::parse(extra_data.as_slice())?;
+                            let extra_data = ExtraData::parse(start_extra_data.as_slice())?;
                             let Some(image) =
                                 render_frame(&self.ctx, &mut self.debug_handle, &extra_data)?
                             else {
@@ -109,7 +110,7 @@ impl SpanDetailPane {
                         match result {
                             Ok(image) => {
                                 let texture = ui.ctx().load_texture(
-                                    "frame",
+                                    "frame_start",
                                     image,
                                     TextureOptions::default(),
                                 );
@@ -121,6 +122,15 @@ impl SpanDetailPane {
                             }
                         }
                     }
+                });
+            }
+
+            if let Some(end_extra_data) = &span.end_extra_data {
+                ui.label("End Extra Data:");
+                let button_response = ui.button("copy raw data");
+                if button_response.clicked() {
+                    let encoded = hex::encode(end_extra_data.as_slice());
+                    ui.output_mut(|it| it.copied_text = encoded);
                 }
             }
 

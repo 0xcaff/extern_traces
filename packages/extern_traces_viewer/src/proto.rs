@@ -106,6 +106,7 @@ pub struct SpanStart {
 pub struct SpanEnd {
     pub thread_id: u64,
     pub time: u64,
+    pub extra_data: Option<Vec<u8>>,
 }
 
 #[derive(Debug, Clone)]
@@ -214,6 +215,7 @@ impl TraceEvent {
                 Ok(TraceEvent::Span(SpanEvent::End(SpanEnd {
                     thread_id,
                     time,
+                    extra_data: None,
                 })))
             }
             2 => {
@@ -247,6 +249,23 @@ impl TraceEvent {
                     thread_id,
                     time,
                     label_id,
+                    extra_data: Some(extra_data),
+                })))
+            }
+            4 => {
+                // SpanEndAdditionalData
+                let mut data = [0u8; 24];
+                stream.read_exact(&mut data)?;
+                let thread_id = u64::from_le_bytes(data[0..8].try_into().unwrap());
+                let time = u64::from_le_bytes(data[8..16].try_into().unwrap());
+                let extra_data_length = u64::from_le_bytes(data[16..24].try_into().unwrap());
+
+                let mut extra_data = vec![0u8; extra_data_length as usize];
+                stream.read_exact(&mut extra_data)?;
+
+                Ok(TraceEvent::Span(SpanEvent::End(SpanEnd {
+                    thread_id,
+                    time,
                     extra_data: Some(extra_data),
                 })))
             }
