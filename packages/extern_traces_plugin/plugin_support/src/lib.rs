@@ -191,6 +191,46 @@ extern "C" fn sceAjmBatchJobRunBufferRa_trace(
     thread_logging_state.flush(res);
 }
 
+#[no_mangle]
+extern "C" fn sceAjmBatchJobControlBufferRa_trace(
+    args: *const Args,
+    thread_logging_state: *mut ThreadLoggingState,
+    time: u64,
+    label_id: u64,
+    thread_id: u64,
+) {
+    let args = unsafe { args.as_ref_unchecked() };
+    let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
+
+    let p_sideband_input = args.args[3] as *const u8;
+    let sideband_input_size = args.args[4] as usize;
+
+    if p_sideband_input.is_null() {
+        return;
+    }
+
+    let sideband_data = unsafe { slice::from_raw_parts(p_sideband_input, sideband_input_size) };
+
+    let total_size = size_of::<SpanStartAdditionalData>() + sideband_input_size;
+
+    let Some(mut res) = thread_logging_state.reserve(total_size) else {
+        return;
+    };
+
+    let span_header = SpanStartAdditionalData {
+        message_tag: 3,
+        thread_id,
+        time,
+        label_id,
+        extra_data_length: sideband_input_size as u64,
+    };
+
+    res.write(bytemuck::cast_slice(&[span_header]));
+    res.write(sideband_data);
+
+    thread_logging_state.flush(res);
+}
+
 fn trace_command_buffer_submit(
     thread_logging_state: &mut ThreadLoggingState,
     draw_command_buffers: &[&[u8]],
