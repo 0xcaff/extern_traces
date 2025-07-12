@@ -87,6 +87,55 @@
           in
           pythonSet.mkVirtualEnv "extern-traces-codegen" uvWorkspace.deps.all;
 
+        pm4Codegen = pkgs.stdenvNoCC.mkDerivation {
+          __contentAddressed = true;
+          outputHashMode = "recursive";
+          outputHashAlgo = "sha256";
+
+          name = "pm4-codegen";
+          src = ./packages/pm4;
+
+          buildPhase = ''
+            pushd src/registers/generated
+            ${pythonCodegenEnv}/bin/python regs_rs.py
+            ${pythonCodegenEnv}/bin/python pkt3_rs.py
+            popd
+          '';
+
+          installPhase = ''
+            mkdir -p $out
+            pushd src/registers/generated
+            cp regs.rs $out
+            cp pkt3.rs $out
+            popd
+          '';
+
+          dontFixup = true;
+        };
+
+        gcnCodegen = pkgs.stdenvNoCC.mkDerivation {
+          __contentAddressed = true;
+          outputHashMode = "recursive";
+          outputHashAlgo = "sha256";
+
+          name = "gcn-codegen";
+          src = ./packages/gcn;
+          buildPhase = ''
+            pushd src/instructions/generated
+            ${pythonCodegenEnv}/bin/python ops_rs.py
+            popd
+          '';
+
+          installPhase = ''
+            mkdir -p $out
+            pushd src/instructions/generated
+            cp ops.rs $out
+            popd
+          '';
+
+          dontFixup = true;
+        };
+
         rustToolchainForPkgs = (
           pkgs:
           fenix.packages.${system}.fromToolchainFile {
@@ -99,8 +148,7 @@
           pm4 = _: {
             prePatch = ''
               pushd src/registers/generated
-              ${pythonCodegenEnv}/bin/python regs_rs.py
-              ${pythonCodegenEnv}/bin/python pkt3_rs.py
+              cp ${pm4Codegen}/* .
               popd
             '';
           };
@@ -108,7 +156,7 @@
           gcn = _: {
             prePatch = ''
               pushd src/instructions/generated
-              ${pythonCodegenEnv}/bin/python ops_rs.py
+              cp ${gcnCodegen}/* .
               popd
             '';
           };
