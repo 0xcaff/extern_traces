@@ -86,7 +86,7 @@ impl SpanDetailPane {
             }
 
             if let Some(start_extra_data) = &span.start_extra_data {
-                ui.label("Start Extra Data:");
+                ui.label(format!("Start Extra Data: {} bytes", start_extra_data.len()));
                 ui.horizontal(|ui| {
                     let button_response = ui.button("copy raw data");
                     if button_response.clicked() {
@@ -126,7 +126,7 @@ impl SpanDetailPane {
             }
 
             if let Some(end_extra_data) = &span.end_extra_data {
-                ui.label("End Extra Data:");
+                ui.label(format!("End Extra Data: {} bytes", end_extra_data.len()));
                 let button_response = ui.button("copy raw data");
                 if button_response.clicked() {
                     let encoded = hex::encode(end_extra_data.as_slice());
