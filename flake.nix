@@ -44,7 +44,6 @@
     let
       supported-systems = with flake-utils.lib.system; [
         x86_64-linux
-        aarch64-darwin
       ];
     in
     flake-utils.lib.eachSystem supported-systems (
@@ -241,34 +240,8 @@
           defaultCrateOverrides = sharedCrateOverrides;
         };
 
-        pkgsFbsd = import nixpkgs {
-          inherit system;
-          crossSystem = {
-            config = "x86_64-unknown-freebsd";
-          };
-          overlays = [
-            fenix.overlays.default
-            crate2nix.overlays.default
-            (final: prev: {
-              bmake = prev.bmake.overrideAttrs (old: {
-                preConfigure =
-                  (old.preConfigure or "")
-                  + ''
-                    # expose wchar_t and use a modern C dialect
-                    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -std=gnu99 -D_DARWIN_C_SOURCE"
-
-                    # the autodetection on Apple silicon picks MACHINE_ARCH=arm (wrong)
-                    export MACHINE_ARCH=arm64
-                    export MACHINE=arm64        # keeps bmake’s paths consistent
-                  '';
-              });
-            })
-
-          ];
-        };
-
         pluginSupportProject =
-          pkgsFbsd.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix
+          pkgs.callPackage ./packages/extern_traces_plugin/plugin_support/Cargo.nix
             {
               defaultCrateOverrides = sharedCrateOverrides;
               buildRustCrateForPkgs = (
@@ -316,14 +289,7 @@
             runHook postInstall
           '';
 
-          meta = {
-            description = "PlayStation 4 extern traces plugin";
-            license = pkgs.lib.licenses.mit;
-            platforms = [
-              "x86_64-linux"
-              "aarch64-darwin"
-            ];
-          };
+          dontFixup = true;
         };
 
         viewer = cargoProject.workspaceMembers.extern_traces_viewer.build;
