@@ -90,7 +90,7 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
     }
 }
 
-void emit_span_end(struct ThreadLoggingState* initial_state) {
+void emit_span_end(struct ThreadLoggingState* initial_state, void* return_value) {
     struct ThreadLoggingState *state = (struct ThreadLoggingState *)lazy_read_value(initial_state);
     uint64_t time = get_current_time_rdtscp();
 

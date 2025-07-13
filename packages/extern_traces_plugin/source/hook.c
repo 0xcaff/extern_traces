@@ -79,6 +79,7 @@ __attribute__((naked)) void hook()
 
         // call end logger
         "movq %fs:-8, %rdi\n\t"
+        "movq %rax, %rsi\n\t"
         "call emit_span_end\n\t"
 
         // extra nop instruction to patch call
@@ -92,7 +93,7 @@ __attribute__((naked)) void hook()
 }
 
 #define PAGE_SIZE 4096
-#define HOOK_FN_SIZE 0xcd
+#define HOOK_FN_SIZE 0xd0
 
 void* build_hook_fn(uint16_t static_tls_base) {
     size_t required_size = HOOK_FN_SIZE + 16;
@@ -140,13 +141,21 @@ void* build_hook_fn(uint16_t static_tls_base) {
     }
 
     {
-        unsigned char patch[] = {0xFF, 0x15, 0x72, 0x00, 0x00, 0x00};
-        memcpy(new_mem + 0x55, patch, sizeof(patch));
+        uint64_t instruction_start = 0x55;
+        uint32_t displacement = (HOOK_FN_SIZE) - (instruction_start + 6);
+        final_printf("displacement 1: %d\n", displacement);
+        unsigned char patch[] = {0xFF, 0x15, 0x00, 0x00, 0x00, 0x00};
+        memcpy(&patch[2], &displacement, sizeof(displacement));
+        memcpy(new_mem + instruction_start, patch, sizeof(patch));
     }
 
     {
-        unsigned char patch[] = {0xFF, 0x15, 0x0A, 0x00, 0x00, 0x00};
-        memcpy(new_mem + 0xC5, patch, sizeof(patch));
+        uint64_t instruction_start = 0xc8;
+        uint32_t displacement = (HOOK_FN_SIZE + 8) - (instruction_start + 6);
+        final_printf("displacement 2: %d\n", displacement);
+        unsigned char patch[] = {0xFF, 0x15, 0x00, 0x00, 0x00, 0x00};
+        memcpy(&patch[2], &displacement, sizeof(displacement));
+        memcpy(new_mem + instruction_start, patch, sizeof(patch));
     }
 
     *(void**)((char*)new_mem + HOOK_FN_SIZE) = emit_span_start;

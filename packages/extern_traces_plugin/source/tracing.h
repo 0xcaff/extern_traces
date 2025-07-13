@@ -27,7 +27,7 @@ struct Args {
 };
 
 void emit_span_start(uint64_t label_id, struct ThreadLoggingState *initial_state, struct Args* args);
-void emit_span_end(struct ThreadLoggingState *initial_state);
+void emit_span_end(struct ThreadLoggingState *initial_state, void* return_value);
 
 void initialize_specific_symbols_table(struct SpecificSymbolsTable* table);
 void capture_next_submit();
