@@ -78,6 +78,8 @@ void emit_span_start(uint64_t label_id, struct ThreadLoggingState* initial_state
         sceAjmBatchJobRunBufferRa_trace(args, state, time, label_id, state->thread_id);
     } else if (label_id == sharedTable.sceAjmBatchJobControlBufferRa) {
         sceAjmBatchJobControlBufferRa_trace(args, state, time, label_id, state->thread_id);
+    } else if (label_id == sharedTable.sceHttpSendRequest) {
+        sceHttpSendRequest_trace(args, state, time, label_id, state->thread_id);
     } else {
         struct SpanStart span = {
             .message_tag = 0,

@@ -139,6 +139,7 @@ struct SpecificSymbolsTable {
     int64_t sceSysmoduleLoadModule;
     int64_t sceAjmBatchJobRunBufferRa;
     int64_t sceAjmBatchJobControlBufferRa;
+    int64_t sceHttpSendRequest;
 };
 
 void fill_specific_symbols_table(const JumpSlotRelocationList* list, struct SpecificSymbolsTable* table);

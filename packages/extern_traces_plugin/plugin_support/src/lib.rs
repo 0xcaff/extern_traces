@@ -231,6 +231,46 @@ extern "C" fn sceAjmBatchJobControlBufferRa_trace(
     thread_logging_state.flush(res);
 }
 
+#[no_mangle]
+extern "C" fn sceHttpSendRequest_trace(
+    args: *const Args,
+    thread_logging_state: *mut ThreadLoggingState,
+    time: u64,
+    label_id: u64,
+    thread_id: u64,
+) {
+    let args = unsafe { args.as_ref_unchecked() };
+    let thread_logging_state = unsafe { thread_logging_state.as_mut_unchecked() };
+
+    let post_data_ptr = args.args[1] as *const u8;
+    let data_size = args.args[2] as usize;
+
+    if post_data_ptr.is_null() || data_size == 0 {
+        return;
+    }
+
+    let post_data = unsafe { slice::from_raw_parts(post_data_ptr, data_size) };
+
+    let total_size = size_of::<SpanStartAdditionalData>() + data_size;
+
+    let Some(mut res) = thread_logging_state.reserve(total_size) else {
+        return;
+    };
+
+    let span_header = SpanStartAdditionalData {
+        message_tag: 3,
+        thread_id,
+        time,
+        label_id,
+        extra_data_length: data_size as u64,
+    };
+
+    res.write(bytemuck::cast_slice(&[span_header]));
+    res.write(post_data);
+
+    thread_logging_state.flush(res);
+}
+
 fn trace_command_buffer_submit(
     thread_logging_state: &mut ThreadLoggingState,
     draw_command_buffers: &[&[u8]],
