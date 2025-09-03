@@ -27,9 +27,6 @@ the ps4.
      ; configuration detailed below in "patching targets" section
      [CUSA08010]
      original_tls_size = 0
-     
-     [CUSA00810]
-     original_tls_size = 528
      ```
 
 2. install trace viewer
@@ -51,7 +48,7 @@ update the `/data/extern_traces.ini` with a section for the newly patched title
 including the size of the original tls segment.
 
 ```
-[CUSA00810]
+[TITLE_ID]
 original_tls_size = 528
 ```
 
